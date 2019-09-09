@@ -1,0 +1,32 @@
+<resources>
+    <string name="app_name">Grant Horners Bible Reading System</string>
+    <string name="title_home">Home</string>
+    <string name="title_dashboard">Dashboard</string>
+    <string name="title_notifications">Notifications</string>
+    <string-array
+    name="list_1">
+        <item>Matthew 1</item><item>Matthew 2</item><item>Matthew 3</item><item>Matthew 4</item>
+        <item>Matthew 5</item><item>Matthew 6</item><item>Matthew 7</item><item>Matthew 8</item>
+        <item>Matthew 9</item><item>Matthew 10</item><item>Matthew 11</item><item>Matthew 12</item>
+        <item>Matthew 13</item><item>Matthew 14</item><item>Matthew 15</item><item>Matthew 16</item>
+        <item>Matthew 17</item><item>Matthew 18</item><item>Matthew 19</item><item>Matthew 20</item>
+        <item>Matthew 21</item><item>Matthew 22</item><item>Matthew 23</item><item>Matthew 24</item>
+        <item>Matthew 25</item><item>Matthew 26</item><item>Matthew 27</item><item>Matthew 28</item>
+        <item>Mark 1</item><item>Mark 2</item><item>Mark 3</item><item>Mark 4</item>
+        <item>Mark 5</item><item>Mark 6</item><item>Mark 7</item><item>Mark 8</item>
+        <item>Mark 9</item><item>Mark 10</item><item>Mark 11</item><item>Mark 12</item>
+        <item>Mark 13</item><item>Mark 14</item><item>Mark 15</item><item>Mark 16</item>
+        <item>Luke 1</item><item>Luke 2</item><item>Luke 3</item><item>Luke 4</item>
+        <item>Luke 5</item><item>Luke 6</item><item>Luke 7</item><item>Luke 8</item>
+        <item>Luke 9</item><item>Luke 10</item><item>Luke 11</item><item>Luke 12</item>
+        <item>Luke 13</item><item>Luke 14</item><item>Luke 15</item><item>Luke 16</item>
+        <item>Luke 17</item><item>Luke 18</item><item>Luke 19</item><item>Luke 20</item>
+        <item>Luke 21</item><item>Luke 22</item><item>Luke 23</item><item>Luke 24</item>
+        <item>John 1</item><item>John 2</item><item>John 3</item><item>John 4</item>
+        <item>John 5</item><item>John 6</item><item>John 7</item><item>John 8</item>
+        <item>John 9</item><item>John 10</item><item>John 11</item><item>John 12</item>
+        <item>John 13</item><item>John 14</item><item>John 15</item><item>John 16</item>
+        <item>John 17</item><item>John 18</item><item>John 19</item><item>John 20</item>
+        <item>John 21</item>
+</string-array>
+</resources>
