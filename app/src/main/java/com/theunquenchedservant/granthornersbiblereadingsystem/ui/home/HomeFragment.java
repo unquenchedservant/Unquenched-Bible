@@ -31,19 +31,22 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         homeViewModel =
                 ViewModelProviders.of(this).get(HomeViewModel.class);
-        SharedPreferences prefs = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         TextView current_date = (TextView)root.findViewById(R.id.current_date);
         Date today = Calendar.getInstance().getTime();
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
         String str_today = formatter.format(today);
         current_date.setText(str_today);
-        Resources res = getResources();
-        int list1_num = prefs.getInt("List 1", 0);
-        String[] list_1 = res.getStringArray(R.array.list_1);
-        String reading = list_1[list1_num];
-        TextView list1_reading = (TextView)root.findViewById(R.id.list1_reading);
-        list1_reading.setText(reading);
+        setList(root, "List 1", R.array.list_1, R.id.list1_reading);
         return root;
+    }
+    public void setList(View view, String list_string, int listId, int readingId){
+        SharedPreferences pref = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
+        Resources res = getResources();
+        int list_num = pref.getInt(list_string, 0);
+        String[] list = res.getStringArray(listId);
+        String reading = list[list_num];
+        TextView list_reading = (TextView)view.findViewById(readingId);
+        list_reading.setText(reading);
     }
 }
