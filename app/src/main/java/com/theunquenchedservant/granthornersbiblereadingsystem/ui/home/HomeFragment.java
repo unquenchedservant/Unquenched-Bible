@@ -39,6 +39,7 @@ public class HomeFragment extends Fragment {
         current_date.setText(str_today);
         setList(root, "List 1", R.array.list_1, R.id.list1_reading);
         setList(root, "List 2", R.array.list_2, R.id.list2_reading);
+        setList(root, "List 3", R.array.list_3, R.id.list3_reading);
         return root;
     }
     public void setList(View view, String list_string, int listId, int readingId){

@@ -70,4 +70,31 @@
         <item>Deuteronomy 28</item><item>Deuteronomy 29</item><item>Deuteronomy 30</item><item>Deuteronomy 31</item>
         <item>Deuteronomy 32</item><item>Deuteronomy 33</item><item>Deuteronomy 34</item>
     </string-array>
+    <string-array name="list_3">
+        <item>Romans 1</item><item>Romans 2</item><item>Romans 3</item><item>Romans 4</item>
+        <item>Romans 5</item><item>Romans 6</item><item>Romans 7</item><item>Romans 8</item>
+        <item>Romans 9</item><item>Romans 10</item><item>Romans 11</item><item>Romans 12</item>
+        <item>Romans 13</item><item>Romans 14</item><item>Romans 15</item><item>Romans 16</item>
+        <item>1 Corinthians 1</item><item>1 Corinthians 2</item><item>1 Corinthians 3</item>
+        <item>1 Corinthians 4</item><item>1 Corinthians 5</item><item>1 Corinthians 6</item>
+        <item>1 Corinthians 7</item><item>1 Corinthians 8</item><item>1 Corinthians 9</item>
+        <item>1 Corinthians 10</item><item>1 Corinthians 11</item><item>1 Corinthians 12</item>
+        <item>1 Corinthians 13</item><item>1 Corinthians 14</item><item>1 Corinthians 15</item>
+        <item>1 Corinthians 16</item><item>2 Corinthians 1</item><item>2 Corinthians 2</item>
+        <item>2 Corinthians 3</item><item>2 Corinthians 4</item><item>2 Corinthians 5</item>
+        <item>2 Corinthians 6</item><item>2 Corinthians 7</item><item>2 Corinthians 8</item>
+        <item>2 Corinthians 9</item><item>2 Corinthians 10</item><item>2 Corinthians 11</item>
+        <item>2 Corinthians 12</item><item>2 Corinthians 13</item><item>Galatians 1</item>
+        <item>Galatians 2</item><item>Galatians 3</item><item>Galatians 4</item>
+        <item>Galatians 5</item><item>Galatians 6</item><item>Ephesians 1</item>
+        <item>Ephesians 2</item><item>Ephesians 3</item><item>Ephesians 4</item>
+        <item>Ephesians 5</item><item>Ephesians 6</item><item>Philippians 1</item>
+        <item>Philippians 2</item><item>Philippians 3</item><item>Philippians 4</item>
+        <item>Colossians 1</item><item>Colossians 2</item><item>Colossians 3</item>
+        <item>Colossians 4</item><item>Hebrews 1</item><item>Hebrews 2</item>
+        <item>Hebrews 3</item><item>Hebrews 4</item><item>Hebrews 5</item>
+        <item>Hebrews 6</item><item>Hebrews 7</item><item>Hebrews 8</item>
+        <item>Hebrews 9</item><item>Hebrews 10</item><item>Hebrews 11</item>
+        <item>Hebrews 12</item><item>Hebrews 13</item>
+    </string-array>
 </resources>
