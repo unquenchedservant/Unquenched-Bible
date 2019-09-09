@@ -40,24 +40,22 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
     }
     public void markAll(View view) {
-        int list1_number = getList1();
-        Log.d("List 1", Integer.toString(list1_number));
-        markList1();
+        markList("List 1");
     }
-    public void markList1(){
-        int number = getList1();
+    public void markList(String listString){
+        int number = getListNumber(listString);
         number++;
-        setList1(number);
+        setList(listString, number);
     }
-    public int getList1(){
+    public int getListNumber(String listString){
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
-        int list1_num = prefs.getInt("List 1", 1);
-        return list1_num;
+        int list_num = prefs.getInt(listString, 0);
+        return list_num;
     }
-    public void setList1(int number){
+    public void setList(String listString, int number){
         SharedPreferences.Editor prefs = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
-        prefs.putInt("List 1", number);
+        prefs.putInt(listString, number);
         prefs.apply();
     }
 }
