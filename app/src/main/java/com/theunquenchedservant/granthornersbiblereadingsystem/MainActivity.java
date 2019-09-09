@@ -41,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
     }
     public void markAll(View view) {
         markList("List 1");
+        markList("List 2");
     }
     public void markList(String listString){
         int number = getListNumber(listString);

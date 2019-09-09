@@ -28,5 +28,46 @@
         <item>John 13</item><item>John 14</item><item>John 15</item><item>John 16</item>
         <item>John 17</item><item>John 18</item><item>John 19</item><item>John 20</item>
         <item>John 21</item>
-</string-array>
+    </string-array>
+    <string-array
+        name="list_2">
+        <item>Genesis 1</item><item>Genesis 2</item><item>Genesis 3</item><item>Genesis 4</item>
+        <item>Genesis 5</item><item>Genesis 6</item><item>Genesis 7</item><item>Genesis 8</item>
+        <item>Genesis 9</item><item>Genesis 10</item><item>Genesis 11</item><item>Genesis 12</item>
+        <item>Genesis 13</item><item>Genesis 14</item><item>Genesis 15</item><item>Genesis 16</item>
+        <item>Genesis 17</item><item>Genesis 18</item><item>Genesis 19</item><item>Genesis 20</item>
+        <item>Genesis 21</item><item>Genesis 22</item><item>Genesis 23</item><item>Genesis 24</item>
+        <item>Genesis 25</item><item>Genesis 26</item><item>Genesis 27</item><item>Genesis 28</item>
+        <item>Genesis 29</item><item>Genesis 30</item><item>Genesis 31</item><item>Genesis 32</item>
+        <item>Genesis 33</item><item>Genesis 34</item><item>Genesis 35</item><item>Genesis 36</item>
+        <item>Genesis 37</item><item>Genesis 38</item><item>Genesis 39</item><item>Genesis 40</item>
+        <item>Genesis 41</item><item>Genesis 42</item><item>Genesis 43</item><item>Genesis 44</item>
+        <item>Genesis 45</item><item>Genesis 46</item><item>Genesis 47</item><item>Genesis 48</item>
+        <item>Genesis 49</item><item>Genesis 50</item><item>Exodus 1</item><item>Exodus 2</item>
+        <item>Exodus 3</item><item>Exodus 4</item><item>Exodus 5</item><item>Exodus 6</item>
+        <item>Exodus 7</item><item>Exodus 8</item><item>Exodus 9</item><item>Exodus 10</item>
+        <item>Exodus 11</item><item>Exodus 12</item><item>Exodus 13</item><item>Exodus 14</item>
+        <item>Exodus 15</item><item>Exodus 16</item><item>Exodus 17</item><item>Exodus 18</item>
+        <item>Exodus 19</item><item>Exodus 20</item><item>Exodus 21</item><item>Exodus 22</item>
+        <item>Exodus 23</item><item>Exodus 24</item><item>Exodus 25</item><item>Exodus 26</item>
+        <item>Exodus 27</item><item>Exodus 28</item><item>Exodus 29</item><item>Exodus 30</item>
+        <item>Exodus 31</item><item>Exodus 32</item><item>Exodus 33</item><item>Exodus 34</item>
+        <item>Exodus 35</item><item>Exodus 36</item><item>Exodus 37</item><item>Exodus 38</item>
+        <item>Exodus 39</item><item>Exodus 40</item><item>Leviticus 1</item><item>Leviticus 2</item>
+        <item>Leviticus 3</item><item>Leviticus 4</item><item>Leviticus 5</item><item>Leviticus 6</item>
+        <item>Leviticus 7</item><item>Leviticus 8</item><item>Leviticus 9</item><item>Leviticus 10</item>
+        <item>Leviticus 11</item><item>Leviticus 12</item><item>Leviticus 13</item><item>Leviticus 14</item>
+        <item>Leviticus 15</item><item>Leviticus 16</item><item>Leviticus 17</item><item>Leviticus 18</item>
+        <item>Leviticus 19</item><item>Leviticus 20</item><item>Leviticus 21</item><item>Leviticus 22</item>
+        <item>Leviticus 23</item><item>Leviticus 24</item><item>Leviticus 25</item><item>Leviticus 26</item>
+        <item>Leviticus 27</item><item>Deuteronomy 1</item><item>Deuteronomy 2</item><item>Deuteronomy 3</item>
+        <item>Deuteronomy 4</item><item>Deuteronomy 5</item><item>Deuteronomy 6</item><item>Deuteronomy 7</item>
+        <item>Deuteronomy 8</item><item>Deuteronomy 9</item><item>Deuteronomy 10</item><item>Deuteronomy 11</item>
+        <item>Deuteronomy 12</item><item>Deuteronomy 13</item><item>Deuteronomy 14</item><item>Deuteronomy 15</item>
+        <item>Deuteronomy 16</item><item>Deuteronomy 17</item><item>Deuteronomy 18</item><item>Deuteronomy 19</item>
+        <item>Deuteronomy 20</item><item>Deuteronomy 21</item><item>Deuteronomy 22</item><item>Deuteronomy 23</item>
+        <item>Deuteronomy 24</item><item>Deuteronomy 25</item><item>Deuteronomy 26</item><item>Deuteronomy 27</item>
+        <item>Deuteronomy 28</item><item>Deuteronomy 29</item><item>Deuteronomy 30</item><item>Deuteronomy 31</item>
+        <item>Deuteronomy 32</item><item>Deuteronomy 33</item><item>Deuteronomy 34</item>
+    </string-array>
 </resources>
