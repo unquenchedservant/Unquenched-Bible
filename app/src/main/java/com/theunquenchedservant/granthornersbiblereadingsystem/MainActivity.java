@@ -1,5 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
@@ -37,13 +39,25 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
-    public void markLists(View view) {
-        Resources res = getResources();
-        String[] list_1  = res.getStringArray(R.array.list_1);
-        Toast.makeText(getApplicationContext(), "Reading Done!", Toast.LENGTH_LONG).show();
-        for(int i = 0; i < list_1.length;i++) {
-            Log.d("ARRAY", list_1[i]);
-        }
+    public void markAll(View view) {
+        int list1_number = getList1();
+        Log.d("List 1", Integer.toString(list1_number));
+        markList1();
     }
-
+    public void markList1(){
+        int number = getList1();
+        number++;
+        setList1(number);
+    }
+    public int getList1(){
+        SharedPreferences prefs = this.getSharedPreferences(
+                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
+        int list1_num = prefs.getInt("List 1", 1);
+        return list1_num;
+    }
+    public void setList1(int number){
+        SharedPreferences.Editor prefs = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
+        prefs.putInt("List 1", number);
+        prefs.apply();
+    }
 }
