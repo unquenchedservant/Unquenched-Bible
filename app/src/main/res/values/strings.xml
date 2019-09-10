@@ -5,6 +5,10 @@
     <string name="title_notifications">Notifications</string>
     <string name="channel_name">Daily Reading</string>
     <string name="channel_description">The daily reading comes in this channel</string>
+    <string name="reset_confirm">Are you sure you want to reset all the lists?</string>
+    <string name="reset_title">Reset Lists</string>
+    <string name="yes">Yes</string>
+    <string name="no">Cancel</string>
     <string-array
     name="list_1">
         <item>Matthew 1</item><item>Matthew 2</item><item>Matthew 3</item><item>Matthew 4</item>

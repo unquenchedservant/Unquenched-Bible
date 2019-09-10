@@ -41,7 +41,7 @@ public class HomeFragment extends Fragment {
         String str_today = formatter.format(today);
         current_date.setText(str_today);
         SharedPreferences prefRead = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
-        String check = prefRead.getString("dateClicked", "May 4");
+        String check = prefRead.getString("dateClicked", "None");
         if(check.equals(str_today)){
             Button button = (Button)root.findViewById(R.id.material_button);
             button.setText("Done!");
@@ -64,7 +64,6 @@ public class HomeFragment extends Fragment {
         setList(root, "List 8", R.array.list_8, R.id.list8_reading);
         setList(root, "List 9", R.array.list_9, R.id.list9_reading);
         setList(root, "List 10", R.array.list_10, R.id.list10_reading);
-        //TODO reset button
         return root;
     }
     public int getPsalmCheck(){

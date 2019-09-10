@@ -1,8 +1,11 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
@@ -100,20 +103,36 @@ public class MainActivity extends AppCompatActivity {
         }
     }
     public void reset(View view){
-        SharedPreferences.Editor prefs = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
-        prefs.putInt("List 1", 0);
-        prefs.putInt("List 2", 0);
-        prefs.putInt("List 3", 0);
-        prefs.putInt("List 4", 0);
-        prefs.putInt("List 5", 0);
-        prefs.putInt("List 6", 0);
-        prefs.putInt("List 7", 0);
-        prefs.putInt("List 8", 0);
-        prefs.putInt("List 9", 0);
-        prefs.putInt("List 10", 0);
-        prefs.apply();
-        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
-        navController.navigate(R.id.navigation_home);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i){
+                SharedPreferences.Editor prefs = getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
+                prefs.putInt("List 1", 0);
+                prefs.putInt("List 2", 0);
+                prefs.putInt("List 3", 0);
+                prefs.putInt("List 4", 0);
+                prefs.putInt("List 5", 0);
+                prefs.putInt("List 6", 0);
+                prefs.putInt("List 7", 0);
+                prefs.putInt("List 8", 0);
+                prefs.putInt("List 9", 0);
+                prefs.putInt("List 10", 0);
+                prefs.putString("dateClicked", "None");
+                prefs.apply();
+                NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
+                navController.navigate(R.id.navigation_home);
+            }
+        });
+        builder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                dialogInterface.cancel();
+            }
+        });
+        builder.setMessage(R.string.reset_confirm)
+                .setTitle(R.string.reset_title);
+        builder.create().show();
     }
     public void setChecked(View view){
         Switch psSwitch = (Switch)view.findViewById(R.id.psalms_switch);
