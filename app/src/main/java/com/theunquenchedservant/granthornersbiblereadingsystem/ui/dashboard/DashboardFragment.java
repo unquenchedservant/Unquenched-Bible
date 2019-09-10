@@ -15,6 +15,7 @@ import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity;
 import com.theunquenchedservant.granthornersbiblereadingsystem.R;
 
 public class DashboardFragment extends Fragment {
@@ -33,9 +34,8 @@ public class DashboardFragment extends Fragment {
                 textView.setText(s);
             }
         });
-        SharedPreferences pref = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
-        Switch psSwitch = (Switch)root.findViewById(R.id.psalms_switch);
-        int psCheck = pref.getInt("psalmSwitch", 0);
+        int psCheck = MainActivity.prefReadInt(getActivity(), "psalmSwitch");
+        Switch psSwitch = root.findViewById(R.id.psalms_switch);
         if(psCheck == 1){
             psSwitch.setChecked(true);
         }else{

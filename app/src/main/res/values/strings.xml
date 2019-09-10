@@ -9,6 +9,18 @@
     <string name="reset_title">Reset Lists</string>
     <string name="yes">Yes</string>
     <string name="no">Cancel</string>
+    <string name="l1">List 1</string>
+    <string name="l2">List 2</string>
+    <string name="l3">List 3</string>
+    <string name="l4">List 4</string>
+    <string name="l5">List 5</string>
+    <string name="l6">List 6</string>
+    <string name="l7">List 7</string>
+    <string name="l8">List 8</string>
+    <string name="l9">List 9</string>
+    <string name="l10">List 10</string>
+    <string name="notdone">Mark Done</string>
+    <string name="done">Done!</string>
     <string-array
     name="list_1">
         <item>Matthew 1</item><item>Matthew 2</item><item>Matthew 3</item><item>Matthew 4</item>

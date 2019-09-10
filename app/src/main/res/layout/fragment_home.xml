@@ -15,7 +15,7 @@
         android:layout_marginBottom="70dp"
         android:clickable="true"
         android:onClick="markAll"
-        android:text="Mark Done"
+        android:text="@string/notdone"
         android:textAlignment="center"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
         android:textIsSelectable="false"
@@ -36,7 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="70dp"
-        android:text="List 1"
+        android:text="@string/l1"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -46,7 +46,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="104dp"
-        android:text="List 2"
+        android:text="@string/l2"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="138dp"
-        android:text="List 3"
+        android:text="@string/l3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -66,7 +66,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="202dp"
-        android:text="List 5"
+        android:text="@string/l5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -76,7 +76,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="236dp"
-        android:text="List 6"
+        android:text="@string/l6"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -86,7 +86,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="270dp"
-        android:text="List 7"
+        android:text="@string/l7"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -96,7 +96,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="304dp"
-        android:text="List 8"
+        android:text="@string/l8"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -106,7 +106,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="338dp"
-        android:text="List 9"
+        android:text="@string/l9"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -116,7 +116,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="372dp"
-        android:text="List 10"
+        android:text="@string/l10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -126,7 +126,7 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="48dp"
         android:layout_marginTop="168dp"
-        android:text="List 4"
+        android:text="@string/l10"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -136,7 +136,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="196dp"
         android:layout_marginTop="16dp"
-        android:text="date"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -146,7 +145,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="70dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -156,7 +154,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="104dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -166,7 +163,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="138dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -176,7 +172,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="168dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -186,7 +181,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="202dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -196,7 +190,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="236dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -206,7 +199,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="270dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -216,7 +208,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="304dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -226,7 +217,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="338dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
@@ -236,7 +226,6 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="166dp"
         android:layout_marginTop="372dp"
-        android:text="TextView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>

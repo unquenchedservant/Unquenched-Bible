@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem;
 
 import android.app.AlertDialog;
-import android.app.Dialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
 import android.content.Context;
@@ -12,30 +11,21 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.dashboard.DashboardFragment;
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment;
-
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
 import androidx.navigation.ui.NavigationUI;
-
-import org.w3c.dom.Text;
-
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -56,10 +46,8 @@ public class MainActivity extends AppCompatActivity {
         notificationMaker();
     }
     private void notificationMaker(){
-        Date today = Calendar.getInstance().getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
-        String str_today = formatter.format(today);
-        String content = "";
+        String today = getCurrentDate();
+        String content;
         String list1 = getListContent("List 1", R.array.list_1);
         String list2 = getListContent("List 2", R.array.list_2);
         String list3 = getListContent("List 3", R.array.list_3);
@@ -73,7 +61,7 @@ public class MainActivity extends AppCompatActivity {
         content = list1 + "\n" + list2 + "\n" + list3 + "\n" + list4 + "\n" + list5 + "\n" + list6 + "\n" + list7 + "\n" + list8 + "\n" + list9 + "\n" + list10;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "daily")
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setContentTitle(str_today)
+                .setContentTitle(today)
                 .setContentText(content)
                 .setStyle(new NotificationCompat.BigTextStyle()
                         .bigText(content))
@@ -84,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
     private String getListContent(String listString, int ArrayId){
         Resources res = getResources();
         String[] list = res.getStringArray(ArrayId);
-        int number = getListNumber(listString);
+        int number = prefReadInt(this, listString);
         return list[number];
     }
     private void createNotificationChannel() {
@@ -99,6 +87,7 @@ public class MainActivity extends AppCompatActivity {
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
+            assert notificationManager != null;
             notificationManager.createNotificationChannel(channel);
         }
     }
@@ -107,19 +96,17 @@ public class MainActivity extends AppCompatActivity {
         builder.setPositiveButton(R.string.yes, new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialogInterface, int i){
-                SharedPreferences.Editor prefs = getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
-                prefs.putInt("List 1", 0);
-                prefs.putInt("List 2", 0);
-                prefs.putInt("List 3", 0);
-                prefs.putInt("List 4", 0);
-                prefs.putInt("List 5", 0);
-                prefs.putInt("List 6", 0);
-                prefs.putInt("List 7", 0);
-                prefs.putInt("List 8", 0);
-                prefs.putInt("List 9", 0);
-                prefs.putInt("List 10", 0);
-                prefs.putString("dateClicked", "None");
-                prefs.apply();
+                prefEditInt(MainActivity.this, "List 1", 0);
+                prefEditInt(MainActivity.this, "List 2", 0);
+                prefEditInt(MainActivity.this, "List 3", 0);
+                prefEditInt(MainActivity.this, "List 4", 0);
+                prefEditInt(MainActivity.this, "List 5", 0);
+                prefEditInt(MainActivity.this, "List 6", 0);
+                prefEditInt(MainActivity.this,"List 7", 0);
+                prefEditInt(MainActivity.this,"List 8", 0);
+                prefEditInt(MainActivity.this,"List 9", 0);
+                prefEditInt(MainActivity.this,"List 10", 0);
+                prefEditString(MainActivity.this,"dateClicked", "None");
                 NavController navController = Navigation.findNavController(MainActivity.this, R.id.nav_host_fragment);
                 navController.navigate(R.id.navigation_home);
             }
@@ -135,41 +122,31 @@ public class MainActivity extends AppCompatActivity {
         builder.create().show();
     }
     public void setChecked(View view){
-        Switch psSwitch = (Switch)view.findViewById(R.id.psalms_switch);
+        Switch psSwitch = view.findViewById(R.id.psalms_switch);
         int data;
         if(psSwitch.isChecked()){
             data = 1;
         }else{
             data = 0;
         }
-        SharedPreferences.Editor prefEdit = this.getSharedPreferences(
-                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
-        prefEdit.putInt("psalmSwitch",data);
-        prefEdit.apply();
+        prefEditInt(this, "psalmSwitch", data);
     }
     public void markAll(View view) {
-        Date today = Calendar.getInstance().getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
-        String str_today = formatter.format(today);
-        SharedPreferences.Editor prefEdit = this.getSharedPreferences(
-                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
-        SharedPreferences prefRead = this.getSharedPreferences(
-                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
-        String check = prefRead.getString("dateClicked", "May 4");
-        if(!check.equals(str_today)){
-            Log.d("Today", str_today);
+        String today = getCurrentDate();
+        String check = prefReadString(this, "dateClicked");
+        if(!check.equals(today)){
+            Log.d("Today", today);
             Log.d("Check", check);
-            prefEdit.putString("dateClicked", str_today);
-            prefEdit.apply();
-            Button button = (Button)view.findViewById(R.id.material_button);
-            button.setText("Done!");
+            prefEditString(this, "dateClicked", today);
+            Button button = view.findViewById(R.id.material_button);
+            button.setText(R.string.done);
             button.setEnabled(false);
             markList("List 1", R.array.list_1);
             markList("List 2", R.array.list_2);
             markList("List 3", R.array.list_3);
             markList("List 4", R.array.list_4);
             markList("List 5", R.array.list_5);
-            int psCheck = prefRead.getInt("psalmSwitch", 0);
+            int psCheck = prefReadInt(this, "psalmSwitch");
             if(psCheck == 0){
                 markList("List 6", R.array.list_6);
             }
@@ -179,8 +156,13 @@ public class MainActivity extends AppCompatActivity {
             markList("List 10", R.array.list_10);
         }
     }
+    public static String getCurrentDate(){
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd", Locale.US);
+        return formatter.format(today);
+    }
     public void markList(String listString, int arrayId){
-        int number = getListNumber(listString);
+        int number = prefReadInt(this, listString);
         number++;
         Resources res = getResources();
         String[] list = res.getStringArray(arrayId);
@@ -189,14 +171,33 @@ public class MainActivity extends AppCompatActivity {
         }
         setList(listString, number);
     }
-    public int getListNumber(String listString){
-        SharedPreferences prefs = this.getSharedPreferences(
-                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
-        return prefs.getInt(listString, 0);
-    }
     public void setList(String listString, int number){
-        SharedPreferences.Editor prefs = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
-        prefs.putInt(listString, number);
-        prefs.apply();
+        prefEditInt(this, listString, number);
+    }
+    public static SharedPreferences getPrefRead(Context context){
+        return context.getSharedPreferences(
+                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
+    }
+    public static SharedPreferences.Editor getPrefEdit(Context context){
+        return context.getSharedPreferences(
+                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
+    }
+    public static String prefReadString(Context context, String stringName){
+        SharedPreferences pref = getPrefRead(context);
+        return pref.getString(stringName, "");
+    }
+    public static int prefReadInt(Context context, String intName){
+        SharedPreferences pref = getPrefRead(context);
+        return pref.getInt(intName, 0);
+    }
+    public static void prefEditString(Context context, String name, String str){
+        SharedPreferences.Editor pref= getPrefEdit(context);
+        pref.putString(name, str);
+        pref.apply();
+    }
+    public static void prefEditInt(Context context, String name, int x){
+        SharedPreferences.Editor pref = getPrefEdit(context);
+        pref.putInt(name, x);
+        pref.apply();
     }
 }
