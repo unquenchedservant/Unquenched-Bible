@@ -6,6 +6,8 @@ import android.content.res.Resources;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -39,6 +41,19 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
     }
+    public void setChecked(View view){
+        Switch psSwitch = (Switch)view.findViewById(R.id.psalms_switch);
+        int data;
+        if(psSwitch.isChecked()){
+            data = 1;
+        }else{
+            data = 0;
+        }
+        SharedPreferences.Editor prefEdit = this.getSharedPreferences(
+                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
+        prefEdit.putInt("psalmSwitch",data);
+        prefEdit.apply();
+    }
     public void markAll(View view) {
         markList("List 1");
         markList("List 2");
@@ -56,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
         int list_num = prefs.getInt(listString, 0);
         return list_num;
     }
-    public void setList(String listString, int number){
+    public void setList(String listString, int number, int readingId, int arrayId){
         SharedPreferences.Editor prefs = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
         prefs.putInt(listString, number);
         prefs.apply();
