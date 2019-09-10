@@ -1,9 +1,12 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.dashboard;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -30,6 +33,14 @@ public class DashboardFragment extends Fragment {
                 textView.setText(s);
             }
         });
+        SharedPreferences pref = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
+        Switch psSwitch = (Switch)root.findViewById(R.id.psalms_switch);
+        int psCheck = pref.getInt("psalmSwitch", 0);
+        if(psCheck == 1){
+            psSwitch.setChecked(true);
+        }else{
+            psSwitch.setChecked(false);
+        }
         return root;
     }
 }
