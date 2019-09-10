@@ -9,16 +9,20 @@ import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Switch;
-import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.dashboard.DashboardFragment;
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -94,6 +98,22 @@ public class MainActivity extends AppCompatActivity {
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         }
+    }
+    public void reset(View view){
+        SharedPreferences.Editor prefs = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
+        prefs.putInt("List 1", 0);
+        prefs.putInt("List 2", 0);
+        prefs.putInt("List 3", 0);
+        prefs.putInt("List 4", 0);
+        prefs.putInt("List 5", 0);
+        prefs.putInt("List 6", 0);
+        prefs.putInt("List 7", 0);
+        prefs.putInt("List 8", 0);
+        prefs.putInt("List 9", 0);
+        prefs.putInt("List 10", 0);
+        prefs.apply();
+        NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
+        navController.navigate(R.id.navigation_home);
     }
     public void setChecked(View view){
         Switch psSwitch = (Switch)view.findViewById(R.id.psalms_switch);
