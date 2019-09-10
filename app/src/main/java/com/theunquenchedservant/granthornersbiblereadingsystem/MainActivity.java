@@ -130,10 +130,8 @@ public class MainActivity extends AppCompatActivity {
             markList("List 3", R.array.list_3);
             markList("List 4", R.array.list_4);
             markList("List 5", R.array.list_5);
-            Switch psSwitch = (Switch)view.findViewById(R.id.psalms_switch);
-            if(psSwitch.isChecked()){
-
-            }else {
+            int psCheck = prefRead.getInt("psalmSwitch", 0);
+            if(psCheck == 0){
                 markList("List 6", R.array.list_6);
             }
             markList("List 7", R.array.list_7);
