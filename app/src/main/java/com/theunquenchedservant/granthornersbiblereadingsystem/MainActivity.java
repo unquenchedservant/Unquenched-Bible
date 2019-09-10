@@ -153,8 +153,7 @@ public class MainActivity extends AppCompatActivity {
     public int getListNumber(String listString){
         SharedPreferences prefs = this.getSharedPreferences(
                 "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
-        int list_num = prefs.getInt(listString, 0);
-        return list_num;
+        return prefs.getInt(listString, 0);
     }
     public void setList(String listString, int number){
         SharedPreferences.Editor prefs = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
