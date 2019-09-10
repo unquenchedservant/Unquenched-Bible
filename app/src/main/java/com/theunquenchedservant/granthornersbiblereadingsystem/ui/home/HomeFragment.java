@@ -8,6 +8,8 @@ import android.preference.PreferenceManager;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.Switch;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -40,7 +42,26 @@ public class HomeFragment extends Fragment {
         setList(root, "List 1", R.array.list_1, R.id.list1_reading);
         setList(root, "List 2", R.array.list_2, R.id.list2_reading);
         setList(root, "List 3", R.array.list_3, R.id.list3_reading);
+        setList(root, "List 4", R.array.list_4, R.id.list4_reading);
+        setList(root, "List 5", R.array.list_5, R.id.list5_reading);
+        int psCheck = getPsalmCheck();
+        if(psCheck == 1){
+            TextView list_reading = (TextView)root.findViewById(R.id.list6_reading);
+            String pa1 = "Psalm " + Integer.toString(day) + ", " + Integer.toString(day + 30) + ", " + Integer.toString(day + 60) + ", " + Integer.toString(day + 90) + ", " + Integer.toString(day + 120);
+            list_reading.setText(pa1);
+        }else {
+            setList(root, "List 6", R.array.list_6, R.id.list6_reading);
+        }
+        setList(root, "List 7", R.array.list_7, R.id.list7_reading);
+        setList(root, "List 8", R.array.list_8, R.id.list8_reading);
+        setList(root, "List 9", R.array.list_9, R.id.list9_reading);
+        setList(root, "List 10", R.array.list_10, R.id.list10_reading);
+        //TODO reset button
         return root;
+    }
+    public int getPsalmCheck(){
+        SharedPreferences pref = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
+        return pref.getInt("psalmSwitch", 0);
     }
     public void setList(View view, String list_string, int listId, int readingId){
         SharedPreferences pref = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
