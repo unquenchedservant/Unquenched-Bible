@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Grant Horners Bible Reading System</string>
     <string name="title_home">Home</string>
-    <string name="title_dashboard">Dashboard</string>
+    <string name="title_dashboard">Settings</string>
     <string name="title_notifications">Notifications</string>
     <string name="channel_name">Daily Reading</string>
     <string name="channel_description">The daily reading comes in this channel</string>
