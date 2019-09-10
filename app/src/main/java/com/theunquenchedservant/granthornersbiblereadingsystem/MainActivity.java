@@ -109,15 +109,48 @@ public class MainActivity extends AppCompatActivity {
         prefEdit.apply();
     }
     public void markAll(View view) {
-        markList("List 1");
-        markList("List 2");
-        markList("List 3");
-        Resources res = getResources();
+        Date today = Calendar.getInstance().getTime();
+        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
+        String str_today = formatter.format(today);
+        SharedPreferences.Editor prefEdit = this.getSharedPreferences(
+                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit();
+        SharedPreferences prefRead = this.getSharedPreferences(
+                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
+        String check = prefRead.getString("dateClicked", "May 4");
+        if(!check.equals(str_today)){
+            Log.d("Today", str_today);
+            Log.d("Check", check);
+            prefEdit.putString("dateClicked", str_today);
+            prefEdit.apply();
+            Button button = (Button)view.findViewById(R.id.material_button);
+            button.setText("Done!");
+            button.setEnabled(false);
+            markList("List 1", R.array.list_1, R.id.list1_reading);
+            markList("List 2", R.array.list_2, R.id.list2_reading);
+            markList("List 3", R.array.list_3, R.id.list3_reading);
+            markList("List 4", R.array.list_4, R.id.list4_reading);
+            markList("List 5", R.array.list_5, R.id.list5_reading);
+            Switch psSwitch = (Switch)view.findViewById(R.id.psalms_switch);
+            if(psSwitch.isChecked()){
+
+            }else {
+                markList("List 6", R.array.list_6, R.id.list6_reading);
+            }
+            markList("List 7", R.array.list_7, R.id.list7_reading);
+            markList("List 8", R.array.list_8, R.id.list8_reading);
+            markList("List 9", R.array.list_9, R.id.list9_reading);
+            markList("List 10", R.array.list_10, R.id.list10_reading);
+        }
     }
-    public void markList(String listString){
+    public void markList(String listString, int arrayId, int readingId){
         int number = getListNumber(listString);
         number++;
-        setList(listString, number);
+        Resources res = getResources();
+        String[] list = res.getStringArray(arrayId);
+        if(number == list.length){
+            number = 0;
+        }
+        setList(listString, number, readingId, arrayId);
     }
     public int getListNumber(String listString){
         SharedPreferences prefs = this.getSharedPreferences(
