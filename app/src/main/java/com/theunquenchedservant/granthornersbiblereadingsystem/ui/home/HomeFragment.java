@@ -36,9 +36,17 @@ public class HomeFragment extends Fragment {
         View root = inflater.inflate(R.layout.fragment_home, container, false);
         TextView current_date = (TextView)root.findViewById(R.id.current_date);
         Date today = Calendar.getInstance().getTime();
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         SimpleDateFormat formatter = new SimpleDateFormat("MMM dd");
         String str_today = formatter.format(today);
         current_date.setText(str_today);
+        SharedPreferences prefRead = getActivity().getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE);
+        String check = prefRead.getString("dateClicked", "May 4");
+        if(check.equals(str_today)){
+            Button button = (Button)root.findViewById(R.id.material_button);
+            button.setText("Done!");
+            button.setEnabled(false);
+        }
         setList(root, "List 1", R.array.list_1, R.id.list1_reading);
         setList(root, "List 2", R.array.list_2, R.id.list2_reading);
         setList(root, "List 3", R.array.list_3, R.id.list3_reading);
