@@ -21,6 +21,11 @@
     <string name="l10">List 10</string>
     <string name="notdone">Mark Done</string>
     <string name="done">Done!</string>
+    <string name="reset">Reset Lists</string>
+    <string name="psToggle">Psalms Based On Day</string>
+    <string name="notToggle">Notifications</string>
+    <string name="notifOn">Notifications On</string>
+    <string name="noifOff">Notifications Off</string>
     <string-array
     name="list_1">
         <item>Matthew 1</item><item>Matthew 2</item><item>Matthew 3</item><item>Matthew 4</item>

@@ -1,10 +1,13 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem;
 
+import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
@@ -12,9 +15,14 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.CompoundButton;
 import android.widget.Switch;
+import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver;
+
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
@@ -29,9 +37,14 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
 
+    private static final int NOTIFICATION_ID=0;
+    private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
+    private NotificationManager mNotificationManager;
+    private Resources res = getResources();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
         BottomNavigationView navView = findViewById(R.id.nav_view);
         // Passing each menu ID as a set of Ids because each
@@ -42,22 +55,25 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
+        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
+        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         createNotificationChannel();
-        notificationMaker();
+        Switch alarmToggle = findViewById(R.id.notificationToggle);
     }
-    private void notificationMaker(){
-        String today = getCurrentDate();
+    public static String getContent(Context context){
+        String today = getCurrentDate(false);
         String content;
-        String list1 = getListContent("List 1", R.array.list_1);
-        String list2 = getListContent("List 2", R.array.list_2);
-        String list3 = getListContent("List 3", R.array.list_3);
-        String list4 = getListContent("List 4", R.array.list_4);
-        String list5 = getListContent("List 5", R.array.list_5);
-        String list6 = getListContent("List 6", R.array.list_6);
-        String list7 = getListContent("List 7", R.array.list_7);
-        String list8 = getListContent("List 8", R.array.list_8);
-        String list9 = getListContent("List 9", R.array.list_9);
-        String list10 = getListContent("List 10", R.array.list_10);
+        String list1 = getListContent(context, "List 1", R.array.list_1);
+        String list2 = getListContent(context, "List 2", R.array.list_2);
+        String list3 = getListContent(context, "List 3", R.array.list_3);
+        String list4 = getListContent(context, "List 4", R.array.list_4);
+        String list5 = getListContent(context, "List 5", R.array.list_5);
+        String list6 = getListContent(context, "List 6", R.array.list_6);
+        String list7 = getListContent(context, "List 7", R.array.list_7);
+        String list8 = getListContent(context, "List 8", R.array.list_8);
+        String list9 = getListContent(context,"List 9", R.array.list_9);
+        String list10 = getListContent(context, "List 10", R.array.list_10);
         content = list1 + "\n" + list2 + "\n" + list3 + "\n" + list4 + "\n" + list5 + "\n" + list6 + "\n" + list7 + "\n" + list8 + "\n" + list9 + "\n" + list10;
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "daily")
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
@@ -68,11 +84,11 @@ public class MainActivity extends AppCompatActivity {
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT);
         NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
         notificationManager.notify(3, builder.build());
+        return content;
     }
-    private String getListContent(String listString, int ArrayId){
-        Resources res = getResources();
-        String[] list = res.getStringArray(ArrayId);
-        int number = prefReadInt(this, listString);
+    public static String getListContent(Context context, String listString, int ArrayId){
+        String[] list = Resources.getSystem().getStringArray(ArrayId);
+        int number = prefReadInt(context, listString);
         return list[number];
     }
     private void createNotificationChannel() {
@@ -84,6 +100,7 @@ public class MainActivity extends AppCompatActivity {
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
             NotificationChannel channel = new NotificationChannel("daily", name, importance);
             channel.setDescription(description);
+            channel.enableVibration(true);
             // Register the channel with the system; you can't change the importance
             // or other notification behaviors after this
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
@@ -131,8 +148,9 @@ public class MainActivity extends AppCompatActivity {
         }
         prefEditInt(this, "psalmSwitch", data);
     }
+    public void
     public void markAll(View view) {
-        String today = getCurrentDate();
+        String today = getCurrentDate(false);
         String check = prefReadString(this, "dateClicked");
         if(!check.equals(today)){
             Log.d("Today", today);
@@ -156,9 +174,14 @@ public class MainActivity extends AppCompatActivity {
             markList("List 10", R.array.list_10);
         }
     }
-    public static String getCurrentDate(){
+    public static String getCurrentDate(Boolean fullMonth){
         Date today = Calendar.getInstance().getTime();
-        SimpleDateFormat formatter = new SimpleDateFormat("MMM dd", Locale.US);
+        SimpleDateFormat formatter;
+        if(fullMonth){
+            formatter = new SimpleDateFormat("MMMM dd", Locale.US);
+        }else {
+            formatter = new SimpleDateFormat("MMM dd", Locale.US);
+        }
         return formatter.format(today);
     }
     public void markList(String listString, int arrayId){
@@ -200,4 +223,10 @@ public class MainActivity extends AppCompatActivity {
         pref.putInt(name, x);
         pref.apply();
     }
+    public static void deliverNotification(Context context){
+        Intent contentIntent = new Intent(context, MainActivity.class);
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+    }
 }
+

@@ -8,7 +8,9 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProviders;
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity;
 import com.theunquenchedservant.granthornersbiblereadingsystem.R;
@@ -20,10 +22,15 @@ public class HomeFragment extends Fragment {
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
         View root = inflater.inflate(R.layout.fragment_home, container, false);
-        TextView current_date = root.findViewById(R.id.current_date);
+        final TextView textView = root.findViewById(R.id.text_home);
+        homeViewModel.getText().observe(this, new Observer<String>() {
+            @Override
+            public void onChanged(@Nullable String s) {
+                textView.setText(MainActivity.getCurrentDate(true));
+            }
+        });
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
-        String str_today = MainActivity.getCurrentDate();
-        current_date.setText(str_today);
+        String str_today = MainActivity.getCurrentDate(false);
         String check = MainActivity.prefReadString(getActivity(), "dateClicked");
         if(check.equals(str_today)){
             Button button = root.findViewById(R.id.material_button);
@@ -38,7 +45,7 @@ public class HomeFragment extends Fragment {
         int psCheck = MainActivity.prefReadInt(getActivity(),"psalmSwitch");
         if(psCheck == 1){
             TextView list_reading = (root.findViewById(R.id.list6_reading));
-            String pa1 = "Psalm " + day + ", " + day + 30 + ", " + day + 60 + ", " + day + 90 + ", " + day + 120;
+            String pa1 = "Psalm " + day + ", " + Integer.toString(day + 30) + ", " + Integer.toString(day + 60) + ", " + Integer.toString(day + 90) + ", " + Integer.toString(day + 120);
             list_reading.setText(pa1);
         }else {
             setList(root, "List 6", R.array.list_6, R.id.list6_reading);

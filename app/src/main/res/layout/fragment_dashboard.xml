@@ -5,19 +5,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:id="@+id/text_dashboard"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
 
     <Switch
         android:id="@+id/psalms_switch"
@@ -26,7 +13,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginTop="75dp"
         android:onClick="setChecked"
-        android:text="Psalms Based on Day"
+        android:text="@string/psToggle"
         android:tooltipText="If Sept. 3, gives Psalm 3, 33, 63, 93, 123. No Psalms on 31st"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -38,7 +25,7 @@
         android:backgroundTint="#D08B0000"
         android:foregroundTint="#B60D0D"
         android:onClick="reset"
-        android:text="RESET"
+        android:text="@string/reset"
         android:textAlignment="center"
         android:textColor="#FFFFFF"
         android:textColorHighlight="#0A309E"
