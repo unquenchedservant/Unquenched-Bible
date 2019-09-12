@@ -29,6 +29,7 @@ public class AlarmReceiver extends BroadcastReceiver {
         String content = MainActivity.getContent(context);
         PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
+                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setContentTitle(today)
                 .setContentText(content)
                 .setContentIntent(contentPendingIntent)
