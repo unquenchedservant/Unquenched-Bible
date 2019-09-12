@@ -7,7 +7,6 @@ import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.os.Build;
@@ -15,17 +14,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.CompoundButton;
 import android.widget.Switch;
-import android.widget.Toast;
-import android.widget.ToggleButton;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver;
-
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.app.NotificationCompat;
-import androidx.core.app.NotificationManagerCompat;
 import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 import androidx.navigation.ui.AppBarConfiguration;
@@ -36,11 +28,8 @@ import java.util.Date;
 import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final int NOTIFICATION_ID=0;
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
-    private NotificationManager mNotificationManager;
-    private Resources res = getResources();
+    private static final int NOTIFICATION_ID=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,11 +44,7 @@ public class MainActivity extends AppCompatActivity {
         NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment);
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
-        Intent notifyIntent = new Intent(this, AlarmReceiver.class);
-        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(this, NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager alarmManager = (AlarmManager) getSystemService(ALARM_SERVICE);
         createNotificationChannel();
-        Switch alarmToggle = findViewById(R.id.notificationToggle);
     }
     public static String getContent(Context context){
         String today = getCurrentDate(false);
@@ -74,20 +59,27 @@ public class MainActivity extends AppCompatActivity {
         String list8 = getListContent(context, "List 8", R.array.list_8);
         String list9 = getListContent(context,"List 9", R.array.list_9);
         String list10 = getListContent(context, "List 10", R.array.list_10);
-        content = list1 + "\n" + list2 + "\n" + list3 + "\n" + list4 + "\n" + list5 + "\n" + list6 + "\n" + list7 + "\n" + list8 + "\n" + list9 + "\n" + list10;
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(this, "daily")
-                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
-                .setContentTitle(today)
-                .setContentText(content)
-                .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(content))
-                .setPriority(NotificationCompat.PRIORITY_DEFAULT);
-        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(this);
-        notificationManager.notify(3, builder.build());
+        content = today + ":\n" + list1 + "\n" + list2 + "\n" + list3 + "\n" + list4 + "\n" + list5 + "\n" + list6 + "\n" + list7 + "\n" + list8 + "\n" + list9 + "\n" + list10;
         return content;
     }
+    public static void cancelAlarm(Context context, PendingIntent notifyPendingIntent){
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        if (alarmManager != null){
+            alarmManager.cancel(notifyPendingIntent);
+        }
+    }
+    public static void createAlarm(Context context, PendingIntent notifyPendingIntent){
+
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 22);
+        calendar.set(Calendar.MINUTE, 26);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, calendar.getTimeInMillis(), notifyPendingIntent);
+    }
     public static String getListContent(Context context, String listString, int ArrayId){
-        String[] list = Resources.getSystem().getStringArray(ArrayId);
+        Resources res = context.getResources();
+        String[] list = res.getStringArray(ArrayId);
         int number = prefReadInt(context, listString);
         return list[number];
     }
@@ -98,7 +90,7 @@ public class MainActivity extends AppCompatActivity {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
             int importance = NotificationManager.IMPORTANCE_DEFAULT;
-            NotificationChannel channel = new NotificationChannel("daily", name, importance);
+            NotificationChannel channel = new NotificationChannel(PRIMARY_CHANNEL_ID, name, importance);
             channel.setDescription(description);
             channel.enableVibration(true);
             // Register the channel with the system; you can't change the importance
@@ -148,7 +140,6 @@ public class MainActivity extends AppCompatActivity {
         }
         prefEditInt(this, "psalmSwitch", data);
     }
-    public void
     public void markAll(View view) {
         String today = getCurrentDate(false);
         String check = prefReadString(this, "dateClicked");
@@ -222,11 +213,6 @@ public class MainActivity extends AppCompatActivity {
         SharedPreferences.Editor pref = getPrefEdit(context);
         pref.putInt(name, x);
         pref.apply();
-    }
-    public static void deliverNotification(Context context){
-        Intent contentIntent = new Intent(context, MainActivity.class);
-        PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
-
     }
 }
 
