@@ -25,19 +25,17 @@ public class AlarmReceiver extends BroadcastReceiver {
     }
     private void deliverNotification(Context context){
         String today = MainActivity.getCurrentDate(false);
-        Intent contentIntent = new Intent(context, MainActivity.class);
+        Intent finishIntent = new Intent(context, AlarmReceiver.class);
+        finishIntent.putExtra("action","Done");
         String content = MainActivity.getContent(context);
-        PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, contentIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+        String smallContent = MainActivity.getSmallContent(context);
+        PendingIntent contentPendingIntent = PendingIntent.getActivity(context, NOTIFICATION_ID, finishIntent, PendingIntent.FLAG_UPDATE_CURRENT);
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setContentTitle(today)
-                .setContentText(content)
+                .setContentText(smallContent)
                 .setStyle(new NotificationCompat.BigTextStyle()
-                        .bigText(content))
-                .setContentIntent(contentPendingIntent)
-                .setPriority(NotificationCompat.PRIORITY_HIGH)
-                .setAutoCancel(true)
-                .setDefaults(NotificationCompat.DEFAULT_ALL);
+                        .bigText(content));
         mNotificationManager.notify(NOTIFICATION_ID, builder.build());
     }
 
