@@ -46,8 +46,15 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupWithNavController(navView, navController);
         createNotificationChannel();
     }
+    public static String getSmallContent(Context context){
+        String content;
+        String list1 = getListContent(context, "List 1", R.array.list_1);
+        String list2 = getListContent(context, "List 2", R.array.list_2);
+
+        content = list1 + "\n" + list2 + "...";
+        return content;
+    }
     public static String getContent(Context context){
-        String today = getCurrentDate(false);
         String content;
         String list1 = getListContent(context, "List 1", R.array.list_1);
         String list2 = getListContent(context, "List 2", R.array.list_2);
@@ -59,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         String list8 = getListContent(context, "List 8", R.array.list_8);
         String list9 = getListContent(context,"List 9", R.array.list_9);
         String list10 = getListContent(context, "List 10", R.array.list_10);
-        content = today + ":\n" + list1 + "\n" + list2 + "\n" + list3 + "\n" + list4 + "\n" + list5 + "\n" + list6 + "\n" + list7 + "\n" + list8 + "\n" + list9 + "\n" + list10;
+        content = list1 + "\n" + list2 + "\n" + list3 + "\n" + list4 + "\n" + list5 + "\n" + list6 + "\n" + list7 + "\n" + list8 + "\n" + list9 + "\n" + list10;
         return content;
     }
     public static void cancelAlarm(Context context, PendingIntent notifyPendingIntent){
@@ -72,10 +79,10 @@ public class MainActivity extends AppCompatActivity {
 
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
-        calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, 22);
-        calendar.set(Calendar.MINUTE, 26);
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC, calendar.getTimeInMillis(), notifyPendingIntent);
+        calendar.set(Calendar.HOUR_OF_DAY, 7);
+        calendar.set(Calendar.MINUTE, 51);
+        //calendar.add(Calendar.DAY_OF_YEAR, 1);
+        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifyPendingIntent);
     }
     public static String getListContent(Context context, String listString, int ArrayId){
         Resources res = context.getResources();
@@ -184,6 +191,19 @@ public class MainActivity extends AppCompatActivity {
             number = 0;
         }
         setList(listString, number);
+    }
+    public static void markListStatic(String listString, int arrayId, Context context){
+        int number = prefReadInt(context, listString);
+        number++;
+        Resources res = context.getResources();
+        String[] list = res.getStringArray(arrayId);
+        if(number == list.length){
+            number = 0;
+        }
+        setListStatic(listString, number, context);
+    }
+    public static void setListStatic(String listString, int number, Context context){
+        prefEditInt(context, listString, number);
     }
     public void setList(String listString, int number){
         prefEditInt(this, listString, number);

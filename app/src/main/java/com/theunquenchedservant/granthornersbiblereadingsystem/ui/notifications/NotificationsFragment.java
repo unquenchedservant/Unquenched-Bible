@@ -28,18 +28,16 @@ public class NotificationsFragment extends Fragment {
         NotificationsViewModel notificationsViewModel = ViewModelProviders.of(this).get(NotificationsViewModel.class);
         View root = inflater.inflate(R.layout.fragment_notifications, container, false);
         Switch notificationToggle = root.findViewById(R.id.notificationToggle);
-        if(MainActivity.prefReadInt(getActivity(), "notifications") == 1){
-            notificationToggle.setChecked(true);
-        }else{
-            notificationToggle.setChecked(false);
-        }
+        Intent notifyIntent = new Intent(getActivity(), AlarmReceiver.class);
+        boolean alarmUp = (PendingIntent.getBroadcast(getActivity(), 0, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null);
+        notificationToggle.setChecked(alarmUp);
         notificationToggle.setOnCheckedChangeListener(
                 new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton compoundButton, boolean isChecked) {
                         String toastMessage;
                         Intent notifyIntent = new Intent(getActivity(), AlarmReceiver.class);
-                        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(getActivity(), NOTIFICATION_ID, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        PendingIntent notifyPendingIntent = PendingIntent.getBroadcast(getActivity(), 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT);
                         if(isChecked){
                             MainActivity.prefEditInt(getActivity(), "notifications", 1);
                             MainActivity.createAlarm(getActivity(), notifyPendingIntent);

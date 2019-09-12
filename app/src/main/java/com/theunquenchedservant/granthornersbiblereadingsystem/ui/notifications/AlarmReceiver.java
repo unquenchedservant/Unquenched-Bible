@@ -22,6 +22,19 @@ public class AlarmReceiver extends BroadcastReceiver {
     public void onReceive(Context context, Intent intent) {
         mNotificationManager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
         deliverNotification(context);
+        String action = intent.getStringExtra("action");
+        if(action.equals("Done")){
+            MainActivity.markListStatic("List 1", R.array.list_1, context);
+            MainActivity.markListStatic("List 2", R.array.list_2, context);
+            MainActivity.markListStatic("List 3", R.array.list_3, context);
+            MainActivity.markListStatic("List 4", R.array.list_4, context);
+            MainActivity.markListStatic("List 5", R.array.list_5, context);
+            MainActivity.markListStatic("List 6", R.array.list_6, context);
+            MainActivity.markListStatic("List 7", R.array.list_7, context);
+            MainActivity.markListStatic("List 8", R.array.list_8, context);
+            MainActivity.markListStatic("List 9", R.array.list_9, context);
+            MainActivity.markListStatic("List 10", R.array.list_10, context);
+        }
     }
     private void deliverNotification(Context context){
         String today = MainActivity.getCurrentDate(false);
