@@ -20,7 +20,7 @@
     <string name="l9">Prophets</string>
     <string name="l10">Acts</string>
     <string name="notdone">Mark Done</string>
-    <string name="done">Done!</string>
+    <string name="done">Already Done For Today!</string>
     <string name="reset">Reset Lists</string>
     <string name="psToggle">Psalms Based On Day</string>
     <string name="notToggle">Notifications</string>
