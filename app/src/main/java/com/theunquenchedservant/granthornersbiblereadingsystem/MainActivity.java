@@ -32,7 +32,6 @@ import java.util.Locale;
 
 public class MainActivity extends AppCompatActivity {
     private static final String PRIMARY_CHANNEL_ID = "primary_notification_channel";
-    private static final int NOTIFICATION_ID=0;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
