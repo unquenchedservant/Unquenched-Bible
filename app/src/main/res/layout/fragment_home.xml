@@ -5,81 +5,42 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <com.google.android.material.button.MaterialButton
+    <Button
         android:id="@+id/material_button"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="324dp"
+        android:layout_height="38dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="553dp"
+        android:layout_marginTop="450dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="70dp"
+        android:layout_weight="1"
         android:clickable="true"
         android:onClick="markAll"
         android:text="@string/notdone"
         android:textAlignment="center"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textAppearance="@style/Theme.MaterialComponents.DayNight.DialogWhenLarge"
+        android:textColor="@color/colorPrimaryDark"
         android:textIsSelectable="false"
-        android:textSize="24sp"
+        android:textSize="14sp"
         android:typeface="normal"
         android:visibility="visible"
-        app:backgroundTint="#00B0FF"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="1.0" />
 
-    <TextView
-        android:id="@+id/list1_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="70dp"
-        android:text="@string/l1"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
-    <TextView
-        android:id="@+id/list2_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="104dp"
-        android:text="@string/l2"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/list3_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="138dp"
-        android:text="@string/l3"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
-        android:id="@+id/list5_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="48dp"
-        android:layout_marginTop="202dp"
-        android:text="@string/l5"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
-
-    <TextView
+    <com.google.android.material.textview.MaterialTextView
         android:id="@+id/text_home"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="8dp"
+        android:layout_marginTop="40dp"
+        android:fontFamily="@font/roboto_condensed_regular"
         android:textAlignment="center"
         android:textSize="20sp"
-        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
