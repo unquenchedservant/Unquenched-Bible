@@ -45,6 +45,8 @@ public class MainActivity extends AppCompatActivity {
         NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
         NavigationUI.setupWithNavController(navView, navController);
         createNotificationChannel();
+        createDailyCheck(this);
+        AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
     }
     public static String getSmallContent(Context context){
         String content;
@@ -74,6 +76,29 @@ public class MainActivity extends AppCompatActivity {
         if (alarmManager != null){
             alarmManager.cancel(notifyPendingIntent);
         }
+    }
+    public static void createDailyCheck(Context context){
+        AlarmManager alarmMgr;
+        PendingIntent alarmIntent;
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 0);
+        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, dailyCheck.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+        alarmMgr.setInexactRepeating(AlarmManager.RTC, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, alarmIntent);
+    }
+    public static void createRemindAlarm(Context context, PendingIntent notifyPendingIntent){
+        int rHour = prefReadInt(context, "remindHour");
+        int rMinute = prefReadInt(context, "remindMinute");
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
+        Calendar calendar = Calendar.getInstance();
+        calendar.set(Calendar.HOUR_OF_DAY, rHour);
+        calendar.set(Calendar.MINUTE, rMinute);
+        if(calendar.before(Calendar.getInstance())){
+            calendar.add(Calendar.DATE, 1);
+        }
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
     }
     public static void createAlarm(Context context, PendingIntent notifyPendingIntent){
 
@@ -170,6 +195,12 @@ public class MainActivity extends AppCompatActivity {
             markList("List 8", R.array.list_8);
             markList("List 9", R.array.list_9);
             markList("List 10", R.array.list_10);
+            int curStreak = prefReadInt(this, "curStreak")+1;
+            int maxStreak = prefReadInt(this, "maxStreak");
+            prefEditInt(this, "curStreak", curStreak);
+            if(curStreak>maxStreak){
+                prefEditInt(this, "maxStreak", curStreak);
+            }
         }
     }
     public static String getCurrentDate(Boolean fullMonth){

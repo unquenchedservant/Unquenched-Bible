@@ -23,7 +23,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R;
 import java.util.Calendar;
 
 public class HomeFragment extends Fragment {
-
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
         HomeViewModel homeViewModel = ViewModelProviders.of(this).get(HomeViewModel.class);
@@ -38,14 +37,26 @@ public class HomeFragment extends Fragment {
                 textView.setAllCaps(true);
             }
         });
+        int currentStreak = MainActivity.prefReadInt(getActivity(), "curStreak");
+        int maxStreak = MainActivity.prefReadInt(getActivity(), "maxStreak");
+        TextView curStreak = root.findViewById(R.id.curStreak);
+        TextView mStreak = root.findViewById(R.id.maxStreak);
+        curStreak.setText(Integer.toString(currentStreak));
+        mStreak.setText(Integer.toString(maxStreak));
         int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         String str_today = MainActivity.getCurrentDate(false);
         String check = MainActivity.prefReadString(getActivity(), "dateClicked");
+        Button button = root.findViewById(R.id.material_button);
         if(check.equals(str_today)){
-            Button button = root.findViewById(R.id.material_button);
             button.setText(R.string.done);
+            button.setBackgroundColor(Color.parseColor("#00383838"));
+            textView.setText(R.string.tomorrow);
             button.setEnabled(false);
+        }else{
+            textView.setText(MainActivity.getCurrentDate(true));
+            button.setBackgroundColor(Color.parseColor("#383838"));
         }
+
         setList(root, "List 1", R.array.list_1, R.id.list1_reading);
         setList(root, "List 2", R.array.list_2, R.id.list2_reading);
         setList(root, "List 3", R.array.list_3, R.id.list3_reading);
