@@ -26,6 +26,15 @@
     <string name="notToggle">Notifications</string>
     <string name="notifOn">Notifications On</string>
     <string name="noifOff">Notifications Off</string>
+    <string name="dailyLabel">Daily Notification Time</string>
+    <string name="reminderLabel">Reminder Notification Time</string>
+    <string name="helpText">Change Time</string>
+    <string name="stat_title">STATS</string>
+    <string name="curStreak">Current Streak:</string>
+    <string name="maxStreak">Max Streak:</string>
+    <string name="percentRead">% Read:</string>
+    <string name="remTitle">Reminder!</string>
+    <string name="tomorrow">Tomorrow\'s Reading</string>
     <string-array
     name="list_1">
         <item>Mt. 1</item><item>Mt. 2</item><item>Mt. 3</item><item>Mt. 4</item>
