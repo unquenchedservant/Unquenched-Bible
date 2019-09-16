@@ -105,13 +105,16 @@ public class MainActivity extends AppCompatActivity {
         alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
     }
     public static void createAlarm(Context context, PendingIntent notifyPendingIntent){
-
+        int hour = prefReadInt(context, "dailyHour");
+        int minute = prefReadInt(context, "dailyMinute");
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(ALARM_SERVICE);
         Calendar calendar = Calendar.getInstance();
-        calendar.set(Calendar.HOUR_OF_DAY, 7);
-        calendar.set(Calendar.MINUTE, 51);
-        //calendar.add(Calendar.DAY_OF_YEAR, 1);
-        alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), notifyPendingIntent);
+        calendar.set(Calendar.HOUR_OF_DAY, hour);
+        calendar.set(Calendar.MINUTE, minute);
+        if(calendar.before(Calendar.getInstance())){
+            calendar.add(Calendar.DATE, 1);
+        }
+        alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, notifyPendingIntent);
     }
     public static String getListContent(Context context, String listString, int ArrayId){
         Resources res = context.getResources();
