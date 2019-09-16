@@ -272,5 +272,17 @@ public class MainActivity extends AppCompatActivity {
         pref.putInt(name, x);
         pref.apply();
     }
+    public static String getYesterdayDate(Boolean fullMonth){
+        Calendar calendar = Calendar.getInstance();
+        calendar.add(Calendar.DATE, -1);
+        Date today = calendar.getTime();
+        SimpleDateFormat formatter;
+        if(fullMonth){
+            formatter = new SimpleDateFormat("MMMM dd", Locale.US);
+        }else {
+            formatter = new SimpleDateFormat("MMM dd", Locale.US);
+        }
+        return formatter.format(today);
+    }
 }
 
