@@ -183,8 +183,6 @@ public class MainActivity extends AppCompatActivity {
         String today = getCurrentDate(false);
         String check = prefReadString(this, "dateClicked");
         if(!check.equals(today)){
-            Log.d("Today", today);
-            Log.d("Check", check);
             prefEditString(this, "dateClicked", today);
             Button button = view.findViewById(R.id.material_button);
             button.setText(R.string.done);
