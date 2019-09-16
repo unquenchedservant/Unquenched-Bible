@@ -48,27 +48,31 @@ public class MainActivity extends AppCompatActivity {
         createDailyCheck(this);
         AlarmManager alarmManager = (AlarmManager) this.getSystemService(ALARM_SERVICE);
     }
-    public static String getSmallContent(Context context){
-        String content;
-        String list1 = getListContent(context, "List 1", R.array.list_1);
-        String list2 = getListContent(context, "List 2", R.array.list_2);
-
-        content = list1 + "\n" + list2 + "...";
-        return content;
-    }
-    public static String getContent(Context context){
-        String content;
+    public static String[] getContent(Context context){
+        String list6;
+        int day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH);
         String list1 = getListContent(context, "List 1", R.array.list_1);
         String list2 = getListContent(context, "List 2", R.array.list_2);
         String list3 = getListContent(context, "List 3", R.array.list_3);
         String list4 = getListContent(context, "List 4", R.array.list_4);
         String list5 = getListContent(context, "List 5", R.array.list_5);
-        String list6 = getListContent(context, "List 6", R.array.list_6);
+        int psCheck = prefReadInt(context, "psalmSwitch");
+        if(psCheck == 0){
+            list6 = getListContent(context, "List 6", R.array.list_6);
+        }else{
+            list6 = "Psalm " + day + ", " + Integer.toString(day + 30) + ", " + Integer.toString(day + 60) + ", " + Integer.toString(day + 90) + ", " + Integer.toString(day + 120);
+        }
         String list7 = getListContent(context, "List 7", R.array.list_7);
         String list8 = getListContent(context, "List 8", R.array.list_8);
         String list9 = getListContent(context,"List 9", R.array.list_9);
         String list10 = getListContent(context, "List 10", R.array.list_10);
-        content = list1 + "\n" + list2 + "\n" + list3 + "\n" + list4 + "\n" + list5 + "\n" + list6 + "\n" + list7 + "\n" + list8 + "\n" + list9 + "\n" + list10;
+
+        String part1 = String.format("List 1 - %s       |       List 2 - %s", list1, list2);
+        String part2 = String.format("List 3 - %s       |       List 4 - %s", list3, list4);
+        String part3 = String.format("List 5 - %s       |       List 6 - %s", list5, list6);
+        String part4 = String.format("List 7 - %s       |       List 8 - %s", list7, list8);
+        String part5 = String.format("List 9 - %s       |       List 10 - %s", list9, list10);
+        String[] content = {part1, part2, part3, part4, part5};
         return content;
     }
     public static void cancelAlarm(Context context, PendingIntent notifyPendingIntent){
@@ -121,7 +125,7 @@ public class MainActivity extends AppCompatActivity {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             CharSequence name = getString(R.string.channel_name);
             String description = getString(R.string.channel_description);
-            int importance = NotificationManager.IMPORTANCE_DEFAULT;
+            int importance = NotificationManager.IMPORTANCE_HIGH;
             NotificationChannel channel = new NotificationChannel(PRIMARY_CHANNEL_ID, name, importance);
             channel.setDescription(description);
             channel.enableVibration(true);
