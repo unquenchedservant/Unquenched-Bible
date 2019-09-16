@@ -28,13 +28,13 @@
     <string name="noifOff">Notifications Off</string>
     <string-array
     name="list_1">
-        <item>Matthew 1</item><item>Matthew 2</item><item>Matthew 3</item><item>Matthew 4</item>
-        <item>Matthew 5</item><item>Matthew 6</item><item>Matthew 7</item><item>Matthew 8</item>
-        <item>Matthew 9</item><item>Matthew 10</item><item>Matthew 11</item><item>Matthew 12</item>
-        <item>Matthew 13</item><item>Matthew 14</item><item>Matthew 15</item><item>Matthew 16</item>
-        <item>Matthew 17</item><item>Matthew 18</item><item>Matthew 19</item><item>Matthew 20</item>
-        <item>Matthew 21</item><item>Matthew 22</item><item>Matthew 23</item><item>Matthew 24</item>
-        <item>Matthew 25</item><item>Matthew 26</item><item>Matthew 27</item><item>Matthew 28</item>
+        <item>Mt. 1</item><item>Mt. 2</item><item>Mt. 3</item><item>Mt. 4</item>
+        <item>Mt. 5</item><item>Mt. 6</item><item>Mt. 7</item><item>Mt. 8</item>
+        <item>Mt. 9</item><item>Mt. 10</item><item>Mt. 11</item><item>Mt. 12</item>
+        <item>Mt. 13</item><item>Mt. 14</item><item>Mt. 15</item><item>Mt. 16</item>
+        <item>Mt. 17</item><item>Mt. 18</item><item>Mt. 19</item><item>Mt. 20</item>
+        <item>Mt. 21</item><item>Mt. 22</item><item>Mt. 23</item><item>Mt. 24</item>
+        <item>Mt. 25</item><item>Mt. 26</item><item>Mt. 27</item><item>Mt. 28</item>
         <item>Mark 1</item><item>Mark 2</item><item>Mark 3</item><item>Mark 4</item>
         <item>Mark 5</item><item>Mark 6</item><item>Mark 7</item><item>Mark 8</item>
         <item>Mark 9</item><item>Mark 10</item><item>Mark 11</item><item>Mark 12</item>
@@ -54,94 +54,94 @@
     </string-array>
     <string-array
         name="list_2">
-        <item>Genesis 1</item><item>Genesis 2</item><item>Genesis 3</item><item>Genesis 4</item>
-        <item>Genesis 5</item><item>Genesis 6</item><item>Genesis 7</item><item>Genesis 8</item>
-        <item>Genesis 9</item><item>Genesis 10</item><item>Genesis 11</item><item>Genesis 12</item>
-        <item>Genesis 13</item><item>Genesis 14</item><item>Genesis 15</item><item>Genesis 16</item>
-        <item>Genesis 17</item><item>Genesis 18</item><item>Genesis 19</item><item>Genesis 20</item>
-        <item>Genesis 21</item><item>Genesis 22</item><item>Genesis 23</item><item>Genesis 24</item>
-        <item>Genesis 25</item><item>Genesis 26</item><item>Genesis 27</item><item>Genesis 28</item>
-        <item>Genesis 29</item><item>Genesis 30</item><item>Genesis 31</item><item>Genesis 32</item>
-        <item>Genesis 33</item><item>Genesis 34</item><item>Genesis 35</item><item>Genesis 36</item>
-        <item>Genesis 37</item><item>Genesis 38</item><item>Genesis 39</item><item>Genesis 40</item>
-        <item>Genesis 41</item><item>Genesis 42</item><item>Genesis 43</item><item>Genesis 44</item>
-        <item>Genesis 45</item><item>Genesis 46</item><item>Genesis 47</item><item>Genesis 48</item>
-        <item>Genesis 49</item><item>Genesis 50</item><item>Exodus 1</item><item>Exodus 2</item>
-        <item>Exodus 3</item><item>Exodus 4</item><item>Exodus 5</item><item>Exodus 6</item>
-        <item>Exodus 7</item><item>Exodus 8</item><item>Exodus 9</item><item>Exodus 10</item>
-        <item>Exodus 11</item><item>Exodus 12</item><item>Exodus 13</item><item>Exodus 14</item>
-        <item>Exodus 15</item><item>Exodus 16</item><item>Exodus 17</item><item>Exodus 18</item>
-        <item>Exodus 19</item><item>Exodus 20</item><item>Exodus 21</item><item>Exodus 22</item>
-        <item>Exodus 23</item><item>Exodus 24</item><item>Exodus 25</item><item>Exodus 26</item>
-        <item>Exodus 27</item><item>Exodus 28</item><item>Exodus 29</item><item>Exodus 30</item>
-        <item>Exodus 31</item><item>Exodus 32</item><item>Exodus 33</item><item>Exodus 34</item>
-        <item>Exodus 35</item><item>Exodus 36</item><item>Exodus 37</item><item>Exodus 38</item>
-        <item>Exodus 39</item><item>Exodus 40</item><item>Leviticus 1</item><item>Leviticus 2</item>
-        <item>Leviticus 3</item><item>Leviticus 4</item><item>Leviticus 5</item><item>Leviticus 6</item>
-        <item>Leviticus 7</item><item>Leviticus 8</item><item>Leviticus 9</item><item>Leviticus 10</item>
-        <item>Leviticus 11</item><item>Leviticus 12</item><item>Leviticus 13</item><item>Leviticus 14</item>
-        <item>Leviticus 15</item><item>Leviticus 16</item><item>Leviticus 17</item><item>Leviticus 18</item>
-        <item>Leviticus 19</item><item>Leviticus 20</item><item>Leviticus 21</item><item>Leviticus 22</item>
-        <item>Leviticus 23</item><item>Leviticus 24</item><item>Leviticus 25</item><item>Leviticus 26</item>
-        <item>Leviticus 27</item><item>Numbers 1</item><item>Numbers 2</item><item>Numbers 3</item>
-        <item>Numbers 4</item><item>Numbers 5</item><item>Numbers 6</item><item>Numbers 7</item>
-        <item>Numbers 8</item><item>Numbers 9</item><item>Numbers 10</item><item>Numbers 11</item>
-        <item>Numbers 12</item><item>Numbers 13</item><item>Numbers 14</item><item>Numbers 15</item>
-        <item>Numbers 16</item><item>Numbers 17</item><item>Numbers 18</item><item>Numbers 19</item>
-        <item>Numbers 20</item><item>Numbers 21</item><item>Numbers 22</item><item>Numbers 23</item>
-        <item>Numbers 24</item><item>Numbers 25</item><item>Numbers 26</item><item>Numbers 27</item>
-        <item>Numbers 28</item><item>Numbers 29</item><item>Numbers 30</item><item>Numbers 31</item>
-        <item>Numbers 32</item><item>Numbers 33</item><item>Numbers 34</item><item>Numbers 35</item>
-        <item>Numbers 36</item><item>Deuteronomy 1</item><item>Deuteronomy 2</item><item>Deuteronomy 3</item>
-        <item>Deuteronomy 4</item><item>Deuteronomy 5</item><item>Deuteronomy 6</item><item>Deuteronomy 7</item>
-        <item>Deuteronomy 8</item><item>Deuteronomy 9</item><item>Deuteronomy 10</item><item>Deuteronomy 11</item>
-        <item>Deuteronomy 12</item><item>Deuteronomy 13</item><item>Deuteronomy 14</item><item>Deuteronomy 15</item>
-        <item>Deuteronomy 16</item><item>Deuteronomy 17</item><item>Deuteronomy 18</item><item>Deuteronomy 19</item>
-        <item>Deuteronomy 20</item><item>Deuteronomy 21</item><item>Deuteronomy 22</item><item>Deuteronomy 23</item>
-        <item>Deuteronomy 24</item><item>Deuteronomy 25</item><item>Deuteronomy 26</item><item>Deuteronomy 27</item>
-        <item>Deuteronomy 28</item><item>Deuteronomy 29</item><item>Deuteronomy 30</item><item>Deuteronomy 31</item>
-        <item>Deuteronomy 32</item><item>Deuteronomy 33</item><item>Deuteronomy 34</item>
+        <item>Gen. 1</item><item>Gen. 2</item><item>Gen. 3</item><item>Gen. 4</item>
+        <item>Gen. 5</item><item>Gen. 6</item><item>Gen. 7</item><item>Gen. 8</item>
+        <item>Gen. 9</item><item>Gen. 10</item><item>Gen. 11</item><item>Gen. 12</item>
+        <item>Gen. 13</item><item>Gen. 14</item><item>Gen. 15</item><item>Gen. 16</item>
+        <item>Gen. 17</item><item>Gen. 18</item><item>Gen. 19</item><item>Gen. 20</item>
+        <item>Gen. 21</item><item>Gen. 22</item><item>Gen. 23</item><item>Gen. 24</item>
+        <item>Gen. 25</item><item>Gen. 26</item><item>Gen. 27</item><item>Gen. 28</item>
+        <item>Gen. 29</item><item>Gen. 30</item><item>Gen. 31</item><item>Gen. 32</item>
+        <item>Gen. 33</item><item>Gen. 34</item><item>Gen. 35</item><item>Gen. 36</item>
+        <item>Gen. 37</item><item>Gen. 38</item><item>Gen. 39</item><item>Gen. 40</item>
+        <item>Gen. 41</item><item>Gen. 42</item><item>Gen. 43</item><item>Gen. 44</item>
+        <item>Gen. 45</item><item>Gen. 46</item><item>Gen. 47</item><item>Gen. 48</item>
+        <item>Gen. 49</item><item>Gen. 50</item><item>Ex. 1</item><item>Ex. 2</item>
+        <item>Ex. 3</item><item>Ex. 4</item><item>Ex. 5</item><item>Ex. 6</item>
+        <item>Ex. 7</item><item>Ex. 8</item><item>Ex. 9</item><item>Ex. 10</item>
+        <item>Ex. 11</item><item>Ex. 12</item><item>Ex. 13</item><item>Ex. 14</item>
+        <item>Ex. 15</item><item>Ex. 16</item><item>Ex. 17</item><item>Ex. 18</item>
+        <item>Ex. 19</item><item>Ex. 20</item><item>Ex. 21</item><item>Ex. 22</item>
+        <item>Ex. 23</item><item>Ex. 24</item><item>Ex. 25</item><item>Ex. 26</item>
+        <item>Ex. 27</item><item>Ex. 28</item><item>Ex. 29</item><item>Ex. 30</item>
+        <item>Ex. 31</item><item>Ex. 32</item><item>Ex. 33</item><item>Ex. 34</item>
+        <item>Ex. 35</item><item>Ex. 36</item><item>Ex. 37</item><item>Ex. 38</item>
+        <item>Ex. 39</item><item>Ex. 40</item><item>Lev. 1</item><item>Lev. 2</item>
+        <item>Lev. 3</item><item>Lev. 4</item><item>Lev. 5</item><item>Lev. 6</item>
+        <item>Lev. 7</item><item>Lev. 8</item><item>Lev. 9</item><item>Lev. 10</item>
+        <item>Lev. 11</item><item>Lev. 12</item><item>Lev. 13</item><item>Lev. 14</item>
+        <item>Lev. 15</item><item>Lev. 16</item><item>Lev. 17</item><item>Lev. 18</item>
+        <item>Lev. 19</item><item>Lev. 20</item><item>Lev. 21</item><item>Lev. 22</item>
+        <item>Lev. 23</item><item>Lev. 24</item><item>Lev. 25</item><item>Lev. 26</item>
+        <item>Lev. 27</item><item>Num. 1</item><item>Num. 2</item><item>Num. 3</item>
+        <item>Num. 4</item><item>Num. 5</item><item>Num. 6</item><item>Num. 7</item>
+        <item>Num. 8</item><item>Num. 9</item><item>Num. 10</item><item>Num. 11</item>
+        <item>Num. 12</item><item>Num. 13</item><item>Num. 14</item><item>Num. 15</item>
+        <item>Num. 16</item><item>Num. 17</item><item>Num. 18</item><item>Num. 19</item>
+        <item>Num. 20</item><item>Num. 21</item><item>Num. 22</item><item>Num. 23</item>
+        <item>Num. 24</item><item>Num. 25</item><item>Num. 26</item><item>Num. 27</item>
+        <item>Num. 28</item><item>Num. 29</item><item>Num. 30</item><item>Num. 31</item>
+        <item>Num. 32</item><item>Num. 33</item><item>Num. 34</item><item>Num. 35</item>
+        <item>Num. 36</item><item>Deut. 1</item><item>Deut. 2</item><item>Deut. 3</item>
+        <item>Deut. 4</item><item>Deut. 5</item><item>Deut. 6</item><item>Deut. 7</item>
+        <item>Deut. 8</item><item>Deut. 9</item><item>Deut. 10</item><item>Deut. 11</item>
+        <item>Deut. 12</item><item>Deut. 13</item><item>Deut. 14</item><item>Deut. 15</item>
+        <item>Deut. 16</item><item>Deut. 17</item><item>Deut. 18</item><item>Deut. 19</item>
+        <item>Deut. 20</item><item>Deut. 21</item><item>Deut. 22</item><item>Deut. 23</item>
+        <item>Deut. 24</item><item>Deut. 25</item><item>Deut. 26</item><item>Deut. 27</item>
+        <item>Deut. 28</item><item>Deut. 29</item><item>Deut. 30</item><item>Deut. 31</item>
+        <item>Deut. 32</item><item>Deut. 33</item><item>Deut. 34</item>
     </string-array>
     <string-array name="list_3">
-        <item>Romans 1</item><item>Romans 2</item><item>Romans 3</item><item>Romans 4</item>
-        <item>Romans 5</item><item>Romans 6</item><item>Romans 7</item><item>Romans 8</item>
-        <item>Romans 9</item><item>Romans 10</item><item>Romans 11</item><item>Romans 12</item>
-        <item>Romans 13</item><item>Romans 14</item><item>Romans 15</item><item>Romans 16</item>
-        <item>1 Corinthians 1</item><item>1 Corinthians 2</item><item>1 Corinthians 3</item><item>1 Corinthians 4</item>
-        <item>1 Corinthians 5</item><item>1 Corinthians 6</item><item>1 Corinthians 7</item><item>1 Corinthians 8</item>
-        <item>1 Corinthians 9</item><item>1 Corinthians 10</item><item>1 Corinthians 11</item><item>1 Corinthians 12</item>
-        <item>1 Corinthians 13</item><item>1 Corinthians 14</item><item>1 Corinthians 15</item><item>1 Corinthians 16</item>
-        <item>2 Corinthians 1</item><item>2 Corinthians 2</item><item>2 Corinthians 3</item><item>2 Corinthians 4</item>
-        <item>2 Corinthians 5</item><item>2 Corinthians 6</item><item>2 Corinthians 7</item><item>2 Corinthians 8</item>
-        <item>2 Corinthians 9</item><item>2 Corinthians 10</item><item>2 Corinthians 11</item><item>2 Corinthians 12</item>
-        <item>2 Corinthians 13</item><item>Galatians 1</item><item>Galatians 2</item><item>Galatians 3</item>
-        <item>Galatians 4</item><item>Galatians 5</item><item>Galatians 6</item><item>Ephesians 1</item>
-        <item>Ephesians 2</item><item>Ephesians 3</item><item>Ephesians 4</item><item>Ephesians 5</item>
-        <item>Ephesians 6</item><item>Philippians 1</item><item>Philippians 2</item><item>Philippians 3</item>
-        <item>Philippians 4</item><item>Colossians 1</item><item>Colossians 2</item><item>Colossians 3</item>
-        <item>Colossians 4</item><item>Hebrews 1</item><item>Hebrews 2</item><item>Hebrews 3</item>
-        <item>Hebrews 4</item><item>Hebrews 5</item><item>Hebrews 6</item><item>Hebrews 7</item>
-        <item>Hebrews 8</item><item>Hebrews 9</item><item>Hebrews 10</item><item>Hebrews 11</item>
-        <item>Hebrews 12</item><item>Hebrews 13</item>
+        <item>Rom. 1</item><item>Rom. 2</item><item>Rom. 3</item><item>Rom. 4</item>
+        <item>Rom. 5</item><item>Rom. 6</item><item>Rom. 7</item><item>Rom. 8</item>
+        <item>Rom. 9</item><item>Rom. 10</item><item>Rom. 11</item><item>Rom. 12</item>
+        <item>Rom. 13</item><item>Rom. 14</item><item>Rom. 15</item><item>Rom. 16</item>
+        <item>1 Co. 1</item><item>1 Co. 2</item><item>1 Co. 3</item><item>1 Co. 4</item>
+        <item>1 Co. 5</item><item>1 Co. 6</item><item>1 Co. 7</item><item>1 Co. 8</item>
+        <item>1 Co. 9</item><item>1 Co. 10</item><item>1 Co. 11</item><item>1 Co. 12</item>
+        <item>1 Co. 13</item><item>1 Co. 14</item><item>1 Co. 15</item><item>1 Co. 16</item>
+        <item>2 Co. 1</item><item>2 Co. 2</item><item>2 Co. 3</item><item>2 Co. 4</item>
+        <item>2 Co. 5</item><item>2 Co. 6</item><item>2 Co. 7</item><item>2 Co. 8</item>
+        <item>2 Co. 9</item><item>2 Co. 10</item><item>2 Co. 11</item><item>2 Co. 12</item>
+        <item>2 Co. 13</item><item>Gal. 1</item><item>Gal. 2</item><item>Gal. 3</item>
+        <item>Gal. 4</item><item>Gal. 5</item><item>Gal. 6</item><item>Eph. 1</item>
+        <item>Eph. 2</item><item>Eph. 3</item><item>Eph. 4</item><item>Eph. 5</item>
+        <item>Eph. 6</item><item>Php. 1</item><item>Php. 2</item><item>Php. 3</item>
+        <item>Php. 4</item><item>Col. 1</item><item>Col. 2</item><item>Col. 3</item>
+        <item>Col. 4</item><item>Heb. 1</item><item>Heb. 2</item><item>Heb. 3</item>
+        <item>Heb. 4</item><item>Heb. 5</item><item>Heb. 6</item><item>Heb. 7</item>
+        <item>Heb. 8</item><item>Heb. 9</item><item>Heb. 10</item><item>Heb. 11</item>
+        <item>Heb. 12</item><item>Heb. 13</item>
     </string-array>
     <string-array name="list_4">
-        <item>1 Thessalonians 1</item><item>1 Thessalonians 2</item><item>1 Thessalonians 3</item><item>1 Thessalonians 4</item>
-        <item>1 Thessalonians 5</item><item>2 Thessalonians 1</item><item>2 Thessalonians 2</item><item>2 Thessalonians 3</item>
-        <item>1 Timothy 1</item><item>1 Timothy 2</item><item>1 Timothy 3</item><item>1 Timothy 4</item>
-        <item>1 Timothy 5</item><item>1 Timothy 6</item><item>2 Timothy 1</item><item>2 Timothy 2</item>
-        <item>2 Timothy 3</item><item>2 Timothy 4</item><item>Titus 1</item><item>Titus 2</item>
+        <item>1 Th. 1</item><item>1 Th. 2</item><item>1 Th. 3</item><item>1 Th. 4</item>
+        <item>1 Th. 5</item><item>2 Th. 1</item><item>2 Th. 2</item><item>2 Th. 3</item>
+        <item>1 Ti. 1</item><item>1 Ti. 2</item><item>1 Ti. 3</item><item>1 Ti. 4</item>
+        <item>1 Ti. 5</item><item>1 Ti. 6</item><item>2 Ti. 1</item><item>2 Ti. 2</item>
+        <item>2 Ti. 3</item><item>2 Ti. 4</item><item>Titus 1</item><item>Titus 2</item>
         <item>Titus 3</item><item>Philemon</item><item>James 1</item><item>James 2</item>
-        <item>James 3</item><item>James 4</item><item>James 5</item><item>1 Peter 1</item>
-        <item>1 Peter 2</item><item>1 Peter 3</item><item>1 Peter 4</item><item>1 Peter 5</item>
-        <item>2 Peter 1</item><item>2 Peter 2</item><item>2 Peter 3</item><item>1 John 1</item>
-        <item>1 John 2</item><item>1 John 3</item><item>1 John 4</item><item>1 John 5</item>
-        <item>2 John</item><item>3 John</item><item>Jude</item><item>Revelations 1</item>
-        <item>Revelations 2</item><item>Revelations 3</item><item>Revelations 4</item><item>Revelations 5</item>
-        <item>Revelations 6</item><item>Revelations 7</item><item>Revelations 8</item><item>Revelations 9</item>
-        <item>Revelations 10</item><item>Revelations 11</item><item>Revelations 12</item><item>Revelations 13</item>
-        <item>Rev 14</item><item>Revelations 15</item><item>Revelations 16</item><item>Revelations 17</item>
-        <item>Revelations 18</item><item>Revelations 19</item><item>Revelations 20</item><item>Revelations 21</item>
-        <item>Revelations 22</item>
+        <item>James 3</item><item>James 4</item><item>James</item><item>1 Pet. 1</item>
+        <item>1 Pet. 2</item><item>1 Pet. 3</item><item>1 Pet. 4</item><item>1 Pet. 5</item>
+        <item>2 Pet. 1</item><item>2 Pet. 2</item><item>2 Pet. 3</item><item>1 Jn. 1</item>
+        <item>1 Jn. 2</item><item>1 Jn. 3</item><item>1 Jn. 4</item><item>1 Jn. 5</item>
+        <item>2 Jn.</item><item>3 Jn.</item><item>Jude</item><item>Rev. 1</item>
+        <item>Rev. 2</item><item>Rev. 3</item><item>Rev. 4</item><item>Rev. 5</item>
+        <item>Rev. 6</item><item>Rev. 7</item><item>Rev. 8</item><item>Rev. 9</item>
+        <item>Rev. 10</item><item>Rev. 11</item><item>Rev. 12</item><item>Rev. 13</item>
+        <item>Rev 14</item><item>Rev. 15</item><item>Rev. 16</item><item>Rev. 17</item>
+        <item>Rev. 18</item><item>Rev. 19</item><item>Rev. 20</item><item>Rev. 21</item>
+        <item>Rev. 22</item>
     </string-array>
     <string-array name="list_5">
         <item>Job 1</item><item>Job 2</item><item>Job 3</item><item>Job 4</item>
@@ -154,192 +154,192 @@
         <item>Job 29</item><item>Job 30</item><item>Job 31</item><item>Job 32</item>
         <item>Job 33</item><item>Job 34</item><item>Job 35</item><item>Job 36</item>
         <item>Job 37</item><item>Job 38</item><item>Job 39</item><item>Job 40</item>
-        <item>Job 41</item><item>Job 42</item><item>Ecclesiastes 1</item><item>Ecclesiastes 2</item>
-        <item>Ecclesiastes 3</item><item>Ecclesiastes 4</item><item>Ecclesiastes 5</item><item>Ecclesiastes 6</item>
-        <item>Ecclesiastes 7</item><item>Ecclesiastes 8</item><item>Ecclesiastes 9</item><item>Ecclesiastes 10</item>
-        <item>Ecclesiastes 11</item><item>Ecclesiastes 12</item><item>Song of Solomon 1</item><item>Song of Solomon 2</item>
-        <item>Song of Solomon 3</item><item>Song of Solomon 4</item><item>Song of Solomon 5</item><item>Song of Solomon 6</item>
-        <item>Song of Solomon 7</item><item>Song of Solomon 8</item>
+        <item>Job 41</item><item>Job 42</item><item>Ecc. 1</item><item>Ecc. 2</item>
+        <item>Ecc. 3</item><item>Ecc. 4</item><item>Ecc. 5</item><item>Ecc. 6</item>
+        <item>Ecc. 7</item><item>Ecc. 8</item><item>Ecc. 9</item><item>Ecc. 10</item>
+        <item>Ecc. 11</item><item>Ecc. 12</item><item>SoS 1</item><item>SoS 2</item>
+        <item>SoS 3</item><item>SoS 4</item><item>SoS 5</item><item>SoS 6</item>
+        <item>SoS 7</item><item>SoS 8</item>
     </string-array>
     <string-array name="list_6">
-        <item>Psalm 1</item><item>Psalm 2</item><item>Psalm 3</item><item>Psalm 4</item>
-        <item>Psalm 5</item><item>Psalm 6</item><item>Psalm 7</item><item>Psalm 8</item>
-        <item>Psalm 9</item><item>Psalm 10</item><item>Psalm 11</item><item>Psalm 12</item>
-        <item>Psalm 13</item><item>Psalm 14</item><item>Psalm 15</item><item>Psalm 16</item>
-        <item>Psalm 17</item><item>Psalm 18</item><item>Psalm 19</item><item>Psalm 20</item>
-        <item>Psalm 21</item><item>Psalm 22</item><item>Psalm 23</item><item>Psalm 24</item>
-        <item>Psalm 25</item><item>Psalm 26</item><item>Psalm 27</item><item>Psalm 28</item>
-        <item>Psalm 29</item><item>Psalm 30</item><item>Psalm 31</item><item>Psalm 32</item>
-        <item>Psalm 33</item><item>Psalm 34</item><item>Psalm 35</item><item>Psalm 36</item>
-        <item>Psalm 37</item><item>Psalm 38</item><item>Psalm 39</item><item>Psalm 40</item>
-        <item>Psalm 41</item><item>Psalm 42</item><item>Psalm 43</item><item>Psalm 44</item>
-        <item>Psalm 45</item><item>Psalm 46</item><item>Psalm 47</item><item>Psalm 48</item>
-        <item>Psalm 49</item><item>Psalm 50</item><item>Psalm 51</item><item>Psalm 52</item>
-        <item>Psalm 53</item><item>Psalm 54</item><item>Psalm 55</item><item>Psalm 56</item>
-        <item>Psalm 57</item><item>Psalm 58</item><item>Psalm 59</item><item>Psalm 60</item>
-        <item>Psalm 61</item><item>Psalm 62</item><item>Psalm 63</item><item>Psalm 64</item>
-        <item>Psalm 65</item><item>Psalm 66</item><item>Psalm 67</item><item>Psalm 68</item>
-        <item>Psalm 69</item><item>Psalm 70</item><item>Psalm 71</item><item>Psalm 72</item>
-        <item>Psalm 73</item><item>Psalm 74</item><item>Psalm 75</item><item>Psalm 76</item>
-        <item>Psalm 77</item><item>Psalm 78</item><item>Psalm 79</item><item>Psalm 80</item>
-        <item>Psalm 81</item><item>Psalm 82</item><item>Psalm 83</item><item>Psalm 84</item>
-        <item>Psalm 85</item><item>Psalm 86</item><item>Psalm 87</item><item>Psalm 88</item>
-        <item>Psalm 89</item><item>Psalm 90</item><item>Psalm 91</item><item>Psalm 92</item>
-        <item>Psalm 93</item><item>Psalm 94</item><item>Psalm 95</item><item>Psalm 96</item>
-        <item>Psalm 97</item><item>Psalm 98</item><item>Psalm 99</item><item>Psalm 100</item>
-        <item>Psalm 101</item><item>Psalm 102</item><item>Psalm 103</item><item>Psalm 104</item>
-        <item>Psalm 105</item><item>Psalm 106</item><item>Psalm 107</item><item>Psalm 108</item>
-        <item>Psalm 109</item><item>Psalm 110</item><item>Psalm 111</item><item>Psalm 112</item>
-        <item>Psalm 113</item><item>Psalm 114</item><item>Psalm 115</item><item>Psalm 116</item>
-        <item>Psalm 117</item><item>Psalm 118</item><item>Psalm 119</item><item>Psalm 120</item>
-        <item>Psalm 121</item><item>Psalm 122</item><item>Psalm 123</item><item>Psalm 124</item>
-        <item>Psalm 125</item><item>Psalm 126</item><item>Psalm 127</item><item>Psalm 128</item>
-        <item>Psalm 129</item><item>Psalm 130</item><item>Psalm 131</item><item>Psalm 132</item>
-        <item>Psalm 133</item><item>Psalm 134</item><item>Psalm 135</item><item>Psalm 136</item>
-        <item>Psalm 137</item><item>Psalm 138</item><item>Psalm 139</item><item>Psalm 140</item>
-        <item>Psalm 141</item><item>Psalm 142</item><item>Psalm 143</item><item>Psalm 144</item>
-        <item>Psalm 145</item><item>Psalm 146</item><item>Psalm 147</item><item>Psalm 148</item>
-        <item>Psalm 149</item><item>Psalm 150</item>
+        <item>Ps. 1</item><item>Ps. 2</item><item>Ps. 3</item><item>Ps. 4</item>
+        <item>Ps. 5</item><item>Ps. 6</item><item>Ps. 7</item><item>Ps. 8</item>
+        <item>Ps. 9</item><item>Ps. 10</item><item>Ps. 11</item><item>Ps. 12</item>
+        <item>Ps. 13</item><item>Ps. 14</item><item>Ps. 15</item><item>Ps. 16</item>
+        <item>Ps. 17</item><item>Ps. 18</item><item>Ps. 19</item><item>Ps. 20</item>
+        <item>Ps. 21</item><item>Ps. 22</item><item>Ps. 23</item><item>Ps. 24</item>
+        <item>Ps. 25</item><item>Ps. 26</item><item>Ps. 27</item><item>Ps. 28</item>
+        <item>Ps. 29</item><item>Ps. 30</item><item>Ps. 31</item><item>Ps. 32</item>
+        <item>Ps. 33</item><item>Ps. 34</item><item>Ps. 35</item><item>Ps. 36</item>
+        <item>Ps. 37</item><item>Ps. 38</item><item>Ps. 39</item><item>Ps. 40</item>
+        <item>Ps. 41</item><item>Ps. 42</item><item>Ps. 43</item><item>Ps. 44</item>
+        <item>Ps. 45</item><item>Ps. 46</item><item>Ps. 47</item><item>Ps. 48</item>
+        <item>Ps. 49</item><item>Ps. 50</item><item>Ps. 51</item><item>Ps. 52</item>
+        <item>Ps. 53</item><item>Ps. 54</item><item>Ps. 55</item><item>Ps. 56</item>
+        <item>Ps. 57</item><item>Ps. 58</item><item>Ps. 59</item><item>Ps. 60</item>
+        <item>Ps. 61</item><item>Ps. 62</item><item>Ps. 63</item><item>Ps. 64</item>
+        <item>Ps. 65</item><item>Ps. 66</item><item>Ps. 67</item><item>Ps. 68</item>
+        <item>Ps. 69</item><item>Ps. 70</item><item>Ps. 71</item><item>Ps. 72</item>
+        <item>Ps. 73</item><item>Ps. 74</item><item>Ps. 75</item><item>Ps. 76</item>
+        <item>Ps. 77</item><item>Ps. 78</item><item>Ps. 79</item><item>Ps. 80</item>
+        <item>Ps. 81</item><item>Ps. 82</item><item>Ps. 83</item><item>Ps. 84</item>
+        <item>Ps. 85</item><item>Ps. 86</item><item>Ps. 87</item><item>Ps. 88</item>
+        <item>Ps. 89</item><item>Ps. 90</item><item>Ps. 91</item><item>Ps. 92</item>
+        <item>Ps. 93</item><item>Ps. 94</item><item>Ps. 95</item><item>Ps. 96</item>
+        <item>Ps. 97</item><item>Ps. 98</item><item>Ps. 99</item><item>Ps. 100</item>
+        <item>Ps. 101</item><item>Ps. 102</item><item>Ps. 103</item><item>Ps. 104</item>
+        <item>Ps. 105</item><item>Ps. 106</item><item>Ps. 107</item><item>Ps. 108</item>
+        <item>Ps. 109</item><item>Ps. 110</item><item>Ps. 111</item><item>Ps. 112</item>
+        <item>Ps. 113</item><item>Ps. 114</item><item>Ps. 115</item><item>Ps. 116</item>
+        <item>Ps. 117</item><item>Ps. 118</item><item>Ps. 119</item><item>Ps. 120</item>
+        <item>Ps. 121</item><item>Ps. 122</item><item>Ps. 123</item><item>Ps. 124</item>
+        <item>Ps. 125</item><item>Ps. 126</item><item>Ps. 127</item><item>Ps. 128</item>
+        <item>Ps. 129</item><item>Ps. 130</item><item>Ps. 131</item><item>Ps. 132</item>
+        <item>Ps. 133</item><item>Ps. 134</item><item>Ps. 135</item><item>Ps. 136</item>
+        <item>Ps. 137</item><item>Ps. 138</item><item>Ps. 139</item><item>Ps. 140</item>
+        <item>Ps. 141</item><item>Ps. 142</item><item>Ps. 143</item><item>Ps. 144</item>
+        <item>Ps. 145</item><item>Ps. 146</item><item>Ps. 147</item><item>Ps. 148</item>
+        <item>Ps. 149</item><item>Ps. 150</item>
     </string-array>
     <string-array name="list_7">
-        <item>Proverbs 1</item><item>Proverbs 2</item><item>Proverbs 3</item><item>Proverbs 4</item>
-        <item>Proverbs 5</item><item>Proverbs 6</item><item>Proverbs 7</item><item>Proverbs 8</item>
-        <item>Proverbs 9</item><item>Proverbs 10</item><item>Proverbs 11</item><item>Proverbs 12</item>
-        <item>Proverbs 13</item><item>Proverbs 14</item><item>Proverbs 15</item><item>Proverbs 16</item>
-        <item>Proverbs 17</item><item>Proverbs 18</item><item>Proverbs 19</item><item>Proverbs 20</item>
-        <item>Proverbs 21</item><item>Proverbs 22</item><item>Proverbs 23</item><item>Proverbs 24</item>
-        <item>Proverbs 25</item><item>Proverbs 26</item><item>Proverbs 27</item><item>Proverbs 28</item>
-        <item>Proverbs 29</item><item>Proverbs 30</item><item>Proverbs 31</item>
+        <item>Prv. 1</item><item>Prv. 2</item><item>Prv. 3</item><item>Prv. 4</item>
+        <item>Prv. 5</item><item>Prv. 6</item><item>Prv. 7</item><item>Prv. 8</item>
+        <item>Prv. 9</item><item>Prv. 10</item><item>Prv. 11</item><item>Prv. 12</item>
+        <item>Prv. 13</item><item>Prv. 14</item><item>Prv. 15</item><item>Prv. 16</item>
+        <item>Prv. 17</item><item>Prv. 18</item><item>Prv. 19</item><item>Prv. 20</item>
+        <item>Prv. 21</item><item>Prv. 22</item><item>Prv. 23</item><item>Prv. 24</item>
+        <item>Prv. 25</item><item>Prv. 26</item><item>Prv. 27</item><item>Prv. 28</item>
+        <item>Prv. 29</item><item>Prv. 30</item><item>Prv. 31</item>
     </string-array>
     <string-array name="list_8">
-        <item>Joshua 1</item><item>Joshua 2</item><item>Joshua 3</item><item>Joshua 4</item>
-        <item>Joshua 5</item><item>Joshua 6</item><item>Joshua 7</item><item>Joshua 8</item>
-        <item>Joshua 9</item><item>Joshua 10</item><item>Joshua 11</item><item>Joshua 12</item>
-        <item>Joshua 13</item><item>Joshua 14</item><item>Joshua 15</item><item>Joshua 16</item>
-        <item>Joshua 17</item><item>Joshua 18</item><item>Joshua 19</item><item>Joshua 20</item>
-        <item>Joshua 21</item><item>Joshua 22</item><item>Joshua 23</item><item>Joshua 24</item>
-        <item>Judges 1</item><item>Judges 2</item><item>Judges 3</item><item>Judges 4</item>
-        <item>Judges 5</item><item>Judges 6</item><item>Judges 7</item><item>Judges 8</item>
-        <item>Judges 9</item><item>Judges 10</item><item>Judges 11</item><item>Judges 12</item>
-        <item>Judges 13</item><item>Judges 14</item><item>Judges 15</item><item>Judges 16</item>
-        <item>Judges 17</item><item>Judges 18</item><item>Judges 19</item><item>Judges 20</item>
-        <item>Judges 21</item><item>Ruth 1</item><item>Ruth 2</item><item>Ruth 3</item>
-        <item>Ruth 4</item><item>1 Samuel 1</item><item>1 Samuel 2</item><item>1 Samuel 3</item>
-        <item>1 Samuel 4</item><item>1 Samuel 5</item><item>1 Samuel 6</item><item>1 Samuel 7</item>
-        <item>1 Samuel 8</item><item>1 Samuel 9</item><item>1 Samuel 10</item><item>1 Samuel 11</item>
-        <item>1 Samuel 12</item><item>1 Samuel 13</item><item>1 Samuel 14</item><item>1 Samuel 15</item>
-        <item>1 Samuel 16</item><item>1 Samuel 17</item><item>1 Samuel 18</item><item>1 Samuel 19</item>
-        <item>1 Samuel 20</item><item>1 Samuel 21</item><item>1 Samuel 22</item><item>1 Samuel 23</item>
-        <item>1 Samuel 24</item><item>1 Samuel 25</item><item>1 Samuel 26</item><item>1 Samuel 27</item>
-        <item>1 Samuel 28</item><item>1 Samuel 29</item><item>1 Samuel 30</item><item>1 Samuel 31</item>
-        <item>2 Samuel 1</item><item>2 Samuel 2</item><item>2 Samuel 3</item><item>2 Samuel 4</item>
-        <item>2 Samuel 5</item><item>2 Samuel 6</item><item>2 Samuel 7</item><item>2 Samuel 8</item>
-        <item>2 Samuel 9</item><item>2 Samuel 10</item><item>2 Samuel 11</item><item>2 Samuel 12</item>
-        <item>2 Samuel 13</item><item>2 Samuel 14</item><item>2 Samuel 15</item><item>2 Samuel 16</item>
-        <item>2 Samuel 17</item><item>2 Samuel 18</item><item>2 Samuel 19</item><item>2 Samuel 20</item>
-        <item>2 Samuel 21</item><item>2 Samuel 22</item><item>2 Samuel 23</item><item>2 Samuel 24</item>
-        <item>1 Kings 1</item><item>1 Kings 2</item><item>1 Kings 3</item><item>1 Kings 4</item>
-        <item>1 Kings 5</item><item>1 Kings 6</item><item>1 Kings 7</item><item>1 Kings 8</item>
-        <item>1 Kings 9</item><item>1 Kings 10</item><item>1 Kings 11</item><item>1 Kings 12</item>
-        <item>1 Kings 13</item><item>1 Kings 14</item><item>1 Kings 15</item><item>1 Kings 16</item>
-        <item>1 Kings 17</item><item>1 Kings 18</item><item>1 Kings 19</item><item>1 Kings 20</item>
-        <item>1 Kings 21</item><item>1 Kings 22</item><item>2 Kings 1</item><item>2 Kings 2</item>
-        <item>2 Kings 3</item><item>2 Kings 4</item><item>2 Kings 5</item><item>2 Kings 6</item>
-        <item>2 Kings 7</item><item>2 Kings 8</item><item>2 Kings 9</item><item>2 Kings 10</item>
-        <item>2 Kings 11</item><item>2 Kings 12</item><item>2 Kings 13</item><item>2 Kings 14</item>
-        <item>2 Kings 15</item><item>2 Kings 16</item><item>2 Kings 17</item><item>2 Kings 18</item>
-        <item>2 Kings 19</item><item>2 Kings 20</item><item>2 Kings 21</item><item>2 Kings 22</item>
-        <item>2 Kings 23</item><item>2 Kings 24</item><item>2 Kings 25</item><item>1 Chronicles 1</item>
-        <item>1 Chronicles 2</item><item>1 Chronicles 3</item><item>1 Chronicles 4</item><item>1 Chronicles 5</item>
-        <item>1 Chronicles 6</item><item>1 Chronicles 7</item><item>1 Chronicles 8</item><item>1 Chronicles 9</item>
-        <item>1 Chronicles 10</item><item>1 Chronicles 11</item><item>1 Chronicles 12</item><item>1 Chronicles 13</item>
-        <item>1 Chronicles 14</item><item>1 Chronicles 15</item><item>1 Chronicles 16</item><item>1 Chronicles 17</item>
-        <item>1 Chronicles 18</item><item>1 Chronicles 19</item><item>1 Chronicles 20</item><item>1 Chronicles 21</item>
-        <item>1 Chronicles 22</item><item>1 Chronicles 23</item><item>1 Chronicles 24</item><item>1 Chronicles 25</item>
-        <item>1 Chronicles 26</item><item>1 Chronicles 27</item><item>1 Chronicles 28</item><item>1 Chronicles 29</item>
-        <item>2 Chronicles 1</item><item>2 Chronicles 2</item><item>2 Chronicles 3</item><item>2 Chronicles 4</item>
-        <item>2 Chronicles 5</item><item>2 Chronicles 6</item><item>2 Chronicles 7</item><item>2 Chronicles 8</item>
-        <item>2 Chronicles 9</item><item>2 Chronicles 10</item><item>2 Chronicles 11</item><item>2 Chronicles 12</item>
-        <item>2 Chronicles 13</item><item>2 Chronicles 14</item><item>2 Chronicles 15</item><item>2 Chronicles 16</item>
-        <item>2 Chronicles 17</item><item>2 Chronicles 18</item><item>2 Chronicles 19</item><item>2 Chronicles 20</item>
-        <item>2 Chronicles 21</item><item>2 Chronicles 22</item><item>2 Chronicles 23</item><item>2 Chronicles 24</item>
-        <item>2 Chronicles 25</item><item>2 Chronicles 26</item><item>2 Chronicles 27</item><item>2 Chronicles 28</item>
-        <item>2 Chronicles 29</item><item>2 Chronicles 30</item><item>2 Chronicles 31</item><item>2 Chronicles 32</item>
-        <item>2 Chronicles 33</item><item>2 Chronicles 34</item><item>2 Chronicles 35</item><item>2 Chronicles 36</item>
+        <item>Jsh. 1</item><item>Jsh. 2</item><item>Jsh. 3</item><item>Jsh. 4</item>
+        <item>Jsh. 5</item><item>Jsh. 6</item><item>Jsh. 7</item><item>Jsh. 8</item>
+        <item>Jsh. 9</item><item>Jsh. 10</item><item>Jsh. 11</item><item>Jsh. 12</item>
+        <item>Jsh. 13</item><item>Jsh. 14</item><item>Jsh. 15</item><item>Jsh. 16</item>
+        <item>Jsh. 17</item><item>Jsh. 18</item><item>Jsh. 19</item><item>Jsh. 20</item>
+        <item>Jsh. 21</item><item>Jsh. 22</item><item>Jsh. 23</item><item>Jsh. 24</item>
+        <item>Jdg. 1</item><item>Jdg. 2</item><item>Jdg. 3</item><item>Jdg. 4</item>
+        <item>Jdg. 5</item><item>Jdg. 6</item><item>Jdg. 7</item><item>Jdg. 8</item>
+        <item>Jdg. 9</item><item>Jdg. 10</item><item>Jdg. 11</item><item>Jdg. 12</item>
+        <item>Jdg. 13</item><item>Jdg. 14</item><item>Jdg. 15</item><item>Jdg. 16</item>
+        <item>Jdg. 17</item><item>Jdg. 18</item><item>Jdg. 19</item><item>Jdg. 20</item>
+        <item>Jdg. 21</item><item>Ruth 1</item><item>Ruth 2</item><item>Ruth 3</item>
+        <item>Ruth 4</item><item>1 Sa. 1</item><item>1 Sa. 2</item><item>1 Sa. 3</item>
+        <item>1 Sa. 4</item><item>1 Sa. 5</item><item>1 Sa. 6</item><item>1 Sa. 7</item>
+        <item>1 Sa. 8</item><item>1 Sa. 9</item><item>1 Sa. 10</item><item>1 Sa. 11</item>
+        <item>1 Sa. 12</item><item>1 Sa. 13</item><item>1 Sa. 14</item><item>1 Sa. 15</item>
+        <item>1 Sa. 16</item><item>1 Sa. 17</item><item>1 Sa. 18</item><item>1 Sa. 19</item>
+        <item>1 Sa. 20</item><item>1 Sa. 21</item><item>1 Sa. 22</item><item>1 Sa. 23</item>
+        <item>1 Sa. 24</item><item>1 Sa. 25</item><item>1 Sa. 26</item><item>1 Sa. 27</item>
+        <item>1 Sa. 28</item><item>1 Sa. 29</item><item>1 Sa. 30</item><item>1 Sa. 31</item>
+        <item>2 Sa. 1</item><item>2 Sa. 2</item><item>2 Sa. 3</item><item>2 Sa. 4</item>
+        <item>2 Sa. 5</item><item>2 Sa. 6</item><item>2 Sa. 7</item><item>2 Sa. 8</item>
+        <item>2 Sa. 9</item><item>2 Sa. 10</item><item>2 Sa. 11</item><item>2 Sa. 12</item>
+        <item>2 Sa. 13</item><item>2 Sa. 14</item><item>2 Sa. 15</item><item>2 Sa. 16</item>
+        <item>2 Sa. 17</item><item>2 Sa. 18</item><item>2 Sa. 19</item><item>2 Sa. 20</item>
+        <item>2 Sa. 21</item><item>2 Sa. 22</item><item>2 Sa. 23</item><item>2 Sa. 24</item>
+        <item>1 Kg. 1</item><item>1 Kg. 2</item><item>1 Kg. 3</item><item>1 Kg. 4</item>
+        <item>1 Kg. 5</item><item>1 Kg. 6</item><item>1 Kg. 7</item><item>1 Kg. 8</item>
+        <item>1 Kg. 9</item><item>1 Kg. 10</item><item>1 Kg. 11</item><item>1 Kg. 12</item>
+        <item>1 Kg. 13</item><item>1 Kg. 14</item><item>1 Kg. 15</item><item>1 Kg. 16</item>
+        <item>1 Kg. 17</item><item>1 Kg. 18</item><item>1 Kg. 19</item><item>1 Kg. 20</item>
+        <item>1 Kg. 21</item><item>1 Kg. 22</item><item>2 Kg. 1</item><item>2 Kg. 2</item>
+        <item>2 Kg. 3</item><item>2 Kg. 4</item><item>2 Kg. 5</item><item>2 Kg. 6</item>
+        <item>2 Kg. 7</item><item>2 Kg. 8</item><item>2 Kg. 9</item><item>2 Kg. 10</item>
+        <item>2 Kg. 11</item><item>2 Kg. 12</item><item>2 Kg. 13</item><item>2 Kg. 14</item>
+        <item>2 Kg. 15</item><item>2 Kg. 16</item><item>2 Kg. 17</item><item>2 Kg. 18</item>
+        <item>2 Kg. 19</item><item>2 Kg. 20</item><item>2 Kg. 21</item><item>2 Kg. 22</item>
+        <item>2 Kg. 23</item><item>2 Kg. 24</item><item>2 Kg. 25</item><item>1 Ch. 1</item>
+        <item>1 Ch. 2</item><item>1 Ch. 3</item><item>1 Ch. 4</item><item>1 Ch. 5</item>
+        <item>1 Ch. 6</item><item>1 Ch. 7</item><item>1 Ch. 8</item><item>1 Ch. 9</item>
+        <item>1 Ch. 10</item><item>1 Ch. 11</item><item>1 Ch. 12</item><item>1 Ch. 13</item>
+        <item>1 Ch. 14</item><item>1 Ch. 15</item><item>1 Ch. 16</item><item>1 Ch. 17</item>
+        <item>1 Ch. 18</item><item>1 Ch. 19</item><item>1 Ch. 20</item><item>1 Ch. 21</item>
+        <item>1 Ch. 22</item><item>1 Ch. 23</item><item>1 Ch. 24</item><item>1 Ch. 25</item>
+        <item>1 Ch. 26</item><item>1 Ch. 27</item><item>1 Ch. 28</item><item>1 Ch. 29</item>
+        <item>2 Ch. 1</item><item>2 Ch. 2</item><item>2 Ch. 3</item><item>2 Ch. 4</item>
+        <item>2 Ch. 5</item><item>2 Ch. 6</item><item>2 Ch. 7</item><item>2 Ch. 8</item>
+        <item>2 Ch. 9</item><item>2 Ch. 10</item><item>2 Ch. 11</item><item>2 Ch. 12</item>
+        <item>2 Ch. 13</item><item>2 Ch. 14</item><item>2 Ch. 15</item><item>2 Ch. 16</item>
+        <item>2 Ch. 17</item><item>2 Ch. 18</item><item>2 Ch. 19</item><item>2 Ch. 20</item>
+        <item>2 Ch. 21</item><item>2 Ch. 22</item><item>2 Ch. 23</item><item>2 Ch. 24</item>
+        <item>2 Ch. 25</item><item>2 Ch. 26</item><item>2 Ch. 27</item><item>2 Ch. 28</item>
+        <item>2 Ch. 29</item><item>2 Ch. 30</item><item>2 Ch. 31</item><item>2 Ch. 32</item>
+        <item>2 Ch. 33</item><item>2 Ch. 34</item><item>2 Ch. 35</item><item>2 Ch. 36</item>
         <item>Ezra 1</item><item>Ezra 2</item><item>Ezra 3</item><item>Ezra 4</item>
         <item>Ezra 5</item><item>Ezra 6</item><item>Ezra 7</item><item>Ezra 8</item>
-        <item>Ezra 9</item><item>Ezra 10</item><item>Nehemiah 1</item><item>Nehemiah 2</item>
-        <item>Nehemiah 3</item><item>Nehemiah 4</item><item>Nehemiah 5</item><item>Nehemiah 6</item>
-        <item>Nehemiah 7</item><item>Nehemiah 8</item><item>Nehemiah 9</item><item>Nehemiah 10</item>
-        <item>Nehemiah 11</item><item>Nehemiah 12</item><item>Nehemiah 13</item><item>Esther 1</item>
-        <item>Esther 2</item><item>Esther 3</item><item>Esther 4</item><item>Esther 5</item>
-        <item>Esther 6</item><item>Esther 7</item><item>Esther 8</item><item>Esther 9</item>
-        <item>Esther 10</item>
+        <item>Ezra 9</item><item>Ezra 10</item><item>Neh. 1</item><item>Neh. 2</item>
+        <item>Neh. 3</item><item>Neh. 4</item><item>Neh. 5</item><item>Neh. 6</item>
+        <item>Neh. 7</item><item>Neh. 8</item><item>Neh. 9</item><item>Neh. 10</item>
+        <item>Neh. 11</item><item>Neh. 12</item><item>Neh. 13</item><item>Est. 1</item>
+        <item>Est. 2</item><item>Est. 3</item><item>Est. 4</item><item>Est. 5</item>
+        <item>Est. 6</item><item>Est. 7</item><item>Est. 8</item><item>Est. 9</item>
+        <item>Est. 10</item>
     </string-array>
     <string-array name="list_9">
-        <item>Isaiah 1</item><item>Isaiah 2</item><item>Isaiah 3</item><item>Isaiah 4</item>
-        <item>Isaiah 5</item><item>Isaiah 6</item><item>Isaiah 7</item><item>Isaiah 8</item>
-        <item>Isaiah 9</item><item>Isaiah 10</item><item>Isaiah 11</item><item>Isaiah 12</item>
-        <item>Isaiah 13</item><item>Isaiah 14</item><item>Isaiah 15</item><item>Isaiah 16</item>
-        <item>Isaiah 17</item><item>Isaiah 18</item><item>Isaiah 19</item><item>Isaiah 20</item>
-        <item>Isaiah 21</item><item>Isaiah 22</item><item>Isaiah 23</item><item>Isaiah 24</item>
-        <item>Isaiah 25</item><item>Isaiah 26</item><item>Isaiah 27</item><item>Isaiah 28</item>
-        <item>Isaiah 29</item><item>Isaiah 30</item><item>Isaiah 31</item><item>Isaiah 32</item>
-        <item>Isaiah 33</item><item>Isaiah 34</item><item>Isaiah 35</item><item>Isaiah 36</item>
-        <item>Isaiah 37</item><item>Isaiah 38</item><item>Isaiah 39</item><item>Isaiah 40</item>
-        <item>Isaiah 41</item><item>Isaiah 42</item><item>Isaiah 43</item><item>Isaiah 44</item>
-        <item>Isaiah 45</item><item>Isaiah 46</item><item>Isaiah 47</item><item>Isaiah 48</item>
-        <item>Isaiah 49</item><item>Isaiah 50</item><item>Isaiah 51</item><item>Isaiah 52</item>
-        <item>Isaiah 53</item><item>Isaiah 54</item><item>Isaiah 55</item><item>Isaiah 56</item>
-        <item>Isaiah 57</item><item>Isaiah 58</item><item>Isaiah 59</item><item>Isaiah 60</item>
-        <item>Isaiah 61</item><item>Isaiah 62</item><item>Isaiah 63</item><item>Isaiah 64</item>
-        <item>Isaiah 65</item><item>Isaiah 66</item><item>Jeremiah 1</item><item>Jeremiah 2</item>
-        <item>Jeremiah 3</item><item>Jeremiah 4</item><item>Jeremiah 5</item><item>Jeremiah 6</item>
-        <item>Jeremiah 7</item><item>Jeremiah 8</item><item>Jeremiah 9</item><item>Jeremiah 10</item>
-        <item>Jeremiah 11</item><item>Jeremiah 12</item><item>Jeremiah 13</item><item>Jeremiah 14</item>
-        <item>Jeremiah 15</item><item>Jeremiah 16</item><item>Jeremiah 17</item><item>Jeremiah 18</item>
-        <item>Jeremiah 19</item><item>Jeremiah 20</item><item>Jeremiah 21</item><item>Jeremiah 22</item>
-        <item>Jeremiah 23</item><item>Jeremiah 24</item><item>Jeremiah 25</item><item>Jeremiah 26</item>
-        <item>Jeremiah 27</item><item>Jeremiah 28</item><item>Jeremiah 29</item><item>Jeremiah 30</item>
-        <item>Jeremiah 31</item><item>Jeremiah 32</item><item>Jeremiah 33</item><item>Jeremiah 34</item>
-        <item>Jeremiah 35</item><item>Jeremiah 36</item><item>Jeremiah 37</item><item>Jeremiah 38</item>
-        <item>Jeremiah 39</item><item>Jeremiah 40</item><item>Jeremiah 41</item><item>Jeremiah 42</item>
-        <item>Jeremiah 43</item><item>Jeremiah 44</item><item>Jeremiah 45</item><item>Jeremiah 46</item>
-        <item>Jeremiah 47</item><item>Jeremiah 48</item><item>Jeremiah 49</item><item>Jeremiah 50</item>
-        <item>Jeremiah 51</item><item>Jeremiah 52</item><item>Lamentations 1</item><item>Lamentations 2</item>
-        <item>Lamentations 3</item><item>Lamentations 4</item><item>Lamentations 5</item><item>Ezekiel 1</item>
-        <item>Ezekiel 2</item><item>Ezekiel 3</item><item>Ezekiel 4</item><item>Ezekiel 5</item>
-        <item>Ezekiel 6</item><item>Ezekiel 7</item><item>Ezekiel 8</item><item>Ezekiel 9</item>
-        <item>Ezekiel 10</item><item>Ezekiel 11</item><item>Ezekiel 12</item><item>Ezekiel 13</item>
-        <item>Ezekiel 14</item><item>Ezekiel 15</item><item>Ezekiel 16</item><item>Ezekiel 17</item>
-        <item>Ezekiel 18</item><item>Ezekiel 19</item><item>Ezekiel 20</item><item>Ezekiel 21</item>
-        <item>Ezekiel 22</item><item>Ezekiel 23</item><item>Ezekiel 24</item><item>Ezekiel 25</item>
-        <item>Ezekiel 26</item><item>Ezekiel 27</item><item>Ezekiel 28</item><item>Ezekiel 29</item>
-        <item>Ezekiel 30</item><item>Ezekiel 31</item><item>Ezekiel 32</item><item>Ezekiel 33</item>
-        <item>Ezekiel 34</item><item>Ezekiel 35</item><item>Ezekiel 36</item><item>Ezekiel 37</item>
-        <item>Ezekiel 38</item><item>Ezekiel 39</item><item>Ezekiel 40</item><item>Ezekiel 41</item>
-        <item>Ezekiel 42</item><item>Ezekiel 43</item><item>Ezekiel 44</item><item>Ezekiel 45</item>
-        <item>Ezekiel 46</item><item>Ezekiel 47</item><item>Ezekiel 48</item><item>Daniel 1</item>
-        <item>Daniel 2</item><item>Daniel 3</item><item>Daniel 4</item><item>Daniel 5</item>
-        <item>Daniel 6</item><item>Daniel 7</item><item>Daniel 8</item><item>Daniel 9</item>
-        <item>Daniel 10</item><item>Daniel 11</item><item>Daniel 12</item><item>Hosea 1</item>
-        <item>Hosea 2</item><item>Hosea 3</item><item>Hosea 4</item><item>Hosea 5</item>
-        <item>Hosea 6</item><item>Hosea 7</item><item>Hosea 8</item><item>Hosea 9</item>
-        <item>Hosea 10</item><item>Hosea 11</item><item>Hosea 12</item><item>Hosea 13</item>
-        <item>Hosea 14</item><item>Joel 1</item><item>Joel 2</item><item>Joel 3</item>
+        <item>Isa. 1</item><item>Isa. 2</item><item>Isa. 3</item><item>Isa. 4</item>
+        <item>Isa. 5</item><item>Isa. 6</item><item>Isa. 7</item><item>Isa. 8</item>
+        <item>Isa. 9</item><item>Isa. 10</item><item>Isa. 11</item><item>Isa. 12</item>
+        <item>Isa. 13</item><item>Isa. 14</item><item>Isa. 15</item><item>Isa. 16</item>
+        <item>Isa. 17</item><item>Isa. 18</item><item>Isa. 19</item><item>Isa. 20</item>
+        <item>Isa. 21</item><item>Isa. 22</item><item>Isa. 23</item><item>Isa. 24</item>
+        <item>Isa. 25</item><item>Isa. 26</item><item>Isa. 27</item><item>Isa. 28</item>
+        <item>Isa. 29</item><item>Isa. 30</item><item>Isa. 31</item><item>Isa. 32</item>
+        <item>Isa. 33</item><item>Isa. 34</item><item>Isa. 35</item><item>Isa. 36</item>
+        <item>Isa. 37</item><item>Isa. 38</item><item>Isa. 39</item><item>Isa. 40</item>
+        <item>Isa. 41</item><item>Isa. 42</item><item>Isa. 43</item><item>Isa. 44</item>
+        <item>Isa. 45</item><item>Isa. 46</item><item>Isa. 47</item><item>Isa. 48</item>
+        <item>Isa. 49</item><item>Isa. 50</item><item>Isa. 51</item><item>Isa. 52</item>
+        <item>Isa. 53</item><item>Isa. 54</item><item>Isa. 55</item><item>Isa. 56</item>
+        <item>Isa. 57</item><item>Isa. 58</item><item>Isa. 59</item><item>Isa. 60</item>
+        <item>Isa. 61</item><item>Isa. 62</item><item>Isa. 63</item><item>Isa. 64</item>
+        <item>Isa. 65</item><item>Isa. 66</item><item>Jer. 1</item><item>Jer. 2</item>
+        <item>Jer. 3</item><item>Jer. 4</item><item>Jer. 5</item><item>Jer. 6</item>
+        <item>Jer. 7</item><item>Jer. 8</item><item>Jer. 9</item><item>Jer. 10</item>
+        <item>Jer. 11</item><item>Jer. 12</item><item>Jer. 13</item><item>Jer. 14</item>
+        <item>Jer. 15</item><item>Jer. 16</item><item>Jer. 17</item><item>Jer. 18</item>
+        <item>Jer. 19</item><item>Jer. 20</item><item>Jer. 21</item><item>Jer. 22</item>
+        <item>Jer. 23</item><item>Jer. 24</item><item>Jer. 25</item><item>Jer. 26</item>
+        <item>Jer. 27</item><item>Jer. 28</item><item>Jer. 29</item><item>Jer. 30</item>
+        <item>Jer. 31</item><item>Jer. 32</item><item>Jer. 33</item><item>Jer. 34</item>
+        <item>Jer. 35</item><item>Jer. 36</item><item>Jer. 37</item><item>Jer. 38</item>
+        <item>Jer. 39</item><item>Jer. 40</item><item>Jer. 41</item><item>Jer. 42</item>
+        <item>Jer. 43</item><item>Jer. 44</item><item>Jer. 45</item><item>Jer. 46</item>
+        <item>Jer. 47</item><item>Jer. 48</item><item>Jer. 49</item><item>Jer. 50</item>
+        <item>Jer. 51</item><item>Jer. 52</item><item>Lam. 1</item><item>Lam. 2</item>
+        <item>Lam. 3</item><item>Lam. 4</item><item>Lam. 5</item><item>Ezk. 1</item>
+        <item>Ezk. 2</item><item>Ezk. 3</item><item>Ezk. 4</item><item>Ezk. 5</item>
+        <item>Ezk. 6</item><item>Ezk. 7</item><item>Ezk. 8</item><item>Ezk. 9</item>
+        <item>Ezk. 10</item><item>Ezk. 11</item><item>Ezk. 12</item><item>Ezk. 13</item>
+        <item>Ezk. 14</item><item>Ezk. 15</item><item>Ezk. 16</item><item>Ezk. 17</item>
+        <item>Ezk. 18</item><item>Ezk. 19</item><item>Ezk. 20</item><item>Ezk. 21</item>
+        <item>Ezk. 22</item><item>Ezk. 23</item><item>Ezk. 24</item><item>Ezk. 25</item>
+        <item>Ezk. 26</item><item>Ezk. 27</item><item>Ezk. 28</item><item>Ezk. 29</item>
+        <item>Ezk. 30</item><item>Ezk. 31</item><item>Ezk. 32</item><item>Ezk. 33</item>
+        <item>Ezk. 34</item><item>Ezk. 35</item><item>Ezk. 36</item><item>Ezk. 37</item>
+        <item>Ezk. 38</item><item>Ezk. 39</item><item>Ezk. 40</item><item>Ezk. 41</item>
+        <item>Ezk. 42</item><item>Ezk. 43</item><item>Ezk. 44</item><item>Ezk. 45</item>
+        <item>Ezk. 46</item><item>Ezk. 47</item><item>Ezk. 48</item><item>Dan. 1</item>
+        <item>Dan. 2</item><item>Dan. 3</item><item>Dan. 4</item><item>Dan. 5</item>
+        <item>Dan. 6</item><item>Dan. 7</item><item>Dan. 8</item><item>Dan. 9</item>
+        <item>Dan. 10</item><item>Dan. 11</item><item>Dan. 12</item><item>Hos. 1</item>
+        <item>Hos. 2</item><item>Hos. 3</item><item>Hos. 4</item><item>Hos. 5</item>
+        <item>Hos. 6</item><item>Hos. 7</item><item>Hos. 8</item><item>Hos. 9</item>
+        <item>Hos. 10</item><item>Hos. 11</item><item>Hos. 12</item><item>Hos. 13</item>
+        <item>Hos. 14</item><item>Joel 1</item><item>Joel 2</item><item>Joel 3</item>
         <item>Amos 1</item><item>Amos 2</item><item>Amos 3</item><item>Amos 4</item>
         <item>Amos 5</item><item>Amos 6</item><item>Amos 7</item><item>Amos 8</item>
-        <item>Amos 9</item><item>Obadiah</item><item>Jonah 1</item><item>Jonah 2</item>
-        <item>Jonah 3</item><item>Jonah 4</item><item>Micah 1</item><item>Micah 2</item>
-        <item>Micah 3</item><item>Micah 4</item><item>Micah 5</item><item>Micah 6</item>
-        <item>Micah 7</item><item>Nahum 1</item><item>Nahum 2</item><item>Nahum 3</item>
-        <item>Habakkuk 1</item><item>Habakkuk 2</item><item>Habakkuk 3</item><item>Zephaniah 1</item>
-        <item>Zephaniah 2</item><item>Zephaniah 3</item><item>Haggai 1</item><item>Haggai 2</item>
-        <item>Zechariah 1</item><item>Zechariah 2</item><item>Zechariah 3</item><item>Zechariah 4</item>
-        <item>Zechariah 5</item><item>Zechariah 6</item><item>Zechariah 7</item><item>Zechariah 8</item>
-        <item>Zechariah 9</item><item>Zechariah 10</item><item>Zechariah 11</item><item>Zechariah 12</item>
-        <item>Zechariah 13</item><item>Zechariah 14</item><item>Malachi 1</item><item>Malachi 2</item>
-        <item>Malachi 3</item><item>Malachi 4</item>
+        <item>Amos 9</item><item>Oba.</item><item>Jnh. 1</item><item>Jnh. 2</item>
+        <item>Jnh. 3</item><item>Jnh. 4</item><item>Mic. 1</item><item>Mic. 2</item>
+        <item>Mic. 3</item><item>Mic. 4</item><item>Mic. 5</item><item>Mic. 6</item>
+        <item>Mic. 7</item><item>Nah. 1</item><item>Nah. 2</item><item>Nah. 3</item>
+        <item>Hab. 1</item><item>Hab. 2</item><item>Hab. 3</item><item>Zeph. 1</item>
+        <item>Zeph. 2</item><item>Zeph. 3</item><item>Hag. 1</item><item>Hag. 2</item>
+        <item>Zech. 1</item><item>Zech. 2</item><item>Zech. 3</item><item>Zech. 4</item>
+        <item>Zech. 5</item><item>Zech. 6</item><item>Zech. 7</item><item>Zech. 8</item>
+        <item>Zech. 9</item><item>Zech. 10</item><item>Zech. 11</item><item>Zech. 12</item>
+        <item>Zech. 13</item><item>Zech. 14</item><item>Mal. 1</item><item>Mal. 2</item>
+        <item>Mal. 3</item><item>Mal. 4</item>
     </string-array>
     <string-array name="list_10">
         <item>Acts 1</item><item>Acts 2</item><item>Acts 3</item><item>Acts 4</item>
