@@ -3,4 +3,11 @@
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
     </style>
+    <style name="AppPreference">
+        <item name="android:layout">@layout/preference_material</item>
+    </style>
+    <style name="AppPreference.DialogPreference">
+        <item name="android:positiveButtonText">@android:string/ok</item>
+        <item name="android:negativeButtonText">@android:string/cancel</item>
+    </style>
 </resources>

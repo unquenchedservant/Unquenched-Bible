@@ -9,127 +9,150 @@
     <Switch
         android:id="@+id/psalms_switch"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="75dp"
+        android:layout_height="48dp"
+        android:layout_marginTop="20dp"
         android:onClick="setChecked"
         android:text="@string/psToggle"
         android:tooltipText="If Sept. 3, gives Psalm 3, 33, 63, 93, 123. No Psalms on 31st"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/reset"
+        android:id="@+id/listReset"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:textColor="@color/colorPrimaryDark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="28dp"
-        android:layout_marginBottom="70dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
         android:onClick="reset"
         android:text="@string/reset"
         android:textAlignment="center"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
-    <Spinner
-        android:id="@+id/list2Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="160dp"
+    <Button
+        android:id="@+id/amountReadReset"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:onClick="resetAmountRead"
+        android:text="@string/resetPercent"
+        android:textAlignment="center"
+        android:textColor="@color/colorPrimaryDark"
+        app:layout_constraintEnd_toStartOf="@id/listReset"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/tableLayout" />
 
-    <Spinner
-        android:id="@+id/list1Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="160dp"
+    <TableLayout
+        android:id="@+id/tableLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/psalms_switch">
 
-    <Spinner
-        android:id="@+id/list3Spinner"
-        style="@style/Widget.AppCompat.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="228dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TableRow android:paddingBottom="3dp">
 
-    <Spinner
-        android:id="@+id/list4Spinner"
-        style="@style/Widget.AppCompat.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="228dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/list2Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/list5Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="300dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/list1Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </TableRow>
 
-    <Spinner
-        android:id="@+id/list6Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="300dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TableRow android:paddingBottom="3dp">
 
-    <Spinner
-        android:id="@+id/list7Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="368dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/list3Spinner"
+                style="@style/Widget.AppCompat.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
 
-    <Spinner
-        android:id="@+id/list8Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="368dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/list4Spinner"
+                style="@style/Widget.AppCompat.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </TableRow>
 
-    <Spinner
-        android:id="@+id/list9Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="60dp"
-        android:layout_marginTop="440dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        <TableRow android:paddingBottom="3dp">
 
-    <Spinner
-        android:id="@+id/list10Spinner"
-        style="@android:style/Widget.Material.Spinner"
-        android:layout_width="140dp"
-        android:layout_height="50dp"
-        android:layout_marginStart="240dp"
-        android:layout_marginTop="440dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <Spinner
+                android:id="@+id/list5Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/list6Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </TableRow>
+
+        <TableRow android:paddingBottom="3dp">
+
+            <Spinner
+                android:id="@+id/list7Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/list8Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </TableRow>
+
+        <TableRow android:paddingBottom="3dp">
+
+            <Spinner
+                android:id="@+id/list9Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+            <Spinner
+                android:id="@+id/list10Spinner"
+                style="@android:style/Widget.Material.Spinner"
+                android:layout_width="140dp"
+                android:layout_height="48dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+        </TableRow>
+    </TableLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
