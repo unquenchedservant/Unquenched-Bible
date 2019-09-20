@@ -57,6 +57,7 @@ class MainActivity : AppCompatActivity() {
     fun markAll(view: View) {
         val pref = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE)
         val today = getCurrentDate(false)
+        val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         val check = pref.getString("dateClicked", "")
         Log.d("today(markAll)", today)
         Log.d("check(markAll)", check)
@@ -72,8 +73,15 @@ class MainActivity : AppCompatActivity() {
             markList(this, "List 4", R.array.list_4)
             markList(this, "List 5", R.array.list_5)
             val psCheck = prefReadInt(this, "psalmSwitch")
-            if (psCheck == 0) {
-                markList(this, "List 6", R.array.list_6)
+            when(psCheck){
+                0 -> markList(this, "List 6", R.array.list_6)
+                1 -> {
+                    markRead(this, "Ps. $day")
+                    markRead(this, "Ps. ${day + 30}")
+                    markRead(this, "Ps. ${day + 60}")
+                    markRead(this, "Ps. ${day + 90}")
+                    markRead(this, "Ps. ${day + 120}")
+                }
             }
             markList(this, "List 7", R.array.list_7)
             markList(this, "List 8", R.array.list_8)
@@ -127,7 +135,16 @@ class MainActivity : AppCompatActivity() {
             return formatter.format(today)
         }
 
-
+        fun markRead(context: Context?, chapterName:String){
+            val beenRead = prefReadInt(context, chapterName)
+            when(beenRead){
+                0->{
+                    prefEditInt(context, chapterName, 1)
+                    prefEditInt(context, "totalRead", prefReadInt(context, "totalRead")+1)
+                }
+                else -> prefEditInt(context, chapterName, beenRead+1)
+            }
+        }
         fun markList(context: Context?, listString: String, arrayId: Int) {
             var number = prefReadInt(context, listString)
             number++
@@ -136,15 +153,7 @@ class MainActivity : AppCompatActivity() {
             when (number) {
                 list.size -> number = 0
             }
-            val beenRead = prefReadInt(context, list[number])
-            if (beenRead == 0) {
-                prefEditInt(context, list[number], 1)
-                prefEditInt(context, "totalRead", prefReadInt(context, "totalRead") + 1)
-                Log.d("Book Read", list[number])
-            } else {
-                prefEditInt(context, list[number], beenRead + 1)
-                Log.d("Book Read", list[number])
-            }
+            markRead(context, list[number])
             prefEditInt(context, listString, number)
         }
 
@@ -239,7 +248,7 @@ class MainActivity : AppCompatActivity() {
                 resetReadList(R.array.list_8, context)
                 resetReadList(R.array.list_9, context)
                 resetReadList(R.array.list_10, context)
-                navController!!.navController!!.navigate(R.id.navigation_home)
+                navController?.navController?.navigate(R.id.navigation_home)
             }
             builder.setNegativeButton(R.string.no) { dialogInterface, i -> dialogInterface.cancel() }
             builder.setMessage(R.string.resetAmount_confirm)
