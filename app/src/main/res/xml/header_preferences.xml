@@ -26,8 +26,7 @@
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="daily_time"
             app:title="Daily List Time"
-            android:defaultValue="90"
-            style="@style/AppPreference.DialogPreference"/>
+            android:defaultValue="90"/>
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="remind_time"
             app:title="Reminder Time"/>
@@ -49,12 +48,17 @@
         app:key="information_category"
         app:title="Information">
         <Preference
+            app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$StatisticsFragment"
+            app:key="stats"
+            app:title="Statistics"/>
+        <Preference
             app:key="privacy"
             app:title="Privacy Policy">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://theunquenchedservant.com/assets/brp_privacy_policy.html"/>
         </Preference>
+
     </PreferenceCategory>
 
 </PreferenceScreen>

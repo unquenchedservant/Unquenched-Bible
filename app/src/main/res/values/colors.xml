@@ -3,4 +3,6 @@
     <color name="colorPrimaryDark">#9CB9D3</color>
     <color name="unquenchedText">#E1E2E6</color>
     <color name="unquenchedEmph">#9CB9D3</color>
+    <color name="unquenchedBorderDone">#1F343D</color>
+    <color name="unquenchedBorder">#BDD7ED </color>
 </resources>
