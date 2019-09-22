@@ -36,7 +36,9 @@
     <string name="tomorrow">Tomorrow\'s Reading</string>
     <string name="resetPercent">Reset Amount Read</string>
     <string name="reset_header">Reset Options</string>
+    <string name="reset_stats">Reset All Stats</string>
     <string name="resetAmount_confirm">Are you sure you want to reset the amount you\'ve read to 0?</string>
+    <string name="resetStat_confirm">Are you sure you want to reset all stats?</string>
 
     <string name="title_activity_settings">Settings</string>
 
