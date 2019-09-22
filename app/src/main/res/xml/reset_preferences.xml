@@ -6,8 +6,5 @@
         app:key="reset_lists"
         app:title="@string/reset_title">
     </Preference>
-    <Preference
-        app:key="reset_amount_read"
-        app:title="@string/resetPercent">
-    </Preference>
+
 </PreferenceScreen>

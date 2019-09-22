@@ -40,18 +40,6 @@ class HomeFragment : Fragment() {
 
             textView.isAllCaps = true
         })
-        val currentStreak = prefReadInt(context, "curStreak")
-        val maxStreak = prefReadInt(context, "maxStreak")
-        val amntRead = prefReadInt(context, "totalRead")
-        val df = DecimalFormat("##")
-        val percentRead = amntRead.toDouble() / 1189.0 * 100
-        val fPercentRead = df.format(percentRead) + "%"
-        val percRead = root.findViewById<TextView>(R.id.perecentRead)
-        val curStreak = root.findViewById<TextView>(R.id.curStreak)
-        val mStreak = root.findViewById<TextView>(R.id.maxStreak)
-        curStreak.text = Integer.toString(currentStreak)
-        mStreak.text = Integer.toString(maxStreak)
-        percRead.text = fPercentRead
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         val str_today = getCurrentDate(false)
         val check = MainActivity.prefReadString(activity, "dateClicked")

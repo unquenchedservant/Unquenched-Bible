@@ -234,7 +234,10 @@ class MainActivity : AppCompatActivity() {
             }
             alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, notifyPendingIntent)
         }
-        fun resetAmountRead(context: Context?) {
+        fun resetStatistics(context: Context?){
+            resetAmountRead(context, false)
+        }
+        fun resetAmountRead(context: Context?, standalone:Boolean) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
                 prefEditInt(context, "totalRead", 0)
@@ -248,11 +251,17 @@ class MainActivity : AppCompatActivity() {
                 resetReadList(R.array.list_8, context)
                 resetReadList(R.array.list_9, context)
                 resetReadList(R.array.list_10, context)
-                navController?.navController?.navigate(R.id.navigation_home)
             }
             builder.setNegativeButton(R.string.no) { dialogInterface, i -> dialogInterface.cancel() }
-            builder.setMessage(R.string.resetAmount_confirm)
-                    .setTitle(R.string.resetPercent)
+            when(standalone){
+                false -> {
+                    builder.setMessage(R.string.resetStat_confirm)
+                            .setTitle(R.string.reset_stats)
+                    prefEditInt(context, "curStreak", 0)
+                    prefEditInt(context, "maxStreak", 0)
+                }
+                true -> builder.setMessage(R.string.resetAmount_confirm).setTitle(R.string.resetPercent)
+            }
             builder.create().show()
         }
 

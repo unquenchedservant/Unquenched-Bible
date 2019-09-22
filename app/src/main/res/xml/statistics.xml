@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <PreferenceCategory
+        app:title="Notifications">
+        <Preference
+            app:key="currentStreak"
+            app:title="@string/curStreak"/>
+        <Preference
+            app:key="MaximumStreak"
+            app:title="@string/maxStreak"/>
+        <Preference
+            app:key="percentRead"
+            app:title="@string/percentRead"/>
+    </PreferenceCategory>
+    <PreferenceCategory
+        app:title="">
+        <Preference
+            app:key="reset_amount_read"
+            app:title="@string/resetPercent">
+        </Preference>
+        <Preference
+            app:key="reset_statistics"
+            app:title="@string/reset_stats"/>
+    </PreferenceCategory>
+
+</PreferenceScreen>

@@ -13,8 +13,11 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.*
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createRemindAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.prefReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.prefReadString
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.reset
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.resetAmountRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.resetStatistics
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
 import java.text.DecimalFormat
@@ -47,7 +50,7 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         when(title){
-            "Reset Options" ->{
+            "Reset Options", "Statistics" ->{
                 onSupportNavigateUp()
             }
             else -> startActivity(parentActivityIntent)
@@ -60,7 +63,7 @@ class SettingsActivity : AppCompatActivity(),
     }
     override fun onSupportNavigateUp(): Boolean {
         when(title){
-            "Reset Options" -> {
+            "Reset Options", "Statistics" -> {
                 if(supportFragmentManager.popBackStackImmediate()){
                     return true
                 }
@@ -99,7 +102,7 @@ class SettingsActivity : AppCompatActivity(),
 
     class HeaderFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(com.theunquenchedservant.granthornersbiblereadingsystem.R.xml.header_preferences, rootKey)
+            setPreferencesFromResource(R.xml.header_preferences, rootKey)
             val dailyList : Preference? = findPreference("daily_time")
             val remindTime : Preference? = findPreference("remind_time")
             val psToggle : Preference? = findPreference("psalms")
@@ -170,16 +173,35 @@ class SettingsActivity : AppCompatActivity(),
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(com.theunquenchedservant.granthornersbiblereadingsystem.R.xml.reset_preferences, rootKey)
             val listReset : Preference? = findPreference("reset_lists")
-            listReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { preference ->
+            listReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 reset(context)
                 true
             }
-            val amountReset : Preference? = findPreference("reset_amount_read")
-            amountReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                resetAmountRead(context)
-                true
-            }
+
         }
     }
+    class StatisticsFragment : PreferenceFragmentCompat(){
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.statistics, rootKey)
+            val curStreak : Preference? = findPreference("currentStreak")
+            val maxStreak : Preference? = findPreference("MaximumStreak")
+            val percentRead : Preference? = findPreference("percentRead")
+            curStreak?.summary = String.format("%d", prefReadInt(context, "curStreak"))
+            maxStreak?.summary = String.format("%d", prefReadInt(context, "maxStreak"))
+            val amountRead = prefReadInt(context, "totalRead").toDouble() / 1189.0 * 100
+            val df = DecimalFormat("##")
+            percentRead?.summary = df.format(amountRead) + "%"
+            val amountReset : Preference? = findPreference("reset_amount_read")
+            amountReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                resetAmountRead(context, true)
+                true
+            }
+            val statReset : Preference? = findPreference("reset_statistics")
+            statReset!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
+                resetStatistics(context)
+                true
+            }
 
+        }
+    }
 }
