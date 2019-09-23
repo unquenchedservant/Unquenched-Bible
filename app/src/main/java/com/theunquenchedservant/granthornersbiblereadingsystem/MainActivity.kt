@@ -6,25 +6,20 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.SharedPreferences
-import android.content.res.Resources
-import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
+import android.view.ContextThemeWrapper
 import android.view.View
 import android.widget.Button
-import android.widget.Switch
 
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.dailyCheck
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat.startActivity
-import androidx.core.content.res.ResourcesCompat
 import androidx.navigation.NavController
 import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
@@ -33,7 +28,6 @@ import androidx.preference.PreferenceManager
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
-import java.util.Date
 import java.util.Locale
 
 class MainActivity : AppCompatActivity() {
@@ -54,49 +48,7 @@ class MainActivity : AppCompatActivity() {
         createDailyCheck(this)
     }
 
-    fun markAll(view: View) {
-        val pref = this.getSharedPreferences("com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE)
-        val today = getCurrentDate(false)
-        val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        val check = pref.getString("dateClicked", "")
-        Log.d("today(markAll)", today)
-        Log.d("check(markAll)", check)
-        if (check != today) {
-            Log.d("Success", "Good job buddy")
-            prefEditString(this, "dateClicked", today)
-            val button = view.findViewById<Button>(R.id.material_button)
-            button.setText(R.string.done)
-            button.isEnabled = false
-            markList(this, "List 1", R.array.list_1)
-            markList(this, "List 2", R.array.list_2)
-            markList(this, "List 3", R.array.list_3)
-            markList(this, "List 4", R.array.list_4)
-            markList(this, "List 5", R.array.list_5)
-            val psCheck = prefReadInt(this, "psalmSwitch")
-            when(psCheck){
-                0 -> markList(this, "List 6", R.array.list_6)
-                1 -> {
-                    markRead(this, "Ps. $day")
-                    markRead(this, "Ps. ${day + 30}")
-                    markRead(this, "Ps. ${day + 60}")
-                    markRead(this, "Ps. ${day + 90}")
-                    markRead(this, "Ps. ${day + 120}")
-                }
-            }
-            markList(this, "List 7", R.array.list_7)
-            markList(this, "List 8", R.array.list_8)
-            markList(this, "List 9", R.array.list_9)
-            markList(this, "List 10", R.array.list_10)
-            val curStreak = prefReadInt(this, "curStreak") + 1
-            val maxStreak = prefReadInt(this, "maxStreak")
-            prefEditInt(this, "curStreak", curStreak)
-            if (curStreak > maxStreak) {
-                prefEditInt(this, "maxStreak", curStreak)
-            }
-            val mNotificationManager = this!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            mNotificationManager.cancel(0)
-        }
-    }
+
 
     private fun createNotificationChannel() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
@@ -112,6 +64,7 @@ class MainActivity : AppCompatActivity() {
     }
     companion object{
         val navController = MainActivity::class.objectInstance
+
         fun getCurrentDate(fullMonth: Boolean): String {
             val today = Calendar.getInstance().time
             val formatter: SimpleDateFormat
@@ -145,16 +98,11 @@ class MainActivity : AppCompatActivity() {
                 else -> prefEditInt(context, chapterName, beenRead+1)
             }
         }
-        fun markList(context: Context?, listString: String, arrayId: Int) {
-            var number = prefReadInt(context, listString)
-            number++
-            val res = context!!.resources
-            val list = res.getStringArray(arrayId)
-            when (number) {
-                list.size -> number = 0
-            }
+        fun markList(context: Context?, listString: String, arrayId: Int, listDoneName: String) {
+            prefEditInt(context, listDoneName, 1)
+            val number = prefReadInt(context, listString)
+            val list = context!!.resources.getStringArray(arrayId)
             markRead(context, list[number])
-            prefEditInt(context, listString, number)
         }
 
         fun prefReadString(context: Context?, stringName: String): String {
@@ -200,7 +148,7 @@ class MainActivity : AppCompatActivity() {
 
         fun cancelAlarm(context: Context, notifyPendingIntent: PendingIntent) {
             val alarmManager = context.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            alarmManager?.cancel(notifyPendingIntent)
+            alarmManager.cancel(notifyPendingIntent)
         }
 
         fun createRemindAlarm(context: Context?, notifyPendingIntent: PendingIntent) {
@@ -238,7 +186,7 @@ class MainActivity : AppCompatActivity() {
             resetAmountRead(context, false)
         }
         fun resetAmountRead(context: Context?, standalone:Boolean) {
-            val builder = AlertDialog.Builder(context)
+            val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
             builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
                 prefEditInt(context, "totalRead", 0)
                 resetReadList(R.array.list_1, context)
@@ -252,7 +200,7 @@ class MainActivity : AppCompatActivity() {
                 resetReadList(R.array.list_9, context)
                 resetReadList(R.array.list_10, context)
             }
-            builder.setNegativeButton(R.string.no) { dialogInterface, i -> dialogInterface.cancel() }
+            builder.setNeutralButton(R.string.no) { dialogInterface, i -> dialogInterface.cancel() }
             when(standalone){
                 false -> {
                     builder.setMessage(R.string.resetStat_confirm)
@@ -274,7 +222,7 @@ class MainActivity : AppCompatActivity() {
         }
 
         fun reset(context: Context?) {
-            val builder = AlertDialog.Builder(context)
+            val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
             builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
                 prefEditInt(context, "List 1", 0)
                 prefEditInt(context, "List 2", 0)
@@ -286,28 +234,30 @@ class MainActivity : AppCompatActivity() {
                 prefEditInt(context, "List 8", 0)
                 prefEditInt(context, "List 9", 0)
                 prefEditInt(context, "List 10", 0)
+                prefEditInt(context, "list1Done", 0)
+                prefEditInt(context, "list2Done", 0)
+                prefEditInt(context, "list3Done", 0)
+                prefEditInt(context, "list4Done", 0)
+                prefEditInt(context, "list5Done", 0)
+                prefEditInt(context, "list6Done", 0)
+                prefEditInt(context, "list7Done", 0)
+                prefEditInt(context, "list8Done", 0)
+                prefEditInt(context, "list9Done", 0)
+                prefEditInt(context, "list10Done", 0)
+                prefEditInt(context, "listsDone", 0)
+                prefEditInt(context, "dailyStreak", 0)
                 prefEditString(context, "dateClicked", "None")
                 prefEditInt(context, "curStreak", 0)
                 navController?.navController?.navigate(R.id.navigation_home)
             }
-            builder.setNegativeButton(R.string.no) { dialogInterface, i -> dialogInterface.cancel() }
+            builder.setNeutralButton(R.string.no) { dialogInterface, i -> dialogInterface.cancel() }
             builder.setMessage(R.string.reset_confirm)
                     .setTitle(R.string.reset_title)
             builder.create().show()
+
         }
 
     }
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -327,44 +277,6 @@ class MainActivity : AppCompatActivity() {
         alarmMgr.setInexactRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, alarmIntent)
     }
 
-
-
-
-
-
-
-    fun markListStatic(listString: String, arrayId: Int, context: Context) {
-        var number = prefReadInt(context, listString)
-        number++
-        val res = context.resources
-        val list = res.getStringArray(arrayId)
-        if (number == list.size) {
-            number = 0
-        }
-        val beenRead = prefReadInt(context, list[number])
-        if (beenRead == 0) {
-            prefEditInt(context, list[number], 1)
-            prefEditInt(context, "totalRead", prefReadInt(context, "totalRead") + 1)
-        } else {
-            prefEditInt(context, list[number], beenRead + 1)
-        }
-
-        setListStatic(listString, number, context)
-    }
-
-    fun setListStatic(listString: String, number: Int, context: Context) {
-        prefEditInt(context, listString, number)
-    }
-
-    fun getPrefRead(context: Context): SharedPreferences {
-        return context.getSharedPreferences(
-                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE)
-    }
-
-    fun getPrefEdit(context: Context): SharedPreferences.Editor {
-        return context.getSharedPreferences(
-                "com.theunquenchedservant.granthornersbiblereadingsystem", Context.MODE_PRIVATE).edit()
-    }
 }
 
 
