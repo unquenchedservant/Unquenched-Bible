@@ -4,6 +4,8 @@ import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
+import android.widget.TextView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
@@ -103,11 +105,10 @@ class SettingsActivity : AppCompatActivity(),
     class HeaderFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.header_preferences, rootKey)
-            val dailyList : Preference? = findPreference("daily_time")
-            val remindTime : Preference? = findPreference("remind_time")
-            val psToggle : Preference? = findPreference("psalms")
+            val dailyList: Preference? = findPreference("daily_time")
+            val remindTime: Preference? = findPreference("remind_time")
+            val psToggle: Preference? = findPreference("psalms")
             psToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
-                val isOn = o as Boolean?
                 true
             }
             val sharedpref = PreferenceManager.getDefaultSharedPreferences(activity!!)
@@ -201,7 +202,11 @@ class SettingsActivity : AppCompatActivity(),
                 resetStatistics(context)
                 true
             }
-
+            val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
+            partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener {preference, o ->
+                true
+            }
+            partialStreakAllow.summary = "Streak won't break if you do less than 10 lists (but more than 1)"
         }
     }
 }
