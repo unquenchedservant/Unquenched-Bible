@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -12,16 +11,14 @@
         android:layout_width="match_parent"
         android:layout_height="48dp"
         android:layout_marginStart="8dp"
-        android:layout_marginTop="450dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="70dp"
         android:layout_weight="1"
         android:clickable="true"
         android:focusable="true"
-        android:onClick="markAll"
+        android:background="#383838"
         android:text="@string/notdone"
         android:textAlignment="center"
-        android:textAppearance="@style/Theme.MaterialComponents.DayNight.DialogWhenLarge"
         android:textColor="@color/colorPrimaryDark"
         android:textIsSelectable="false"
         android:textSize="14sp"
@@ -31,31 +28,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.492"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0" />
+        app:layout_constraintTop_toBottomOf="@+id/cardList9" />
 
-
-    <com.google.android.material.textview.MaterialTextView
-        android:id="@+id/text_home"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAlignment="center"
-        android:textSize="20sp"
-        app:fontFamily="@font/roboto_condensed_regular"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList1"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="10dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
+        android:clickable="true"
+        app:cardBackgroundColor="#383838"
+        android:focusable="true"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList3"
@@ -74,7 +59,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l1" />
+                android:text="@string/l1"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list1_reading"
@@ -89,14 +75,12 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList2"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
-        android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
+        app:cardBackgroundColor="#383838"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList4"
@@ -115,7 +99,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l2" />
+                android:text="@string/l2"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list2_reading"
@@ -130,14 +115,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList3"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        app:cardBackgroundColor="#383838"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="10dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList5"
@@ -157,7 +141,8 @@
                 android:layout_height="0dp"
                 android:layout_weight="1"
                 android:paddingStart="3dp"
-                android:text="@string/l3" />
+                android:text="@string/l3"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list3_reading"
@@ -172,14 +157,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList4"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        app:cardBackgroundColor="#383838"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="20dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList6"
@@ -198,13 +182,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l4" />
+                android:text="@string/l4"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list4_reading"
                 style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:autoSizeTextType="uniform"
                 android:paddingStart="15dp"
                 android:paddingBottom="3dp"
                 android:textColor="@color/unquenchedEmph" />
@@ -213,14 +199,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList5"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="10dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
+        app:cardBackgroundColor="#383838"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList7"
@@ -239,7 +224,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l5" />
+                android:text="@string/l5"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list5_reading"
@@ -254,14 +240,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList6"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
+        app:cardBackgroundColor="#383838"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="20dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList8"
@@ -280,7 +265,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l6" />
+                android:text="@string/l6"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list6_reading"
@@ -295,14 +281,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList7"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        app:cardBackgroundColor="#383838"
         android:layout_marginStart="20dp"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="10dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList9"
@@ -321,7 +306,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l7" />
+                android:text="@string/l7"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list7_reading"
@@ -336,14 +322,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList8"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
+        app:cardBackgroundColor="#383838"
         android:layout_marginEnd="20dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/cardList10"
@@ -362,7 +347,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l8" />
+                android:text="@string/l8"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list8_reading"
@@ -378,14 +364,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList9"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="20dp"
+        app:cardBackgroundColor="#383838"
         android:layout_marginTop="0dp"
         android:layout_marginEnd="10dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/material_button"
@@ -404,7 +389,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l9" />
+                android:text="@string/l9"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list9_reading"
@@ -419,14 +405,13 @@
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/cardList10"
-        style="@style/Widget.MaterialComponents.CardView"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="10dp"
         android:layout_marginTop="0dp"
+        app:cardBackgroundColor="#383838"
         android:layout_marginEnd="20dp"
-        app:strokeColor="@color/unquenchedBorder"
-        app:strokeWidth="1dp"
         app:cardCornerRadius="4dp"
         app:cardElevation="0dp"
         app:layout_constraintBottom_toTopOf="@+id/material_button"
@@ -445,7 +430,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:paddingStart="3dp"
-                android:text="@string/l10" />
+                android:text="@string/l10"
+                android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list10_reading"
