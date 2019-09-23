@@ -7,8 +7,7 @@
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment"
-        android:label="@string/title_home"
-        tools:layout="@layout/fragment_home" />
+        android:label="@string/title_home" />
 
     <activity
         android:id="@+id/navigation_settings"
