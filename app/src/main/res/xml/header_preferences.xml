@@ -17,21 +17,22 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
 
-    <PreferenceCategory
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
+        android:background="#00DD0C0C"
         app:key="notification_category"
         app:title="Notifications">
         <SwitchPreferenceCompat
             app:key="notif_switch"
             app:title="Notifications" />
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
+            android:defaultValue="90"
             app:key="daily_time"
-            app:title="Daily List Time"
-            android:defaultValue="90"/>
+            app:title="Daily List Time" />
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="remind_time"
-            app:title="Reminder Time"/>
-    </PreferenceCategory>
-    <PreferenceCategory
+            app:title="Reminder Time" />
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="option_category"
         app:title="Options">
         <SwitchPreferenceCompat
@@ -42,9 +43,9 @@
             app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$ResetFragment"
             app:key="reset_header"
             app:title="@string/reset_header" />
-    </PreferenceCategory>
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 
-    <PreferenceCategory
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="information_category"
         app:title="Information">
         <Preference
@@ -59,6 +60,6 @@
                 android:data="https://theunquenchedservant.com/assets/brp_privacy_policy.html"/>
         </Preference>
 
-    </PreferenceCategory>
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 
 </PreferenceScreen>

@@ -2,6 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight">
+        <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
+        <item name="colorAccent">@color/unquenchedEmph</item>
     </style>
     <style name="AppPreference">
         <item name="android:layout">@layout/preference_material</item>
@@ -9,5 +11,20 @@
     <style name="AppPreference.DialogPreference">
         <item name="android:positiveButtonText">@android:string/ok</item>
         <item name="android:negativeButtonText">@android:string/cancel</item>
+    </style>
+    <style name="AppTheme.SwitchPreferenceCompat">
+        <item name="android:colorControlActivated">@color/unquenchedEmph</item>
+    </style>
+    <style name="AlertButton" parent="Widget.MaterialComponents.Button.OutlinedButton">
+        <item name="android:background">#383838</item>
+        <item name="android:textColor">@color/colorPrimaryDark</item>
+        <item name="android:textIsSelectable">false</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:height">48dp</item>
+    </style>
+    <style name="unquenchedAlert" parent="Theme.MaterialComponents.Dialog.Alert">
+        <item name="colorAccent">@color/unquenchedEmph</item>
+        <item name="android:buttonBarButtonStyle">@style/AlertButton</item>
+        <item name="dialogPreferredPadding">10dp</item>
     </style>
 </resources>
