@@ -1,7 +1,9 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
+import android.annotation.SuppressLint
 import android.app.PendingIntent
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.util.Log
@@ -48,16 +50,21 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
             val is24hour = DateFormat.is24HourFormat(context)
 
             mTimePicker!!.setIs24HourView(is24hour)
-            mTimePicker!!.hour = hours
-            mTimePicker!!.minute = minutes
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTimePicker!!.hour = hours
+            }
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                mTimePicker!!.minute = minutes
+            }
         }
     }
 
+    @SuppressLint("NewApi")
     override fun onDialogClosed(positiveResult: Boolean) {
         if (positiveResult) {
             // generate value to save
-            var hours : Int = mTimePicker!!.hour
-            val minutes : Int =  mTimePicker!!.minute
+            var hours : Int =  mTimePicker!!.hour
+            val minutes : Int = mTimePicker!!.minute
             val minutesAfterMidnight : Int = hours * 60 + minutes
             Log.d("preference", preference.dialogTitle as String)
             if (preference is TimePreference && preference.callChangeListener(minutesAfterMidnight)) {
