@@ -20,7 +20,7 @@
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         android:background="#00DD0C0C"
         app:key="notification_category"
-        app:title="Notifications">
+        app:title="Notification Settings">
         <SwitchPreferenceCompat
             app:key="notif_switch"
             app:title="Notifications" />
