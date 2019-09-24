@@ -8,6 +8,7 @@ import android.content.Intent
 import android.util.Log
 
 import androidx.core.app.NotificationCompat
+import androidx.preference.PreferenceManager
 
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
@@ -16,15 +17,20 @@ class remindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
     override fun onReceive(context: Context, intent: Intent) {
         mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val check = MainActivity.prefReadString(context, "dateClicked")
-        val str_today = MainActivity.getCurrentDate(false)
-        if (check != str_today) {
-            deliverNotification(context)
+        val check = MainActivity.prefReadInt(context, "listsDone")
+        val allow_partial = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("allow_partial_switch", false)
+        when(check){
+            0 -> deliverNotification(context, false)
+            in 1..9 ->{
+                if(!allow_partial){deliverNotification(context, true)}
+            }
         }
     }
 
-    private fun deliverNotification(context: Context) {
+    private fun deliverNotification(context: Context, partial:Boolean) {
         val rem = context.resources.getString(R.string.remTitle)
+        var content : String? = null
+        if(partial){content="Don't forget to finish the reading!"}else{content="Don't forget to do the reading"}
         val tapIntent = Intent(context, MainActivity::class.java)
         tapIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val tapPending = PendingIntent.getActivity(context, 0, tapIntent, 0)
@@ -33,7 +39,7 @@ class remindReceiver : BroadcastReceiver() {
         val builder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notifications_black_24dp)
                 .setContentTitle(rem)
-                .setContentText("Don't Forget To Do The Reading!")
+                .setContentText(content)
                 .addAction(android.R.drawable.ic_menu_save, "Done", detailsPendingIntent)
                 .setContentIntent(tapPending)
                 .setAutoCancel(false)
