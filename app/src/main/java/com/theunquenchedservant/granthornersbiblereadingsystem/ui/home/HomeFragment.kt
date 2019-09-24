@@ -146,7 +146,6 @@ class HomeFragment : Fragment() {
             cardList.isEnabled = false
             cardList.setCardBackgroundColor(Color.parseColor("#00383838"))
             prefEditInt(context, "listsDone", prefReadInt(context, "listsDone")+ 1)
-            Log.d("CHECKING", "${prefReadInt(context, "listsDone")}")
             if(prefReadInt(context, "listsDone") == 10){
                 button.setText(R.string.done)
                 button.setBackgroundColor(Color.parseColor("#00383838"))
