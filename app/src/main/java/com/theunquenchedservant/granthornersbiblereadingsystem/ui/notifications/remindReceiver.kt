@@ -5,19 +5,18 @@ import android.app.PendingIntent
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import android.util.Log
-
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
 
 class remindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
     override fun onReceive(context: Context, intent: Intent) {
         mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val check = MainActivity.prefReadInt(context, "listsDone")
+        val check = listNumberReadInt(context, "listsDone")
         val allow_partial = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("allow_partial_switch", false)
         when(check){
             0 -> deliverNotification(context, false)

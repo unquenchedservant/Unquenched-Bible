@@ -25,12 +25,15 @@
             app:key="notif_switch"
             app:title="Notifications" />
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
-            android:defaultValue="90"
             app:key="daily_time"
+            app:defaultValue="360"
+            style="@style/AppPreference.DialogPreference"
             app:title="Daily List Time" />
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="remind_time"
-            app:title="Reminder Time" />
+            app:defaultValue="1170"
+            style="@style/AppPreference.DialogPreference"
+            app:title="Reminder Time"/>
     </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="option_category"

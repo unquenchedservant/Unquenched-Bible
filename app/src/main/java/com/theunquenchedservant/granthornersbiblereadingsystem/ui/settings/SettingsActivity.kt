@@ -1,11 +1,10 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
+import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
-import android.view.View
-import android.widget.TextView
+import android.view.ContextThemeWrapper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
@@ -15,11 +14,11 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.*
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createRemindAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.prefReadInt
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.prefReadString
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.reset
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.resetAmountRead
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.resetStatistics
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumbersReset
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.resetRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
 import java.text.DecimalFormat
@@ -112,30 +111,29 @@ class SettingsActivity : AppCompatActivity(),
                 true
             }
             val sharedpref = PreferenceManager.getDefaultSharedPreferences(activity!!)
-            val daily_timeinminutes = sharedpref.getInt("daily_time", 0)
-            var ampm = ""
-            var d_hour = daily_timeinminutes / 60
-            val d_minute = daily_timeinminutes % 60
-            when(d_hour){
-                in 13..23 -> {d_hour = d_hour - 12; ampm=" PM"}
-                12 -> ampm = " PM"
-                0 -> {d_hour = 12; ampm = " AM"}
-                in 1..11 -> ampm=" AM"
+            val dailyTimeInMinutes = sharedpref.getInt("daily_time", 0)
+            var dailyAMPM = ""
+            var dailyHour = dailyTimeInMinutes / 60
+            val dailyMinute = dailyTimeInMinutes % 60
+            when(dailyHour){
+                in 13..23 -> {dailyHour -= 12; dailyAMPM="PM"}
+                12 -> dailyAMPM = "PM"
+                0 -> {dailyHour = 12; dailyAMPM = "AM"}
+                in 1..11 -> dailyAMPM="AM"
             }
-            val daily_time = Integer.toString(d_hour) + ":" + DecimalFormat("00").format(d_minute.toLong()) + ampm
-            dailyList!!.summary = daily_time
+            val dailyTime = "$dailyHour:${DecimalFormat("00").format(dailyMinute)} $dailyAMPM"
+            dailyList!!.summary = dailyTime
             val reminderTimeInMinutes = sharedpref.getInt("remind_time", 0)
-            ampm = ""
-            var r_hour = reminderTimeInMinutes / 60
-            val r_minute = reminderTimeInMinutes % 60
-            when(r_hour){
-                in 13..23 -> {r_hour = r_hour - 12; ampm=" PM"}
-                12 -> ampm = " PM"
-                0 -> {r_hour = 12; ampm = " AM"}
-                in 1..11 -> ampm=" AM"
-            }
-            val remind_time = Integer.toString(r_hour) + ":" + DecimalFormat("00").format(r_minute.toLong()) + ampm
-            remindTime!!.summary = remind_time
+            var remindAMPM = ""
+            var remindHour = reminderTimeInMinutes / 60
+            val remindMinute = reminderTimeInMinutes % 60
+            when(remindHour){
+                in 13..23 -> {remindHour -= 12; remindAMPM="PM"}
+                12 -> remindAMPM = "PM"
+                0 -> {remindHour = 12; remindAMPM = "AM"}
+                in 1..11 -> remindAMPM="AM" }
+            val reminderTime = "$remindHour:${DecimalFormat("00").format(remindMinute)} $remindAMPM"
+            remindTime!!.summary = reminderTime
             val notif = findPreference<Preference>("notif_switch")
             notif!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
                 val isOn = o as Boolean
@@ -143,13 +141,8 @@ class SettingsActivity : AppCompatActivity(),
                 val remindIntent = Intent(activity, remindReceiver::class.java)
                 val notifyPendingIntent = PendingIntent.getBroadcast(activity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                 val remindPendingIntent = PendingIntent.getBroadcast(activity, 0, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                if (isOn) {
-                    createAlarm(context, notifyPendingIntent)
-                    createRemindAlarm(context, remindPendingIntent)
-                } else {
-                    cancelAlarm(activity!!, notifyPendingIntent)
-                    cancelAlarm(activity!!, remindPendingIntent)
-                }
+                if (isOn) { createAlarm(context, notifyPendingIntent); createRemindAlarm(context, remindPendingIntent) }
+                else { cancelAlarm(activity!!, notifyPendingIntent); cancelAlarm(activity!!, remindPendingIntent) }
                 true
             }
         }
@@ -175,7 +168,28 @@ class SettingsActivity : AppCompatActivity(),
             setPreferencesFromResource(R.xml.reset_preferences, rootKey)
             val listReset : Preference? = findPreference("reset_lists")
             listReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                reset(context)
+                log("Begin reset (list reset)")
+                val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
+                log("created alertdialog builder with unquenched theme")
+                builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
+                    log("reset dialog button yes pressed")
+                    listNumbersReset(context)
+                    log("Reset list numbers")
+                    statisticsEdit(context, "dailyStreak", 0)
+                    log("reset daily streak to 0")
+                    //statisticsEdit(context, "curStreak", 0)
+                    log("navigating home")
+                    val intent = Intent(activity, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                builder.setNeutralButton(R.string.no) {
+                    dialogInterface, i -> log("reset dialog cancel button pressed");
+                    dialogInterface.cancel()
+                }
+                builder.setMessage(R.string.reset_confirm)
+                        .setTitle(R.string.reset_title)
+                log("Showing reset dialog")
+                builder.create().show()
                 true
             }
 
@@ -187,19 +201,19 @@ class SettingsActivity : AppCompatActivity(),
             val curStreak : Preference? = findPreference("currentStreak")
             val maxStreak : Preference? = findPreference("MaximumStreak")
             val percentRead : Preference? = findPreference("percentRead")
-            curStreak?.summary = String.format("%d", prefReadInt(context, "curStreak"))
-            maxStreak?.summary = String.format("%d", prefReadInt(context, "maxStreak"))
-            val amountRead = prefReadInt(context, "totalRead").toDouble() / 1189.0 * 100
+            curStreak?.summary = String.format("%d", statisticsRead(context, "currentStreak"))
+            maxStreak?.summary = String.format("%d", statisticsRead(context, "maxStreak"))
+            val amountRead = statisticsRead(context, "totalRead").toDouble() / 1189.0 * 100
             val df = DecimalFormat("##")
             percentRead?.summary = df.format(amountRead) + "%"
             val amountReset : Preference? = findPreference("reset_amount_read")
             amountReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                resetAmountRead(context, true)
+                resetAmountRead(true)
                 true
             }
             val statReset : Preference? = findPreference("reset_statistics")
             statReset!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
-                resetStatistics(context)
+                resetAmountRead(false)
                 true
             }
             val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
@@ -207,6 +221,48 @@ class SettingsActivity : AppCompatActivity(),
                 true
             }
             partialStreakAllow.summary = "Streak won't break if you do less than 10 lists (but more than 1)"
+        }
+
+        fun resetAmountRead(standalone:Boolean){
+            log("Start resetAmountRead, standalone = $standalone")
+            val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
+            log("created alertdialog builder with unquenched theme")
+            builder.setNeutralButton(R.string.no) { dialogInterface, i -> log("cancel pressed"); dialogInterface.cancel() }
+            when(standalone){
+                false -> {
+                    log("Standalone False, edit streaks as well")
+                    builder.setMessage(R.string.resetStat_confirm)
+                            .setTitle(R.string.reset_stats)
+                    builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
+                        statisticsEdit(context, "totalRead", 0)
+                        log("reset Amount Read/statistics = yes")
+                        log("reset totalRead to 0")
+                        resetRead(context)
+                        statisticsEdit(context, "currentStreak", 0)
+                        val curStreak : Preference? = findPreference("currentStreak")
+                        val maxStreak : Preference? = findPreference("MaximumStreak")
+                        val percentRead : Preference? = findPreference("percentRead")
+                        statisticsEdit(context, "maxStreak", 0)
+                        curStreak?.summary = "${0}"
+                        maxStreak?.summary = "${0}"
+                        percentRead?.summary="${0}%"
+                    }
+                }
+                true -> {
+                    builder.setMessage(R.string.resetAmount_confirm).setTitle(R.string.resetPercent)
+                    log("Standalone true, just reset amount read")
+                    builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
+                        statisticsEdit(context, "totalRead", 0)
+                        val percentRead : Preference? = findPreference("percentRead")
+                        percentRead?.summary="${0}%"
+                        log("reset Amount Read/statistics = yes")
+                        log("reset totalRead to 0")
+                        resetRead(context)
+                    }
+                }
+            }
+            log("show resetAmountRead dialog")
+            builder.create().show()
         }
     }
 }

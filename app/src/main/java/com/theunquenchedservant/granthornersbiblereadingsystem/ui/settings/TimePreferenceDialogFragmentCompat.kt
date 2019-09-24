@@ -6,7 +6,6 @@ import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat
-import android.util.Log
 import android.view.View
 import android.widget.TimePicker
 import androidx.preference.PreferenceDialogFragmentCompat
@@ -28,14 +27,10 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
         }
     }
 
-
     override fun onBindDialogView(view: View) {
         super.onBindDialogView(view)
-
-        mTimePicker = view.findViewById(R.id.timepicker) as TimePicker
-
+        mTimePicker = view.findViewById(R.id.timepicker)
         checkNotNull(mTimePicker) { "Dialog view must contain a TimePicker with id 'timepicker'" }
-
         // Get the time from the related Preference
         var minutesAfterMidnight: Int? = null
         val preference = preference
@@ -63,31 +58,29 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
     override fun onDialogClosed(positiveResult: Boolean) {
         if (positiveResult) {
             // generate value to save
+            var ampm = ""
             var hours : Int =  mTimePicker!!.hour
             val minutes : Int = mTimePicker!!.minute
             val minutesAfterMidnight : Int = hours * 60 + minutes
-            Log.d("preference", preference.dialogTitle as String)
             if (preference is TimePreference && preference.callChangeListener(minutesAfterMidnight)) {
-                if (preference.dialogTitle.equals("Daily List Time")) {
+                if (preference.dialogTitle=="Daily List Time") {
                     val notifyIntent = Intent(activity, AlarmReceiver::class.java)
                     val notifyPendingIntent = PendingIntent.getBroadcast(activity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                     MainActivity.cancelAlarm(activity!!, notifyPendingIntent)
                     MainActivity.createAlarm(activity, notifyPendingIntent)
-                } else if(preference.dialogTitle.equals("Reminder Time")) {
+                } else if(preference.dialogTitle=="Reminder Time") {
                     val remindIntent = Intent(activity, remindReceiver::class.java)
                     val remindPendingIntent = PendingIntent.getBroadcast(activity, 0, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                     MainActivity.cancelAlarm(activity!!, remindPendingIntent)
                     MainActivity.createRemindAlarm(activity, remindPendingIntent)
                 }
-                var ampm = ""
                 when(hours) {
-                    0 -> { hours = 12; ampm = " AM" }
-                    in 1..11 -> ampm = " AM"
-                    12 -> ampm = " PM"
-                    in 13..23 -> { hours = hours - 12; ampm = " PM" }
+                    0 -> { hours = 12; ampm = "AM" }
+                    in 1..11 -> ampm = "AM"
+                    12 -> ampm = "PM"
+                    in 13..23 -> { hours -= 12; ampm = "PM" }
                 }
-                val df = DecimalFormat("00")
-                val time = Integer.toString(hours) + ":" + df.format(minutes.toLong()) + ampm
+                val time = "$hours:${DecimalFormat("00").format(minutes)} $ampm"
                 preference.summary = time
                 (preference as TimePreference).setTime(minutesAfterMidnight)
             }

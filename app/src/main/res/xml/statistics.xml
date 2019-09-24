@@ -1,16 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
         app:title="Notifications">
         <Preference
+            android:clickable="false"
+            android:focusableInTouchMode="false"
             app:key="currentStreak"
-            app:title="@string/curStreak"/>
+            app:title="@string/curStreak" />
         <Preference
+            android:clickable="false"
+            android:focusableInTouchMode="false"
             app:key="MaximumStreak"
-            app:title="@string/maxStreak"/>
+            app:title="@string/maxStreak" />
         <Preference
+            android:clickable="false"
+            android:focusableInTouchMode="false"
             app:key="percentRead"
-            app:title="@string/percentRead"/>
+            app:title="@string/percentRead" />
     </PreferenceCategory>
     <PreferenceCategory
         app:title="">
