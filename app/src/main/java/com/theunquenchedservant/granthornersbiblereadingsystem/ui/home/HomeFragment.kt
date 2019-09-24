@@ -18,6 +18,7 @@ import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createDailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.getCurrentDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.markList
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.prefEditInt
@@ -33,9 +34,8 @@ class HomeFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-
+        createDailyCheck(context)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        Log.d("CHECKING", "${prefReadInt(context, "listsDone")}")
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         val str_today = getCurrentDate(false)
         val check = prefReadString(activity, "dateClicked")
