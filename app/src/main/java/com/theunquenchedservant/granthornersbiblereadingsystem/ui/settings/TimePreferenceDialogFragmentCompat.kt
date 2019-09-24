@@ -88,7 +88,7 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
                 }
                 val df = DecimalFormat("00")
                 val time = Integer.toString(hours) + ":" + df.format(minutes.toLong()) + ampm
-                preference.setSummary(time)
+                preference.summary = time
                 (preference as TimePreference).setTime(minutesAfterMidnight)
             }
         }
