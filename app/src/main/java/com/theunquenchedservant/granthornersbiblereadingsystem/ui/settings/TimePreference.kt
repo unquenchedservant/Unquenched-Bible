@@ -18,7 +18,7 @@ class TimePreference : DialogPreference {
         return a.getInt(index, 0)
     }
     fun setTime(time:Int){
-        mTime = time;
+        mTime = time
         persistInt(time)
     }
     fun getTime():Int{
