@@ -53,23 +53,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l1"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list1_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -93,23 +99,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l2"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list2_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -134,24 +146,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:paddingStart="3dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:text="@string/l3"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list3_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -176,24 +193,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l4"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list4_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autoSizeTextType="uniform"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="6sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -218,23 +240,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l5"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list5_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="6sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -258,24 +286,30 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="15dp"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l6"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list6_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -300,23 +334,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l7"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list7_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -341,23 +381,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l8"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list8_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
 
     </com.google.android.material.card.MaterialCardView>
@@ -383,23 +429,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l9"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list9_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
@@ -424,23 +476,29 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="5dp">
+            android:layout_marginEnd="15dp"
+            android:paddingTop="5dp">
 
             <com.google.android.material.textview.MaterialTextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:paddingStart="3dp"
+                android:layout_marginStart="8dp"
                 android:text="@string/l10"
                 android:textColor="?android:attr/textColorPrimary" />
 
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/list10_reading"
-                style="@style/MaterialAlertDialog.MaterialComponents.Title.Text"
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:paddingStart="15dp"
+                android:layout_marginStart="20dp"
+                android:maxLines="1"
                 android:paddingBottom="3dp"
-                android:textColor="@color/unquenchedEmph" />
+                android:textColor="@color/unquenchedEmph"
+                android:textSize="18sp"
+                app:autoSizeMaxTextSize="20sp"
+                app:autoSizeMinTextSize="3sp"
+                app:autoSizeStepGranularity="1sp"
+                app:autoSizeTextType="uniform" />
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
 
