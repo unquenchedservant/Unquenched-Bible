@@ -34,11 +34,11 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(com.theunquenchedservant.granthornersbiblereadingsystem.R.layout.settings_activity)
+        setContentView(R.layout.settings_activity)
         if (savedInstanceState == null) {
             supportFragmentManager
                     .beginTransaction()
-                    .replace(com.theunquenchedservant.granthornersbiblereadingsystem.R.id.settings, HeaderFragment())
+                    .replace(R.id.settings, HeaderFragment())
                     .commit()
         } else {
             title = savedInstanceState.getCharSequence(TITLE_TAG)
@@ -95,7 +95,7 @@ class SettingsActivity : AppCompatActivity(),
         }
         // Replace the existing Fragment with the new Fragment
         supportFragmentManager.beginTransaction()
-                .replace(com.theunquenchedservant.granthornersbiblereadingsystem.R.id.settings, fragment)
+                .replace(R.id.settings, fragment)
                 .addToBackStack(null)
                 .commit()
         title = pref.title
@@ -172,7 +172,7 @@ class SettingsActivity : AppCompatActivity(),
 
     class ResetFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(com.theunquenchedservant.granthornersbiblereadingsystem.R.xml.reset_preferences, rootKey)
+            setPreferencesFromResource(R.xml.reset_preferences, rootKey)
             val listReset : Preference? = findPreference("reset_lists")
             listReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 reset(context)
