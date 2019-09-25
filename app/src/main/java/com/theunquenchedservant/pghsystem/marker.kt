@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem
+package com.theunquenchedservant.pghsystem
 
 import android.app.NotificationManager
 import android.content.Context
@@ -7,13 +7,13 @@ import android.view.View
 import android.widget.Button
 import androidx.cardview.widget.CardView
 import androidx.preference.PreferenceManager
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.readEdit
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.readRead
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
+import com.theunquenchedservant.pghsystem.sharedPref.listNumberEditInt
+import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.pghsystem.sharedPref.readEdit
+import com.theunquenchedservant.pghsystem.sharedPref.readRead
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
 import kotlinx.android.synthetic.main.fragment_home.view.*
 import java.util.*
 

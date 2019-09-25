@@ -1,8 +1,8 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem
+package com.theunquenchedservant.pghsystem
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
 import java.io.File
 
 object sharedPref {

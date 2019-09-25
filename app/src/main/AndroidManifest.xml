@@ -40,7 +40,7 @@
             android:exported="false" />
 
         <activity
-            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity"
+            android:name=".MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
