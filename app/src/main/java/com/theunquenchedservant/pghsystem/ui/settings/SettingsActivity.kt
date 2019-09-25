@@ -1,6 +1,5 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
@@ -11,6 +10,9 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
 import com.theunquenchedservant.granthornersbiblereadingsystem.*
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
@@ -58,13 +60,11 @@ class SettingsActivity : AppCompatActivity(),
             else -> startActivity(parentActivityIntent)
         }
     }
-
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save current activity title so we can set it again after a configuration change
         outState.putCharSequence(TITLE_TAG, title)
     }
-
     override fun onSupportNavigateUp(): Boolean {
         when (title) {
             "Reset Lists", "Statistics", "Notifications" -> {
@@ -180,7 +180,7 @@ class SettingsActivity : AppCompatActivity(),
         override fun onDisplayPreferenceDialog(preference: Preference) {
             var dialogFragment: DialogFragment? = null
             if (preference is TimePreference) {
-                dialogFragment = TimePreferenceDialogFragmentCompat
+                dialogFragment =TimePreferenceDialogFragmentCompat
                         .newInstance(preference.getKey())
             }
             if (dialogFragment != null) {
@@ -271,29 +271,29 @@ class SettingsActivity : AppCompatActivity(),
             val amountRead = statisticsRead(context, "totalRead").toDouble() / 1189.0 * 100
             val df = DecimalFormat("##")
             percentRead?.summary = df.format(amountRead) + "%"
-            val amountReset: Preference? = findPreference("reset_amount_read")
+            val amountReset : Preference? = findPreference("reset_amount_read")
             amountReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 resetAmountRead(true)
                 true
             }
-            val statReset: Preference? = findPreference("reset_statistics")
-            statReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val statReset : Preference? = findPreference("reset_statistics")
+            statReset!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
                 resetAmountRead(false)
                 true
             }
-            val partialStreakAllow: Preference? = findPreference("allow_partial_switch")
-            partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
+            val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
+            partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener {preference, o ->
                 true
             }
             partialStreakAllow.summary = "Streak won't break if you do less than 10 lists (but more than 1)"
         }
 
-        fun resetAmountRead(standalone: Boolean) {
+        fun resetAmountRead(standalone:Boolean){
             log("Start resetAmountRead, standalone = $standalone")
             val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
             log("created alertdialog builder with unquenched theme")
             builder.setNeutralButton(R.string.no) { dialogInterface, i -> log("cancel pressed"); dialogInterface.cancel() }
-            when (standalone) {
+            when(standalone){
                 false -> {
                     log("Standalone False, edit streaks as well")
                     builder.setMessage(R.string.resetStat_confirm)
@@ -304,13 +304,13 @@ class SettingsActivity : AppCompatActivity(),
                         log("reset totalRead to 0")
                         resetRead(context)
                         statisticsEdit(context, "currentStreak", 0)
-                        val curStreak: Preference? = findPreference("currentStreak")
-                        val maxStreak: Preference? = findPreference("MaximumStreak")
-                        val percentRead: Preference? = findPreference("percentRead")
+                        val curStreak : Preference? = findPreference("currentStreak")
+                        val maxStreak : Preference? = findPreference("MaximumStreak")
+                        val percentRead : Preference? = findPreference("percentRead")
                         statisticsEdit(context, "maxStreak", 0)
                         curStreak?.summary = "${0}"
                         maxStreak?.summary = "${0}"
-                        percentRead?.summary = "${0}%"
+                        percentRead?.summary="${0}%"
                     }
                 }
                 true -> {
@@ -318,8 +318,8 @@ class SettingsActivity : AppCompatActivity(),
                     log("Standalone true, just reset amount read")
                     builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
                         statisticsEdit(context, "totalRead", 0)
-                        val percentRead: Preference? = findPreference("percentRead")
-                        percentRead?.summary = "${0}%"
+                        val percentRead : Preference? = findPreference("percentRead")
+                        percentRead?.summary="${0}%"
                         log("reset Amount Read/statistics = yes")
                         log("reset totalRead to 0")
                         resetRead(context)
