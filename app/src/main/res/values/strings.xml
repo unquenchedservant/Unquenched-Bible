@@ -5,7 +5,7 @@
     <string name="title_notifications">Notifications</string>
     <string name="channel_name">Daily Reading</string>
     <string name="channel_description">The daily reading comes in this channel</string>
-    <string name="reset_confirm">Are you sure you want to reset all the lists?</string>
+    <string name="reset_confirm">Are you sure you want to reset all the lists to 0? This is irreversible</string>
     <string name="reset_title">Reset Lists</string>
     <string name="yes">Yes</string>
     <string name="no">Cancel</string>
@@ -35,11 +35,23 @@
     <string name="remTitle">Reminder!</string>
     <string name="tomorrow">Tomorrow\'s Reading</string>
     <string name="resetPercent">Reset Amount Read</string>
-    <string name="reset_header">Reset Options</string>
+    <string name="reset_header">Reset Lists</string>
     <string name="reset_stats">Reset All Stats</string>
     <string name="resetAmount_confirm">Are you sure you want to reset the amount you\'ve read to 0?</string>
     <string name="resetStat_confirm">Are you sure you want to reset all stats?</string>
     <string name="markRemaining">Mark Remaining Lists Done</string>
+    <string name="resetAll">Reset All</string>
+    <string name="resetList1">Reset List 1</string>
+    <string name="resetList2">Reset List 2</string>
+    <string name="resetList3">Reset List 3</string>
+    <string name="resetList4">Reset List 4</string>
+    <string name="resetList5">Reset List 5</string>
+    <string name="resetList6">Reset List 6</string>
+    <string name="resetList7">Reset List 7</string>
+    <string name="resetList8">Reset List 8</string>
+    <string name="resetList9">Reset List 9</string>
+    <string name="resetList10">Reset List 10</string>
+
 
     <string name="title_activity_settings">Settings</string>
 
