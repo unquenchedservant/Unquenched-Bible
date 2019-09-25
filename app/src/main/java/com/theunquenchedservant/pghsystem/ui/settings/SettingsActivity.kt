@@ -1,5 +1,6 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.pghsystem.ui.settings
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
@@ -10,17 +11,20 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.theunquenchedservant.granthornersbiblereadingsystem.*
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.cancelAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createRemindAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumbersReset
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.resetRead
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.firebase.auth.FirebaseAuth
+import com.theunquenchedservant.pghsystem.*
+import com.theunquenchedservant.pghsystem.MainActivity.Companion.cancelAlarm
+import com.theunquenchedservant.pghsystem.MainActivity.Companion.createAlarm
+import com.theunquenchedservant.pghsystem.MainActivity.Companion.createRemindAlarm
+import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
+import com.theunquenchedservant.pghsystem.sharedPref.listNumbersReset
+import com.theunquenchedservant.pghsystem.sharedPref.resetRead
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver
+import com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver
 import java.text.DecimalFormat
 
 
@@ -44,7 +48,7 @@ class SettingsActivity : AppCompatActivity(),
         }
         supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount == 0) {
-                setTitle(com.theunquenchedservant.granthornersbiblereadingsystem.R.string.title_activity_settings)
+                setTitle(com.theunquenchedservant.pghsystem.R.string.title_activity_settings)
             }
         }
     }
@@ -145,6 +149,11 @@ class SettingsActivity : AppCompatActivity(),
                 else { cancelAlarm(activity!!, notifyPendingIntent); cancelAlarm(activity!!, remindPendingIntent) }
                 true
             }
+            val logIn = findPreference<Preference>("signInPref")
+            logIn!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                startActivity(Intent(context, fireBaseUIActivity::class.java))
+                true
+            }
         }
 
         override fun onDisplayPreferenceDialog(preference: Preference) {
@@ -192,7 +201,6 @@ class SettingsActivity : AppCompatActivity(),
                 builder.create().show()
                 true
             }
-
         }
     }
     class StatisticsFragment : PreferenceFragmentCompat(){

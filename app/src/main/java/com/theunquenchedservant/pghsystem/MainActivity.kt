@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem
+package com.theunquenchedservant.pghsystem
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.util.Log
 
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.dailyCheck
+import com.theunquenchedservant.pghsystem.ui.notifications.dailyCheck
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -19,10 +19,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.preference.PreferenceManager
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver
+import com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver
 
 import java.text.SimpleDateFormat
 import java.util.Calendar

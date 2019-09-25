@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.theunquenchedservant.granthornersbiblereadingsystem">
+    package="com.theunquenchedservant.pghsystem">
 
     <application
         android:allowBackup="true"
@@ -10,29 +10,37 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".ui.settings.SettingsActivity"
+            android:name="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName=".MainActivity">
+            android:parentActivityName="com.theunquenchedservant.pghsystem.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity" />
+                android:value="com.theunquenchedservant.pghsystem.MainActivity" />
+        </activity>
+        <activity
+            android:name="com.theunquenchedservant.pghsystem.fireBaseUIActivity"
+            android:label="Firebase"
+            android:parentActivityName=".ui.settings.SettingsActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity"/>
         </activity>
 
         <receiver
-            android:name=".ui.notifications.remindReceiver"
+            android:name="com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".ui.notifications.dailyCheck"
+            android:name="com.theunquenchedservant.pghsystem.ui.notifications.dailyCheck"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".ui.notifications.doneReceiver"
+            android:name="com.theunquenchedservant.pghsystem.ui.notifications.doneReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name=".MainActivity"
+            android:name="com.theunquenchedservant.pghsystem.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -42,7 +50,7 @@
         </activity>
 
         <receiver
-            android:name=".ui.notifications.AlarmReceiver"
+            android:name="com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
