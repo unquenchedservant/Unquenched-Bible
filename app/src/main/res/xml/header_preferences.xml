@@ -24,8 +24,8 @@
             app:title="Log In"
             app:summary="Sign in via Google or Email/Password for multi-device support"
             />
-    </com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory>
-    <com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="option_category"
         app:title="Options">
         <Preference
