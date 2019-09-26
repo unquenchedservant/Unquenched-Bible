@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
+package com.theunquenchedservant.pghsystem.ui.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -6,8 +6,8 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.pghsystem.MainActivity
+import com.theunquenchedservant.pghsystem.R
 
 class AlarmReceiver : BroadcastReceiver() {
     private val NOTIFICATION_ID = 0

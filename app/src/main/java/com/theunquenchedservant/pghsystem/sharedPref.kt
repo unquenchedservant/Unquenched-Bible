@@ -1,10 +1,9 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem
+package com.theunquenchedservant.pghsystem
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
 import java.io.File
-import java.nio.file.Files
 
 object sharedPref {
     fun statisticsRead(context: Context?, name: String): Int {

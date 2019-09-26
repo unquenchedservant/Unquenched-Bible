@@ -6,12 +6,12 @@
 
     <fragment
         android:id="@+id/navigation_home"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment"
+        android:name="com.theunquenchedservant.pghsystem.ui.home.HomeFragment"
         android:label="@string/title_home" />
 
     <activity
         android:id="@+id/navigation_settings"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity"
+        android:name="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity"
         android:label="@string/title_dashboard"
         tools:layout="@layout/settings_activity" />
 

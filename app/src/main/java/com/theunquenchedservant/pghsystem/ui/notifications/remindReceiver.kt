@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
+package com.theunquenchedservant.pghsystem.ui.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -8,9 +8,9 @@ import android.content.Intent
 import androidx.core.app.NotificationCompat
 import androidx.preference.PreferenceManager
 
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.pghsystem.MainActivity
+import com.theunquenchedservant.pghsystem.R
+import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
 
 class remindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
