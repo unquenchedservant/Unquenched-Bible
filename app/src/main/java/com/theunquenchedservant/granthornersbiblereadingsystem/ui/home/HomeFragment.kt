@@ -57,7 +57,6 @@ class HomeFragment : Fragment() {
         cardList10 = root.findViewById(R.id.cardList10)!!
         temporaryChange()
         createDailyCheck(context)
-        listNumberEditInt(context, "List 4", 65)
         val button = root.findViewById<Button>(R.id.material_button)
         button.setBackgroundColor(Color.parseColor("#383838"))
         checkLists(button)

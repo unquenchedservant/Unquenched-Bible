@@ -104,22 +104,35 @@ class SettingsActivity : AppCompatActivity(),
     class HeaderFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.header_preferences, rootKey)
-            val dailyList: Preference? = findPreference("daily_time")
-            val remindTime: Preference? = findPreference("remind_time")
             val psToggle: Preference? = findPreference("psalms")
+            val vacationToggle: Preference? = findPreference("vacation_mode")
             psToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
                 true
             }
+            vacationToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
+                true
+            }
+        }
+    }
+    class NotificationsFragment : PreferenceFragmentCompat() {
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
+            setPreferencesFromResource(R.xml.notification_preferences, rootKey)
+            val dailyList: Preference? = findPreference("daily_time")
+            val remindTime: Preference? = findPreference("remind_time")
             val sharedpref = PreferenceManager.getDefaultSharedPreferences(activity!!)
             val dailyTimeInMinutes = sharedpref.getInt("daily_time", 0)
             var dailyAMPM = ""
             var dailyHour = dailyTimeInMinutes / 60
             val dailyMinute = dailyTimeInMinutes % 60
-            when(dailyHour){
-                in 13..23 -> {dailyHour -= 12; dailyAMPM="PM"}
+            when (dailyHour) {
+                in 13..23 -> {
+                    dailyHour -= 12; dailyAMPM = "PM"
+                }
                 12 -> dailyAMPM = "PM"
-                0 -> {dailyHour = 12; dailyAMPM = "AM"}
-                in 1..11 -> dailyAMPM="AM"
+                0 -> {
+                    dailyHour = 12; dailyAMPM = "AM"
+                }
+                in 1..11 -> dailyAMPM = "AM"
             }
             val dailyTime = "$dailyHour:${DecimalFormat("00").format(dailyMinute)} $dailyAMPM"
             dailyList!!.summary = dailyTime
@@ -127,11 +140,16 @@ class SettingsActivity : AppCompatActivity(),
             var remindAMPM = ""
             var remindHour = reminderTimeInMinutes / 60
             val remindMinute = reminderTimeInMinutes % 60
-            when(remindHour){
-                in 13..23 -> {remindHour -= 12; remindAMPM="PM"}
+            when (remindHour) {
+                in 13..23 -> {
+                    remindHour -= 12; remindAMPM = "PM"
+                }
                 12 -> remindAMPM = "PM"
-                0 -> {remindHour = 12; remindAMPM = "AM"}
-                in 1..11 -> remindAMPM="AM" }
+                0 -> {
+                    remindHour = 12; remindAMPM = "AM"
+                }
+                in 1..11 -> remindAMPM = "AM"
+            }
             val reminderTime = "$remindHour:${DecimalFormat("00").format(remindMinute)} $remindAMPM"
             remindTime!!.summary = reminderTime
             val notif = findPreference<Preference>("notif_switch")
@@ -141,8 +159,11 @@ class SettingsActivity : AppCompatActivity(),
                 val remindIntent = Intent(activity, remindReceiver::class.java)
                 val notifyPendingIntent = PendingIntent.getBroadcast(activity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                 val remindPendingIntent = PendingIntent.getBroadcast(activity, 0, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                if (isOn) { createAlarm(context, notifyPendingIntent); createRemindAlarm(context, remindPendingIntent) }
-                else { cancelAlarm(activity!!, notifyPendingIntent); cancelAlarm(activity!!, remindPendingIntent) }
+                if (isOn) {
+                    createAlarm(context, notifyPendingIntent); createRemindAlarm(context, remindPendingIntent)
+                } else {
+                    cancelAlarm(activity!!, notifyPendingIntent); cancelAlarm(activity!!, remindPendingIntent)
+                }
                 true
             }
         }
@@ -150,7 +171,7 @@ class SettingsActivity : AppCompatActivity(),
         override fun onDisplayPreferenceDialog(preference: Preference) {
             var dialogFragment: DialogFragment? = null
             if (preference is TimePreference) {
-                dialogFragment =TimePreferenceDialogFragmentCompat
+                dialogFragment = TimePreferenceDialogFragmentCompat
                         .newInstance(preference.getKey())
             }
             if (dialogFragment != null) {
