@@ -178,7 +178,7 @@ class SettingsActivity : AppCompatActivity(),
         override fun onDisplayPreferenceDialog(preference: Preference) {
             var dialogFragment: DialogFragment? = null
             if (preference is TimePreference) {
-                dialogFragment =TimePreferenceDialogFragmentCompat
+                dialogFragment = TimePreferenceDialogFragmentCompat
                         .newInstance(preference.getKey())
             }
             if (dialogFragment != null) {
