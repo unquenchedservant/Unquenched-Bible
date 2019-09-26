@@ -1,10 +1,10 @@
-package com.theunquenchedservant.pghsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.content.Context
 import android.content.res.TypedArray
 import android.util.AttributeSet
 import androidx.preference.DialogPreference
-import com.theunquenchedservant.pghsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.R
 
 class TimePreference : DialogPreference {
     private var mTime: Int = 0

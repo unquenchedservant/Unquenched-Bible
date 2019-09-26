@@ -1,13 +1,13 @@
-package com.theunquenchedservant.pghsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.theunquenchedservant.pghsystem.R
-import com.theunquenchedservant.pghsystem.marker.markList
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.marker.markList
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
 
 class doneReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
