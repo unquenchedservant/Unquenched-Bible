@@ -1,6 +1,5 @@
-package com.theunquenchedservant.pghsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
@@ -11,19 +10,17 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.theunquenchedservant.pghsystem.*
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.cancelAlarm
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.createAlarm
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.createRemindAlarm
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
-import com.theunquenchedservant.pghsystem.sharedPref.listNumbersReset
-import com.theunquenchedservant.pghsystem.sharedPref.resetRead
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
-import com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.*
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.cancelAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createRemindAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumbersReset
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.resetRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
 import java.text.DecimalFormat
 
 
@@ -54,7 +51,7 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         when (title) {
-            "Reset Options", "Statistics", "Notifications" -> {
+            "Reset Lists", "Statistics", "Notifications" -> {
                 onSupportNavigateUp()
             }
             else -> startActivity(parentActivityIntent)
@@ -69,7 +66,7 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onSupportNavigateUp(): Boolean {
         when (title) {
-            "Reset Options", "Statistics", "Notifications" -> {
+            "Reset Lists", "Statistics", "Notifications" -> {
                 if (supportFragmentManager.popBackStackImmediate()) {
                     return true
                 }
@@ -110,18 +107,21 @@ class SettingsActivity : AppCompatActivity(),
     class HeaderFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.header_preferences, rootKey)
+            val psToggle: Preference? = findPreference("psalms")
+            val vacationToggle: Preference? = findPreference("vacation_mode")
+            psToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
+                true
+            }
+            vacationToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
+                true
+            }
         }
     }
-
     class NotificationsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.notification_preferences, rootKey)
             val dailyList: Preference? = findPreference("daily_time")
             val remindTime: Preference? = findPreference("remind_time")
-            val psToggle: Preference? = findPreference("psalms")
-            psToggle?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
-                true
-            }
             val sharedpref = PreferenceManager.getDefaultSharedPreferences(activity!!)
             val dailyTimeInMinutes = sharedpref.getInt("daily_time", 0)
             var dailyAMPM = ""

@@ -1,4 +1,4 @@
-package com.theunquenchedservant.pghsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -6,22 +6,46 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import androidx.preference.Preference
 import androidx.preference.PreferenceManager
 
-import com.theunquenchedservant.pghsystem.MainActivity
-import com.theunquenchedservant.pghsystem.R
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
 
 class remindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
     override fun onReceive(context: Context, intent: Intent) {
-        mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        val check = listNumberReadInt(context, "listsDone")
-        val allow_partial = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("allow_partial_switch", false)
-        when(check){
-            0 -> deliverNotification(context, false)
-            in 1..9 ->{
-                if(!allow_partial){deliverNotification(context, true)}
+        val vacation = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("vacation_mode", false)
+        log("Vacation mode is $vacation")
+        when(vacation) {
+            false -> {
+                log("Vacation mode off, preparing reminder notification")
+                mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                val check = listNumberReadInt(context, "listsDone")
+                log("lists done so far = $check")
+                val allow_partial = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("allow_partial_switch", false)
+                log("Allow partial is $allow_partial")
+                when(check){
+                    0 -> {
+                        log("Sending notification to do reading (not partial)")
+                        deliverNotification(context, false)
+
+                    }
+                    in 1..9 -> {
+                        if(allow_partial) {
+                            log("$check lists done, allow partial is on")
+                            deliverNotification(context, true)
+                        }else if(!allow_partial){
+                            log("$check lists done, allow partial is off")
+                            deliverNotification(context, true)
+                        }
+                    }
+                }
+            }
+            true -> {
+                log("Vacation mode on, not sending notification")
             }
         }
     }

@@ -1,4 +1,4 @@
-package com.theunquenchedservant.pghsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -6,14 +6,28 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import com.theunquenchedservant.pghsystem.MainActivity
-import com.theunquenchedservant.pghsystem.R
+import androidx.preference.PreferenceManager
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.R
 
 class AlarmReceiver : BroadcastReceiver() {
     private val NOTIFICATION_ID = 0
     private val PRIMARY_CHANNEL_ID = "primary_notification_channel"
     private var mNotificationManager: NotificationManager? = null
     override fun onReceive(context: Context, intent: Intent){
+        val vacation = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("vacation_mode", false)
+        log("Vacation mode is $vacation")
+        when(vacation){
+            false -> {
+                log("Vacation mode off, sending notification")
+                mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                deliverNotification(context)
+            }
+            true -> {
+                log("Vacation mode on, not sending notification")
+            }
+        }
         mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         deliverNotification(context)
     }
