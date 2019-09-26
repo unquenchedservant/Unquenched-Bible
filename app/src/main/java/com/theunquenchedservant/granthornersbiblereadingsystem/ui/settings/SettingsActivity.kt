@@ -26,6 +26,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statis
 import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import java.text.DecimalFormat
 
 

@@ -41,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 val remindIntent = Intent(this, remindReceiver::class.java)
                 val notifyPendingIntent = PendingIntent.getBroadcast(this, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                 val remindPendingIntent = PendingIntent.getBroadcast(this, 0, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                createAlarm(this,notifyPendingIntent)
+                createAlarm(this, notifyPendingIntent)
                 createRemindAlarm(this, remindPendingIntent)
 
             }
@@ -67,7 +67,7 @@ class MainActivity : AppCompatActivity() {
 
 
     private fun createNotificationChannel() {
-        log( "start createNotificationChannel")
+        log("start createNotificationChannel")
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = this.getString(R.string.channel_name)
             log("Name of channel: $name")

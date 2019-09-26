@@ -82,11 +82,11 @@ object marker {
                         false -> markList(context, listName, arrayId, cardName)
                         true -> {
                             listNumberEditInt(context, "list6Done", 1)
-                            markRead(context,"Ps. $day")
-                            markRead(context,"Ps. ${day + 30}")
-                            markRead(context,"Ps. ${day + 60}")
-                            markRead(context,"Ps. ${day + 90}")
-                            markRead(context,"Ps. ${day + 120}")
+                            markRead(context, "Ps. $day")
+                            markRead(context, "Ps. ${day + 30}")
+                            markRead(context, "Ps. ${day + 60}")
+                            markRead(context, "Ps. ${day + 90}")
+                            markRead(context, "Ps. ${day + 120}")
                         }
                     }
                 }
