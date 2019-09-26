@@ -1,13 +1,13 @@
-package com.theunquenchedservant.pghsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 
 class dailyCheck : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

@@ -1,4 +1,4 @@
-package com.theunquenchedservant.pghsystem;
+package com.theunquenchedservant.granthornersbiblereadingsystem;
 
 import org.junit.Test;
 

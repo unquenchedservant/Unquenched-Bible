@@ -1,6 +1,5 @@
-package com.theunquenchedservant.pghsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
-import android.app.Activity
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
@@ -11,19 +10,19 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.theunquenchedservant.pghsystem.*
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.cancelAlarm
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.createAlarm
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.createRemindAlarm
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
-import com.theunquenchedservant.pghsystem.sharedPref.listNumbersReset
-import com.theunquenchedservant.pghsystem.sharedPref.resetRead
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
-import com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.*
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.cancelAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createRemindAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumbersReset
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.resetRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
 import java.text.DecimalFormat
 
 

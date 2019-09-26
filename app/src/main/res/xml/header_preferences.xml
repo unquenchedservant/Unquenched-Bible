@@ -16,7 +16,7 @@
 
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="signInCat"
         app:title="Multi-Device Sign In">
         <Preference
@@ -24,8 +24,8 @@
             app:title="Log In"
             app:summary="Sign in via Google or Email/Password for multi-device support"
             />
-    </com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory>
-    <com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="option_category"
         app:title="Options">
         <SwitchPreferenceCompat
@@ -38,15 +38,15 @@
         app:title="Notifications"
         app:summary="Set daily and reminder times here"/>
     <Preference
-        app:fragment="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity$ResetFragment"
+        app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$ResetFragment"
         app:key="reset_header"
         app:title="@string/reset_header" />
-    </com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory>
-    <com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="information_category"
         app:title="Information">
         <Preference
-            app:fragment="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity$StatisticsFragment"
+            app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$StatisticsFragment"
             app:key="stats"
             app:title="Statistics"/>
         <Preference
@@ -57,6 +57,6 @@
                 android:data="https://theunquenchedservant.com/assets/brp_privacy_policy.html"/>
         </Preference>
 
-    </com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory>
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 
 </PreferenceScreen>

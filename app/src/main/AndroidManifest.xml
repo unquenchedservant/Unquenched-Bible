@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.theunquenchedservant.pghsystem">
+    package="com.theunquenchedservant.granthornersbiblereadingsystem">
 
     <application
         android:allowBackup="true"
@@ -10,37 +10,37 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity
-            android:name="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity"
+            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:parentActivityName="com.theunquenchedservant.pghsystem.MainActivity">
+            android:parentActivityName="com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.theunquenchedservant.pghsystem.MainActivity" />
+                android:value="com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity" />
         </activity>
         <activity
-            android:name="com.theunquenchedservant.pghsystem.fireBaseUIActivity"
+            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.fireBaseUIActivity"
             android:label="Firebase"
-            android:parentActivityName=".ui.settings.SettingsActivity">
+            android:parentActivityName="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity"/>
+                android:value="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity"/>
         </activity>
 
         <receiver
-            android:name="com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver"
+            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name="com.theunquenchedservant.pghsystem.ui.notifications.dailyCheck"
+            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.dailyCheck"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name="com.theunquenchedservant.pghsystem.ui.notifications.doneReceiver"
+            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.doneReceiver"
             android:enabled="true"
             android:exported="false" />
 
         <activity
-            android:name="com.theunquenchedservant.pghsystem.MainActivity"
+            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity"
             android:label="@string/app_name"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -50,7 +50,7 @@
         </activity>
 
         <receiver
-            android:name="com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver"
+            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 

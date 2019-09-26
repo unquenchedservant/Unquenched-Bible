@@ -6,10 +6,10 @@ android {
     compileSdkVersion 29
     buildToolsVersion "29.0.2"
     defaultConfig {
-        applicationId "com.theunquenchedservant.pghsystem"
+        applicationId "com.theunquenchedservant.granthornersbiblereadingsystem"
         minSdkVersion 21
         targetSdkVersion 29
-        versionCode 13
+        versionCode 14
         versionName "1.03"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }

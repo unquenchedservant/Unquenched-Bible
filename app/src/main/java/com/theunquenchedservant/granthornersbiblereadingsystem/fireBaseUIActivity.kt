@@ -1,4 +1,4 @@
-package com.theunquenchedservant.pghsystem
+package com.theunquenchedservant.granthornersbiblereadingsystem
 
 
 import android.app.Activity
@@ -9,7 +9,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.firebase.auth.FirebaseAuth
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 
 class fireBaseUIActivity : AppCompatActivity(){
 
