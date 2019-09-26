@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.pghsystem.ui.settings
 
 import android.annotation.SuppressLint
 import android.app.PendingIntent
@@ -9,10 +9,10 @@ import android.text.format.DateFormat
 import android.view.View
 import android.widget.TimePicker
 import androidx.preference.PreferenceDialogFragmentCompat
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.theunquenchedservant.pghsystem.MainActivity
+import com.theunquenchedservant.pghsystem.R
+import com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver
+import com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver
 import java.text.DecimalFormat
 
 class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {

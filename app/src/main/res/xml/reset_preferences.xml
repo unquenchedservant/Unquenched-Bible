@@ -1,9 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
-
     <Preference
-        app:key="reset_lists"
-        app:title="@string/reset_title">
+        app:key="reset_list_1"
+        app:title="@string/resetList1">
+    </Preference>
+    <Preference
+        app:key="reset_list_2"
+        app:title="@string/resetList2">
+    </Preference>
+    <Preference
+        app:key="reset_list_3"
+        app:title="@string/resetList3">
+    </Preference>
+    <Preference
+        app:key="reset_list_4"
+        app:title="@string/resetList4">
+    </Preference>
+    <Preference
+        app:key="reset_list_5"
+        app:title="@string/resetList5">
+    </Preference>
+    <Preference
+        app:key="reset_list_6"
+        app:title="@string/resetList6">
+    </Preference>
+    <Preference
+        app:key="reset_list_7"
+        app:title="@string/resetList7">
+    </Preference>
+    <Preference
+        app:key="reset_list_8"
+        app:title="@string/resetList8">
+    </Preference>
+    <Preference
+        app:key="reset_list_9"
+        app:title="@string/resetList9">
+    </Preference>
+    <Preference
+        app:key="reset_list_10"
+        app:title="@string/resetList10">
+    </Preference>
+    <Preference
+        app:key="reset_all"
+        app:title="@string/resetAll">
     </Preference>
 
 </PreferenceScreen>

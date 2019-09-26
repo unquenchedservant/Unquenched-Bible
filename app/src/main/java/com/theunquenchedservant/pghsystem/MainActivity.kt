@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem
+package com.theunquenchedservant.pghsystem
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -11,7 +11,7 @@ import android.os.Bundle
 import android.util.Log
 
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.dailyCheck
+import com.theunquenchedservant.pghsystem.ui.notifications.dailyCheck
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -19,10 +19,10 @@ import androidx.navigation.Navigation
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.NavigationUI
 import androidx.preference.PreferenceManager
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.pghsystem.ui.notifications.AlarmReceiver
+import com.theunquenchedservant.pghsystem.ui.notifications.remindReceiver
 
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -48,7 +48,9 @@ class MainActivity : AppCompatActivity() {
         }
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         log("Dark Mode Enabled")
+        super.
         setContentView(R.layout.activity_main)
+        log("activity int - ${R.layout.activity_main}")
         log("Main Activity Content View Enabled")
         val navView = findViewById<BottomNavigationView>(R.id.nav_view)
         val appBarConfiguration = AppBarConfiguration.Builder(
@@ -86,16 +88,16 @@ class MainActivity : AppCompatActivity() {
         }
         fun createDailyCheck(context: Context?) {
             log("Begin createDailyCheck")
-            val alarmMgr: AlarmManager
+            val alarmMgr: AlarmManager = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val alarmIntent: PendingIntent
             val calendar = Calendar.getInstance()
             calendar.timeInMillis = System.currentTimeMillis()
             calendar.set(Calendar.HOUR_OF_DAY, 0)
             if (calendar.before(Calendar.getInstance())) {
+                log("ADDING ONE DAY(SHOULDNT HAPPEN)")
                 calendar.add(Calendar.DATE, 1)
             }
             log("Calendar item: $calendar")
-            alarmMgr = context!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
             val intent = Intent(context, dailyCheck::class.java)
             alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0)
             alarmMgr.setInexactRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, alarmIntent)
