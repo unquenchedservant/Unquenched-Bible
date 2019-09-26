@@ -63,11 +63,13 @@ class SettingsActivity : AppCompatActivity(),
             else -> startActivity(parentActivityIntent)
         }
     }
+
     override fun onSaveInstanceState(outState: Bundle) {
         super.onSaveInstanceState(outState)
         // Save current activity title so we can set it again after a configuration change
         outState.putCharSequence(TITLE_TAG, title)
     }
+
     override fun onSupportNavigateUp(): Boolean {
         when (title) {
             "Reset Lists", "Statistics", "Notifications Options" -> {
@@ -121,6 +123,7 @@ class SettingsActivity : AppCompatActivity(),
             }
         }
     }
+
     class NotificationsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.notification_preferences, rootKey)
