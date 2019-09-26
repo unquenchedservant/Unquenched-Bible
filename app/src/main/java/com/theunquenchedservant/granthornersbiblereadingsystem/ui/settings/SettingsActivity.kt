@@ -173,11 +173,6 @@ class SettingsActivity : AppCompatActivity(),
                 }
                 true
             }
-            val logIn = findPreference<Preference>("signInPref")
-            logIn!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                startActivity(Intent(context, fireBaseUIActivity::class.java))
-                true
-            }
         }
 
         override fun onDisplayPreferenceDialog(preference: Preference) {
