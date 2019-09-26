@@ -1,4 +1,4 @@
-package com.theunquenchedservant.pghsystem.ui.home
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 
 import android.graphics.Color
 import android.os.Bundle
@@ -13,20 +13,20 @@ import androidx.cardview.widget.CardView
 import androidx.fragment.app.Fragment
 import androidx.preference.PreferenceManager
 
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.createDailyCheck
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.getCurrentDate
-import com.theunquenchedservant.pghsystem.MainActivity.Companion.log
-import com.theunquenchedservant.pghsystem.R
-import com.theunquenchedservant.pghsystem.marker.markAll
-import com.theunquenchedservant.pghsystem.marker.markSingle
-import com.theunquenchedservant.pghsystem.sharedPref.clearOldPref
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
-import com.theunquenchedservant.pghsystem.sharedPref.prefReadInt
-import com.theunquenchedservant.pghsystem.sharedPref.readEdit
-import com.theunquenchedservant.pghsystem.sharedPref.readRead
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createDailyCheck
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.getCurrentDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.marker.markAll
+import com.theunquenchedservant.granthornersbiblereadingsystem.marker.markSingle
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.clearOldPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.prefReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.readEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.readRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
 
 import java.util.Calendar
 

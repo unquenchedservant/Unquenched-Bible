@@ -1,4 +1,4 @@
-package com.theunquenchedservant.pghsystem.ui.home
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
