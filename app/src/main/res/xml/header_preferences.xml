@@ -28,20 +28,24 @@
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="option_category"
         app:title="Options">
+        <Preference
+            app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$NotificationsFragment"
+            app:key="notifications"
+            app:title="Notification Options" />
         <SwitchPreferenceCompat
             app:key="psalms"
             app:title="5 Psalms by the Day"
             app:summary="Ex. If it's the 5th, Psalms for the day would be 5, 35, 65, 95, 125"/>
-    <Preference
-        app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$NotificationsFragment"
-        app:key="notifs"
-        app:title="Notifications"
-        app:summary="Set daily and reminder times here"/>
-    <Preference
-        app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$ResetFragment"
-        app:key="reset_header"
-        app:title="@string/reset_header" />
+        <SwitchPreferenceCompat
+            app:key="vacation_mode"
+            app:title="Vacation Mode"
+            app:summary="Notifications are paused, streaks are unaffected if you miss a day."/>
+        <Preference
+            app:fragment="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity$ResetFragment"
+            app:key="reset_header"
+            app:title="@string/reset_header" />
     </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="information_category"
         app:title="Information">

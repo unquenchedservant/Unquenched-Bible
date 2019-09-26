@@ -15,14 +15,14 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createRemindAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
 import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumbersReset
 import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.resetRead
 import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
 import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
 import java.text.DecimalFormat
 
 
@@ -53,7 +53,7 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onBackPressed() {
         when (title) {
-            "Reset Options", "Statistics", "Notifications" -> {
+            "Reset Lists", "Statistics", "Notification Options" -> {
                 onSupportNavigateUp()
             }
             else -> startActivity(parentActivityIntent)
@@ -68,7 +68,7 @@ class SettingsActivity : AppCompatActivity(),
 
     override fun onSupportNavigateUp(): Boolean {
         when (title) {
-            "Reset Options", "Statistics", "Notifications" -> {
+            "Reset Lists", "Statistics", "Notifications Options" -> {
                 if (supportFragmentManager.popBackStackImmediate()) {
                     return true
                 }
@@ -109,18 +109,21 @@ class SettingsActivity : AppCompatActivity(),
     class HeaderFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.header_preferences, rootKey)
+            val psToggle: Preference? = findPreference("psalms")
+            val vacationToggle: Preference? = findPreference("vacation_mode")
+            psToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
+                true
+            }
+            vacationToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
+                true
+            }
         }
     }
-
     class NotificationsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.notification_preferences, rootKey)
             val dailyList: Preference? = findPreference("daily_time")
             val remindTime: Preference? = findPreference("remind_time")
-            val psToggle: Preference? = findPreference("psalms")
-            psToggle?.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
-                true
-            }
             val sharedpref = PreferenceManager.getDefaultSharedPreferences(activity!!)
             val dailyTimeInMinutes = sharedpref.getInt("daily_time", 0)
             var dailyAMPM = ""
