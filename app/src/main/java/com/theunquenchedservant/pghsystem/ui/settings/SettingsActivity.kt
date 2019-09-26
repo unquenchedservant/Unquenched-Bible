@@ -11,9 +11,6 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceManager
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
-import com.google.firebase.auth.FirebaseAuth
 import com.theunquenchedservant.pghsystem.*
 import com.theunquenchedservant.pghsystem.MainActivity.Companion.cancelAlarm
 import com.theunquenchedservant.pghsystem.MainActivity.Companion.createAlarm
