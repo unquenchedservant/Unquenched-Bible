@@ -1,18 +1,35 @@
-package com.theunquenchedservant.pghsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
 
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.pghsystem.sharedPref.listNumberReadInt
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.pghsystem.sharedPref.statisticsRead
+import androidx.preference.PreferenceManager
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
 
 class dailyCheck : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        when(statisticsRead(context, "dailyStreak")) {
-            1 -> statisticsEdit(context, "dailyStreak", 0)
-            0 -> statisticsEdit(context, "curStreak", 0)
+        val vacation = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("vacation_mode", false)
+        log("Vacation mode is $vacation")
+        when(statisticsRead(context, "dailyStreak")){
+            1 -> {
+                statisticsEdit(context, "dailyStreak", 0)
+                log("dailyStreak was set to 1, setting back to 0 for next day")
+            }
+            0 -> {
+                when(vacation){
+                    true -> {
+                        log("Vacation mode is on, not changing current streak negatively")
+                    }
+                    false -> {
+                        log("Vacation mode is off, changing current streak to 0")
+                        statisticsEdit(context, "currentStreak", 0)
+                    }
+                }
+            }
         }
         //RESETS ALL DONE LISTS AT MIDNIGHT EACH NIGHT
         when(listNumberReadInt(context, "list1Done")){

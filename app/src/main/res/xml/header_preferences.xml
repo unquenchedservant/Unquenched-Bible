@@ -16,15 +16,7 @@
 
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
-    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
-        app:key="signInCat"
-        app:title="Multi-Device Sign In">
-        <Preference
-            app:key="signInPref"
-            app:title="Log In"
-            app:summary="Sign in via Google or Email/Password for multi-device support"
-            />
-    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="option_category"
         app:title="Options">
