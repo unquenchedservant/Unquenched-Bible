@@ -1,4 +1,4 @@
-package com.theunquenchedservant.pghsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.content.Context
 import android.graphics.Color

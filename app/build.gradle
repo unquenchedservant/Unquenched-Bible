@@ -24,7 +24,6 @@ android {
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
-    debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.0-beta-3'
     implementation 'com.google.firebase:firebase-analytics:17.2.0'
     implementation 'com.google.firebase:firebase-firestore:21.1.1'
     implementation 'com.google.firebase:firebase-auth:19.0.0'
