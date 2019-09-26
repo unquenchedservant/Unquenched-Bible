@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.app.PendingIntent
 import android.content.Intent
