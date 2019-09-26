@@ -17,39 +17,16 @@
 <PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android">
     <com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory
-        app:key="signInCat"
-        app:title="Multi-Device Sign In">
-        <Preference
-            app:key="signInPref"
-            app:title="Log In"
-            app:summary="Sign in via Google or Email/Password for multi-device support"
-            />
-    </com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory>
-    <com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory
-        android:background="#00DD0C0C"
-        app:key="notification_category"
-        app:title="Notification Settings">
-        <SwitchPreferenceCompat
-            app:key="notif_switch"
-            app:title="Notifications" />
-        <com.theunquenchedservant.pghsystem.ui.settings.TimePreference
-            app:key="daily_time"
-            app:defaultValue="360"
-            style="@style/AppPreference.DialogPreference"
-            app:title="Daily List Time" />
-        <com.theunquenchedservant.pghsystem.ui.settings.TimePreference
-            app:key="remind_time"
-            app:defaultValue="1170"
-            style="@style/AppPreference.DialogPreference"
-            app:title="Reminder Time"/>
-    </com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory>
-    <com.theunquenchedservant.pghsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="option_category"
         app:title="Options">
         <SwitchPreferenceCompat
             app:key="psalms"
             app:title="5 Psalms by the Day"
             app:summary="Ex. If it's the 5th, Psalms for the day would be 5, 35, 65, 95, 125"/>
+        <Preference
+            app:fragment="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity$NotificationsFragment"
+            app:key="notifications"
+            app:title="Notifications"/>
         <Preference
             app:fragment="com.theunquenchedservant.pghsystem.ui.settings.SettingsActivity$ResetFragment"
             app:key="reset_header"
