@@ -17,15 +17,6 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity" />
         </activity>
-        <activity
-            android:name="com.theunquenchedservant.granthornersbiblereadingsystem.fireBaseUIActivity"
-            android:label="Firebase"
-            android:parentActivityName="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity">
-            <meta-data
-                android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity"/>
-        </activity>
-
         <receiver
             android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver"
             android:enabled="true"
