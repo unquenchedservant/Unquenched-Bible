@@ -7,27 +7,25 @@ import android.os.Bundle
 import android.view.ContextThemeWrapper
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.DialogFragment
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import androidx.preference.PreferenceManager
-import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
+import androidx.preference.*
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.auth.FirebaseAuth
-import com.theunquenchedservant.granthornersbiblereadingsystem.*
+import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.createRemindAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberEditInt
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumberReadInt
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.listNumbersReset
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.resetRead
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsEdit
-import com.theunquenchedservant.granthornersbiblereadingsystem.sharedPref.statisticsRead
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.listNumberEditInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.statisticsEdit
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.statisticsRead
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.RemindReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.ManualListSet
 import java.text.DecimalFormat
+
+
+
 
 
 
@@ -40,27 +38,116 @@ class SettingsActivity : AppCompatActivity(),
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.settings_activity)
-        if (savedInstanceState == null) {
-            supportFragmentManager
-                    .beginTransaction()
-                    .replace(R.id.settings, HeaderFragment())
-                    .commit()
+        setSupportActionBar(findViewById(R.id.settings_toolbar))
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        val b = intent.extras
+        if(b != null){
+            log("B wasn't null")
+            if(b.getBoolean("Statistics")){
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.settings, StatisticsFragment())
+                        .commit()
+                title = "Statistics"
+            }else if(b.getBoolean("Notifications")){
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.settings, NotificationsFragment())
+                        .commit()
+                title = "Notifications"
+            }else if(b.getBoolean("Information")){
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.settings, InformationFragment())
+                        .commit()
+                title = "Information"
+            }else if(b.getBoolean("Manual")){
+                supportFragmentManager
+                        .beginTransaction()
+                        .replace(R.id.settings, ManualListSet())
+                        .commit()
+                title="Set Lists Manually"
+            }
         } else {
-            title = savedInstanceState.getCharSequence(TITLE_TAG)
+            title = savedInstanceState?.getCharSequence(TITLE_TAG)
         }
         supportFragmentManager.addOnBackStackChangedListener {
             if (supportFragmentManager.backStackEntryCount == 0) {
-                setTitle(R.string.title_activity_settings)
+                    setTitle(R.string.title_activity_settings)
             }
         }
     }
 
     override fun onBackPressed() {
+        val user = FirebaseAuth.getInstance().currentUser
+        if(user != null) {
+            val db = FirebaseFirestore.getInstance()
+            val data = mutableMapOf<String, Any>()
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+            if (listNumberReadInt(this, "psToggleChanged") == 1) {
+                data.put("psalms", sharedPref.getBoolean("psalms", false))
+                listNumberEditInt(this, "psToggleChanged", 0)
+            }
+            if (listNumberReadInt(this, "vacationModeChanged") == 1) {
+                data.put("vacationMode", sharedPref.getBoolean("vacation_mode", false))
+                listNumberEditInt(this, "vacationModeChanged", 0)
+            }
+            if (listNumberReadInt(this, "remindtimeChanged") == 1) {
+                data.put("remindNotif", sharedPref.getInt("remind_time", 1200))
+                listNumberEditInt(this, "remindtimeChanged", 0)
+            }
+            if (listNumberReadInt(this, "dailytimeChanged") == 1) {
+                data.put("dailyNotif", sharedPref.getInt("daily_time", 300))
+                listNumberEditInt(this, "dailyTimeChanged", 0)
+            }
+            if (listNumberReadInt(this, "notifChanged") == 1) {
+                data.put("notifications", sharedPref.getBoolean("notif_switch", false))
+                listNumberEditInt(this, "notifChanged", 1)
+            }
+            if (listNumberReadInt(this, "allListsReset") == 1) {
+                data.put("list1", 0)
+                data.put("list1Done", 0)
+                data.put("list2", 0)
+                data.put("list2Done", 0)
+                data.put("list3", 0)
+                data.put("list3Done", 0)
+                data.put("list4", 0)
+                data.put("list4Done", 0)
+                data.put("list5", 0)
+                data.put("list5Done", 0)
+                data.put("list6", 0)
+                data.put("list6Done", 0)
+                data.put("list7", 0)
+                data.put("list7Done", 0)
+                data.put("list8", 0)
+                data.put("list8Done", 0)
+                data.put("list9", 0)
+                data.put("list9Done", 0)
+                data.put("list10", 0)
+                data.put("list10Done", 0)
+                data.put("listsDone", 0)
+                listNumberEditInt(this, "allListsReset", 0)
+            }
+            if (listNumberReadInt(this, "allStatsChanged") == 1) {
+                data.put("read", "")
+                data.put("currentStreak", 0)
+                data.put("maxStreak", 0)
+                data.put("dailyStreak", 0)
+                listNumberEditInt(this, "allStatsChanged", 0)
+            }
+            if (listNumberReadInt(this, "partialChanged") == 1) {
+                data.put("allowPartial", sharedPref.getBoolean("allow_partial_switch", false))
+                listNumberEditInt(this, "partialChanged", 0)
+            }
+            if (data != mutableMapOf<String, Any>()) {
+                db.collection("main").document(user.uid).update(data)
+            }
+        }
         when (title) {
             "Reset Lists", "Statistics", "Notification Options" -> {
                 onSupportNavigateUp()
             }
-            else -> startActivity(parentActivityIntent)
+            else -> this.finish()
         }
     }
 
@@ -71,8 +158,73 @@ class SettingsActivity : AppCompatActivity(),
     }
 
     override fun onSupportNavigateUp(): Boolean {
+        val isLogged = FirebaseAuth.getInstance().currentUser
+
+        if(isLogged != null) {
+            val db = FirebaseFirestore.getInstance()
+            val data = mutableMapOf<String, Any>()
+            val sharedPref = PreferenceManager.getDefaultSharedPreferences(this)
+            if (listNumberReadInt(this, "psToggleChanged") == 1) {
+                data.put("psalms", sharedPref.getBoolean("psalms", false))
+                listNumberEditInt(this, "psToggleChanged", 0)
+            }
+            if (listNumberReadInt(this, "vacationModeChanged") == 1) {
+                data.put("vacationMode", sharedPref.getBoolean("vacation_mode", false))
+                listNumberEditInt(this, "vacationModeChanged", 0)
+            }
+            if (listNumberReadInt(this, "remindtimeChanged") == 1) {
+                data.put("remindNotif", sharedPref.getInt("remind_time", 1200))
+                listNumberEditInt(this, "remindtimeChanged", 0)
+            }
+            if (listNumberReadInt(this, "dailytimeChanged") == 1) {
+                data.put("dailyNotif", sharedPref.getInt("daily_time", 300))
+                listNumberEditInt(this, "dailyTimeChanged", 0)
+            }
+            if (listNumberReadInt(this, "notifChanged") == 1) {
+                data.put("notifications", sharedPref.getBoolean("notif_switch", false))
+                listNumberEditInt(this, "notifChanged", 0)
+            }
+            if (listNumberReadInt(this, "allListsReset") == 1) {
+                data.put("list1", 0)
+                data.put("list1Done", 0)
+                data.put("list2", 0)
+                data.put("list2Done", 0)
+                data.put("list3", 0)
+                data.put("list3Done", 0)
+                data.put("list4", 0)
+                data.put("list4Done", 0)
+                data.put("list5", 0)
+                data.put("list5Done", 0)
+                data.put("list6", 0)
+                data.put("list6Done", 0)
+                data.put("list7", 0)
+                data.put("list7Done", 0)
+                data.put("list8", 0)
+                data.put("list8Done", 0)
+                data.put("list9", 0)
+                data.put("list9Done", 0)
+                data.put("list10", 0)
+                data.put("list10Done", 0)
+                data.put("listsDone", 0)
+                listNumberEditInt(this, "allListsReset", 0)
+            }
+            if (listNumberReadInt(this, "allStatsChanged") == 1) {
+                data.put("read", "")
+                data.put("currentStreak", 0)
+                data.put("maxStreak", 0)
+                data.put("dailyStreak", 0)
+                listNumberEditInt(this, "allStatsChanged", 0)
+            }
+            if (listNumberReadInt(this, "partialChanged") == 1) {
+                data.put("allowPartial", sharedPref.getBoolean("allow_partial_switch", false))
+                listNumberEditInt(this, "partialChanged", 0)
+            }
+            if (data != mutableMapOf<String, Any>()) {
+                db.collection("main").document(isLogged.uid).update(data)
+            }
+        }
         when (title) {
-            "Reset Lists", "Statistics", "Notifications Options" -> {
+            "Reset Lists", "Statistics", "Notification Options" -> {
                 if (supportFragmentManager.popBackStackImmediate()) {
                     return true
                 }
@@ -80,7 +232,7 @@ class SettingsActivity : AppCompatActivity(),
             }
             else -> {
                 if (supportFragmentManager.popBackStackImmediate()) {
-                    startActivity(parentActivityIntent)
+                    finish()
                     return true
                 }
                 return super.onSupportNavigateUp()
@@ -109,26 +261,26 @@ class SettingsActivity : AppCompatActivity(),
         title = pref.title
         return true
     }
-
-    class HeaderFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.header_preferences, rootKey)
-            val psToggle: Preference? = findPreference("psalms")
-            val vacationToggle: Preference? = findPreference("vacation_mode")
-            psToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
-                true
-            }
-            vacationToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
-                true
+    class InformationFragment : PreferenceFragmentCompat(){
+        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?){
+            setPreferencesFromResource(R.xml.information_preferences, rootKey)
+            val license: Preference? = findPreference("licenses")
+            license!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+                false
             }
         }
     }
-
     class NotificationsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.notification_preferences, rootKey)
+            val vacationToggle: Preference? = findPreference("vacation_mode")
             val dailyList: Preference? = findPreference("daily_time")
             val remindTime: Preference? = findPreference("remind_time")
+            val notifyIntent = Intent(activity, AlarmReceiver::class.java)
+            val remindIntent = Intent(activity, RemindReceiver::class.java)
+            val notifyPendingIntent = PendingIntent.getBroadcast(activity, 4, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+            val remindPendingIntent = PendingIntent.getBroadcast(activity, 2, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
             val sharedpref = PreferenceManager.getDefaultSharedPreferences(activity!!)
             val dailyTimeInMinutes = sharedpref.getInt("daily_time", 0)
             var dailyAMPM = ""
@@ -162,18 +314,36 @@ class SettingsActivity : AppCompatActivity(),
             }
             val reminderTime = "$remindHour:${DecimalFormat("00").format(remindMinute)} $remindAMPM"
             remindTime!!.summary = reminderTime
+            val context = context
+            remindTime.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
+                if(sharedpref.getInt("remind_time", 0) != o as Int) {
+                    listNumberEditInt(context, "remindtimeChanged", 1)
+                    sharedpref.edit().putInt("remind_time", o).apply()
+                }
+                true
+            }
+            dailyList.onPreferenceChangeListener = Preference.OnPreferenceChangeListener{ _, o ->
+                if(sharedpref.getInt("daily_time", 0) != o as Int) {
+                    listNumberEditInt(context, "dailyTimeChanged", 1)
+                    sharedpref.edit().putInt("daily_time", o).apply()
+                }
+                true
+            }
             val notif = findPreference<Preference>("notif_switch")
-            notif!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { preference, o ->
+            notif!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
                 val isOn = o as Boolean
-                val notifyIntent = Intent(activity, AlarmReceiver::class.java)
-                val remindIntent = Intent(activity, remindReceiver::class.java)
-                val notifyPendingIntent = PendingIntent.getBroadcast(activity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                val remindPendingIntent = PendingIntent.getBroadcast(activity, 0, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+                listNumberEditInt(context, "notifChanged", 1)
                 if (isOn) {
-                    createAlarm(context, notifyPendingIntent); createRemindAlarm(context, remindPendingIntent)
+                    log("Creating alarms")
+                    createAlarm(context, notifyPendingIntent, true); createAlarm(context, remindPendingIntent, false)
                 } else {
+                    log("Cancelling alarms")
                     cancelAlarm(activity!!, notifyPendingIntent); cancelAlarm(activity!!, remindPendingIntent)
                 }
+                true
+            }
+            vacationToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+                listNumberEditInt(context, "vacationModeChanged", 1)
                 true
             }
         }
@@ -194,136 +364,46 @@ class SettingsActivity : AppCompatActivity(),
         }
     }
 
-    class ResetFragment : PreferenceFragmentCompat() {
-        override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-            setPreferencesFromResource(R.xml.reset_preferences, rootKey)
-            val listAllReset: Preference? = findPreference("reset_all")
-            val list1Reset: Preference? = findPreference("reset_list_1")
-            val list2Reset: Preference? = findPreference("reset_list_2")
-            val list3Reset: Preference? = findPreference("reset_list_3")
-            val list4Reset: Preference? = findPreference("reset_list_4")
-            val list5Reset: Preference? = findPreference("reset_list_5")
-            val list6Reset: Preference? = findPreference("reset_list_6")
-            val list7Reset: Preference? = findPreference("reset_list_7")
-            val list8Reset: Preference? = findPreference("reset_list_8")
-            val list9Reset: Preference? = findPreference("reset_list_9")
-            val list10Reset: Preference? = findPreference("reset_list_10")
-            listAllReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("all", "all");true }
-            list1Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 1", "list1Done"); true}
-            list2Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 2", "list2Done"); true}
-            list3Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 3", "list3Done"); true}
-            list4Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 4", "list4Done"); true}
-            list5Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 5", "list5Done"); true}
-            list6Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 6", "list6Done"); true}
-            list7Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 7", "list7Done"); true}
-            list8Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 8", "list8Done"); true}
-            list9Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 9", "list9Done"); true}
-            list10Reset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener { resetList("List 10", "list10Done"); true}
-        }
-        private fun resetList(list:String, listDone:String){
-            log("Begin reset (list reset)")
-            var title : String = ""
-            val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
-            log("created alertdialog builder with unquenched theme")
-            builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
-                log("reset dialog button yes pressed")
-                when(list){
-                    "all" -> {
-                        listNumbersReset(context)
-                        log("Reset all list numbers")
-                        statisticsEdit(context, "dailyStreak", 0)
-                        log("reset daily streak to 0")
-                    }
-                    else -> {
-                        listNumberEditInt(context, list, 0)
-                        log("Reset $list to 0")
-                        listNumberEditInt(context, listDone, 0)
-                        log("set list to not done")
-                        listNumberEditInt(context, "listsDone", listNumberReadInt(context, "listsDone")-1)
-                        log("New listDone = ${listNumberReadInt(context, "listsDone")}")
-                    }
-                }
-                log("navigating home")
-                val intent = Intent(activity, MainActivity::class.java)
-                startActivity(intent)
-            }
-            builder.setNeutralButton(R.string.no) { dialogInterface, i ->
-                log("reset dialog cancel button pressed");
-                dialogInterface.cancel()
-            }
-            builder.setTitle(R.string.reset_title)
-            when(list) {
-                "all" -> {builder.setMessage(R.string.reset_confirm);builder.setTitle(R.string.reset_title)}
-                else -> {builder.setMessage("Are you sure you want to reset $list? This is irreversible");builder.setTitle("Reset $list")}
-            }
-            log("Showing reset dialog")
-            builder.create().show()
-        }
-    }
-
     class StatisticsFragment : PreferenceFragmentCompat() {
         override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
             setPreferencesFromResource(R.xml.statistics, rootKey)
             val curStreak: Preference? = findPreference("currentStreak")
             val maxStreak: Preference? = findPreference("MaximumStreak")
-            val percentRead: Preference? = findPreference("percentRead")
+            val context = activity?.applicationContext
             curStreak?.summary = String.format("%d", statisticsRead(context, "currentStreak"))
             maxStreak?.summary = String.format("%d", statisticsRead(context, "maxStreak"))
-            val amountRead = statisticsRead(context, "totalRead").toDouble() / 1189.0 * 100
-            val df = DecimalFormat("##")
-            percentRead?.summary = df.format(amountRead) + "%"
-            val amountReset : Preference? = findPreference("reset_amount_read")
-            amountReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                resetAmountRead(true)
-                true
-            }
             val statReset : Preference? = findPreference("reset_statistics")
             statReset!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
+                listNumberEditInt(context, "allStatsChanged", 1)
                 resetAmountRead(false)
                 true
             }
             val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
-            partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener {preference, o ->
+            partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener {_, _ ->
+                listNumberEditInt(context, "partialChanged", 1)
                 true
             }
             partialStreakAllow.summary = "Streak won't break if you do less than 10 lists (but more than 1)"
         }
 
-        fun resetAmountRead(standalone:Boolean){
+        private fun resetAmountRead(standalone:Boolean){
             log("Start resetAmountRead, standalone = $standalone")
             val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
             log("created alertdialog builder with unquenched theme")
-            builder.setNeutralButton(R.string.no) { dialogInterface, i -> log("cancel pressed"); dialogInterface.cancel() }
+            builder.setNeutralButton(R.string.no) { dialogInterface, _ -> log("cancel pressed"); dialogInterface.cancel() }
             when(standalone){
                 false -> {
                     log("Standalone False, edit streaks as well")
                     builder.setMessage(R.string.resetStat_confirm)
                             .setTitle(R.string.reset_stats)
-                    builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
-                        statisticsEdit(context, "totalRead", 0)
+                    builder.setPositiveButton(R.string.yes) { _, _ ->
                         log("reset Amount Read/statistics = yes")
-                        log("reset totalRead to 0")
-                        resetRead(context)
                         statisticsEdit(context, "currentStreak", 0)
                         val curStreak : Preference? = findPreference("currentStreak")
                         val maxStreak : Preference? = findPreference("MaximumStreak")
-                        val percentRead : Preference? = findPreference("percentRead")
                         statisticsEdit(context, "maxStreak", 0)
                         curStreak?.summary = "${0}"
                         maxStreak?.summary = "${0}"
-                        percentRead?.summary="${0}%"
-                    }
-                }
-                true -> {
-                    builder.setMessage(R.string.resetAmount_confirm).setTitle(R.string.resetPercent)
-                    log("Standalone true, just reset amount read")
-                    builder.setPositiveButton(R.string.yes) { dialogInterface, i ->
-                        statisticsEdit(context, "totalRead", 0)
-                        val percentRead : Preference? = findPreference("percentRead")
-                        percentRead?.summary="${0}%"
-                        log("reset Amount Read/statistics = yes")
-                        log("reset totalRead to 0")
-                        resetRead(context)
                     }
                 }
             }
