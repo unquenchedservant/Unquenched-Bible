@@ -2,13 +2,19 @@
     <string name="app_name">Grant Horners Bible Reading System</string>
     <string name="title_home">Home</string>
     <string name="title_dashboard">Settings</string>
-    <string name="title_notifications">Notifications</string>
     <string name="channel_name">Daily Reading</string>
     <string name="channel_description">The daily reading comes in this channel</string>
     <string name="reset_confirm">Are you sure you want to reset all the lists to 0? This is irreversible</string>
     <string name="reset_title">Reset Lists</string>
+    <string name="googleCheck">Signing in to Google allows you to use the app across multiple devices without losing your place. Would you like to continue?</string>
+    <string name="statistic_title">Statistics</string>
+    <string name="privacy_policy">Privacy Policy</string>
+    <string name="notif">Notifications</string>
+    <string name="about">About</string>
     <string name="yes">Yes</string>
     <string name="no">Cancel</string>
+    <string name="emailHint">Email Address</string>
+    <string name="passwordHint">Password</string>
     <string name="l1">The Gospels</string>
     <string name="l2">The Pentateuch</string>
     <string name="l3">Epistles 1</string>
@@ -19,55 +25,18 @@
     <string name="l8">History</string>
     <string name="l9">Prophets</string>
     <string name="l10">Acts</string>
-    <string name="notdone">Mark Done</string>
+    <string name="notdone">Mark All Done</string>
     <string name="done">Already Done For Today!</string>
-    <string name="reset">Reset Lists</string>
-    <string name="psToggle">Psalms Based On Day</string>
-    <string name="notifications_header">Notifications</string>
-    <string name="notToggle">Notifications</string>
-    <string name="dailyLabel">Daily Notification Time</string>
-    <string name="reminderLabel">Reminder Notification Time</string>
-    <string name="helpText">Change Time</string>
-    <string name="stat_title">STATS</string>
     <string name="curStreak">Current Streak:</string>
     <string name="maxStreak">Max Streak:</string>
-    <string name="percentRead">% Read:</string>
     <string name="remTitle">Reminder!</string>
-    <string name="tomorrow">Tomorrow\'s Reading</string>
-    <string name="resetPercent">Reset Amount Read</string>
-    <string name="reset_header">Reset Lists</string>
     <string name="reset_stats">Reset All Stats</string>
-    <string name="resetAmount_confirm">Are you sure you want to reset the amount you\'ve read to 0?</string>
     <string name="resetStat_confirm">Are you sure you want to reset all stats?</string>
     <string name="markRemaining">Mark Remaining Lists Done</string>
     <string name="resetAll">Reset All</string>
-    <string name="resetList1">Reset List 1</string>
-    <string name="resetList2">Reset List 2</string>
-    <string name="resetList3">Reset List 3</string>
-    <string name="resetList4">Reset List 4</string>
-    <string name="resetList5">Reset List 5</string>
-    <string name="resetList6">Reset List 6</string>
-    <string name="resetList7">Reset List 7</string>
-    <string name="resetList8">Reset List 8</string>
-    <string name="resetList9">Reset List 9</string>
-    <string name="resetList10">Reset List 10</string>
-
-
+    <string name="register_button">Register</string>
+    <string name="login_button">Log In</string>
+    <string name="login_summary">Log in with Google or email/password for multi-device support and cloud backup!</string>
+    <string name="logout_summary">Logging out will remove multi-device features</string>
     <string name="title_activity_settings">Settings</string>
-
-    <!-- Preference Titles -->
-    <string name="messages_header">Messages</string>
-    <string name="sync_header">Sync</string>
-
-    <!-- Messages Preferences -->
-    <string name="signature_title">Your signature</string>
-    <string name="reply_title">Default reply action</string>
-
-    <!-- Sync Preferences -->
-    <string name="sync_title">Sync email periodically</string>
-    <string name="attachment_title">Download incoming attachments</string>
-    <string name="attachment_summary_on">Automatically download attachments for incoming emails
-    </string>
-    <string name="attachment_summary_off">Only download attachments when manually requested</string>
-    <string name="title_activity_settings2">Settings</string>
 </resources>

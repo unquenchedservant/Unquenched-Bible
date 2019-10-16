@@ -8,6 +8,10 @@
         <SwitchPreferenceCompat
             app:key="notif_switch"
             app:title="Notifications" />
+        <SwitchPreferenceCompat
+            app:key="vacation_mode"
+            app:title="Vacation Mode"
+            app:summary="Notifications are paused, streaks are unaffected if you miss a day."/>
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="daily_time"
             app:defaultValue="360"

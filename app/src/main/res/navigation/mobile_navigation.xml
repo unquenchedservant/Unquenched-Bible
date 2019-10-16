@@ -8,8 +8,11 @@
         android:id="@+id/navigation_home"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment"
         android:label="@string/title_home" />
-
-    <activity
+    <!--<fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ESV.ChapterViewer"
+        android:label="Settings"/>-->
+     <activity
         android:id="@+id/navigation_settings"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity"
         android:label="@string/title_dashboard"

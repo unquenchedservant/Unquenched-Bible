@@ -13,18 +13,9 @@
             android:focusableInTouchMode="false"
             app:key="MaximumStreak"
             app:title="@string/maxStreak" />
-        <Preference
-            android:clickable="false"
-            android:focusableInTouchMode="false"
-            app:key="percentRead"
-            app:title="@string/percentRead" />
     </PreferenceCategory>
     <PreferenceCategory
         app:title="">
-        <Preference
-            app:key="reset_amount_read"
-            app:title="@string/resetPercent">
-        </Preference>
         <Preference
             app:key="reset_statistics"
             app:title="@string/reset_stats"/>
