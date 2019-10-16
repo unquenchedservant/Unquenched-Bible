@@ -12,7 +12,7 @@ import androidx.preference.PreferenceDialogFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.remindReceiver
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.RemindReceiver
 import java.text.DecimalFormat
 
 class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
@@ -67,12 +67,12 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
                     val notifyIntent = Intent(activity, AlarmReceiver::class.java)
                     val notifyPendingIntent = PendingIntent.getBroadcast(activity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                     MainActivity.cancelAlarm(activity!!, notifyPendingIntent)
-                    MainActivity.createAlarm(activity, notifyPendingIntent)
+                    MainActivity.createAlarm(activity, notifyPendingIntent, true)
                 } else if(preference.dialogTitle=="Reminder Time") {
-                    val remindIntent = Intent(activity, remindReceiver::class.java)
+                    val remindIntent = Intent(activity, RemindReceiver::class.java)
                     val remindPendingIntent = PendingIntent.getBroadcast(activity, 0, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
                     MainActivity.cancelAlarm(activity!!, remindPendingIntent)
-                    MainActivity.createRemindAlarm(activity, remindPendingIntent)
+                    MainActivity.createAlarm(activity, remindPendingIntent, false)
                 }
                 when(hours) {
                     0 -> { hours = 12; ampm = "AM" }
