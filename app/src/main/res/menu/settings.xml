@@ -3,10 +3,26 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context=".MainActivity">
-    <item
-        android:id="@+id/action_notifications"
-        android:title="@string/notif"
-        app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_notifications"
+            android:title="@string/notif"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_psalms"
+            android:title="Switch to 5 Psalms"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/google_sign"
+            android:title="@string/login_button"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_manual"
+            android:title="Manually Set Lists"
+            app:showAsAction="never"/>
+        <item
+            android:id="@+id/action_daily_reset"
+            android:title="Force Daily Reset"
+            app:showAsAction="never"/>
     <item
         android:id="@+id/action_statistics"
         android:title="@string/statistic_title"
@@ -15,20 +31,7 @@
         android:id="@+id/action_info"
         android:title="Information"
         app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_psalms"
-        android:title="Switch to 5 Psalms"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_daily_reset"
-        android:title="Force Daily Reset"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/action_manual"
-        android:title="Manually Set Lists"
-        app:showAsAction="never"/>
-    <item
-        android:id="@+id/google_sign"
-        android:title="@string/login_button"
-        app:showAsAction="never"/>
+
+
+
 </menu>
