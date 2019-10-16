@@ -4,6 +4,7 @@ import android.app.*
 import android.content.Context
 import android.content.DialogInterface
 import android.content.Intent
+import android.content.res.Configuration
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
@@ -11,46 +12,52 @@ import android.view.ContextThemeWrapper
 import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
+import androidx.appcompat.app.ActionBarDrawerToggle
 
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.DailyCheck
 
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.view.GravityCompat
+import androidx.drawerlayout.widget.DrawerLayout
 import androidx.preference.PreferenceManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity
-
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
 
-class MainActivity : AppCompatActivity() {
+class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelectedListener{
+
     private var _rcSignIn = 96
     private var globalmenu : Menu? = null
+    private lateinit var drawer: DrawerLayout
+    private lateinit var toggle: ActionBarDrawerToggle
     override fun onCreate(savedInstanceState: Bundle?) {
-        log("MainActivity.java onCreate Start")
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         setContentView(R.layout.activity_main)
+        drawer = findViewById(R.id.container)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        toggle = ActionBarDrawerToggle(this, drawer, findViewById(R.id.my_toolbar), R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description)
+        drawer.addDrawerListener(toggle)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
         supportActionBar?.title = getCurrentDate(true)
-        log("MainActivity Start")
-    }
-
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        log("MainActivity.java onCreateOptionsMenu Start")
-        menuInflater.inflate(R.menu.settings, menu)
+        val navigationView: NavigationView = findViewById(R.id.nav_view)
         val user = FirebaseAuth.getInstance().currentUser
-        val googleSign = menu?.findItem(R.id.google_sign)
-        val psalms = menu?.findItem(R.id.action_psalms)
+        val googleSign = navigationView.menu.findItem(R.id.google_sign)
+        val psalms = navigationView.menu.findItem(R.id.action_psalms)
         val ps = PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean("psalms", false)
+
         if(ps){
             psalms?.title = "Switch to 1 Psalm A Day"
         }else if(!ps){
@@ -61,60 +68,72 @@ class MainActivity : AppCompatActivity() {
         }else{
             googleSign?.title = "Sign In"
         }
-        globalmenu = menu
+        navigationView.setNavigationItemSelectedListener(this)
+        log("MainActivity Start")
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.action_manual ->{
+                startActivity(Intent(applicationContext, SettingsActivity::class.java).putExtra("Manual", true))
+            }
+            R.id.action_info -> {
+                startActivity(Intent(this, SettingsActivity::class.java).putExtra("Information", true))
+            }
+            R.id.action_statistics -> {
+                startActivity(Intent(this, SettingsActivity::class.java).putExtra("Statistics", true))
+            }
+            R.id.action_notifications -> {
+                startActivity(Intent(this, SettingsActivity::class.java).putExtra("Notifications", true))
+            }
+            R.id.action_daily_reset -> {
+                val intent = Intent(this, DailyCheck::class.java)
+                sendBroadcast(intent)
+                Toast.makeText(this, "Forced Daily Reset", Toast.LENGTH_LONG).show()
+                startActivity(Intent(this, MainActivity::class.java))
+            }
+            R.id.google_sign -> {
+                googleSignIn(item)
+            }
+            R.id.action_psalms -> {
+                val ps = PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean("psalms", false)
+                if (ps) {
+                    PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putBoolean("psalms", false).apply()
+                    if (FirebaseAuth.getInstance().currentUser != null) {
+                        updateFS("psalms", false)
+                    }
+                    startActivity(Intent(this, MainActivity::class.java))
+                } else {
+                    PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putBoolean("psalms", true).apply()
+                    if (FirebaseAuth.getInstance().currentUser != null) {
+                        updateFS("psalms", true)
+                    }
+                    startActivity(Intent(this, MainActivity::class.java))
+
+                }
+            }
+        }
+        drawer.closeDrawer(GravityCompat.START)
         return true
     }
-    override fun onOptionsItemSelected(item: MenuItem) = when(item.itemId) {
-        R.id.action_manual -> {
-            log("manualListSelectionMenuItem")
-            startActivity(Intent(this, SettingsActivity::class.java).putExtra("Manual", true))
-            true
-        }
-        R.id.action_info -> {
-            startActivity(Intent(this, SettingsActivity::class.java).putExtra("Information", true))
-            true
-        }
-        R.id.action_statistics -> {
-            startActivity(Intent(this, SettingsActivity::class.java).putExtra("Statistics", true))
-            true
-        }
-        R.id.action_notifications -> {
-            startActivity(Intent(this, SettingsActivity::class.java).putExtra("Notifications", true))
-            true
-        }
-        R.id.action_daily_reset->{
-            val intent = Intent(this, DailyCheck::class.java)
-            sendBroadcast(intent)
-            Toast.makeText(this, "Forced Daily Reset", Toast.LENGTH_LONG).show()
-            recreate()
-            true
-        }
-        R.id.google_sign -> {
-            googleSignIn(item)
-            true
-        }
-        R.id.action_psalms ->{
-            val ps = PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean("psalms", false)
-            if(ps){
-                PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putBoolean("psalms", false).apply()
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("psalms", false)
-                }
-                recreate()
-            }else{
-                PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putBoolean("psalms", true).apply()
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("psalms", true)
-                }
-               recreate()
-            }
-            true
-        }
-        else->{
-            log("nothing pressed")
-            super.onOptionsItemSelected(item)
+    override fun onPostCreate(savedInstanceState: Bundle?) {
+        super.onPostCreate(savedInstanceState)
+        toggle.syncState()
+    }
+    override fun onConfigurationChanged(newConfig: Configuration) {
+        super.onConfigurationChanged(newConfig)
+        toggle.onConfigurationChanged(newConfig) }
+
+
+    override fun onBackPressed() {
+
+        if (drawer.isDrawerOpen(GravityCompat.START)) {
+            drawer.closeDrawer(GravityCompat.START)
+        } else {
+            super.onBackPressed()
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == _rcSignIn){
