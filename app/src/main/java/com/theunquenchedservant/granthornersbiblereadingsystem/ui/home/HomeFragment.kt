@@ -43,33 +43,28 @@ class HomeFragment : Fragment() {
     private var cardList10 : CardView? = null
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        model = ViewModelProviders.of(this).get(HomeView::class.java)
         val root = inflater.inflate(R.layout.fragment_home, container, false)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        cardList1 = root.findViewById(R.id.cardList1)!!
-        cardList2 = root.findViewById(R.id.cardList2)!!
-        cardList3 = root.findViewById(R.id.cardList3)!!
-        cardList4 = root.findViewById(R.id.cardList4)!!
-        cardList5 = root.findViewById(R.id.cardList5)!!
-        cardList6 = root.findViewById(R.id.cardList6)!!
-        cardList7 = root.findViewById(R.id.cardList7)!!
-        cardList8 = root.findViewById(R.id.cardList8)!!
-        cardList9 = root.findViewById(R.id.cardList9)!!
-        cardList10 = root.findViewById(R.id.cardList10)!!
-        temporaryChange()
-        createDailyCheck(context)
-        val button = root.findViewById<Button>(R.id.material_button)
-        button.setBackgroundColor(Color.parseColor("#383838"))
-        checkLists(button)
-        createListeners(button, root)
-        setLists(root)
-        when(listNumberReadInt(context, "listsDone")){
-            10 -> {
-                button.setText(R.string.done)
-                button.setBackgroundColor(Color.parseColor("#00383838"))
-                button.isEnabled = false
-            }
-        }
-        (activity as AppCompatActivity).supportActionBar?.title = getCurrentDate(true)
+        val list1Observer = Observer<String> { root.findViewById<TextView>(R.id.list1_reading).text = it }
+        val list2Observer = Observer<String> { root.findViewById<TextView>(R.id.list2_reading).text = it }
+        val list3Observer = Observer<String> { root.findViewById<TextView>(R.id.list3_reading).text = it }
+        val list4Observer = Observer<String> { root.findViewById<TextView>(R.id.list4_reading).text = it }
+        val list5Observer = Observer<String> { root.findViewById<TextView>(R.id.list5_reading).text = it }
+        val list6Observer = Observer<String> { root.findViewById<TextView>(R.id.list6_reading).text = it }
+        val list7Observer = Observer<String> { root.findViewById<TextView>(R.id.list7_reading).text = it }
+        val list8Observer = Observer<String> { root.findViewById<TextView>(R.id.list8_reading).text = it }
+        val list9Observer = Observer<String> { root.findViewById<TextView>(R.id.list9_reading).text = it }
+        val list10Observer = Observer<String> { root.findViewById<TextView>(R.id.list10_reading).text = it }
+        model.list1.observe(this, list1Observer)
+        model.list2.observe(this, list2Observer)
+        model.list3.observe(this, list3Observer)
+        model.list4.observe(this, list4Observer)
+        model.list5.observe(this, list5Observer)
+        model.list6.observe(this, list6Observer)
+        model.list7.observe(this, list7Observer)
+        model.list8.observe(this, list8Observer)
+        model.list9.observe(this, list9Observer)
+        model.list10.observe(this, list10Observer)
         return root
     }
     private fun setLists(root:View){
