@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
 
+import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.BroadcastReceiver
@@ -12,39 +13,41 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 
 class AlarmReceiver : BroadcastReceiver() {
-    private val NOTIFICATION_ID = 0
-    private val PRIMARY_CHANNEL_ID = "primary_notification_channel"
+
+    private val _notificationId = 2
+    private val _primaryChannelId = "primary_notification_channel"
     private var mNotificationManager: NotificationManager? = null
+
     override fun onReceive(context: Context, intent: Intent){
         val vacation = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("vacation_mode", false)
         log("Vacation mode is $vacation")
         when(vacation){
             false -> {
-                log("Vacation mode off, sending notification")
-                mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                deliverNotification(context)
+                if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notif_switch", false)) {
+                    log("Vacation mode off, sending notification")
+                    mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                    deliverNotification(context)
+                }else{
+                    log("Notification switch off, not sending notification")
+                }
             }
             true -> {
                 log("Vacation mode on, not sending notification")
             }
         }
-        mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        deliverNotification(context)
     }
     private fun deliverNotification(context: Context) {
         val today = MainActivity.getCurrentDate(false)
         val tapIntent = Intent(context, MainActivity::class.java)
         tapIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val tapPending = PendingIntent.getActivity(context, 0, tapIntent, 0)
-        val detailsIntent = Intent(context, doneReceiver::class.java)
-        val detailsPendingIntent = PendingIntent.getBroadcast(context, 0, detailsIntent, 0)
-        val builder = NotificationCompat.Builder(context, PRIMARY_CHANNEL_ID)
-                .setSmallIcon(R.drawable.ic_notifications_black_24dp)
+        val builder : Notification = NotificationCompat.Builder(context, _primaryChannelId)
+                .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentTitle(today)
                 .setContentText("Tap here for today's reading!")
-                .addAction(android.R.drawable.ic_menu_save, "Done", detailsPendingIntent)
                 .setContentIntent(tapPending)
                 .setAutoCancel(false)
-        mNotificationManager!!.notify(NOTIFICATION_ID, builder.build())
+                .build()
+        mNotificationManager!!.notify(_notificationId, builder)
     }
 }
