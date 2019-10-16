@@ -10,6 +10,12 @@
     <string name="statistic_title">Statistics</string>
     <string name="privacy_policy">Privacy Policy</string>
     <string name="notif">Notifications</string>
+    <string name="notifnav">Notification Options</string>
+    <string name="psalmsnav5">Switch to 5 Psalms</string>
+    <string name="psalmsnav1">Switch to 1 Psalms</string>
+    <string name="manualnav">Manually Set Lists</string>
+    <string name="forcedailynav">Force Daily Reset</string>
+    <string name="infonav">Information</string>
     <string name="about">About</string>
     <string name="yes">Yes</string>
     <string name="no">Cancel</string>
@@ -35,6 +41,8 @@
     <string name="markRemaining">Mark Remaining Lists Done</string>
     <string name="resetAll">Reset All</string>
     <string name="register_button">Register</string>
+    <string name="signinnav">Sign In</string>
+    <string name="signoutnav">Sign Out</string>
     <string name="login_button">Log In</string>
     <string name="login_summary">Log in with Google or email/password for multi-device support and cloud backup!</string>
     <string name="logout_summary">Logging out will remove multi-device features</string>
