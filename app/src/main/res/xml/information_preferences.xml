@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="about"
+        app:title="About The System"
+        app:summary="The official PDF for Professor Grant Horner's Bible Reading System">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="http://grant-horner-bible-reading-plan-pdf.weebly.com/uploads/4/5/9/7/45977741/professor-grant-horners-bible-reading-system.pdf"/>
+    </Preference>
+    <Preference
+        app:key="aboutApp"
+        app:title="About the App"
+        app:summary="More about this app">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://theunquenchedservant.com/bible-reading-system/"/>
+    </Preference>
+    <Preference
+        app:key="licenses"
+        app:title="Licenses">
+    </Preference>
+    <Preference
+        app:key="privacy"
+        app:title="@string/privacy_policy">
+        <intent
+            android:action="android.intent.action.VIEW"
+            android:data="https://www.iubenda.com/privacy-policy/56351106"/>
+    </Preference>
+
+</PreferenceScreen>
