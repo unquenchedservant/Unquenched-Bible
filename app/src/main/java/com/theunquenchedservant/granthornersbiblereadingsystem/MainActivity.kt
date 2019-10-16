@@ -59,14 +59,14 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         val ps = PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean("psalms", false)
 
         if(ps){
-            psalms?.title = "Switch to 1 Psalm A Day"
+            psalms?.title = resources.getString(R.string.psalmsnav1)
         }else if(!ps){
-            psalms?.title = "Switch to 5 Psalms"
+            psalms?.title = resources.getString(R.string.psalmsnav5)
         }
         if(user != null){
-            googleSign?.title = "Sign Out"
+            googleSign?.title = resources.getString(R.string.signoutnav)
         }else{
-            googleSign?.title = "Sign In"
+            googleSign?.title = resources.getString(R.string.signinnav)
         }
         navigationView.setNavigationItemSelectedListener(this)
         log("MainActivity Start")

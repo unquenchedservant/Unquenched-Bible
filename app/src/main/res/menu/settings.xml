@@ -5,23 +5,23 @@
     tools:context=".MainActivity">
         <item
             android:id="@+id/action_notifications"
-            android:title="@string/notif"
+            android:title="@string/notifnav"
             app:showAsAction="never"/>
         <item
             android:id="@+id/action_psalms"
-            android:title="Switch to 5 Psalms"
+            android:title="@string/psalmsnav5"
             app:showAsAction="never"/>
         <item
             android:id="@+id/google_sign"
-            android:title="@string/login_button"
+            android:title="@string/signinnav"
             app:showAsAction="never"/>
         <item
             android:id="@+id/action_manual"
-            android:title="Manually Set Lists"
+            android:title="@string/manualnav"
             app:showAsAction="never"/>
         <item
             android:id="@+id/action_daily_reset"
-            android:title="Force Daily Reset"
+            android:title="@string/forcedailynav"
             app:showAsAction="never"/>
     <item
         android:id="@+id/action_statistics"
@@ -29,7 +29,7 @@
         app:showAsAction="never"/>
     <item
         android:id="@+id/action_info"
-        android:title="Information"
+        android:title="@string/infonav"
         app:showAsAction="never"/>
 
 
