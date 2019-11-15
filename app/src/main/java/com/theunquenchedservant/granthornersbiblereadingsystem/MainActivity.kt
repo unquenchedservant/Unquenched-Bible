@@ -270,6 +270,57 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             }
         }
     }
+    private fun resetDaily(){
+        val isLogged = FirebaseAuth.getInstance().currentUser
+        val db = FirebaseFirestore.getInstance()
+        var resetStreak  = false
+        var resetCurrent = false
+        val vacation = boolPref("vacationMode", null)
+        when (intPref("dailyStreak", null)) {
+            1 -> {
+                intPref("dailyStreak", 0)
+                log("DAILY CHECK - daily streak set to 0")
+                resetStreak = true
+            }
+            0 -> {
+                when (vacation) {
+                    false -> {
+                        when(stringPref("dateChecked", null)){
+                            getYesterdayDate(false) -> {
+                            }
+                            else -> {
+                                resetCurrent = true
+                                log("DAILY CHECK - currentStreak set to 0")
+                                intPref( "currentStreak", 0)
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        for(i in 1..10){
+            when(intPref("list${i}Done", null)){
+                1 -> {
+                    resetList("list$i", "list${i}Done")
+                }
+            }
+        }
+        intPref("listsDone", 0)
+        if(isLogged != null) {
+            val data = mutableMapOf<String, Any>()
+            for (i in 1..10){
+                data["list$i"] = intPref("list$i", null)
+                data["list${i}Done"] = intPref("list${i}Done", null)
+            }
+            data["listsDone"] = 0
+            if(resetCurrent) {
+                data["currentStreak"] = 0
+            }else if(resetStreak) {
+                data["dailyStreak"] = 0
+            }
+            db.collection("main").document(isLogged.uid).update(data)
+        }
+    }
 
     companion object{
 
