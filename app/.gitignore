@@ -4,3 +4,4 @@
 /lib
 /src/androidTest
 /src/test
+gradle.properties
