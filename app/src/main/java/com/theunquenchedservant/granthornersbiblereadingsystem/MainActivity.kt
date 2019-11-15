@@ -13,14 +13,14 @@ import android.view.Menu
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.DailyCheck
-
+import kotlinx.android.synthetic.main.activity_main.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.preference.PreferenceManager
+import androidx.navigation.Navigation.findNavController
+import androidx.preference.Preference
+import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -30,7 +30,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.SettingsActivity
+import kotlinx.android.synthetic.main.appbar.*
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Locale
