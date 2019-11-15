@@ -3,48 +3,22 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 import android.app.AlertDialog
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.listNumberEditInt
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
 
 class ManualListSet: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_manual, container, false)
     }
-    override fun onPause(){
-        super.onPause()
-        val db = FirebaseFirestore.getInstance()
-        val user = FirebaseAuth.getInstance().currentUser
-        if(user != null){
 
-            val data = mapOf(
-                    "list1" to listNumberReadInt(context, "List 1"),
-                    "list2" to listNumberReadInt(context, "List 2"),
-                    "list3" to listNumberReadInt(context, "List 3"),
-                    "list4" to listNumberReadInt(context, "List 4"),
-                    "list5" to listNumberReadInt(context, "List 5"),
-                    "list6" to listNumberReadInt(context, "List 6"),
-                    "list7" to listNumberReadInt(context, "List 7"),
-                    "list8" to listNumberReadInt(context, "List 8"),
-                    "list9" to listNumberReadInt(context, "List 9"),
-                    "list10" to listNumberReadInt(context, "List 10")
-            )
-            db.collection("main").document(user.uid).update(data)
-                    .addOnSuccessListener { log("Data transferred to firestore") }
-                    .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
-        }
-    }
     override fun onResume() {
         super.onResume()
         val root = view!!
@@ -461,22 +435,26 @@ class ManualListSet: Fragment() {
                     "The Gospels" -> {
                         val array = resources.getStringArray(R.array.list_1)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 1", num)
-                        model.list1.value = array[num] }
+                        intPref("list1", num)
+                        model.list1.value = array[num]
+                        updateFS( "list1", num)
+                    }
 
 
                     "The Pentateuch" -> {
                         val array = resources.getStringArray(R.array.list_2)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 2", num)
-                        model.list2.value = array[num] }
+                        intPref("list2", num)
+                        model.list2.value = array[num]
+                        updateFS("list2", num)}
 
 
                     "Epistles I" -> {
                         val array = resources.getStringArray(R.array.list_3)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 3", num)
-                        model.list3.value = array[num] }
+                        intPref("list3", num)
+                        model.list3.value = array[num]
+                        updateFS("list3", num)}
 
 
                     "Epistles II" -> {
@@ -486,36 +464,41 @@ class ManualListSet: Fragment() {
                         } else {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        listNumberEditInt(context, "List 4", num)
-                        model.list4.value = array[num] }
+                        intPref("list4", num)
+                        model.list4.value = array[num]
+                        updateFS("list4", num)}
 
 
                     "Poetry" -> {
                         val array = resources.getStringArray(R.array.list_5)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 5", num)
-                        model.list5.value = array[num] }
+                        intPref("list5", num)
+                        model.list5.value = array[num]
+                        updateFS("list5", num)}
 
 
                     "Psalms" -> {
                         val array = resources.getStringArray(R.array.list_6)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 6", num)
-                        model.list6.value = array[num] }
+                        intPref("list6", num)
+                        model.list6.value = array[num]
+                        updateFS("list6", num)}
 
 
                     "Proverbs" -> {
                         val array = resources.getStringArray(R.array.list_7)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 7", num)
-                        model.list7.value = array[num]}
+                        intPref("list7", num)
+                        model.list7.value = array[num]
+                        updateFS( "list7", num)}
 
 
                     "History" -> {
                         val array = resources.getStringArray(R.array.list_8)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 8", num)
-                        model.list8.value = array[num]}
+                        intPref("list8", num)
+                        model.list8.value = array[num]
+                        updateFS( "list8", num)}
 
 
                     "Prophets" -> {
@@ -525,15 +508,17 @@ class ManualListSet: Fragment() {
                         }else{
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        listNumberEditInt(context, "List 9", num)
-                        model.list9.value = array[num]}
+                        intPref("list9", num)
+                        model.list9.value = array[num]
+                        updateFS("list9", num)}
 
 
                     "Acts" -> {
                         val array = resources.getStringArray(R.array.list_10)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        listNumberEditInt(context, "List 10", num)
-                        model.list10.value = array[num]} }
+                        intPref("list10", num)
+                        model.list10.value = array[num]
+                        updateFS( "list10", num)}}
 
 
                 dialogInterface.dismiss()
@@ -550,16 +535,16 @@ class ManualListSet: Fragment() {
     fun getCurrentInfo(listNum:Int): Array<Any> {
 
         val data : Array<Any> = when(listNum){
-            1  ->  arrayOf(listNumberReadInt(context, "List 1"), R.array.list_1)
-            2  ->  arrayOf(listNumberReadInt(context, "List 2"), R.array.list_2)
-            3  ->  arrayOf(listNumberReadInt(context, "List 3"), R.array.list_3)
-            4  ->  arrayOf(listNumberReadInt(context, "List 4"), R.array.list_4)
-            5  ->  arrayOf(listNumberReadInt(context, "List 5"), R.array.list_5)
-            6  ->  arrayOf(listNumberReadInt(context, "List 6"), R.array.list_6)
-            7  ->  arrayOf(listNumberReadInt(context, "List 7"), R.array.list_7)
-            8  ->  arrayOf(listNumberReadInt(context, "List 8"), R.array.list_8)
-            9  ->  arrayOf(listNumberReadInt(context, "List 9"), R.array.list_9)
-            10 ->  arrayOf(listNumberReadInt(context, "List 10"), R.array.list_10)
+            1  ->  arrayOf(intPref("list1", null), R.array.list_1)
+            2  ->  arrayOf(intPref("list2", null), R.array.list_2)
+            3  ->  arrayOf(intPref("list3", null), R.array.list_3)
+            4  ->  arrayOf(intPref("list4", null), R.array.list_4)
+            5  ->  arrayOf(intPref("list5", null), R.array.list_5)
+            6  ->  arrayOf(intPref("list6", null), R.array.list_6)
+            7  ->  arrayOf(intPref("list7", null), R.array.list_7)
+            8  ->  arrayOf(intPref("list8", null), R.array.list_8)
+            9  ->  arrayOf(intPref("list9", null), R.array.list_9)
+            10 ->  arrayOf(intPref("list10", null), R.array.list_10)
             else -> arrayOf(0, 0) }
 
         val number = data[0] as Int
