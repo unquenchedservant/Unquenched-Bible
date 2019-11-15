@@ -11,6 +11,7 @@ import androidx.preference.PreferenceManager
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -23,7 +24,7 @@ class AlarmReceiver : BroadcastReceiver() {
         log("Vacation mode is $vacation")
         when(vacation){
             false -> {
-                if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notif_switch", false)) {
+                if(boolPref("notif_switch", null)) {
                     log("Vacation mode off, sending notification")
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     deliverNotification(context)
@@ -36,6 +37,7 @@ class AlarmReceiver : BroadcastReceiver() {
             }
         }
     }
+
     private fun deliverNotification(context: Context) {
         val today = MainActivity.getCurrentDate(false)
         val tapIntent = Intent(context, MainActivity::class.java)
