@@ -44,6 +44,7 @@
     <string name="signinnav">Sign In</string>
     <string name="signoutnav">Sign Out</string>
     <string name="login_button">Log In</string>
+    <string name="markdone">Mark Done</string>
     <string name="login_summary">Log in with Google or email/password for multi-device support and cloud backup!</string>
     <string name="logout_summary">Logging out will remove multi-device features</string>
     <string name="title_activity_settings">Settings</string>
