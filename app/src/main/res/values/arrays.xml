@@ -1,5 +1,10 @@
 <resources>
     <!-- Reply Preference -->
+    <string-array name="translationArray">
+        <item>---</item>
+        <item>CSB</item>
+        <item>ESV</item>
+    </string-array>
     <string-array name="listNames">
         <item>----</item>
         <item>The Gospels</item>
