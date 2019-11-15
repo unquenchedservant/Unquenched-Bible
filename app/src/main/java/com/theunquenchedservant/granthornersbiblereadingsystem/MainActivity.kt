@@ -322,6 +322,23 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         }
     }
 
+    private fun resetList(listName: String, listNameDone: String){
+        log("$listName is now set to ${intPref(listName, null)}")
+        intPref(listName, intPref(listName, null) + 1)
+        log("$listName index is now ${intPref( listName, null)}")
+        intPref(listNameDone, 0)
+        log("$listNameDone set to 0")
+    }
+
+    private fun switchEnabled(current: String){
+        val menu = nav_view?.menu
+        menu?.findItem(R.id.action_home)?.isEnabled = current != "home"
+        menu?.findItem(R.id.action_information)?.isEnabled = current != "information"
+        menu?.findItem(R.id.action_manual)?.isEnabled = current != "manual"
+        menu?.findItem(R.id.action_statistics)?.isEnabled = current != "stats"
+        menu?.findItem(R.id.action_notifications)?.isEnabled = current != "notif"
+        menu?.findItem(R.id.action_support)?.isEnabled = current != "support"
+    }
     companion object{
 
         fun log(logString:String){
