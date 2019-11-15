@@ -19,3 +19,11 @@
 # If you keep the line number information, uncomment this to
 # hide the original source file name.
 #-renamesourcefileattribute SourceFile
+-keep class * extends androidx.fragment.app.Fragment{}
+-dontwarn android.support.v7.**
+-keep class android.support.v7.** { *; }
+-keep interface android.support.v7.** { *; }
+-dontwarn androidx.core.**
+-keep class com.** { *; }
+-keep class androidx.core.** { *; }
+-keep interface androidx.core.** { *; }
