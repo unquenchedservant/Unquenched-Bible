@@ -344,112 +344,34 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         fun log(logString:String){
             Log.d("PROFGRANT", logString)
         }
-        fun createNotificationChannel(ctx: Context?) {
-            log("start createNotificationChannel")
 
-            val primaryChannelId = "primary_notification_channel"
-
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-
-                val name = ctx?.getString(R.string.channel_name)
-                log("Name of channel: $name")
-
-                val description = ctx?.getString(R.string.channel_description)
-                log("Description of Channel: $description")
-
-                val importance = NotificationManager.IMPORTANCE_DEFAULT
-                val channel = NotificationChannel(primaryChannelId, name, importance)
-
-                channel.description = description
-                channel.enableVibration(true)
-
-                val notificationManager = ctx?.getSystemService(NotificationManager::class.java)!!
-                notificationManager.createNotificationChannel(channel)
-
-                log("Notification channel created")
-            }
-        }
-        fun createDailyCheck(ctx: Context?) {
-            log("Begin createDailyCheck")
-
-            val alarmMgr: AlarmManager = ctx!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val alarmIntent: PendingIntent
-            val calendar = Calendar.getInstance()
-
-            calendar.timeInMillis = System.currentTimeMillis()
-            calendar.set(Calendar.HOUR_OF_DAY, 0)
-
-            if (calendar.before(Calendar.getInstance())) {
-                log("ADDING ONE DAY(SHOULDNT HAPPEN)")
-                calendar.add(Calendar.DATE, 1)
-            }
-
-            val intent = Intent(ctx, DailyCheck::class.java)
-            alarmIntent = PendingIntent.getBroadcast(ctx, 6, intent, PendingIntent.FLAG_UPDATE_CURRENT)
-
-            alarmMgr.setInexactRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, alarmIntent)
-
-            log("DailyCheck Alarm created/updated")
-        }
         fun getCurrentDate(fullMonth: Boolean): String {
-            log("Begin getCurrentDate")
-            val today = Calendar.getInstance().time
-            val formatter: SimpleDateFormat = if (fullMonth) {
-                SimpleDateFormat("MMMM dd", Locale.US)
+            return if (fullMonth) {
+                SimpleDateFormat("MMMM dd", Locale.US).format(Calendar.getInstance().time)
             } else {
-                SimpleDateFormat("MMM dd", Locale.US)
+                SimpleDateFormat("MMM dd", Locale.US).format(Calendar.getInstance().time)
             }
-            log("getCurrentDate returning ${formatter.format(today)}")
-            return formatter.format(today)
         }
 
         fun getYesterdayDate(fullMonth:Boolean): String{
-            log("Begin get yesterdays date")
             val yesterday = Calendar.getInstance()
             yesterday.set(Calendar.HOUR_OF_DAY, 0)
             yesterday.add(Calendar.DATE, -1)
-            val value = yesterday.time
-            val formatter: SimpleDateFormat = if(fullMonth){
-                SimpleDateFormat("MMMM dd", Locale.US)
+            return if(fullMonth){
+                SimpleDateFormat("MMMM dd", Locale.US).format(yesterday.time)
             }else{
-                SimpleDateFormat("MMM dd", Locale.US)
+                SimpleDateFormat("MMM dd", Locale.US).format(yesterday.time)
             }
-            log("getYesterdayDate returning ${formatter.format(value)}")
-            return formatter.format(value)
         }
-        fun cancelAlarm(ctx: Context, notifyPendingIntent: PendingIntent) {
-            log("Start cancelAlarm")
-            val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            log("Cancelling $notifyPendingIntent")
-            alarmManager.cancel(notifyPendingIntent)
+    }
+}
+class InformationFragment : PreferenceFragmentCompat(){
+    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?){
+        setPreferencesFromResource(R.xml.information_preferences, rootKey)
+        val license: Preference? = findPreference("licenses")
+        license!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            startActivity(Intent(context, OssLicensesMenuActivity::class.java))
+            false
         }
-
-        fun createAlarm(ctx: Context?, notifyPendingIntent: PendingIntent, isDaily: Boolean) {
-            log("Start createAlarm (dailyAlarm)")
-            val sharedpref = PreferenceManager.getDefaultSharedPreferences(ctx)
-            var timeInMinutes = 0
-            if(isDaily) {
-                timeInMinutes = sharedpref.getInt("daily_time", 0)
-            }else{
-                timeInMinutes = sharedpref.getInt("remind_time", 0)
-            }
-            log("time in minutes $timeInMinutes")
-            val hour = timeInMinutes / 60
-            val minute = timeInMinutes % 60
-            log("dailyHour - $hour")
-            log("dailyMinute - $minute")
-            val alarmManager = ctx!!.getSystemService(Context.ALARM_SERVICE) as AlarmManager
-            val calendar = Calendar.getInstance()
-            calendar.set(Calendar.HOUR_OF_DAY, hour)
-            calendar.set(Calendar.MINUTE, minute)
-            if (calendar.before(Calendar.getInstance())) {
-                calendar.add(Calendar.DATE, 1)
-            }
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, notifyPendingIntent)
-            log("Created daily Alarm at $hour:$minute")
-
-        }
-
-
     }
 }
