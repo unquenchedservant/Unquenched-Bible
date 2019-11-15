@@ -106,49 +106,70 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         return true
     } */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val homeFrag = nav_host_fragment.childFragmentManager.fragments[0]
+        val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
-            R.id.action_manual ->{
-                startActivity(Intent(applicationContext, SettingsActivity::class.java).putExtra("Manual", true))
+            R.id.action_home ->{
+                supportActionBar?.title = getCurrentDate(true)
+                switchEnabled("home")
+                navControl.navigate(R.id.navigation_home)
             }
-            R.id.action_info -> {
-                startActivity(Intent(this, SettingsActivity::class.java).putExtra("Information", true))
+            R.id.action_manual ->{
+                supportActionBar?.title = "Manually Set List"
+                switchEnabled("manual")
+                navControl.navigate(R.id.navigation_manual)
+            }
+            R.id.action_support -> {
+                supportActionBar?.title = "Support"
+                switchEnabled("support")
+                navControl.navigate(R.id.navigation_support)
+            }
+            R.id.action_information -> {
+                supportActionBar?.title = "Information"
+                switchEnabled("information")
+                navControl.navigate(R.id.navigation_information)
             }
             R.id.action_statistics -> {
-                startActivity(Intent(this, SettingsActivity::class.java).putExtra("Statistics", true))
+                supportActionBar?.title = "Statistics"
+                switchEnabled("stats")
+                navControl.navigate(R.id.navigation_stats)
             }
             R.id.action_notifications -> {
-                startActivity(Intent(this, SettingsActivity::class.java).putExtra("Notifications", true))
+                supportActionBar?.title = "Notifications"
+                switchEnabled("notif")
+                navControl.navigate(R.id.navigation_notifications)
             }
             R.id.action_daily_reset -> {
-                val intent = Intent(this, DailyCheck::class.java)
-                sendBroadcast(intent)
+                resetDaily()
+                navControl.navigate(R.id.navigation_home)
                 Toast.makeText(this, "Forced Daily Reset", Toast.LENGTH_LONG).show()
-                startActivity(Intent(this, MainActivity::class.java))
             }
             R.id.google_sign -> {
                 googleSignIn(item)
             }
             R.id.action_psalms -> {
-                val ps = PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean("psalms", false)
+                val ps = boolPref("psalms", null)
                 if (ps) {
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putBoolean("psalms", false).apply()
+                    boolPref("psalms", false)
                     if (FirebaseAuth.getInstance().currentUser != null) {
                         updateFS("psalms", false)
                     }
-                    startActivity(Intent(this, MainActivity::class.java))
+                    item.title = resources.getString(R.string.psalmsnav5)
+                    nav_host_fragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
                 } else {
-                    PreferenceManager.getDefaultSharedPreferences(applicationContext).edit().putBoolean("psalms", true).apply()
+                    boolPref("psalms", true)
                     if (FirebaseAuth.getInstance().currentUser != null) {
                         updateFS("psalms", true)
                     }
-                    startActivity(Intent(this, MainActivity::class.java))
-
+                    item.title = resources.getString(R.string.psalmsnav1)
+                    nav_host_fragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
                 }
             }
         }
         drawer.closeDrawer(GravityCompat.START)
         return true
     }
+
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
         toggle.syncState()
@@ -181,12 +202,14 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     }
     private fun googleSignIn(item:MenuItem){
         val user = FirebaseAuth.getInstance().currentUser
+        val navControl = findNavController(this, R.id.nav_host_fragment)
         if(user != null){
             val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
-            builder.setPositiveButton(getString(R.string.yes)){_: DialogInterface?, _: Int ->
+            builder.setPositiveButton(getString(R.string.yes)){_,_ ->
                 FirebaseAuth.getInstance().signOut()
-                Toast.makeText(applicationContext, "Signed Out!", Toast.LENGTH_LONG).show()
                 item.title = "Sign In"
+                navControl.navigate(R.id.navigation_home)
+                Toast.makeText(applicationContext, "Signed Out!", Toast.LENGTH_LONG).show()
             }
             builder.setNeutralButton(getString(R.string.no)){dialogInterface, _ ->
                 dialogInterface.cancel()
@@ -214,28 +237,32 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         log("firebaseAuthWithGoogle: ${acct.id}")
         val auth = FirebaseAuth.getInstance()
+        val navControl = findNavController(this, R.id.nav_host_fragment)
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                Toast.makeText(applicationContext, "Signed In!", Toast.LENGTH_LONG).show()
+                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
                 val db = FirebaseFirestore.getInstance()
                 val user = FirebaseAuth.getInstance().currentUser
                 db.collection("main").document(user!!.uid).get()
-                        .addOnSuccessListener {
-                            if (it != null) {
+                        .addOnSuccessListener { doc ->
+                            if (doc != null) {
                                 val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
-                                    SharedPref.firestoneToPreference(it, applicationContext)
-                                    globalmenu?.findItem(R.id.google_sign)?.title = "Sign Out"
+                                    firestoneToPreference(doc)
+                                    nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
-                                    SharedPref.preferenceToFireStone(applicationContext)
+                                    preferenceToFireStone()
+                                    nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setTitle("Account Found")
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
                                 builder.create().show()
                             } else {
-                                SharedPref.preferenceToFireStone(applicationContext)
+                                preferenceToFireStone()
                             }
                         }
             } else {
