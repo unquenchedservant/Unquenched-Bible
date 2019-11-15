@@ -1,6 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
+    <style name="splash" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+        <item name="android:windowBackground">@drawable/splash_screen</item>
+    </style>
     <style name="AppTheme" parent="Theme.MaterialComponents.DayNight.NoActionBar">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="colorAccent">@color/unquenchedEmph</item>
