@@ -9,8 +9,9 @@ import android.text.format.DateFormat
 import android.view.View
 import android.widget.TimePicker
 import androidx.preference.PreferenceDialogFragmentCompat
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.cancelAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.RemindReceiver
 import java.text.DecimalFormat
@@ -64,15 +65,11 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
             val minutesAfterMidnight : Int = hours * 60 + minutes
             if (preference is TimePreference && preference.callChangeListener(minutesAfterMidnight)) {
                 if (preference.dialogTitle=="Daily List Time") {
-                    val notifyIntent = Intent(activity, AlarmReceiver::class.java)
-                    val notifyPendingIntent = PendingIntent.getBroadcast(activity, 0, notifyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                    MainActivity.cancelAlarm(activity!!, notifyPendingIntent)
-                    MainActivity.createAlarm(activity, notifyPendingIntent, true)
+                    cancelAlarm("daily")
+                    createAlarm("daily")
                 } else if(preference.dialogTitle=="Reminder Time") {
-                    val remindIntent = Intent(activity, RemindReceiver::class.java)
-                    val remindPendingIntent = PendingIntent.getBroadcast(activity, 0, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-                    MainActivity.cancelAlarm(activity!!, remindPendingIntent)
-                    MainActivity.createAlarm(activity, remindPendingIntent, false)
+                    cancelAlarm("remind")
+                    createAlarm("remind")
                 }
                 when(hours) {
                     0 -> { hours = 12; ampm = "AM" }
