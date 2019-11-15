@@ -1,11 +1,8 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
 import android.app.*
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.res.Configuration
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.ContextThemeWrapper
@@ -25,10 +22,17 @@ import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
+import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.mergePref
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.stringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
 import kotlinx.android.synthetic.main.appbar.*
 import java.text.SimpleDateFormat
@@ -41,6 +45,8 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     private var globalmenu : Menu? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
