@@ -50,35 +50,61 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-        setContentView(R.layout.activity_main)
-        drawer = findViewById(R.id.container)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
-        toggle = ActionBarDrawerToggle(this, drawer, findViewById(R.id.my_toolbar), R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description)
-        drawer.addDrawerListener(toggle)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-        supportActionBar?.title = getCurrentDate(true)
-        val navigationView: NavigationView = findViewById(R.id.nav_view)
-        val user = FirebaseAuth.getInstance().currentUser
-        val googleSign = navigationView.menu.findItem(R.id.google_sign)
-        val psalms = navigationView.menu.findItem(R.id.action_psalms)
-        val ps = PreferenceManager.getDefaultSharedPreferences(applicationContext).getBoolean("psalms", false)
-
-        if(ps){
-            psalms?.title = resources.getString(R.string.psalmsnav1)
-        }else if(!ps){
-            psalms?.title = resources.getString(R.string.psalmsnav5)
-        }
-        if(user != null){
-            googleSign?.title = resources.getString(R.string.signoutnav)
+        if(boolPref("has_merged", null)) {
+            setContentView(R.layout.activity_main)
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            if (intPref("translation", null) == 0) intPref("translation", 1)
+            setSupportActionBar(my_toolbar)
+            drawer = container
+            toggle = ActionBarDrawerToggle(this, drawer, my_toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description)
+            drawer.addDrawerListener(toggle)
+            switchEnabled("home")
+            supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            supportActionBar?.setHomeButtonEnabled(true)
+            nav_view?.getHeaderView(0)?.setOnClickListener {
+                findNavController(this, R.id.nav_host_fragment).navigate(R.id.navigation_home)
+                switchEnabled("home")
+                supportActionBar?.title = getCurrentDate(true)
+                drawer.closeDrawers()
+            }
+            supportActionBar?.title = getCurrentDate(true)
+            val user = FirebaseAuth.getInstance().currentUser
+            val googleSign = nav_view?.menu?.findItem(R.id.google_sign)
+            val psalms = nav_view?.menu?.findItem(R.id.action_psalms)
+            val ps = boolPref("psalms", null)
+            if (ps) psalms?.title = resources.getString(R.string.psalmsnav1) else psalms?.title = resources.getString(R.string.psalmsnav5)
+            if (user != null) googleSign?.title = resources.getString(R.string.signoutnav) else googleSign?.title = resources.getString(R.string.signinnav)
+            nav_view?.setNavigationItemSelectedListener(this)
         }else{
-            googleSign?.title = resources.getString(R.string.signinnav)
+            mergePref()
+            recreate()
         }
-        navigationView.setNavigationItemSelectedListener(this)
-        log("MainActivity Start")
     }
+    /**
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        menuInflater.inflate(R.menu.translation, menu)
+        val spinner = menu?.findItem(R.id.translation_selector)
+        val spin = spinner?.actionView as Spinner
+        ArrayAdapter.createFromResource(this, R.array.translationArray,
+                android.R.layout.simple_spinner_item).also {
+            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+            spin.adapter = it
+            spin.setSelection(listNumberPref("translation", null))
+        }
+        spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                when (parent?.getItemAtPosition(position).toString()) {
+                    "CSB" -> listNumberPref("translation", 1)
+                    "ESV" -> listNumberPref("translation", 2)
+                }
+            }
 
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+
+            }
+        }
+        return true
+    } */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.action_manual ->{
