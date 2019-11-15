@@ -6,26 +6,23 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
-import androidx.preference.PreferenceManager
-
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.listNumberReadInt
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
 
 class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
+
     override fun onReceive(context: Context, intent: Intent) {
-        val vacation = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("vacation_mode", false)
-        log("Vacation mode is $vacation")
-        when(vacation) {
+        when(boolPref("vacation_mode", null)) {
             false -> {
                 log("Vacation mode off, preparing reminder notification")
-                if(PreferenceManager.getDefaultSharedPreferences(context).getBoolean("notif_switch", false)) {
-                    log("Vacation mode off, sending notification")
-                    val check = listNumberReadInt(context, "listsDone")
+                if(boolPref("notif_switch", null)) {
+                    val check = intPref("listsDone", null)
                     log("lists done so far = $check")
-                    val allowPartial = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("allow_partial_switch", false)
+                    val allowPartial = boolPref("allow_partial_switch", null)
                     log("Allow partial is $allowPartial")
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     when (check) {
@@ -51,8 +48,7 @@ class RemindReceiver : BroadcastReceiver() {
 
     private fun deliverNotification(context: Context, partial:Boolean) {
         val rem = context.resources.getString(R.string.remTitle)
-        var content : String? = null
-        content = if(partial){
+        val content : String = if(partial){
             "Don't forget to finish the reading!"
         }else{
             "Don't forget to do the reading"
