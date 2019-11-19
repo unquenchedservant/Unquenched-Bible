@@ -284,12 +284,12 @@ class HomeFragment : Fragment() {
                                 1 -> getCSBReference(chapter)
                                 2 -> getESVReference(chapter)
                             }*/
-                            getESVReference(chapter)
+                            getESVReference(chapter, context, false, 0)
                         }else if(cardList == cardList6 && psalms){
                             /**when(listNumberPref("translation", null)){
                                 2 -> getESVPsalms(i)
                             }*/
-                            getESVPsalms(i)
+                            getESVReference("no", context, true, 1)
                         }
                     }
                 }
@@ -332,51 +332,17 @@ class HomeFragment : Fragment() {
         }
     }
 
-    private fun chapterShower(wv : WebView, title: String, psalms: Boolean, iteration: Int){
-        val alert = AlertDialog.Builder(context!!)
-        alert.setTitle(title)
-        alert.setView(wv)
-        if(psalms){
-            if(iteration != 5) {
-                alert.setPositiveButton("Next") { _, _ ->
-                    getESVPsalms(iteration + 1)
-                }
-            }else if(iteration == 5){
-                alert.setNeutralButton("Close"){dialogInterface, _ ->
-                    dialogInterface.dismiss()
-                }
-            }
-        }else{
-            alert.setNeutralButton("Close"){ dialogInterface, _ ->
-                dialogInterface.dismiss()
-            }
-        }
-        alert.show()
-    }
 
-    private fun getESVPsalms(iteration: Int){
-        var day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        if(iteration > 1){
-            day += 30 * (iteration - 1)
-        }
-        val title = "Psalm $day"
-        val url = "https://api.esv.org/v3/passage/html/?q=Psalm$day&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
-        val wv = getESV(context, url)
-        chapterShower(wv, title, true, iteration)
-    }
+
+    /**
     private fun getCSBReference(chapter: String){
         log("START CSB REFERENCE")
         val title = chapter
         val url = "https://api.scripture.api.bible/v1/bibles/a556c5305ee15c3f-01/passages/JHN.1"
         val wv = getCSB(context, url)
         chapterShower(wv, title, false, 0)
-    }
-    private fun getESVReference(chapter: String){
-        val title = chapter
-        val url = "https://api.esv.org/v3/passage/html/?q=$chapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
-        val wv = getESV(context, url)
-        chapterShower(wv, title, false, 0)
-    }
+    }*/
+
 
     private fun googleSignIn(needsNotifOnSuccess: Boolean){
         val ctx = App.applicationContext()
