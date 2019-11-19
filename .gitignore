@@ -12,7 +12,7 @@
 /app/libs
 /app/build
 /app/.cxx
-/release
+/app/release
 /captures
 gradle.properties
 .externalNativeBuild
