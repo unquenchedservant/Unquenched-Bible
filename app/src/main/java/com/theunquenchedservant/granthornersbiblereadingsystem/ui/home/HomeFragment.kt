@@ -6,7 +6,6 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.*
-import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
@@ -22,22 +21,27 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.ESV.CSBGet.getCSB
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.getCurrentDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.DailyCheck
-import com.theunquenchedservant.granthornersbiblereadingsystem.ESV.ESVGet.getESV
+import com.theunquenchedservant.granthornersbiblereadingsystem.ESV.ESVGet.getESVReference
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.stringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createNotificationChannel
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.FirebaseHelper.checkLogin
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.changeVisibility
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.getListNumber
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.hideOthers
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.listSwitcher
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setTitles
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setVisibilities
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.cardviews.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
@@ -71,9 +75,13 @@ class HomeFragment : Fragment() {
         model.list8.observe(this, Observer<String>{ cardList8.list_reading.text = it })
         model.list9.observe(this, Observer<String>{ cardList9.list_reading.text = it })
         model.list10.observe(this, Observer<String>{ cardList10.list_reading.text = it })
-        checkLogin()
-        setVisibilities()
-        setTitles()
+        if(checkLogin()){
+            getData()
+        }else{
+            setLists(null)
+        }
+        setVisibilities(view)
+        setTitles(view)
         val psalms = boolPref("psalms", null)
         createCardListeners(psalms)
         createButtonListener()
@@ -91,30 +99,24 @@ class HomeFragment : Fragment() {
             }
         }
     }
-    private fun checkLogin() {
-        var result : Map<String, Any>
-        user = FirebaseAuth.getInstance().currentUser
-        if (user != null) {
-            db.collection("main").document(user!!.uid).get()
-                    .addOnSuccessListener {
-                        if(it.data != null) {
-                            result = it.data!!
-                            if (result["dateChecked"] != null && result["dateChecked"] != getCurrentDate(false)) {
-                                stringPref("dateChecked", result["dateChecked"] as String)
-                                intPref("maxStreak", (result["maxStreak"] as Long).toInt())
-                                intPref("currentStreak", (result["currentStreak"] as Long).toInt())
-                            }
-                            setLists(result)
+    private fun getData() {
+        db.collection("main").document(user!!.uid).get()
+                .addOnSuccessListener {
+                    if (it.data != null) {
+                        val result = it.data!!
+                        if (result["dateChecked"] != null && result["dateChecked"] != getCurrentDate(false)) {
+                            stringPref("dateChecked", result["dateChecked"] as String)
+                            intPref("maxStreak", (result["maxStreak"] as Long).toInt())
+                            intPref("currentStreak", (result["currentStreak"] as Long).toInt())
                         }
+                        setLists(result)
                     }
-                    .addOnFailureListener{
-                        setLists(null)
-                    }
-
-        }else{
-            setLists(null)
-        }
+                }
+                .addOnFailureListener {
+                    setLists(null)
+                }
     }
+
     private fun setLists(result: Map<String, Any>?){
         val ctx = App.applicationContext()
         if (stringPref("dateChecked", null) != getCurrentDate(false)) {
@@ -122,7 +124,7 @@ class HomeFragment : Fragment() {
             ctx.sendBroadcast(intent)
         }
         val fromFirebase : Boolean = (result != null)
-        val psalmChecked = if(result != null) (result["psalms"] as Boolean) else boolPref("psalms", null)
+        val psalmChecked = if(fromFirebase) (result!!["psalms"] as Boolean) else boolPref("psalms", null)
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         model.list1.value = getListNumber(result, "list1", R.array.list_1, fromFirebase)
         model.list2.value = getListNumber(result, "list2", R.array.list_2, fromFirebase)
@@ -145,7 +147,7 @@ class HomeFragment : Fragment() {
             val cardViewList = arrayOf(cardList1, cardList2, cardList3, cardList4, cardList5, cardList6, cardList7, cardList8, cardList9, cardList10)
             for (i in 1..10) {
                 val listDone = if (result != null) (result["list${i}Done"] as Long).toInt() else intPref("list${i}Done", null)
-                if (cardViewList[i - 1] != null) listSwitcher(cardViewList[i - 1], listDone)
+                if (cardViewList[i - 1] != null) listSwitcher(cardViewList[i - 1], listDone, material_button)
             }
 
             when (if (result != null) (result["listsDone"] as Long).toInt() else intPref("listsDone", null)) {
@@ -172,35 +174,13 @@ class HomeFragment : Fragment() {
             }
         }
     }
-    private fun setTitles(){
-        cardList1.list_title.text = resources.getString(R.string.l1)
-        cardList2.list_title.text = resources.getString(R.string.l2)
-        cardList3.list_title.text = resources.getString(R.string.l3)
-        cardList4.list_title.text = resources.getString(R.string.l4)
-        cardList5.list_title.text = resources.getString(R.string.l5)
-        cardList6.list_title.text = resources.getString(R.string.l6)
-        cardList7.list_title.text = resources.getString(R.string.l7)
-        cardList8.list_title.text = resources.getString(R.string.l8)
-        cardList9.list_title.text = resources.getString(R.string.l9)
-        cardList10.list_title.text = resources.getString(R.string.l10)
-    }
-    private fun setVisibilities(){
-        changeVisibility(cardList1, false)
-        changeVisibility(cardList2, false)
-        changeVisibility(cardList3, false)
-        changeVisibility(cardList4, false)
-        changeVisibility(cardList5, false)
-        changeVisibility(cardList6, false)
-        changeVisibility(cardList7, false)
-        changeVisibility(cardList8, false)
-        changeVisibility(cardList9, false)
-        changeVisibility(cardList10, false)
-    }
+
+
     private fun createButtonListener(){
         val ctx = App.applicationContext()
         val disabled = Color.parseColor("#00383838")
         material_button.setOnClickListener {
-            hideOthers(null)
+            hideOthers(null, view!!)
             markAll()
             material_button.isEnabled = false
             material_button.text = resources.getString(R.string.done)
@@ -220,27 +200,8 @@ class HomeFragment : Fragment() {
             mNotificationManager.cancel(2)
         }
     }
-    private fun changeVisibility(cardList: View, isCardView: Boolean){
-        if(isCardView){
-            cardList.list_buttons.visibility = View.VISIBLE
-            cardList.list_reading.visibility = View.GONE
-        }else {
-            cardList.list_buttons.visibility = View.GONE
-            cardList.list_reading.visibility = View.VISIBLE
-        }
-    }
-    private fun hideOthers(cardList: CardView?){
-        changeVisibility(cardList1, cardList == cardList1)
-        changeVisibility(cardList2, cardList == cardList2)
-        changeVisibility(cardList3, cardList == cardList3)
-        changeVisibility(cardList4, cardList == cardList4)
-        changeVisibility(cardList5, cardList == cardList5)
-        changeVisibility(cardList6, cardList == cardList6)
-        changeVisibility(cardList7, cardList == cardList7)
-        changeVisibility(cardList8, cardList == cardList8)
-        changeVisibility(cardList9, cardList == cardList9)
-        changeVisibility(cardList10, cardList == cardList10)
-    }
+
+
     private fun createCardListeners(psalms: Boolean) {
         val cardViewList = arrayOf(cardList1, cardList2, cardList3,  cardList4, cardList5, cardList6, cardList7, cardList8, cardList9, cardList10)
         val arrayIdList = arrayOf(R.array.list_1, R.array.list_2, R.array.list_3, R.array.list_4, R.array.list_5, R.array.list_6, R.array.list_7, R.array.list_8,
@@ -250,9 +211,9 @@ class HomeFragment : Fragment() {
             val list = resources.getStringArray(arrayIdList[i-1])
             cardList.setOnClickListener{
                 if(it.list_buttons.isVisible){
-                    listSwitcher(it, intPref("list${i}Done", null))
+                    listSwitcher(it, intPref("list${i}Done", null), material_button)
                 }else{
-                    hideOthers(cardList)
+                    hideOthers(cardList, view!!)
                     it.list_done.setOnClickListener{
                         changeVisibility(cardList, false)
                         markSingle("list${i}Done")
@@ -294,41 +255,6 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-        }
-    }
-
-
-    private fun getListNumber(result: Map<String, Any>?, listName: String, listId: Int, fromFirebase: Boolean): String{
-        val number = if(result != null){
-            (result[listName] as Long).toInt()
-        }else{
-            log("NUMBER = ${intPref(listName, null)}")
-            intPref(listName, null)
-        }
-        val list = App.applicationContext().resources.getStringArray(listId)
-        return when(number){
-            list.size -> {
-                if(fromFirebase){
-                    updateFS(listName, 0)
-                }
-                intPref(listName, 0)
-                list[0]
-            }
-            else -> {
-                log("THIS IS THE NUMBER $number")
-                intPref(listName, number)
-                list[number]
-            }
-        }
-    }
-
-    private fun listSwitcher(cardList: View, listDone: Int){
-        val enabled = Color.parseColor("#383838")
-        val disabled = Color.parseColor("#00383838")
-        cardList as CardView
-        when(listDone){
-            0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-            1-> { material_button.setText(R.string.markRemaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
         }
     }
 
