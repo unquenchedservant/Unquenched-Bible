@@ -172,7 +172,11 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
         super.onPostCreate(savedInstanceState)
-        toggle.syncState()
+        try {
+            toggle.syncState()
+        }catch(e: UninitializedPropertyAccessException){
+
+        }
     }
     override fun onConfigurationChanged(newConfig: Configuration) {
         super.onConfigurationChanged(newConfig)

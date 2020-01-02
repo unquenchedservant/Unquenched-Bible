@@ -40,22 +40,24 @@ object SharedPref {
                 .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
     }
     fun firestoneToPreference(database: DocumentSnapshot){
-        val data = database.data!!
-        log("User document exists")
-        for(i in 1..10){
-            intPref( "list$i", (data["list$i"] as Long).toInt())
-            intPref("List${i}Done", (data["list${i}Done"] as Long).toInt())
+        val data = database.data
+        if(data != null) {
+            log("User document exists")
+            for (i in 1..10) {
+                intPref("list$i", (data["list$i"] as Long).toInt())
+                intPref("List${i}Done", (data["list${i}Done"] as Long).toInt())
+            }
+            intPref("dailyStreak", (data["dailyStreak"] as Long).toInt())
+            intPref("currentStreak", (data["currentStreak"] as Long).toInt())
+            intPref("maxStreak", (data["maxStreak"] as Long).toInt())
+            boolPref("psalms", data["psalms"] as Boolean)
+            boolPref("allow_partial_switch", data["allowPartial"] as Boolean)
+            boolPref("vacation_mode", data["vacationMode"] as Boolean)
+            boolPref("notif_switch", data["notifications"] as Boolean)
+            intPref("daily_time", (data["dailyNotif"] as Long).toInt())
+            intPref("remind_time", (data["remindNotif"] as Long).toInt())
+            stringPref("dateChecked", (data["dateChecked"] as String))
         }
-        intPref( "dailyStreak", (data["dailyStreak"] as Long).toInt())
-        intPref("currentStreak", (data["currentStreak"] as Long).toInt())
-        intPref("maxStreak",(data["maxStreak"] as Long).toInt())
-        boolPref("psalms", data["psalms"] as Boolean)
-        boolPref( "allow_partial_switch", data["allowPartial"] as Boolean)
-        boolPref("vacation_mode", data["vacationMode"] as Boolean)
-        boolPref("notif_switch", data["notifications"] as Boolean)
-        intPref("daily_time", (data["dailyNotif"] as Long).toInt())
-        intPref("remind_time", (data["remindNotif"] as Long).toInt())
-        stringPref("dateChecked", (data["dateChecked"] as String))
     }
 
     fun listNumbersReset() { App.applicationContext().getSharedPreferences("listNumbers", Context.MODE_PRIVATE).edit().clear().apply() }

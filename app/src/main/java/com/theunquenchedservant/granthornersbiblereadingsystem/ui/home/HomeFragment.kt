@@ -18,6 +18,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
@@ -50,7 +51,7 @@ import java.util.Calendar
 class HomeFragment : Fragment() {
 
     private val db = FirebaseFirestore.getInstance()
-    private var user = FirebaseAuth.getInstance().currentUser
+    private var user: FirebaseUser? = null
     private var allowResume = true
     private var skipped = false
     private lateinit var model: HomeView
@@ -75,7 +76,8 @@ class HomeFragment : Fragment() {
         model.list8.observe(this, Observer<String>{ cardList8.list_reading.text = it })
         model.list9.observe(this, Observer<String>{ cardList9.list_reading.text = it })
         model.list10.observe(this, Observer<String>{ cardList10.list_reading.text = it })
-        if(checkLogin()){
+        user = FirebaseAuth.getInstance().currentUser
+        if(user != null){
             getData()
         }else{
             setLists(null)
@@ -100,21 +102,23 @@ class HomeFragment : Fragment() {
         }
     }
     private fun getData() {
-        db.collection("main").document(user!!.uid).get()
-                .addOnSuccessListener {
-                    if (it.data != null) {
-                        val result = it.data!!
-                        if (result["dateChecked"] != null && result["dateChecked"] != getCurrentDate(false)) {
-                            stringPref("dateChecked", result["dateChecked"] as String)
-                            intPref("maxStreak", (result["maxStreak"] as Long).toInt())
-                            intPref("currentStreak", (result["currentStreak"] as Long).toInt())
+        if(user != null) {
+            db.collection("main").document(user!!.uid).get()
+                    .addOnSuccessListener {
+                        if (it.data != null) {
+                            val result = it.data!!
+                            if (result["dateChecked"] != null && result["dateChecked"] != getCurrentDate(false)) {
+                                stringPref("dateChecked", result["dateChecked"] as String)
+                                intPref("maxStreak", (result["maxStreak"] as Long).toInt())
+                                intPref("currentStreak", (result["currentStreak"] as Long).toInt())
+                            }
+                            setLists(result)
                         }
-                        setLists(result)
                     }
-                }
-                .addOnFailureListener {
-                    setLists(null)
-                }
+                    .addOnFailureListener {
+                        setLists(null)
+                    }
+        }
     }
 
     private fun setLists(result: Map<String, Any>?){
