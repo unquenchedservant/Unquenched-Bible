@@ -72,6 +72,12 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             val googleSign = nav_view?.menu?.findItem(R.id.google_sign)
             val psalms = nav_view?.menu?.findItem(R.id.action_psalms)
             val ps = boolPref("psalms", null)
+            val stats = nav_view?.menu?.findItem(R.id.action_statistics)
+            log("DATE CHECKED ${stringPref("dateChecked", null)} VERSUS yesterday date ${getCurrentDate(false)}")
+            if(stringPref("dateChecked",  null) != getYesterdayDate(false) && stringPref("dateChecked", null) != getCurrentDate(false)){
+                intPref("currentStreak", 0)
+            }
+            stats?.title = "Current Streak: ${intPref("currentStreak", null)}"
             if (ps) psalms?.title = resources.getString(R.string.psalmsnav1) else psalms?.title = resources.getString(R.string.psalmsnav5)
             if (user != null) googleSign?.title = resources.getString(R.string.signoutnav) else googleSign?.title = resources.getString(R.string.signinnav)
             nav_view?.setNavigationItemSelectedListener(this)
@@ -285,7 +291,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                 intPref("dailyStreak", 0)
                 log("DAILY CHECK - daily streak set to 0")
                 resetStreak = true
-            }
+        }
             0 -> {
                 when (vacation) {
                     false -> {

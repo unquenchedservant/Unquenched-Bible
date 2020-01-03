@@ -182,6 +182,7 @@ class HomeFragment : Fragment() {
 
     private fun createButtonListener(){
         val ctx = App.applicationContext()
+        val nav_view = activity?.nav_view!!
         val disabled = Color.parseColor("#00383838")
         material_button.setOnClickListener {
             hideOthers(null, view!!)
@@ -202,6 +203,8 @@ class HomeFragment : Fragment() {
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
+            val stats = nav_view.menu.findItem(R.id.action_statistics)
+            stats.title = "Current Streak: ${intPref("currentStreak", null)}"
         }
     }
 
