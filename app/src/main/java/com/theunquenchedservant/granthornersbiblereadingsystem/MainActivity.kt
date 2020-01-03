@@ -148,6 +148,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             R.id.action_daily_reset -> {
                 resetDaily()
                 navControl.navigate(R.id.navigation_home)
+                switchEnabled("home")
                 Toast.makeText(this, "Forced Daily Reset", Toast.LENGTH_LONG).show()
             }
             R.id.google_sign -> {
