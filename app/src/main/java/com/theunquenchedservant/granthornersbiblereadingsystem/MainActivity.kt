@@ -299,6 +299,8 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                         when(stringPref("dateChecked", null)){
                             getYesterdayDate(false) -> {
                             }
+                            getCurrentDate(false)->{
+                            }
                             else -> {
                                 resetCurrent = true
                                 log("DAILY CHECK - currentStreak set to 0")
