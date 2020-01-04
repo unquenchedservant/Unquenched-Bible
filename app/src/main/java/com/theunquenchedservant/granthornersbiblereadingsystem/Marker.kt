@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
@@ -52,7 +52,7 @@ object Marker {
     }
     fun markSingle(cardDone: String) {
         val db = FirebaseFirestore.getInstance()
-        val allowPartial = boolPref("allow_partial_switch", null)
+        val allowPartial = getBoolPref("allow_partial_switch")
         val listsDone = increaseIntPref("listsDone", 1)
         if (getIntPref(cardDone) != 1) {
             setIntPref(cardDone, 1)

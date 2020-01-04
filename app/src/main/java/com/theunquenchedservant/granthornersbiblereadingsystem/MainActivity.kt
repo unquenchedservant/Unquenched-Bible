@@ -30,9 +30,10 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStreak
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
@@ -83,7 +84,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         val stats = menu?.findItem(R.id.action_statistics)
         val psalms = menu?.findItem(R.id.action_psalms)
         val googleSign = menu?.findItem(R.id.google_sign)
-        val ps = boolPref("psalms", null)
+        val ps = getBoolPref("psalms")
         supportActionBar?.title = getDate(0, true)
         stats?.title = "Current Streak: ${getIntPref("currentStreak")}"
         if (ps) psalms?.title = resources.getString(R.string.psalmsnav1) else psalms?.title = resources.getString(R.string.psalmsnav5)
@@ -174,16 +175,16 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                 googleSignIn()
             }
             R.id.action_psalms -> {
-                val ps = boolPref("psalms", null)
+                val ps = getBoolPref("psalms")
                 if (ps) {
-                    boolPref("psalms", false)
+                    setBoolPref("psalms", false)
                     if (FirebaseAuth.getInstance().currentUser != null) {
                         updateFS("psalms", false)
                     }
                     item.title = resources.getString(R.string.psalmsnav5)
                     nav_host_fragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
                 } else {
-                    boolPref("psalms", true)
+                    setBoolPref("psalms", true)
                     if (FirebaseAuth.getInstance().currentUser != null) {
                         updateFS("psalms", true)
                     }
@@ -285,7 +286,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         val db = FirebaseFirestore.getInstance()
         var resetStreak  = false
         var resetCurrent = false
-        val vacation = boolPref("vacationMode", null)
+        val vacation = getBoolPref("vacationMode")
         when (getIntPref("dailyStreak")) {
             1 -> {
                 setIntPref("dailyStreak", 0)

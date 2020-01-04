@@ -11,7 +11,7 @@ import androidx.preference.PreferenceManager
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class AlarmReceiver : BroadcastReceiver() {
@@ -25,7 +25,7 @@ class AlarmReceiver : BroadcastReceiver() {
         log("Vacation mode is $vacation")
         when(vacation){
             false -> {
-                if(boolPref("notif_switch", null)) {
+                if(getBoolPref("notif_switch")) {
                     log("Vacation mode off, sending notification")
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     deliverNotification(context)

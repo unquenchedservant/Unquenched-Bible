@@ -8,9 +8,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import java.io.File
@@ -30,10 +31,10 @@ object SharedPref {
         results["currentStreak"] = getIntPref("currentStreak")
         results["dailyStreak"] = getIntPref("dailyStreak")
         results["maxStreak"] = getIntPref("maxStreak")
-        results["notifications"] = boolPref( "notif_switch", null)
-        results["psalms"] = boolPref( "psalms", null)
-        results["vacationMode"] = boolPref( "vacation_mode", null)
-        results["allowPartial"] = boolPref("allow_partial_switch", null)
+        results["notifications"] = getBoolPref("notif_switch")
+        results["psalms"] = getBoolPref("psalms")
+        results["vacationMode"] = getBoolPref("vacation_mode")
+        results["allowPartial"] = getBoolPref("allow_partial_switch")
         results["dailyNotif"] = getIntPref( "daily_time")
         results["remindNotif"] = getIntPref("remind_time")
         results["dateChecked"] = getStringPref( "dateChecked")
@@ -52,10 +53,10 @@ object SharedPref {
             setIntPref("dailyStreak", (data["dailyStreak"] as Long).toInt())
             setIntPref("currentStreak", (data["currentStreak"] as Long).toInt())
             setIntPref("maxStreak", (data["maxStreak"] as Long).toInt())
-            boolPref("psalms", data["psalms"] as Boolean)
-            boolPref("allow_partial_switch", data["allowPartial"] as Boolean)
-            boolPref("vacation_mode", data["vacationMode"] as Boolean)
-            boolPref("notif_switch", data["notifications"] as Boolean)
+            setBoolPref("psalms", data["psalms"] as Boolean)
+            setBoolPref("allow_partial_switch", data["allowPartial"] as Boolean)
+            setBoolPref("vacation_mode", data["vacationMode"] as Boolean)
+            setBoolPref("notif_switch", data["notifications"] as Boolean)
             setIntPref("daily_time", (data["dailyNotif"] as Long).toInt())
             setIntPref("remind_time", (data["remindNotif"] as Long).toInt())
             setStringPref("dateChecked", (data["dateChecked"] as String))

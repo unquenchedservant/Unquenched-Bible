@@ -36,7 +36,6 @@ object SharedPref {
         setIntPref(name, start+value)
         return getIntPref(name)
     }
-
     fun getIntPref(name: String): Int {
         return getPref().getInt(name, 0)
     }
@@ -49,13 +48,10 @@ object SharedPref {
         return getPref().getString(name, "itsdeadjim")!!
     }
 
-    fun boolPref(name: String, value: Any?): Boolean {
-        val pref = PreferenceManager.getDefaultSharedPreferences(App.applicationContext())
-        return if (value != null) {
-            pref.edit().putBoolean(name, value as Boolean).apply()
-            false
-        } else {
-            pref.getBoolean(name, false)
-        }
+    fun setBoolPref(name: String, value: Boolean){
+        getPref().edit().putBoolean(name, value).apply()
+    }
+    fun getBoolPref(name: String): Boolean{
+        return getPref().getBoolean(name, false)
     }
 }

@@ -32,7 +32,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.ESV.ESVGet.getESV
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createNotificationChannel
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
         }
         setVisibilities(view)
         setTitles(view)
-        val psalms = boolPref("psalms", null)
+        val psalms = getBoolPref("psalms")
         createCardListeners(psalms)
         createButtonListener()
         createNotificationChannel()
@@ -129,7 +129,7 @@ class HomeFragment : Fragment() {
             ctx.sendBroadcast(intent)
         }
         val fromFirebase : Boolean = (result != null)
-        val psalmChecked = if(fromFirebase) (result!!["psalms"] as Boolean) else boolPref("psalms", null)
+        val psalmChecked = if(fromFirebase) (result!!["psalms"] as Boolean) else getBoolPref("psalms")
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         model.list1.value = getListNumber(result, "list1", R.array.list_1, fromFirebase)
         model.list2.value = getListNumber(result, "list2", R.array.list_2, fromFirebase)

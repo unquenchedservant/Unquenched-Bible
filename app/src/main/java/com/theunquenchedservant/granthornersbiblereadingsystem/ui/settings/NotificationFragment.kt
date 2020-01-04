@@ -7,8 +7,8 @@ import androidx.preference.PreferenceFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import java.text.DecimalFormat
@@ -56,7 +56,7 @@ class NotificationsFragment : PreferenceFragmentCompat() {
                 updateFS("vacationMode", o)
             }else{
                 updateFS("vacationMode", o)
-                boolPref("vacationOff", true)
+                setBoolPref("vacationOff", true)
             }
             true
         }

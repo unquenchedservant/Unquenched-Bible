@@ -9,20 +9,20 @@ import androidx.core.app.NotificationCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 
 class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
 
     override fun onReceive(context: Context, intent: Intent) {
-        when(boolPref("vacation_mode", null)) {
+        when(getBoolPref("vacation_mode")) {
             false -> {
                 log("Vacation mode off, preparing reminder notification")
-                if(boolPref("notif_switch", null)) {
+                if(getBoolPref("notif_switch")) {
                     val check = getIntPref("listsDone")
                     log("lists done so far = $check")
-                    val allowPartial = boolPref("allow_partial_switch", null)
+                    val allowPartial = getBoolPref("allow_partial_switch")
                     log("Allow partial is $allowPartial")
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     when (check) {

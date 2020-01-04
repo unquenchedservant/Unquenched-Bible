@@ -6,10 +6,11 @@ import android.content.Intent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
@@ -19,7 +20,7 @@ class DailyCheck : BroadcastReceiver() {
         val db = FirebaseFirestore.getInstance()
         var resetStreak  = false
         var resetCurrent = false
-        val vacation = boolPref("vacation_mode", null)
+        val vacation = getBoolPref("vacation_mode")
         when (getIntPref("dailyStreak")) {
             1 -> {
                 setIntPref("dailyStreak", 0)
@@ -27,7 +28,7 @@ class DailyCheck : BroadcastReceiver() {
                 resetStreak = true
             }
             0 -> {
-                when (vacation || boolPref("vacationOff", null)) {
+                when (vacation || getBoolPref("vacationOff")) {
                     false -> {
                         when(getStringPref("dateChecked")){
                             getDate(1, false) -> {
@@ -40,8 +41,8 @@ class DailyCheck : BroadcastReceiver() {
                         }
                     }
                     true -> {
-                        if(boolPref("vacationOff", null)){
-                            boolPref("vacationOff", false)
+                        if(getBoolPref("vacationOff")){
+                            setBoolPref("vacationOff", false)
                         }
                     }
                 }
