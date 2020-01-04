@@ -33,8 +33,9 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createNotificationChannel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.changeVisibility
@@ -91,7 +92,7 @@ class HomeFragment : Fragment() {
         createAlarm("dailyCheck")
         allowResume = false
         if(savedInstanceState != null) {
-            when (intPref("firstRun", null)) {
+            when (getIntPref("firstRun")) {
                 0 -> {
                     googleSignIn(true)
                 }
@@ -109,8 +110,8 @@ class HomeFragment : Fragment() {
                             val result = it.data!!
                             if (result["dateChecked"] != null && result["dateChecked"] != getDate(0,false)) {
                                 setStringPref("dateChecked", result["dateChecked"] as String)
-                                intPref("maxStreak", (result["maxStreak"] as Long).toInt())
-                                intPref("currentStreak", (result["currentStreak"] as Long).toInt())
+                                setIntPref("maxStreak", (result["maxStreak"] as Long).toInt())
+                                setIntPref("currentStreak", (result["currentStreak"] as Long).toInt())
                             }
                             setLists(result)
                         }
@@ -150,11 +151,11 @@ class HomeFragment : Fragment() {
         if (material_button != null) {
             val cardViewList = arrayOf(cardList1, cardList2, cardList3, cardList4, cardList5, cardList6, cardList7, cardList8, cardList9, cardList10)
             for (i in 1..10) {
-                val listDone = if (result != null) (result["list${i}Done"] as Long).toInt() else intPref("list${i}Done", null)
+                val listDone = if (result != null) (result["list${i}Done"] as Long).toInt() else getIntPref("list${i}Done")
                 if (cardViewList[i - 1] != null) listSwitcher(cardViewList[i - 1], listDone, material_button)
             }
 
-            when (if (result != null) (result["listsDone"] as Long).toInt() else intPref("listsDone", null)) {
+            when (if (result != null) (result["listsDone"] as Long).toInt() else getIntPref("listsDone")) {
                 10 -> {
                     material_button.setText(R.string.done)
                     material_button.isEnabled = false
@@ -168,10 +169,10 @@ class HomeFragment : Fragment() {
                 in 1..9 -> {
                     material_button.setText(R.string.markRemaining)
                     material_button.isEnabled = true
-                    val opacity = if (intPref("listsDone", null) < 5){
-                        100 - (intPref("listsDone", null) * 5)
+                    val opacity = if (getIntPref("listsDone") < 5){
+                        100 - (getIntPref("listsDone") * 5)
                     }else{
-                        100 - ((intPref("listsDone", null) * 5) - 5)
+                        100 - ((getIntPref("listsDone") * 5) - 5)
                     }
                     material_button.setBackgroundColor(Color.parseColor("#${opacity}383838"))
                 }
@@ -204,7 +205,7 @@ class HomeFragment : Fragment() {
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
             val stats = nav_view.menu.findItem(R.id.action_statistics)
-            stats.title = "Current Streak: ${intPref("currentStreak", null)}"
+            stats.title = "Current Streak: ${getIntPref("currentStreak")}"
         }
     }
 
@@ -218,7 +219,7 @@ class HomeFragment : Fragment() {
             val list = resources.getStringArray(arrayIdList[i-1])
             cardList.setOnClickListener{
                 if(it.list_buttons.isVisible){
-                    listSwitcher(it, intPref("list${i}Done", null), material_button)
+                    listSwitcher(it, getIntPref("list${i}Done"), material_button)
                 }else{
                     hideOthers(cardList, view!!)
                     it.list_done.setOnClickListener{
@@ -226,7 +227,7 @@ class HomeFragment : Fragment() {
                         markSingle("list${i}Done")
                         cardList.isEnabled = false
                         cardList.setCardBackgroundColor(Color.parseColor("#00383838"))
-                        if(intPref("listsDone", null) == 10){
+                        if(getIntPref("listsDone") == 10){
                             val mNotif = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                             mNotif.cancel(1)
                             mNotif.cancel(2)
@@ -235,10 +236,10 @@ class HomeFragment : Fragment() {
                             material_button.setBackgroundColor(Color.parseColor("#00383838"))
                         }else{
                             material_button.isEnabled = true
-                            val opacity = if(intPref("listsDone", null) < 5){
-                                 100 - (intPref("listsDone", null) * 5)
+                            val opacity = if(getIntPref("listsDone") < 5){
+                                 100 - (getIntPref("listsDone") * 5)
                             }else{
-                                 100 - ((intPref("listsDone", null) * 5) + 5)
+                                 100 - ((getIntPref("listsDone") * 5) + 5)
                             }
                             log("THIS IS THE OPACITY ${opacity}383838")
                             material_button.setBackgroundColor(Color.parseColor("#${opacity}383838"))
@@ -247,7 +248,7 @@ class HomeFragment : Fragment() {
                     }
                     it.list_read.setOnClickListener{
                         if(cardList != cardList6 || cardList == cardList6 && !psalms){
-                            val chapter = list[intPref("list$i", null)]
+                            val chapter = list[getIntPref("list$i")]
                             /**when(listNumberPref("translation", null)){
                                 1 -> getCSBReference(chapter)
                                 2 -> getESVReference(chapter)
@@ -290,13 +291,13 @@ class HomeFragment : Fragment() {
                 val mGoogleSignInClient = GoogleSignIn.getClient(ctx, gso)
                 val signInIntent = mGoogleSignInClient.signInIntent
                 if(needsNotifOnSuccess) {
-                    intPref("needNotif", 1)
+                    setIntPref("needNotif", 1)
                 }else{
-                    intPref("needNotif", 0)
+                    setIntPref("needNotif", 0)
                 }
                 startActivityForResult(signInIntent, 96)
             }
-            builder.setNeutralButton("No") { dialogInterface, _ -> log("cancel pressed"); intPref("firstRun", 1); dialogInterface.cancel() }
+            builder.setNeutralButton("No") { dialogInterface, _ -> log("cancel pressed"); setIntPref("firstRun", 1); dialogInterface.cancel() }
             builder.setMessage(R.string.googleCheck).setTitle("Sign In To Google Account")
             builder.create().show()
         }
@@ -330,7 +331,7 @@ class HomeFragment : Fragment() {
                                 val builder = AlertDialog.Builder(context!!)
                                 builder.setPositiveButton("Use Cloud Data") { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
-                                    intPref("firstRun", 1)
+                                    setIntPref("firstRun", 1)
                                     log("NAV VIEW $nav_view")
                                     nav_view.menu.findItem(R.id.google_sign)?.title = "Sign Out"
                                     val psalmsItem = nav_view.menu.findItem(R.id.action_psalms)
@@ -341,7 +342,7 @@ class HomeFragment : Fragment() {
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _,_->
                                     SharedPref.preferenceToFireStone()
-                                    intPref("firstRun", 1)
+                                    setIntPref("firstRun", 1)
                                     nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     fragmentManager?.beginTransaction()?.detach(fragmentManager!!.fragments[0]!!)?.attach(fragmentManager!!.fragments[0]!!)?.commit()
                                 }
@@ -349,7 +350,7 @@ class HomeFragment : Fragment() {
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
                                 builder.create().show()
                             } else {
-                                intPref("firstRun", 1)
+                                setIntPref("firstRun", 1)
                                 SharedPref.preferenceToFireStone()
                                 nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
                                 val psalmsItem = nav_view.menu.findItem(R.id.action_psalms)
@@ -359,7 +360,7 @@ class HomeFragment : Fragment() {
                         }
 
             } else {
-                intPref("firstRun", 1)
+                setIntPref("firstRun", 1)
                 Toast.makeText(context, "Google Sign In Failed", Toast.LENGTH_LONG).show()
             }
         }
@@ -368,12 +369,12 @@ class HomeFragment : Fragment() {
     private fun welcome4(){
         val alert = AlertDialog.Builder(context!!)
         alert.setPositiveButton("Yes") { diag, _ ->
-            intPref("firstRun", 1)
+            setIntPref("firstRun", 1)
             diag.dismiss()
         }
         alert.setNeutralButton("No"){dialogInterface, _ ->
             dialogInterface.dismiss()
-            intPref("firstRun", 1)
+            setIntPref("firstRun", 1)
             fragmentManager!!.beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
         }
         alert.setTitle("Notifications")

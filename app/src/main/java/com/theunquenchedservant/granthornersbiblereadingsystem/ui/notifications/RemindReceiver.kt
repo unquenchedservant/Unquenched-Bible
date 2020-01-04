@@ -10,7 +10,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 
 class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
@@ -20,7 +20,7 @@ class RemindReceiver : BroadcastReceiver() {
             false -> {
                 log("Vacation mode off, preparing reminder notification")
                 if(boolPref("notif_switch", null)) {
-                    val check = intPref("listsDone", null)
+                    val check = getIntPref("listsDone")
                     log("lists done so far = $check")
                     val allowPartial = boolPref("allow_partial_switch", null)
                     log("Allow partial is $allowPartial")

@@ -7,7 +7,8 @@ import androidx.cardview.widget.CardView
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import kotlinx.android.synthetic.main.cardviews.view.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
@@ -74,8 +75,8 @@ object listHelpers {
         val number = if(result != null){
             (result[listName] as Long).toInt()
         }else{
-            log("NUMBER = ${intPref(listName, null)}")
-            intPref(listName, null)
+            log("NUMBER = ${getIntPref(listName)}")
+            getIntPref(listName)
         }
         val list = App.applicationContext().resources.getStringArray(listId)
         return when(number){
@@ -83,12 +84,12 @@ object listHelpers {
                 if(fromFirebase){
                     updateFS(listName, 0)
                 }
-                intPref(listName, 0)
+                setIntPref(listName, 0)
                 list[0]
             }
             else -> {
                 log("THIS IS THE NUMBER $number")
-                intPref(listName, number)
+                setIntPref(listName, number)
                 list[number]
             }
         }

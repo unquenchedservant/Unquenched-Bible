@@ -10,7 +10,8 @@ import android.widget.*
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.ViewModelProviders
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class ManualListSet: Fragment() {
@@ -435,7 +436,7 @@ class ManualListSet: Fragment() {
                     "The Gospels" -> {
                         val array = resources.getStringArray(R.array.list_1)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list1", num)
+                        setIntPref("list1", num)
                         model.list1.value = array[num]
                         updateFS( "list1", num)
                     }
@@ -444,7 +445,7 @@ class ManualListSet: Fragment() {
                     "The Pentateuch" -> {
                         val array = resources.getStringArray(R.array.list_2)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list2", num)
+                        setIntPref("list2", num)
                         model.list2.value = array[num]
                         updateFS("list2", num)}
 
@@ -452,7 +453,7 @@ class ManualListSet: Fragment() {
                     "Epistles I" -> {
                         val array = resources.getStringArray(R.array.list_3)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list3", num)
+                        setIntPref("list3", num)
                         model.list3.value = array[num]
                         updateFS("list3", num)}
 
@@ -464,7 +465,7 @@ class ManualListSet: Fragment() {
                         } else {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        intPref("list4", num)
+                        setIntPref("list4", num)
                         model.list4.value = array[num]
                         updateFS("list4", num)}
 
@@ -472,7 +473,7 @@ class ManualListSet: Fragment() {
                     "Poetry" -> {
                         val array = resources.getStringArray(R.array.list_5)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list5", num)
+                        setIntPref("list5", num)
                         model.list5.value = array[num]
                         updateFS("list5", num)}
 
@@ -480,7 +481,7 @@ class ManualListSet: Fragment() {
                     "Psalms" -> {
                         val array = resources.getStringArray(R.array.list_6)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list6", num)
+                        setIntPref("list6", num)
                         model.list6.value = array[num]
                         updateFS("list6", num)}
 
@@ -488,7 +489,7 @@ class ManualListSet: Fragment() {
                     "Proverbs" -> {
                         val array = resources.getStringArray(R.array.list_7)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list7", num)
+                        setIntPref("list7", num)
                         model.list7.value = array[num]
                         updateFS( "list7", num)}
 
@@ -496,7 +497,7 @@ class ManualListSet: Fragment() {
                     "History" -> {
                         val array = resources.getStringArray(R.array.list_8)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list8", num)
+                        setIntPref("list8", num)
                         model.list8.value = array[num]
                         updateFS( "list8", num)}
 
@@ -508,7 +509,7 @@ class ManualListSet: Fragment() {
                         }else{
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        intPref("list9", num)
+                        setIntPref("list9", num)
                         model.list9.value = array[num]
                         updateFS("list9", num)}
 
@@ -516,7 +517,7 @@ class ManualListSet: Fragment() {
                     "Acts" -> {
                         val array = resources.getStringArray(R.array.list_10)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        intPref("list10", num)
+                        setIntPref("list10", num)
                         model.list10.value = array[num]
                         updateFS( "list10", num)}}
 
@@ -535,16 +536,16 @@ class ManualListSet: Fragment() {
     fun getCurrentInfo(listNum:Int): Array<Any> {
 
         val data : Array<Any> = when(listNum){
-            1  ->  arrayOf(intPref("list1", null), R.array.list_1)
-            2  ->  arrayOf(intPref("list2", null), R.array.list_2)
-            3  ->  arrayOf(intPref("list3", null), R.array.list_3)
-            4  ->  arrayOf(intPref("list4", null), R.array.list_4)
-            5  ->  arrayOf(intPref("list5", null), R.array.list_5)
-            6  ->  arrayOf(intPref("list6", null), R.array.list_6)
-            7  ->  arrayOf(intPref("list7", null), R.array.list_7)
-            8  ->  arrayOf(intPref("list8", null), R.array.list_8)
-            9  ->  arrayOf(intPref("list9", null), R.array.list_9)
-            10 ->  arrayOf(intPref("list10", null), R.array.list_10)
+            1  ->  arrayOf(getIntPref("list1"), R.array.list_1)
+            2  ->  arrayOf(getIntPref("list2"), R.array.list_2)
+            3  ->  arrayOf(getIntPref("list3"), R.array.list_3)
+            4  ->  arrayOf(getIntPref("list4"), R.array.list_4)
+            5  ->  arrayOf(getIntPref("list5"), R.array.list_5)
+            6  ->  arrayOf(getIntPref("list6"), R.array.list_6)
+            7  ->  arrayOf(getIntPref("list7"), R.array.list_7)
+            8  ->  arrayOf(getIntPref("list8"), R.array.list_8)
+            9  ->  arrayOf(getIntPref("list9"), R.array.list_9)
+            10 ->  arrayOf(getIntPref("list10"), R.array.list_10)
             else -> arrayOf(0, 0) }
 
         val number = data[0] as Int

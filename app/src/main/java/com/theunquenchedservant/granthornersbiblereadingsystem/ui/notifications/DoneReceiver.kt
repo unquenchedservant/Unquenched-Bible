@@ -6,11 +6,11 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 
 class DoneReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        when(intPref("listsDone",  null)) {
+        when(getIntPref("listsDone")) {
             in 0..9 -> {
                 markAll()
                 Toast.makeText(context, "Lists Marked!", Toast.LENGTH_LONG)

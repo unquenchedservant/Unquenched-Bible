@@ -1,19 +1,17 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
 import android.content.Context
-import android.content.SharedPreferences
 import android.os.Build
-import android.os.FileUtils
 import android.util.Log
-import androidx.core.content.edit
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import java.io.File
 
@@ -25,19 +23,19 @@ object SharedPref {
         val user2 = FirebaseAuth.getInstance().currentUser
         val results = mutableMapOf<String?, Any?>()
         for(i in 1..10){
-            results["list$i"] = intPref("list$i", null)
-            results["list${i}Done"] = intPref("list${i}Done", null)
+            results["list$i"] = getIntPref("list$i")
+            results["list${i}Done"] = getIntPref("list${i}Done")
         }
-        results["listsDone"] = intPref("listsDone", null)
-        results["currentStreak"] = intPref("currentStreak", null)
-        results["dailyStreak"] = intPref("dailyStreak", null)
-        results["maxStreak"] = intPref("maxStreak", null)
+        results["listsDone"] = getIntPref("listsDone")
+        results["currentStreak"] = getIntPref("currentStreak")
+        results["dailyStreak"] = getIntPref("dailyStreak")
+        results["maxStreak"] = getIntPref("maxStreak")
         results["notifications"] = boolPref( "notif_switch", null)
         results["psalms"] = boolPref( "psalms", null)
         results["vacationMode"] = boolPref( "vacation_mode", null)
         results["allowPartial"] = boolPref("allow_partial_switch", null)
-        results["dailyNotif"] = intPref( "daily_time", null)
-        results["remindNotif"] = intPref("remind_time", null)
+        results["dailyNotif"] = getIntPref( "daily_time")
+        results["remindNotif"] = getIntPref("remind_time")
         results["dateChecked"] = getStringPref( "dateChecked")
         db.collection("main").document(user2!!.uid).set(results)
                 .addOnSuccessListener { log("Data transferred to firestore") }
@@ -48,18 +46,18 @@ object SharedPref {
         if(data != null) {
             log("User document exists")
             for (i in 1..10) {
-                intPref("list$i", (data["list$i"] as Long).toInt())
-                intPref("List${i}Done", (data["list${i}Done"] as Long).toInt())
+                setIntPref("list$i", (data["list$i"] as Long).toInt())
+                setIntPref("List${i}Done", (data["list${i}Done"] as Long).toInt())
             }
-            intPref("dailyStreak", (data["dailyStreak"] as Long).toInt())
-            intPref("currentStreak", (data["currentStreak"] as Long).toInt())
-            intPref("maxStreak", (data["maxStreak"] as Long).toInt())
+            setIntPref("dailyStreak", (data["dailyStreak"] as Long).toInt())
+            setIntPref("currentStreak", (data["currentStreak"] as Long).toInt())
+            setIntPref("maxStreak", (data["maxStreak"] as Long).toInt())
             boolPref("psalms", data["psalms"] as Boolean)
             boolPref("allow_partial_switch", data["allowPartial"] as Boolean)
             boolPref("vacation_mode", data["vacationMode"] as Boolean)
             boolPref("notif_switch", data["notifications"] as Boolean)
-            intPref("daily_time", (data["dailyNotif"] as Long).toInt())
-            intPref("remind_time", (data["remindNotif"] as Long).toInt())
+            setIntPref("daily_time", (data["dailyNotif"] as Long).toInt())
+            setIntPref("remind_time", (data["remindNotif"] as Long).toInt())
             setStringPref("dateChecked", (data["dateChecked"] as String))
         }
     }

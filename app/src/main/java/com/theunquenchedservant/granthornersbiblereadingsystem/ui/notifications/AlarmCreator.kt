@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Build
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import java.util.*
 
 object AlarmCreator {
@@ -52,11 +52,11 @@ object AlarmCreator {
         when(alarmType) {
             "daily" -> {
                 notifPendingIntent = dailyPending
-                timeInMinutes = intPref("${alarmType}_time", null)
+                timeInMinutes = getIntPref("${alarmType}_time")
             }
             "remind" -> {
                 notifPendingIntent = remindPending
-                timeInMinutes = intPref("${alarmType}_time", null)
+                timeInMinutes = getIntPref("${alarmType}_time")
             }
             else -> {
                 notifPendingIntent = checkPending
@@ -77,7 +77,7 @@ object AlarmCreator {
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
         if (calendar.before(Calendar.getInstance())) {
-            if((alarmType == "daily" && intPref("listsDone", null) == 10) || alarmType != "daily") {
+            if((alarmType == "daily" && getIntPref("listsDone") == 10) || alarmType != "daily") {
                 calendar.add(Calendar.DATE, 1)
             }
         }

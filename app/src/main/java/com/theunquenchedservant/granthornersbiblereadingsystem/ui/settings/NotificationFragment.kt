@@ -8,7 +8,8 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import java.text.DecimalFormat
 
@@ -19,19 +20,19 @@ class NotificationsFragment : PreferenceFragmentCompat() {
         val dailyList: Preference? = findPreference("daily_time")
         val remindTime: Preference? = findPreference("remind_time")
 
-        val dailyMillis = intPref("daily_time", null)
+        val dailyMillis = getIntPref("daily_time")
         dailyList!!.summary = getSummary(dailyMillis)
 
-        val remindMillis = intPref("remind_time", null)
+        val remindMillis = getIntPref("remind_time")
         remindTime!!.summary = getSummary(remindMillis)
 
         remindTime.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            intPref("remind_time", o)
+            setIntPref("remind_time", o as Int)
             updateFS("remindNotif", o)
             true
         }
         dailyList.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            intPref("daily_time", o)
+            setIntPref("daily_time", o as Int)
             updateFS("remindNotif", o)
             true
         }

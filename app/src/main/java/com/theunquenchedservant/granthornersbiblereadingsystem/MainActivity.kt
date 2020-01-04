@@ -31,10 +31,12 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStreak
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 import kotlinx.android.synthetic.main.appbar.*
 
@@ -83,7 +85,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         val googleSign = menu?.findItem(R.id.google_sign)
         val ps = boolPref("psalms", null)
         supportActionBar?.title = getDate(0, true)
-        stats?.title = "Current Streak: ${intPref("currentStreak", null)}"
+        stats?.title = "Current Streak: ${getIntPref("currentStreak")}"
         if (ps) psalms?.title = resources.getString(R.string.psalmsnav1) else psalms?.title = resources.getString(R.string.psalmsnav5)
         if (user != null) googleSign?.title = resources.getString(R.string.signoutnav) else googleSign?.title = resources.getString(R.string.signinnav)
     }
@@ -169,7 +171,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                     builder.setTitle("Sign Out?")
                     builder.create().show()
                 }
-                googleSignIn(item)
+                googleSignIn()
             }
             R.id.action_psalms -> {
                 val ps = boolPref("psalms", null)
@@ -228,7 +230,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             }
         }
     }
-    private fun googleSignIn(item:MenuItem){
+    private fun googleSignIn(){
         val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
         builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -284,43 +286,36 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         var resetStreak  = false
         var resetCurrent = false
         val vacation = boolPref("vacationMode", null)
-        when (intPref("dailyStreak", null)) {
+        when (getIntPref("dailyStreak")) {
             1 -> {
-                intPref("dailyStreak", 0)
+                setIntPref("dailyStreak", 0)
                 log("DAILY CHECK - daily streak set to 0")
                 resetStreak = true
-        }
+            }
             0 -> {
                 when (vacation) {
                     false -> {
-                        when(getStringPref("dateChecked")) {
-                            getDate(1, false) -> {
-                            }
-                            getDate(0, false)->{
-                            }
-                            else -> {
-                                resetCurrent = true
-                                log("DAILY CHECK - currentStreak set to 0")
-                                intPref( "currentStreak", 0)
-                            }
-                        }
+                        if (!checkDate("both", false))
+                            resetCurrent = true
+                        log("DAILY CHECK - currentStreak set to 0")
+                        setIntPref("currentStreak", 0)
                     }
                 }
             }
         }
         for(i in 1..10){
-            when(intPref("list${i}Done", null)){
+            when(getIntPref("list${i}Done")){
                 1 -> {
                     resetList("list$i", "list${i}Done")
                 }
             }
         }
-        intPref("listsDone", 0)
+        setIntPref("listsDone", 0)
         if(isLogged != null) {
             val data = mutableMapOf<String, Any>()
             for (i in 1..10){
-                data["list$i"] = intPref("list$i", null)
-                data["list${i}Done"] = intPref("list${i}Done", null)
+                data["list$i"] = getIntPref("list$i")
+                data["list${i}Done"] = getIntPref("list${i}Done")
             }
             data["listsDone"] = 0
             if(resetCurrent) {
@@ -333,10 +328,10 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     }
 
     private fun resetList(listName: String, listNameDone: String){
-        log("$listName is now set to ${intPref(listName, null)}")
-        intPref(listName, intPref(listName, null) + 1)
-        log("$listName index is now ${intPref( listName, null)}")
-        intPref(listNameDone, 0)
+        log("$listName is now set to ${getIntPref(listName)}")
+        increaseIntPref(listName, 1)
+        log("$listName index is now ${getIntPref( listName)}")
+        setIntPref(listNameDone, 0)
         log("$listNameDone set to 0")
     }
 

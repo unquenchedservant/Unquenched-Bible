@@ -7,8 +7,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class DailyCheck : BroadcastReceiver() {
@@ -18,9 +20,9 @@ class DailyCheck : BroadcastReceiver() {
         var resetStreak  = false
         var resetCurrent = false
         val vacation = boolPref("vacation_mode", null)
-        when (intPref("dailyStreak", null)) {
+        when (getIntPref("dailyStreak")) {
             1 -> {
-                intPref("dailyStreak", 0)
+                setIntPref("dailyStreak", 0)
                 log("DAILY CHECK - daily streak set to 0")
                 resetStreak = true
             }
@@ -33,7 +35,7 @@ class DailyCheck : BroadcastReceiver() {
                             else -> {
                                 resetCurrent = true
                                 log("DAILY CHECK - currentStreak set to 0")
-                                intPref("currentStreak", 0)
+                                setIntPref("currentStreak", 0)
                             }
                         }
                     }
@@ -46,18 +48,18 @@ class DailyCheck : BroadcastReceiver() {
             }
         }
         for(i in 1..10){
-            when(intPref("list${i}Done", null)){
+            when(getIntPref("list${i}Done")){
                 1 -> {
                     resetList("list$i", "list${i}Done")
                 }
             }
         }
-        intPref("listsDone", 0)
+        setIntPref("listsDone", 0)
         if(isLogged != null) {
             val data = mutableMapOf<String, Any>()
             for (i in 1..10){
-                data["list$i"] = intPref("list$i", null)
-                data["list${i}Done"] = intPref("list${i}Done", null)
+                data["list$i"] = getIntPref("list$i")
+                data["list${i}Done"] = getIntPref("list${i}Done")
             }
             data["listsDone"] = 0
             if(resetCurrent) {
@@ -69,10 +71,10 @@ class DailyCheck : BroadcastReceiver() {
         }
     }
     private fun resetList(listName: String, listNameDone: String){
-        log("$listName is now set to ${intPref(listName, null)}")
-        intPref(listName, intPref(listName, null) + 1)
-        log("$listName index is now ${intPref(listName, null)}")
-        intPref(listNameDone, 0)
+        log("$listName is now set to ${getIntPref(listName)}")
+        increaseIntPref(listName, 1)
+        log("$listName index is now ${getIntPref(listName)}")
+        setIntPref(listNameDone, 0)
         log("$listNameDone set to 0")
     }
 }
