@@ -17,7 +17,7 @@ class ContactFragment : PreferenceFragmentCompat() {
         val currentVersion: Preference? = findPreference("currentVersion")
 
 
-        currentVersion?.title = "Current Version - 1.11"
+        currentVersion?.title = "Current Version - 1.13"
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://theunquenchedservant.com/changelog/"))
             if(i.resolveActivity(App.applicationContext().packageManager)!= null){

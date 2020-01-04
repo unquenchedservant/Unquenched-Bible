@@ -9,7 +9,7 @@ import android.content.Intent
 import android.os.Build
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
 import java.util.*
 
 object AlarmCreator {

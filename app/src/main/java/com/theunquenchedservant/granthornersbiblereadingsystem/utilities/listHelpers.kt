@@ -4,16 +4,12 @@ import android.graphics.Color
 import android.view.View
 import android.widget.Button
 import androidx.cardview.widget.CardView
-import androidx.lifecycle.ViewModelProviders
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeView
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import kotlinx.android.synthetic.main.cardviews.view.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.view.*
 
 object listHelpers {

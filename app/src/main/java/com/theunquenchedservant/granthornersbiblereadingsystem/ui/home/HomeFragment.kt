@@ -22,7 +22,6 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.getCurrentDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
@@ -30,13 +29,14 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.ESV.ESVGet.getESVReference
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.stringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createNotificationChannel
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.FirebaseHelper.checkLogin
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.changeVisibility
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.getListNumber
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.hideOthers
@@ -107,8 +107,8 @@ class HomeFragment : Fragment() {
                     .addOnSuccessListener {
                         if (it.data != null) {
                             val result = it.data!!
-                            if (result["dateChecked"] != null && result["dateChecked"] != getCurrentDate(false)) {
-                                stringPref("dateChecked", result["dateChecked"] as String)
+                            if (result["dateChecked"] != null && result["dateChecked"] != getDate(0,false)) {
+                                setStringPref("dateChecked", result["dateChecked"] as String)
                                 intPref("maxStreak", (result["maxStreak"] as Long).toInt())
                                 intPref("currentStreak", (result["currentStreak"] as Long).toInt())
                             }
@@ -123,7 +123,7 @@ class HomeFragment : Fragment() {
 
     private fun setLists(result: Map<String, Any>?){
         val ctx = App.applicationContext()
-        if (stringPref("dateChecked", null) != getCurrentDate(false)) {
+        if (getStringPref("dateChecked") != getDate(0, false)) {
             val intent = Intent(ctx, DailyCheck::class.java)
             ctx.sendBroadcast(intent)
         }

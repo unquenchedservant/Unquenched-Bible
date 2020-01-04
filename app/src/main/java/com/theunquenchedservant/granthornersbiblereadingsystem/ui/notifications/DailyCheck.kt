@@ -5,11 +5,11 @@ import android.content.Context
 import android.content.Intent
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.getYesterdayDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.stringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class DailyCheck : BroadcastReceiver() {
     private val isLogged = FirebaseAuth.getInstance().currentUser
@@ -27,8 +27,8 @@ class DailyCheck : BroadcastReceiver() {
             0 -> {
                 when (vacation || boolPref("vacationOff", null)) {
                     false -> {
-                        when(stringPref("dateChecked", null)){
-                            getYesterdayDate(false) -> {
+                        when(getStringPref("dateChecked")){
+                            getDate(1, false) -> {
                             }
                             else -> {
                                 resetCurrent = true

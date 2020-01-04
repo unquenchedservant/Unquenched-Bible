@@ -11,6 +11,10 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import java.io.File
 
 object SharedPref {
@@ -34,7 +38,7 @@ object SharedPref {
         results["allowPartial"] = boolPref("allow_partial_switch", null)
         results["dailyNotif"] = intPref( "daily_time", null)
         results["remindNotif"] = intPref("remind_time", null)
-        results["dateChecked"] = stringPref( "dateChecked", null)
+        results["dateChecked"] = getStringPref( "dateChecked")
         db.collection("main").document(user2!!.uid).set(results)
                 .addOnSuccessListener { log("Data transferred to firestore") }
                 .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
@@ -56,46 +60,11 @@ object SharedPref {
             boolPref("notif_switch", data["notifications"] as Boolean)
             intPref("daily_time", (data["dailyNotif"] as Long).toInt())
             intPref("remind_time", (data["remindNotif"] as Long).toInt())
-            stringPref("dateChecked", (data["dateChecked"] as String))
+            setStringPref("dateChecked", (data["dateChecked"] as String))
         }
     }
 
     fun listNumbersReset() { App.applicationContext().getSharedPreferences("listNumbers", Context.MODE_PRIVATE).edit().clear().apply() }
-    fun updateFS(name: String, value: Any){
-        val db = FirebaseFirestore.getInstance()
-        val user = FirebaseAuth.getInstance().currentUser
-        if(user != null)
-            db.collection("main").document(user.uid).update(name, value)
-    }
-    fun intPref(name: String, value: Any?): Int{
-        val context = App.applicationContext()
-        val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        return if(value !=null){
-            pref.edit().putInt(name, value as Int).apply()
-            0
-        }else{
-            pref.getInt(name, 0)
-        }
-    }
-    fun stringPref(name: String, value: Any?): String{
-        val context = App.applicationContext()
-        val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        return if(value != null) {
-            pref.edit().putString(name, value as String).apply()
-            "0"
-        }else{
-            pref.getString(name, "itsdeadjim")!!
-        }
-    }
-    fun boolPref(name: String, value: Any?): Boolean{
-        val pref = PreferenceManager.getDefaultSharedPreferences(App.applicationContext())
-        return if(value != null){
-            pref.edit().putBoolean(name, value as Boolean).apply()
-            false
-        }else{
-            pref.getBoolean(name, false)
-        }
-    }
 
     fun mergePref(){
         val context = App.applicationContext()

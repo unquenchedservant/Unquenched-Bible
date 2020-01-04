@@ -5,11 +5,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import java.text.DecimalFormat
 
 class NotificationsFragment : PreferenceFragmentCompat() {

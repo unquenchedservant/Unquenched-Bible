@@ -9,8 +9,8 @@ import androidx.core.app.NotificationCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
 
 class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null

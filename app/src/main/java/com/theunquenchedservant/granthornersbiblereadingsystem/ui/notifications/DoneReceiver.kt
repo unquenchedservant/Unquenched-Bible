@@ -6,7 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.widget.Toast
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
 
 class DoneReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {

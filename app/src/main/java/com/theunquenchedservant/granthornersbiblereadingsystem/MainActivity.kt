@@ -25,23 +25,23 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.boolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.intPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.mergePref
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.stringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.updateFS
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.boolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.intPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStreak
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 import kotlinx.android.synthetic.main.appbar.*
-import java.text.SimpleDateFormat
-import java.util.Calendar
-import java.util.Locale
 
 class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelectedListener{
 
     private var _rcSignIn = 96
+    private var user: FirebaseUser? = null
     private var globalmenu : Menu? = null
     private lateinit var drawer: DrawerLayout
     private lateinit var toggle: ActionBarDrawerToggle
@@ -49,42 +49,43 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
+        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
-        if(boolPref("has_merged", null)) {
-            setContentView(R.layout.activity_main)
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            if (intPref("translation", null) == 0) intPref("translation", 1)
-            setSupportActionBar(my_toolbar)
-            drawer = container
-            toggle = ActionBarDrawerToggle(this, drawer, my_toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description)
-            drawer.addDrawerListener(toggle)
-            switchEnabled("home")
-            supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            supportActionBar?.setHomeButtonEnabled(true)
-            nav_view?.getHeaderView(0)?.setOnClickListener {
-                findNavController(this, R.id.nav_host_fragment).navigate(R.id.navigation_home)
-                switchEnabled("home")
-                supportActionBar?.title = getCurrentDate(true)
-                drawer.closeDrawers()
-            }
-            supportActionBar?.title = getCurrentDate(true)
-            val user = FirebaseAuth.getInstance().currentUser
-            val googleSign = nav_view?.menu?.findItem(R.id.google_sign)
-            val psalms = nav_view?.menu?.findItem(R.id.action_psalms)
-            val ps = boolPref("psalms", null)
-            val stats = nav_view?.menu?.findItem(R.id.action_statistics)
-            log("DATE CHECKED ${stringPref("dateChecked", null)} VERSUS yesterday date ${getCurrentDate(false)}")
-            if(stringPref("dateChecked",  null) != getYesterdayDate(false) && stringPref("dateChecked", null) != getCurrentDate(false)){
-                intPref("currentStreak", 0)
-            }
-            stats?.title = "Current Streak: ${intPref("currentStreak", null)}"
-            if (ps) psalms?.title = resources.getString(R.string.psalmsnav1) else psalms?.title = resources.getString(R.string.psalmsnav5)
-            if (user != null) googleSign?.title = resources.getString(R.string.signoutnav) else googleSign?.title = resources.getString(R.string.signinnav)
-            nav_view?.setNavigationItemSelectedListener(this)
-        }else{
-            mergePref()
-            recreate()
+        setContentView(R.layout.activity_main)
+        user = FirebaseAuth.getInstance().currentUser
+        if(savedInstanceState == null){
+            setupDrawer()
         }
+    }
+    private fun setupDrawer() {
+        setSupportActionBar(my_toolbar)
+        toggle = ActionBarDrawerToggle(this, container, my_toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description)
+        container.addDrawerListener(toggle)
+        switchEnabled("home")
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        supportActionBar?.setHomeButtonEnabled(true)
+        nav_view?.getHeaderView(0)?.setOnClickListener {
+            findNavController(this, R.id.nav_host_fragment).navigate(R.id.navigation_home)
+            switchEnabled("home")
+            supportActionBar?.title = getDate(0,true)
+            container.closeDrawers()
+        }
+        setStreak()
+
+        setDrawerTitles()
+
+        nav_view?.setNavigationItemSelectedListener(this)
+    }
+    private fun setDrawerTitles(){
+        val menu = nav_view?.menu
+        val stats = menu?.findItem(R.id.action_statistics)
+        val psalms = menu?.findItem(R.id.action_psalms)
+        val googleSign = menu?.findItem(R.id.google_sign)
+        val ps = boolPref("psalms", null)
+        supportActionBar?.title = getDate(0, true)
+        stats?.title = "Current Streak: ${intPref("currentStreak", null)}"
+        if (ps) psalms?.title = resources.getString(R.string.psalmsnav1) else psalms?.title = resources.getString(R.string.psalmsnav5)
+        if (user != null) googleSign?.title = resources.getString(R.string.signoutnav) else googleSign?.title = resources.getString(R.string.signinnav)
     }
     /**
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
@@ -116,7 +117,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.action_home ->{
-                supportActionBar?.title = getCurrentDate(true)
+                supportActionBar?.title = getDate(0, true)
                 switchEnabled("home")
                 navControl.navigate(R.id.navigation_home)
             }
@@ -152,6 +153,22 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                 Toast.makeText(this, "Forced Daily Reset", Toast.LENGTH_LONG).show()
             }
             R.id.google_sign -> {
+                val user = FirebaseAuth.getInstance().currentUser
+                if (user != null){
+                    val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
+                    builder.setPositiveButton(getString(R.string.yes)){_,_ ->
+                        FirebaseAuth.getInstance().signOut()
+                        item.title = "Sign In"
+                        navControl.navigate(R.id.navigation_home)
+                        Toast.makeText(applicationContext, "Signed Out!", Toast.LENGTH_LONG).show()
+                    }
+                    builder.setNeutralButton(getString(R.string.no)){dialogInterface, _ ->
+                        dialogInterface.cancel()
+                    }
+                    builder.setMessage("Are you sure you want to sign out ${user.email}?")
+                    builder.setTitle("Sign Out?")
+                    builder.create().show()
+                }
                 googleSignIn(item)
             }
             R.id.action_psalms -> {
@@ -212,41 +229,21 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         }
     }
     private fun googleSignIn(item:MenuItem){
-        val user = FirebaseAuth.getInstance().currentUser
-        val navControl = findNavController(this, R.id.nav_host_fragment)
-        if(user != null){
-            val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
-            builder.setPositiveButton(getString(R.string.yes)){_,_ ->
-                FirebaseAuth.getInstance().signOut()
-                item.title = "Sign In"
-                navControl.navigate(R.id.navigation_home)
-                Toast.makeText(applicationContext, "Signed Out!", Toast.LENGTH_LONG).show()
-            }
-            builder.setNeutralButton(getString(R.string.no)){dialogInterface, _ ->
-                dialogInterface.cancel()
-            }
-            builder.setMessage("Are you sure you want to sign out ${user.email}?")
-            builder.setTitle("Sign Out?")
-            builder.create().show()
-
-        }else {
-            val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
-            builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail()
-                        .build()
-                val mGoogleSignInClient = GoogleSignIn.getClient(applicationContext, gso)
-                val signInIntent = mGoogleSignInClient.signInIntent
-                startActivityForResult(signInIntent, _rcSignIn)
-            }
-            builder.setNeutralButton(R.string.no) { dialogInterface, _ -> log("cancel pressed"); dialogInterface.cancel() }
-            builder.setMessage(R.string.googleCheck).setTitle("Sign In To Google Account")
-            builder.create().show()
+        val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build()
+            val mGoogleSignInClient = GoogleSignIn.getClient(applicationContext, gso)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, _rcSignIn)
         }
+        builder.setNeutralButton(R.string.no) { dialogInterface, _ -> log("cancel pressed"); dialogInterface.cancel() }
+        builder.setMessage(R.string.googleCheck).setTitle("Sign In To Google Account")
+        builder.create().show()
     }
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        log("firebaseAuthWithGoogle: ${acct.id}")
         val auth = FirebaseAuth.getInstance()
         val navControl = findNavController(this, R.id.nav_host_fragment)
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
@@ -270,7 +267,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setTitle("Account Found")
-                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
+                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
                                 builder.create().show()
                             } else {
                                 preferenceToFireStone()
@@ -296,10 +293,10 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             0 -> {
                 when (vacation) {
                     false -> {
-                        when(stringPref("dateChecked", null)){
-                            getYesterdayDate(false) -> {
+                        when(getStringPref("dateChecked")) {
+                            getDate(1, false) -> {
                             }
-                            getCurrentDate(false)->{
+                            getDate(0, false)->{
                             }
                             else -> {
                                 resetCurrent = true
@@ -358,24 +355,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             Log.d("PROFGRANT", logString)
         }
 
-        fun getCurrentDate(fullMonth: Boolean): String {
-            return if (fullMonth) {
-                SimpleDateFormat("MMMM dd", Locale.US).format(Calendar.getInstance().time)
-            } else {
-                SimpleDateFormat("MMM dd", Locale.US).format(Calendar.getInstance().time)
-            }
-        }
 
-        fun getYesterdayDate(fullMonth:Boolean): String{
-            val yesterday = Calendar.getInstance()
-            yesterday.set(Calendar.HOUR_OF_DAY, 0)
-            yesterday.add(Calendar.DATE, -1)
-            return if(fullMonth){
-                SimpleDateFormat("MMMM dd", Locale.US).format(yesterday.time)
-            }else{
-                SimpleDateFormat("MMM dd", Locale.US).format(yesterday.time)
-            }
-        }
     }
 }
 class InformationFragment : PreferenceFragmentCompat(){
