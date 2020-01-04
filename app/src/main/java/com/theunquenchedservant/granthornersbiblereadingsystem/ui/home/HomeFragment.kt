@@ -37,6 +37,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.changeVisibility
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.getListNumber
@@ -108,7 +109,7 @@ class HomeFragment : Fragment() {
                     .addOnSuccessListener {
                         if (it.data != null) {
                             val result = it.data!!
-                            if (result["dateChecked"] != null && result["dateChecked"] != getDate(0,false)) {
+                            if (!checkDate("both", false)) {
                                 setStringPref("dateChecked", result["dateChecked"] as String)
                                 setIntPref("maxStreak", (result["maxStreak"] as Long).toInt())
                                 setIntPref("currentStreak", (result["currentStreak"] as Long).toInt())
@@ -124,7 +125,7 @@ class HomeFragment : Fragment() {
 
     private fun setLists(result: Map<String, Any>?){
         val ctx = App.applicationContext()
-        if (getStringPref("dateChecked") != getDate(0, false)) {
+        if (!checkDate("current", false)) {
             val intent = Intent(ctx, DailyCheck::class.java)
             ctx.sendBroadcast(intent)
         }

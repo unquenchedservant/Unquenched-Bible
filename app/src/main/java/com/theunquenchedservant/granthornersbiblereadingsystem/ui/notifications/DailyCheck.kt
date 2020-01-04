@@ -12,6 +12,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class DailyCheck : BroadcastReceiver() {
@@ -30,14 +31,10 @@ class DailyCheck : BroadcastReceiver() {
             0 -> {
                 when (vacation || getBoolPref("vacationOff")) {
                     false -> {
-                        when(getStringPref("dateChecked")){
-                            getDate(1, false) -> {
-                            }
-                            else -> {
+                        if(!checkDate("current", false)){
                                 resetCurrent = true
                                 log("DAILY CHECK - currentStreak set to 0")
                                 setIntPref("currentStreak", 0)
-                            }
                         }
                     }
                     true -> {

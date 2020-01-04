@@ -5,14 +5,13 @@ import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
 
 
 object SharedPref {
 
     fun setStreak(){
-        val date = getStringPref("dateChecked")
-        if(date != getDate(1, false) && date != getDate(0, false)){
+        if(!checkDate("both", false)){
             setIntPref("currentStreak", 0)
         }
     }
@@ -28,8 +27,7 @@ object SharedPref {
     }
 
     fun setIntPref(name: String, value: Int){
-        val pref = getPref()
-        pref.edit().putInt(name, value).apply()
+        getPref().edit().putInt(name, value).apply()
     }
     fun increaseIntPref(name: String, value: Int): Int{
         val start = getIntPref(name)
@@ -41,8 +39,7 @@ object SharedPref {
     }
 
     fun setStringPref(name:String, value: String) {
-        val pref = getPref()
-        pref.edit().putString(name, value).apply()
+        getPref().edit().putString(name, value).apply()
     }
     fun getStringPref(name:String): String{
         return getPref().getString(name, "itsdeadjim")!!
