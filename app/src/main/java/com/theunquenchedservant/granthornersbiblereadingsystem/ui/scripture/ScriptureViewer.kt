@@ -1,9 +1,13 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ESV
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.scripture
 
-import android.content.Context
+import android.graphics.Color
+import android.os.Bundle
 import android.util.Base64
+import android.view.LayoutInflater
+import android.view.View
+import android.view.ViewGroup
 import android.webkit.WebView
-import androidx.appcompat.app.AlertDialog
+import androidx.fragment.app.Fragment
 import com.android.volley.RequestQueue
 import com.android.volley.Response
 import com.android.volley.toolbox.BasicNetwork
@@ -11,17 +15,38 @@ import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.JsonObjectRequest
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import kotlinx.android.synthetic.main.scripture_viewer.*
 import java.util.*
 import kotlin.collections.HashMap
 
-object ESVGet {
+class ScriptureViewer : Fragment() {
     init{
         System.loadLibrary("native-lib")
     }
+    private lateinit var chapter: String
+    private var psalms: Boolean = false
+    private var iteration = 0
+
     private external fun getESVKey() : String
 
-    fun getESVReference(chapter: String, ctx: Context?, psalms: Boolean, iteration: Int){
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
+        val b = arguments
+        chapter = b?.getString("chapter")!!
+        psalms = b.getBoolean("psalms")
+        iteration = b.getInt("iteration")
+        val root = inflater.inflate(R.layout.scripture_viewer, container, false)
+        root.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
+        val act = activity as MainActivity
+        act.supportActionBar?.title = chapter
+        val url = getESVReference(chapter, psalms, iteration)
+        getESV(url)
+        return root
+    }
+
+    fun getESVReference(chapter: String, psalms: Boolean, iteration: Int) : String {
         val title : String
         val url: String
         if(psalms){
@@ -36,46 +61,22 @@ object ESVGet {
             title = chapter
             url = "https://api.esv.org/v3/passage/html/?q=$chapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
         }
-        val wv = getESV(ctx, url)
-        val alert = AlertDialog.Builder(ctx!!)
-        alert.setTitle(title)
-        alert.setView(wv)
-        if(psalms){
-            when(iteration){
-                in 1..4 -> {
-                    alert.setPositiveButton("Next"){_,_ ->
-                        getESVReference("no", ctx, psalms, iteration+1)
-                    }
-                }
-                5 -> {
-                    alert.setNeutralButton("Close"){dialog, _ ->
-                        dialog.dismiss()
-                    }
-                }
-            }
-        }else{
-            alert.setNeutralButton("Close"){ dialog, _ ->
-                dialog.dismiss()
-            }
-        }
-        alert.show()
+        return url
     }
-
-    fun getESV(ctx: Context?, url: String): WebView {
+    fun getESV(url: String){
         val key = String(Base64.decode(getESVKey(), Base64.DEFAULT))
-        var html : String?
+        var html = ""
         val context = App.applicationContext()
-        val wv = WebView(ctx)
         val cache = DiskBasedCache(context.cacheDir, 1024 * 1024)
         val network = BasicNetwork(HurlStack())
         val requestQueue = RequestQueue(cache, network).apply {
             start()
         }
-        val jsonObjectRequest = object: JsonObjectRequest(Method.GET, url, null,
+        val jsonObjectRequest = object : JsonObjectRequest(Method.GET, url, null,
                 Response.Listener { response ->
                     html = response.getJSONArray("passages").getString(0)
-                    html = html!!.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", "esv.css")
-                    wv.loadDataWithBaseURL("file:///android_asset/", html,"text/html", "UTF-8", null)
+                    html = html.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", "esv.css")
+                    scripture_web.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
 
                 Response.ErrorListener { error ->
@@ -88,7 +89,5 @@ object ESVGet {
             }
         }
         requestQueue.add(jsonObjectRequest)
-        return wv
     }
-
 }
