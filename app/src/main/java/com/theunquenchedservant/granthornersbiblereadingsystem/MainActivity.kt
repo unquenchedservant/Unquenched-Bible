@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.ContextThemeWrapper
 import android.view.Menu
 import android.view.MenuItem
+import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import kotlinx.android.synthetic.main.activity_main.*
@@ -15,7 +16,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -46,25 +49,35 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     private var _rcSignIn = 96
     private var user: FirebaseUser? = null
     private var globalmenu : Menu? = null
-    private lateinit var drawer: DrawerLayout
-    private lateinit var toggle: ActionBarDrawerToggle
+    lateinit var toggle: ActionBarDrawerToggle
+    lateinit var navController: NavController
+    lateinit var navHostFragment: NavHostFragment
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
+        WebView(applicationContext)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         user = FirebaseAuth.getInstance().currentUser
-        if(savedInstanceState == null){
-            setupDrawer()
-        }
-    }
-    private fun setupDrawer() {
         setSupportActionBar(my_toolbar)
-        toggle = ActionBarDrawerToggle(this, container, my_toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description)
-        container.addDrawerListener(toggle)
+        navHostFragment = nav_host_fragment as NavHostFragment
+        navController = navHostFragment.navController
+        navController.navigate(R.id.navigation_home)
+        toggle = ActionBarDrawerToggle(this, container, my_toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description).apply{
+            container.addDrawerListener(this)
+            this.syncState()
+        }
+        setupDrawer()
+    }
+
+
+    private fun setupDrawer() {
         switchEnabled("home")
+        setStreak()
+        setDrawerTitles()
+        nav_view?.setNavigationItemSelectedListener(this)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         supportActionBar?.setHomeButtonEnabled(true)
         nav_view?.getHeaderView(0)?.setOnClickListener {
@@ -73,12 +86,10 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             supportActionBar?.title = getDate(0,true)
             container.closeDrawers()
         }
-        setStreak()
 
-        setDrawerTitles()
-
-        nav_view?.setNavigationItemSelectedListener(this)
+        }
     }
+
     private fun setDrawerTitles(){
         val menu = nav_view?.menu
         val stats = menu?.findItem(R.id.action_statistics)
@@ -193,7 +204,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                 }
             }
         }
-        drawer.closeDrawer(GravityCompat.START)
+        container.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -211,14 +222,16 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
 
 
     override fun onBackPressed() {
-
-        if (drawer.isDrawerOpen(GravityCompat.START)) {
-            drawer.closeDrawer(GravityCompat.START)
+        if (container.isDrawerOpen(GravityCompat.START)) {
+            container.closeDrawer(GravityCompat.START)
         } else {
-            super.onBackPressed()
+            if(navController.currentDestination?.id != R.id.navigation_home){
+                navController.navigate(R.id.navigation_home)
+            }else {
+                finish()
+            }
         }
     }
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == _rcSignIn){
