@@ -5,14 +5,21 @@ import android.content.Context
 import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
+import android.renderscript.Script
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.cardview.widget.CardView
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProviders
+import androidx.navigation.Navigation
+import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
+import androidx.navigation.fragment.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -28,10 +35,11 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.DailyCheck
-import com.theunquenchedservant.granthornersbiblereadingsystem.ESV.ESVGet.getESVReference
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createNotificationChannel
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.scripture.ScriptureViewer
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -46,6 +54,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setTitles
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setVisibilities
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.appbar.*
 import kotlinx.android.synthetic.main.cardviews.view.*
 import kotlinx.android.synthetic.main.fragment_home.*
 import java.util.Calendar
@@ -64,8 +73,6 @@ class HomeFragment : Fragment() {
         model = ViewModelProviders.of(this).get(HomeView::class.java)
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
-
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         model.list1.observe(this, Observer<String>{ cardList1.list_reading.text = it })
@@ -254,12 +261,15 @@ class HomeFragment : Fragment() {
                                 1 -> getCSBReference(chapter)
                                 2 -> getESVReference(chapter)
                             }*/
-                            getESVReference(chapter, context, false, 0)
+                            val bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
+                            val nav_control = findNavController(activity as MainActivity, R.id.nav_host_fragment)
+                            nav_control.navigate(R.id.navigation_scripture, bundle)
                         }else if(cardList == cardList6 && psalms){
-                            /**when(listNumberPref("translation", null)){
-                                2 -> getESVPsalms(i)
-                            }*/
-                            getESVReference("no", context, true, 1)
+                            val bundle = Bundle()
+                            bundle.putString("chapter", "no")
+                            bundle.putBoolean("psalms", true)
+                            bundle.putInt("iteration", 1)
+                            (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
                         }
                     }
                 }
