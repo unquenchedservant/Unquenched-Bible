@@ -17,3 +17,11 @@
 gradle.properties
 .externalNativeBuild
 .cxx
+
+app/google-services.json
+
+app/src/main/cpp/native-lib.cpp
+
+.idea/render.experimental.xml
+
+app/test.txt
