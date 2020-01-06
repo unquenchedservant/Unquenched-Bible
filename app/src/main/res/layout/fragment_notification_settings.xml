@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
-        android:background="#00DD0C0C"
         app:key="notification_category"
         app:title="Notification Settings">
         <SwitchPreferenceCompat
