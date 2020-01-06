@@ -78,14 +78,39 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         setStreak()
         setDrawerTitles()
         nav_view?.setNavigationItemSelectedListener(this)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setHomeButtonEnabled(true)
-        nav_view?.getHeaderView(0)?.setOnClickListener {
-            findNavController(this, R.id.nav_host_fragment).navigate(R.id.navigation_home)
-            switchEnabled("home")
-            supportActionBar?.title = getDate(0,true)
-            container.closeDrawers()
-        }
+        navController.addOnDestinationChangedListener{ _, destination, _ ->
+            if(destination.id == R.id.navigation_scripture){
+                toggle.isDrawerIndicatorEnabled = false
+                container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                toggle.setToolbarNavigationClickListener { navController.navigate(R.id.navigation_home) }
+                supportActionBar?.setDisplayHomeAsUpEnabled(true)
+            }else{
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                container.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                toggle.isDrawerIndicatorEnabled = true
+                toggle.toolbarNavigationClickListener = null
+                toggle.syncState()
+                if (destination.id == R.id.navigation_home){
+                    switchEnabled("home")
+                    supportActionBar?.title = getDate(0, true)
+                }else if (destination.id == R.id.navigation_stats){
+                    switchEnabled("stats")
+                    supportActionBar?.title = destination.label
+                }else if(destination.id == R.id.navigation_information){
+                    switchEnabled("information")
+                    supportActionBar?.title = destination.label
+                }else if(destination.id == R.id.navigation_manual){
+                    switchEnabled("manual")
+                    supportActionBar?.title = destination.label
+                }else if(destination.id == R.id.navigation_support){
+                    switchEnabled("support")
+                    supportActionBar?.title = destination.label
+                }else if(destination.id == R.id.navigation_notifications){
+                    switchEnabled("notif")
+                    supportActionBar?.title = destination.label
+                }
+            }
 
         }
     }
