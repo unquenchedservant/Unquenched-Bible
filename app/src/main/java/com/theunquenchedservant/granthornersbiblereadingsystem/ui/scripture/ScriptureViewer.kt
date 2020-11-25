@@ -18,7 +18,8 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import kotlinx.android.synthetic.main.scripture_viewer.*
+import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ScriptureViewerBinding
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -29,10 +30,14 @@ class ScriptureViewer : Fragment() {
     private lateinit var chapter: String
     private var psalms: Boolean = false
     private var iteration = 0
+    private var _binding: ScriptureViewerBinding? = null
+    private val binding get() = _binding!!
 
     private external fun getESVKey() : String
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
+        _binding = ScriptureViewerBinding.inflate(inflater, container, false)
+        val view = binding.root
         val b = arguments
         chapter = b?.getString("chapter")!!
         psalms = b.getBoolean("psalms")
@@ -40,7 +45,7 @@ class ScriptureViewer : Fragment() {
         val root = inflater.inflate(R.layout.scripture_viewer, container, false)
         root.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
         val act = activity as MainActivity
-        act.supportActionBar?.title = chapter-+---
+        act.supportActionBar?.title = chapter
         val url = getESVReference(chapter, psalms, iteration)
         getESV(url)
         return root
@@ -76,7 +81,7 @@ class ScriptureViewer : Fragment() {
                 Response.Listener { response ->
                     html = response.getJSONArray("passages").getString(0)
                     html = html.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", "esv.css")
-                    scripture_web.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
+                    binding.scriptureWeb.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
 
                 Response.ErrorListener { error ->

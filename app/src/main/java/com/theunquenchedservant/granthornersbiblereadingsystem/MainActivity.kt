@@ -11,13 +11,15 @@ import android.view.MenuItem
 import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
-import kotlinx.android.synthetic.main.activity_main.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
+import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
+import androidx.fragment.app.commit
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -33,6 +35,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
+import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.AppbarBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
@@ -42,7 +46,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
-import kotlinx.android.synthetic.main.appbar.*
 
 class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelectedListener{
 
@@ -52,6 +55,8 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     lateinit var toggle: ActionBarDrawerToggle
     lateinit var navController: NavController
     lateinit var navHostFragment: NavHostFragment
+    lateinit var binding: ActivityMainBinding
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -59,17 +64,20 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         WebView(applicationContext)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
+        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
+        binding.lifecycleOwner = this
         user = FirebaseAuth.getInstance().currentUser
-        setSupportActionBar(my_toolbar)
-        navHostFragment = nav_host_fragment as NavHostFragment
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         navController.navigate(R.id.navigation_home)
-        toggle = ActionBarDrawerToggle(this, container, my_toolbar, R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description).apply{
-            container.addDrawerListener(this)
+        toggle = ActionBarDrawerToggle(this, binding.container, findViewById(R.id.my_toolbar), R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description).apply{
+            binding.container.addDrawerListener(this)
             this.syncState()
         }
         setupDrawer()
+
+
     }
 
 
@@ -77,17 +85,17 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         switchEnabled("home")
         setStreak()
         setDrawerTitles()
-        nav_view?.setNavigationItemSelectedListener(this)
+        binding.navView.setNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             if(destination.id == R.id.navigation_scripture){
                 toggle.isDrawerIndicatorEnabled = false
-                container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
+                binding.container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
                 toggle.setToolbarNavigationClickListener { navController.navigate(R.id.navigation_home) }
                 supportActionBar?.setDisplayHomeAsUpEnabled(true)
             }else{
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                container.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
+                binding.container.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
                 toggle.isDrawerIndicatorEnabled = true
                 toggle.toolbarNavigationClickListener = null
                 toggle.syncState()
@@ -116,10 +124,10 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     }
 
     private fun setDrawerTitles(){
-        val menu = nav_view?.menu
-        val stats = menu?.findItem(R.id.action_statistics)
-        val psalms = menu?.findItem(R.id.action_psalms)
-        val googleSign = menu?.findItem(R.id.google_sign)
+        val menu = binding.navView.menu
+        val stats = menu.findItem(R.id.action_statistics)
+        val psalms = menu.findItem(R.id.action_psalms)
+        val googleSign = menu.findItem(R.id.google_sign)
         val ps = getBoolPref("psalms")
         supportActionBar?.title = getDate(0, true)
         stats?.title = "Current Streak: ${getIntPref("currentStreak")}"
@@ -152,7 +160,7 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
         return true
     } */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val homeFrag = nav_host_fragment.childFragmentManager.fragments[0]
+        val homeFrag = navHostFragment.childFragmentManager.fragments[0]
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.action_home ->{
@@ -218,18 +226,18 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                         updateFS("psalms", false)
                     }
                     item.title = resources.getString(R.string.psalmsnav5)
-                    nav_host_fragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
+                    navHostFragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
                 } else {
                     setBoolPref("psalms", true)
                     if (FirebaseAuth.getInstance().currentUser != null) {
                         updateFS("psalms", true)
                     }
                     item.title = resources.getString(R.string.psalmsnav1)
-                    nav_host_fragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
+                    navHostFragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
                 }
             }
         }
-        container.closeDrawer(GravityCompat.START)
+        binding.container.closeDrawer(GravityCompat.START)
         return true
     }
 
@@ -247,8 +255,8 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
 
 
     override fun onBackPressed() {
-        if (container.isDrawerOpen(GravityCompat.START)) {
-            container.closeDrawer(GravityCompat.START)
+        if (binding.container.isDrawerOpen(GravityCompat.START)) {
+            binding.container.closeDrawer(GravityCompat.START)
         } else {
             if(navController.currentDestination?.id != R.id.navigation_home){
                 navController.navigate(R.id.navigation_home)
@@ -299,12 +307,12 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
                                 val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
                                     firestoneToPreference(doc)
-                                    nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    binding.navView.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
                                     preferenceToFireStone()
-                                    nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    binding.navView.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setTitle("Account Found")
@@ -375,13 +383,13 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
     }
 
     private fun switchEnabled(current: String){
-        val menu = nav_view?.menu
-        menu?.findItem(R.id.action_home)?.isEnabled = current != "home"
-        menu?.findItem(R.id.action_information)?.isEnabled = current != "information"
-        menu?.findItem(R.id.action_manual)?.isEnabled = current != "manual"
-        menu?.findItem(R.id.action_statistics)?.isEnabled = current != "stats"
-        menu?.findItem(R.id.action_notifications)?.isEnabled = current != "notif"
-        menu?.findItem(R.id.action_support)?.isEnabled = current != "support"
+        val menu = binding.navView.menu
+        menu.findItem(R.id.action_home)?.isEnabled = current != "home"
+        menu.findItem(R.id.action_information)?.isEnabled = current != "information"
+        menu.findItem(R.id.action_manual)?.isEnabled = current != "manual"
+        menu.findItem(R.id.action_statistics)?.isEnabled = current != "stats"
+        menu.findItem(R.id.action_notifications)?.isEnabled = current != "notif"
+        menu.findItem(R.id.action_support)?.isEnabled = current != "support"
     }
     companion object{
 

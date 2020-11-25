@@ -4,4 +4,5 @@
     <color name="colorPrimaryDark">#9CB9D3</color>
     <color name="unquenchedText">#E1E2E6</color>
     <color name="unquenchedEmph">#9CB9D3</color>
+    <color name="buttonBackground">#383838</color>
 </resources>

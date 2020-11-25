@@ -86,7 +86,7 @@ class NotificationsFragment : PreferenceFragmentCompat() {
         }
         if (dialogFragment != null) {
             dialogFragment.setTargetFragment(this, 0)
-            dialogFragment.show(this.fragmentManager!!,
+            dialogFragment.show(this.requireFragmentManager(),
                     "android.support.v7.preference" + ".PreferenceFragment.DIALOG")
         } else {
             super.onDisplayPreferenceDialog(preference)
