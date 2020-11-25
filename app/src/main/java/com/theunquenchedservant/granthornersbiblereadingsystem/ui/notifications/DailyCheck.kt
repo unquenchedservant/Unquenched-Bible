@@ -31,7 +31,7 @@ class DailyCheck : BroadcastReceiver() {
             0 -> {
                 when (vacation || getBoolPref("vacationOff")) {
                     false -> {
-                        if(!checkDate("current", false)){
+                        if(!checkDate("yesterday", false)){
                                 resetCurrent = true
                                 log("DAILY CHECK - currentStreak set to 0")
                                 setIntPref("currentStreak", 0)
