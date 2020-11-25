@@ -16,10 +16,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.view.GravityCompat
 import androidx.databinding.DataBindingUtil
 import androidx.drawerlayout.widget.DrawerLayout
-import androidx.fragment.app.commit
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -36,7 +34,6 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.AppbarBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
