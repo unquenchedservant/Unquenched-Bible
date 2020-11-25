@@ -32,7 +32,7 @@ object SharedPref {
     fun increaseIntPref(name: String, value: Int): Int{
         val start = getIntPref(name)
         setIntPref(name, start+value)
-        return getIntPref(name)
+        return start+value
     }
     fun getIntPref(name: String): Int {
         return getPref().getInt(name, 0)
