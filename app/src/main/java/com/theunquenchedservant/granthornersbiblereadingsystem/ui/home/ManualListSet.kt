@@ -558,5 +558,6 @@ class ManualListSet: Fragment() {
         return when (afterSplit.size){
             1 -> arrayOf(fullValue, 1)
             3 -> arrayOf("${afterSplit[0]} ${afterSplit[1]}", afterSplit[2].toInt())
+            4 -> arrayOf("${afterSplit[0]} ${afterSplit[1]} ${afterSplit[2]}", afterSplit[3].toInt())
             else -> arrayOf(afterSplit[0], afterSplit[1].toInt()) } }
 }
