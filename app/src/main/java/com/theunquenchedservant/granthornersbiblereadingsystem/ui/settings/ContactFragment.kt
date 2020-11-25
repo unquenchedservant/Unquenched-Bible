@@ -17,7 +17,7 @@ class ContactFragment : PreferenceFragmentCompat() {
         val currentVersion: Preference? = findPreference("currentVersion")
 
 
-        currentVersion?.title = "Current Version - 1.13"
+        currentVersion?.title = "Current Version - 1.2"
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://theunquenchedservant.com/changelog/"))
             if(i.resolveActivity(App.applicationContext().packageManager)!= null){
@@ -26,7 +26,7 @@ class ContactFragment : PreferenceFragmentCompat() {
             false
         }
         twitter!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/theunqnchdsrvnt"))
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/unquenchedbible"))
             if(i.resolveActivity(App.applicationContext().packageManager)!= null){
                 startActivity(i)
             }
@@ -36,7 +36,7 @@ class ContactFragment : PreferenceFragmentCompat() {
             val i = Intent(Intent.ACTION_SENDTO)
                     .setType("text/plain")
                     .setData(Uri.parse("mailto:"))
-                    .putExtra(Intent.EXTRA_EMAIL, arrayOf("contact@theunquenchedservant.com"))
+                    .putExtra(Intent.EXTRA_EMAIL, arrayOf("contact@unquenched.tech"))
                     .putExtra(Intent.EXTRA_SUBJECT, "COMMENT/QUESTION - PGH APP")
             if(i.resolveActivity(App.applicationContext().packageManager) != null){
                 MainActivity.log("STARTING ACTIVITY SOON")
