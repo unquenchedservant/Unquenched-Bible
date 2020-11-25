@@ -75,16 +75,16 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        model.list1.observe(this, Observer<String>{ cardList1.list_reading.text = it })
-        model.list2.observe(this, Observer<String>{ cardList2.list_reading.text = it })
-        model.list3.observe(this, Observer<String>{ cardList3.list_reading.text = it })
-        model.list4.observe(this, Observer<String>{ cardList4.list_reading.text = it })
-        model.list5.observe(this, Observer<String>{ cardList5.list_reading.text = it })
-        model.list6.observe(this, Observer<String>{ cardList6.list_reading.text = it })
-        model.list7.observe(this, Observer<String>{ cardList7.list_reading.text = it })
-        model.list8.observe(this, Observer<String>{ cardList8.list_reading.text = it })
-        model.list9.observe(this, Observer<String>{ cardList9.list_reading.text = it })
-        model.list10.observe(this, Observer<String>{ cardList10.list_reading.text = it })
+        model.list1.observe(viewLifecycleOwner, Observer<String>{ cardList1.list_reading.text = it })
+        model.list2.observe(viewLifecycleOwner, Observer<String>{ cardList2.list_reading.text = it })
+        model.list3.observe(viewLifecycleOwner, Observer<String>{ cardList3.list_reading.text = it })
+        model.list4.observe(viewLifecycleOwner, Observer<String>{ cardList4.list_reading.text = it })
+        model.list5.observe(viewLifecycleOwner, Observer<String>{ cardList5.list_reading.text = it })
+        model.list6.observe(viewLifecycleOwner, Observer<String>{ cardList6.list_reading.text = it })
+        model.list7.observe(viewLifecycleOwner, Observer<String>{ cardList7.list_reading.text = it })
+        model.list8.observe(viewLifecycleOwner, Observer<String>{ cardList8.list_reading.text = it })
+        model.list9.observe(viewLifecycleOwner, Observer<String>{ cardList9.list_reading.text = it })
+        model.list10.observe(viewLifecycleOwner, Observer<String>{ cardList10.list_reading.text = it })
         user = FirebaseAuth.getInstance().currentUser
         if(user != null){
             getData()
@@ -194,7 +194,7 @@ class HomeFragment : Fragment() {
         val nav_view = activity?.nav_view!!
         val disabled = Color.parseColor("#00383838")
         material_button.setOnClickListener {
-            hideOthers(null, view!!)
+            hideOthers(null, requireView())
             markAll()
             material_button.isEnabled = false
             material_button.text = resources.getString(R.string.done)
