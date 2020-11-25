@@ -14,4 +14,8 @@
         app:key="twitter"
         app:title="Follow Dev On Twitter"
         app:summary="Follow @theunqnchdsrvnt on twitter for updates and support"/>
+    <Preference
+        app:key="mailchimp"
+        app:title="Sign Up for the Mailing List"
+        app:summary="Get emails with updates about the upcoming major overhaul to the app!"/>
 </PreferenceScreen>

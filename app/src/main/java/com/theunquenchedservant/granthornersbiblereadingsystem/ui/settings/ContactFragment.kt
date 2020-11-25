@@ -15,6 +15,7 @@ class ContactFragment : PreferenceFragmentCompat() {
         val contact: Preference? = findPreference("contact")
         val twitter: Preference? = findPreference("twitter")
         val currentVersion: Preference? = findPreference("currentVersion")
+        val mailchimp: Preference? = findPreference("mailchimp")
 
 
         currentVersion?.title = "Current Version - 1.2"
@@ -43,6 +44,13 @@ class ContactFragment : PreferenceFragmentCompat() {
                 startActivity(i)
             }else{
                 MainActivity.log("PACKAGE MANAGER ${i.resolveActivity(App.applicationContext().packageManager)}")
+            }
+            false
+        }
+        mailchimp!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse("http://eepurl.com/g_jIob"))
+            if(i.resolveActivity(App.applicationContext().packageManager)!= null){
+                startActivity(i)
             }
             false
         }
