@@ -40,7 +40,7 @@ class ScriptureViewer : Fragment() {
         val root = inflater.inflate(R.layout.scripture_viewer, container, false)
         root.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
         val act = activity as MainActivity
-        act.supportActionBar?.title = chapter
+        act.supportActionBar?.title = chapter-+---
         val url = getESVReference(chapter, psalms, iteration)
         getESV(url)
         return root

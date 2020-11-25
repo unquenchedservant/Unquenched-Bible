@@ -229,14 +229,14 @@ class HomeFragment : Fragment() {
                 if(it.list_buttons.isVisible){
                     listSwitcher(it, getIntPref("list${i}Done"), material_button)
                 }else{
-                    hideOthers(cardList, view!!)
+                    hideOthers(cardList, requireView())
                     it.list_done.setOnClickListener{
                         changeVisibility(cardList, false)
                         markSingle("list${i}Done")
                         cardList.isEnabled = false
                         cardList.setCardBackgroundColor(Color.parseColor("#00383838"))
                         if(getIntPref("listsDone") == 10){
-                            val mNotif = context!!.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                            val mNotif = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                             mNotif.cancel(1)
                             mNotif.cancel(2)
                             material_button.text = resources.getString(R.string.done)
@@ -339,7 +339,7 @@ class HomeFragment : Fragment() {
                         .addOnSuccessListener { doc ->
                             log("DOCUMENT SNAPSHOT ${doc.get("Doc")}")
                             if (doc.get("Doc") != null) {
-                                val builder = AlertDialog.Builder(context!!)
+                                val builder = AlertDialog.Builder(requireContext())
                                 builder.setPositiveButton("Use Cloud Data") { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
                                     setIntPref("firstRun", 1)
@@ -349,13 +349,13 @@ class HomeFragment : Fragment() {
                                     val isPsalms = doc.data!!["psalms"] as Boolean
                                     if(isPsalms) psalmsItem?.title = resources.getString(R.string.psalmsnav1)
                                         else nav_view.menu.findItem(R.id.action_psalms).title = resources.getString(R.string.psalmsnav5)
-                                    fragmentManager?.beginTransaction()?.detach(fragmentManager!!.fragments[0]!!)?.attach(fragmentManager!!.fragments[0]!!)?.commit()
+                                    fragmentManager?.beginTransaction()?.detach(requireFragmentManager().fragments[0]!!)?.attach(requireFragmentManager().fragments[0]!!)?.commit()
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _,_->
                                     SharedPref.preferenceToFireStone()
                                     setIntPref("firstRun", 1)
                                     nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
-                                    fragmentManager?.beginTransaction()?.detach(fragmentManager!!.fragments[0]!!)?.attach(fragmentManager!!.fragments[0]!!)?.commit()
+                                    fragmentManager?.beginTransaction()?.detach(requireFragmentManager().fragments[0]!!)?.attach(requireFragmentManager().fragments[0]!!)?.commit()
                                 }
                                 builder.setTitle("Account Found")
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
@@ -366,7 +366,7 @@ class HomeFragment : Fragment() {
                                 nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
                                 val psalmsItem = nav_view.menu.findItem(R.id.action_psalms)
                                 psalmsItem.title = resources.getString(R.string.psalmsnav1)
-                                fragmentManager?.beginTransaction()?.detach(fragmentManager!!.fragments[0]!!)?.attach(fragmentManager!!.fragments[0]!!)?.commit()
+                                fragmentManager?.beginTransaction()?.detach(requireFragmentManager().fragments[0]!!)?.attach(requireFragmentManager().fragments[0]!!)?.commit()
                             }
                         }
 
@@ -378,7 +378,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun welcome4(){
-        val alert = AlertDialog.Builder(context!!)
+        val alert = AlertDialog.Builder(requireContext())
         alert.setPositiveButton("Yes") { diag, _ ->
             setIntPref("firstRun", 1)
             diag.dismiss()
@@ -386,7 +386,7 @@ class HomeFragment : Fragment() {
         alert.setNeutralButton("No"){dialogInterface, _ ->
             dialogInterface.dismiss()
             setIntPref("firstRun", 1)
-            fragmentManager!!.beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
+            requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
         }
         alert.setTitle("Notifications")
         alert.setMessage("Would you like to change your notification settings now?")
