@@ -24,7 +24,7 @@ object CSBGet {
         val key = String(Base64.decode(getCSBKey(), Base64.DEFAULT))
         var html : String?
         val context = App.applicationContext()
-        val wv = WebView(ctx)
+        val wv = WebView(ctx!!)
         val cache = DiskBasedCache(context.cacheDir, 1024 * 1024)
         val network = BasicNetwork(HurlStack())
         val requestQueue = RequestQueue(cache, network).apply {
@@ -33,7 +33,7 @@ object CSBGet {
         val jsonObjectRequest = object: JsonObjectRequest(Method.GET, url, null,
                 Response.Listener { response ->
                     html = response.getJSONArray("passages").getString(0)
-                    wv.loadData(html, "text/html", "UTF-8")
+                    wv.loadData(html!!, "text/html", "UTF-8")
                 },
 
                 Response.ErrorListener { error ->
