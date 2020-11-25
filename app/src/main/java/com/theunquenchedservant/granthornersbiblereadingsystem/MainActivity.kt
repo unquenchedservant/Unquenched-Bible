@@ -26,11 +26,13 @@ import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.messaging.FirebaseMessaging
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
@@ -73,8 +75,6 @@ class MainActivity : AppCompatActivity(),  NavigationView.OnNavigationItemSelect
             this.syncState()
         }
         setupDrawer()
-
-
     }
 
 
