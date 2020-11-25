@@ -42,13 +42,12 @@ class ScriptureViewer : Fragment() {
         chapter = b?.getString("chapter")!!
         psalms = b.getBoolean("psalms")
         iteration = b.getInt("iteration")
-        val root = inflater.inflate(R.layout.scripture_viewer, container, false)
-        root.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
+        view.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
         val act = activity as MainActivity
         act.supportActionBar?.title = chapter
         val url = getESVReference(chapter, psalms, iteration)
         getESV(url)
-        return root
+        return view
     }
 
     fun getESVReference(chapter: String, psalms: Boolean, iteration: Int) : String {
@@ -80,7 +79,7 @@ class ScriptureViewer : Fragment() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET, url, null,
                 Response.Listener { response ->
                     html = response.getJSONArray("passages").getString(0)
-                    html = html.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", "esv.css")
+                    html = html.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", "https://unquenched.bible/esv-2.css")
                     binding.scriptureWeb.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
 

@@ -1,0 +1,70 @@
+.interlinear p {
+    text-indent: 0;
+}
+
+.interlinear ol li {
+    list-style: none;
+    text-align: center;
+    margin:0;
+    padding: 0;
+    text-indent: 0;
+}
+.grc {
+    font-family: 'GalatiaSILRegular';
+    font-size: 125%;
+}
+.interlinear .wi{
+    display:none;
+}
+.interlinear .gl, .interlinear .gm {
+    font-family: 'GalatiaSILRegular';
+}
+.interlinear .tf, .interlinear .tm {
+    font-family: arial,helvetica,verdana,sans-serif;
+    font-style: italic;
+}
+
+.interlinear ol {
+    display: inline-block;
+    padding: 0 5px 20px 5px;
+    margin: 0;
+    vertical-align: top;
+}
+.interlinear p, .interlinear h3 {
+    clear:both;
+}
+.interlinear span.sub{
+    font-size:xx-small; vertical-align:bottom;
+}
+
+.interlinear .cf, .interlinear .verse-num {
+    display: inline-block;
+}
+
+#interlinear{
+    padding:0 15px 15px 15px;
+}
+#interlinear_tab h3{
+    font-size:1.2em;
+    font-weight:bold;
+}
+
+#interlinear_tab li{
+    list-style:none;
+}
+
+
+.interlinear .flash{
+    background-color:#ffe6d2;
+}
+
+#concordance .concordance_results{
+    margin:0;
+    padding:0
+}
+
+#concordance .concordance_results li{
+    list-style:none;
+    margin:0;
+    padding:0
+}
