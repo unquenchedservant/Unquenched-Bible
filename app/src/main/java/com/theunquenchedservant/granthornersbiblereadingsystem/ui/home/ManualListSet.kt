@@ -22,11 +22,11 @@ class ManualListSet: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val root = view!!
+        val root = requireView()
         val listSelector = root.findViewById<Spinner>(R.id.listSelector)
 
         ArrayAdapter.createFromResource(
-                context!!,
+                requireContext(),
                 R.array.listNames,
                 android.R.layout.simple_spinner_item).also{
             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -420,7 +420,7 @@ class ManualListSet: Fragment() {
 
         button.setOnClickListener {
             val model             = ViewModelProviders.of(this).get(HomeView::class.java)
-            val alert             = AlertDialog.Builder(context!!)
+            val alert             = AlertDialog.Builder(requireContext())
             val listSelected      = root.findViewById<Spinner>(R.id.listSelector)
             val selectedList      = listSelected.selectedItem
             val bookSpinner       = root.findViewById<Spinner>(R.id.listSpinner1)

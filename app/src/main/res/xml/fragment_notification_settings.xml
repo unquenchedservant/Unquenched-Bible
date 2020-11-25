@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.preference.PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_height="match_parent"
     android:layout_width="match_parent">
+
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="notification_category"
         app:title="Notification Settings">
@@ -24,4 +25,4 @@
             style="@style/AppPreference.DialogPreference"
             app:title="Reminder Time"/>
     </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
-</PreferenceScreen>
+</androidx.preference.PreferenceScreen>
