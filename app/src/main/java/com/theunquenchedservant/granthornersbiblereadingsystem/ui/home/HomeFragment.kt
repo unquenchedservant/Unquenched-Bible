@@ -33,7 +33,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarms
@@ -58,7 +57,8 @@ class HomeFragment : Fragment() {
     private var allowResume = true
     private var skipped = false
     private lateinit var binding: FragmentHomeBinding
-    val viewModel: HomeView by viewModels()
+    private val viewModel: HomeView by viewModels()
+
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -67,12 +67,8 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater,  container, false)
         return binding.root
     }
-    override fun onDestroyView() {
-        super.onDestroyView()
-    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        log("testing something real quick")
         viewModel.list1.observe(viewLifecycleOwner, {binding.cardList1.listReading.text = it})
         viewModel.list2.observe(viewLifecycleOwner, {binding.cardList2.listReading.text = it})
         viewModel.list3.observe(viewLifecycleOwner, {binding.cardList3.listReading.text = it})
@@ -102,7 +98,7 @@ class HomeFragment : Fragment() {
             when (getIntPref("firstRun")) {
                 0 -> {
                     log("Testing again")
-                    googleSignIn(true)
+                    googleSignIn()
                 }
                 1 -> {
                     log("alone again, naturally")
@@ -228,7 +224,7 @@ class HomeFragment : Fragment() {
         val arrayIdList = arrayOf(R.array.list_1, R.array.list_2, R.array.list_3, R.array.list_4, R.array.list_5, R.array.list_6, R.array.list_7, R.array.list_8,
                 R.array.list_9, R.array.list_10)
         for(i in 1..10){
-            val cardList = cardViewList[i-1] as CardviewsBinding
+            val cardList = cardViewList[i-1]
             val list = resources.getStringArray(arrayIdList[i-1])
             cardList.root.setOnClickListener{
                 if(it.findViewById<LinearLayout>(R.id.list_buttons).isVisible){
@@ -241,9 +237,9 @@ class HomeFragment : Fragment() {
                         cardList.root.isEnabled = false
                         cardList.root.setCardBackgroundColor(Color.parseColor("#00383838"))
                         if(getIntPref("listsDone") == 10){
-                            val mNotif = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                            mNotif.cancel(1)
-                            mNotif.cancel(2)
+                            val mNotification = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                            mNotification.cancel(1)
+                            mNotification.cancel(2)
                             binding.materialButton.text = resources.getString(R.string.done)
                             binding.materialButton.isEnabled = false
                             binding.materialButton.backgroundTintList = null
@@ -294,7 +290,7 @@ class HomeFragment : Fragment() {
     }*/
 
 
-    private fun googleSignIn(needsNotifOnSuccess: Boolean){
+    private fun googleSignIn(){
         val ctx = App.applicationContext()
         val user = FirebaseAuth.getInstance().currentUser
         if(user == null){
@@ -306,11 +302,8 @@ class HomeFragment : Fragment() {
                         .build()
                 val mGoogleSignInClient = GoogleSignIn.getClient(ctx, gso)
                 val signInIntent = mGoogleSignInClient.signInIntent
-                if(needsNotifOnSuccess) {
-                    setIntPref("needNotif", 1)
-                }else{
-                    setIntPref("needNotif", 0)
-                }
+
+                setIntPref("needNotif", 1)
                 startActivityForResult(signInIntent, 96)
             }
             builder.setNeutralButton("No") { dialogInterface, _ -> log("cancel pressed"); setIntPref("firstRun", 1); dialogInterface.cancel() }
@@ -340,28 +333,27 @@ class HomeFragment : Fragment() {
                 val db = FirebaseFirestore.getInstance()
                 val user = FirebaseAuth.getInstance().currentUser
                 val mainBinding = ActivityMainBinding.inflate(layoutInflater)
-                val nav_view = mainBinding.navView
+                val navView = mainBinding.navView
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
-                            log("DOCUMENT SNAPSHOT ${doc.get("Doc")}")
                             if (doc.get("Doc") != null) {
                                 val builder = AlertDialog.Builder(requireContext())
                                 builder.setPositiveButton("Use Cloud Data") { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
                                     setIntPref("firstRun", 1)
-                                    log("NAV VIEW $nav_view")
-                                    nav_view.menu.findItem(R.id.google_sign)?.title = "Sign Out"
-                                    val psalmsItem = nav_view.menu.findItem(R.id.action_psalms)
+                                    navView.menu.findItem(R.id.google_sign)?.title = "Sign Out"
+                                    val psalmsItem = navView.menu.findItem(R.id.action_psalms)
                                     val isPsalms = doc.data!!["psalms"] as Boolean
                                     if(isPsalms) psalmsItem?.title = resources.getString(R.string.psalmsnav1)
-                                        else nav_view.menu.findItem(R.id.action_psalms).title = resources.getString(R.string.psalmsnav5)
-                                    fragmentManager?.beginTransaction()?.detach(requireFragmentManager().fragments[0]!!)?.attach(requireFragmentManager().fragments[0]!!)?.commit()
+                                        else navView.menu.findItem(R.id.action_psalms).title = resources.getString(R.string.psalmsnav5)
+
+                                    requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _,_->
                                     SharedPref.preferenceToFireStone()
                                     setIntPref("firstRun", 1)
-                                    nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
-                                    fragmentManager?.beginTransaction()?.detach(requireFragmentManager().fragments[0]!!)?.attach(requireFragmentManager().fragments[0]!!)?.commit()
+                                    navView.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
                                 builder.setTitle("Account Found")
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
@@ -369,10 +361,10 @@ class HomeFragment : Fragment() {
                             } else {
                                 setIntPref("firstRun", 1)
                                 SharedPref.preferenceToFireStone()
-                                nav_view.menu.findItem(R.id.google_sign).title = "Sign Out"
-                                val psalmsItem = nav_view.menu.findItem(R.id.action_psalms)
+                                navView.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                val psalmsItem = navView.menu.findItem(R.id.action_psalms)
                                 psalmsItem.title = resources.getString(R.string.psalmsnav1)
-                                fragmentManager?.beginTransaction()?.detach(requireFragmentManager().fragments[0]!!)?.attach(requireFragmentManager().fragments[0]!!)?.commit()
+                                requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                             }
                         }
 
