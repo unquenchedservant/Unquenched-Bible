@@ -1,15 +1,11 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
-import android.app.*
-import android.content.Intent
 import android.content.res.Configuration
 import android.os.Bundle
 import android.util.Log
-import android.view.ContextThemeWrapper
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
-import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -18,26 +14,10 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
-import androidx.preference.Preference
-import androidx.preference.PreferenceFragmentCompat
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
-import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
-import com.google.firebase.firestore.FirebaseFirestore
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.firestoneToPreference
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{

@@ -16,7 +16,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
-object listHelpers {
+object ListHelpers {
     fun setVisibilities(binding: FragmentHomeBinding){
         changeVisibility(binding.cardList1, false)
         changeVisibility(binding.cardList2, false)

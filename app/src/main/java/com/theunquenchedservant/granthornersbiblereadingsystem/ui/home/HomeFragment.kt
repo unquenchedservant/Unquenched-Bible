@@ -25,11 +25,10 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markSingle
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
@@ -42,12 +41,12 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.changeVisibility
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.getListNumber
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.hideOthers
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.listSwitcher
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setTitles
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setVisibilities
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.changeVisibility
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.getListNumber
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.hideOthers
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.listSwitcher
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setTitles
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
@@ -313,7 +312,6 @@ class HomeFragment : Fragment() {
                 val db = FirebaseFirestore.getInstance()
                 val user = FirebaseAuth.getInstance().currentUser
                 val mainBinding = ActivityMainBinding.inflate(layoutInflater)
-                val navView = mainBinding.bottomNav
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
                             if (doc.get("Doc") != null) {
@@ -321,8 +319,6 @@ class HomeFragment : Fragment() {
                                 builder.setPositiveButton(R.string.btn_use_cloud) { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
                                     setIntPref("firstRun", 1)
-                                    val isPsalms = doc.data!!["psalms"] as Boolean
-
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
                                 builder.setNeutralButton(R.string.btn_use_device) { _,_->
