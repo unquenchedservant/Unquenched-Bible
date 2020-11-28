@@ -1,8 +1,8 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.service
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarm
 
 class ServiceStarted  : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {

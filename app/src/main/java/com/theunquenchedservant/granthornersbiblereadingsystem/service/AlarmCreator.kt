@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.service
 
 import android.app.AlarmManager
 import android.app.NotificationChannel
@@ -9,6 +9,8 @@ import android.content.Intent
 import android.os.Build
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.RemindReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import java.util.*
 

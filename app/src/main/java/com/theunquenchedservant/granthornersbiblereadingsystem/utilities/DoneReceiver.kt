@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver

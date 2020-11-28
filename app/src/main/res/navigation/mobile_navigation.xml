@@ -47,7 +47,7 @@
         android:label="Notifications"/>
     <fragment
         android:label="Manual"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.ManualListSet"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListSet"
         android:id="@+id/navigation_manual" />
     <fragment
         android:id="@+id/navigation_stats"
