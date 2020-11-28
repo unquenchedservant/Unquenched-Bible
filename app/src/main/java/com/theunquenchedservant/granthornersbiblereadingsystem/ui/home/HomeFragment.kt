@@ -4,11 +4,17 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Resources
+import android.content.res.XmlResourceParser
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.annotation.DrawableRes
+import androidx.annotation.XmlRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -26,8 +32,8 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
-import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markSingle
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
@@ -159,13 +165,14 @@ class HomeFragment : Fragment() {
             10 -> {
                 binding.materialButton.setText(R.string.done)
                 binding.materialButton.isEnabled = false
-                binding.materialButton.backgroundTintList = null
-                binding.materialButton.backgroundTintMode = null
+                binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+                binding.materialButton.backgroundTintMode= PorterDuff.Mode.ADD
             }
             0 -> {
                 binding.materialButton.setText(R.string.not_done)
                 binding.materialButton.isEnabled = true
                 binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
+                binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             }
             in 1..9 -> {
                 binding.materialButton.setText(R.string.btn_mark_remaining)
@@ -176,6 +183,7 @@ class HomeFragment : Fragment() {
                     100 - ((getIntPref("listsDone") * 5) - 5)
                 }
                 binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}383838"))
+                binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             }
         }
     }
@@ -191,8 +199,8 @@ class HomeFragment : Fragment() {
             markAll()
             binding.materialButton.isEnabled = false
             binding.materialButton.text = resources.getString(R.string.done)
-            binding.materialButton.backgroundTintList = null
-            binding.materialButton.backgroundTintMode = null
+            binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             binding.cardList1.root.isEnabled = false; binding.cardList2.root.isEnabled = false
             binding.cardList1.root.setBackgroundColor(disabled);binding.cardList2.root.setBackgroundColor(disabled)
             binding.cardList3.root.isEnabled = false; binding.cardList4.root.isEnabled = false
@@ -236,8 +244,8 @@ class HomeFragment : Fragment() {
                             mNotification.cancel(2)
                             binding.materialButton.text = resources.getString(R.string.done)
                             binding.materialButton.isEnabled = false
-                            binding.materialButton.backgroundTintList = null
-                            binding.materialButton.backgroundTintMode = null
+                            binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+                            binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                         }else{
                             binding.materialButton.isEnabled = true
                             val opacity = if(getIntPref("listsDone") < 5){
@@ -246,6 +254,7 @@ class HomeFragment : Fragment() {
                                  100 - ((getIntPref("listsDone") * 5) + 5)
                             }
                             binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}383838"))
+                            binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                             binding.materialButton.text = resources.getString(R.string.btn_mark_remaining)
                         }
                     }
