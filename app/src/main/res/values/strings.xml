@@ -23,6 +23,10 @@
     <string name="summary_overrides_reset">Forgot to mark lists as done? Mark them now and reset the lists</string>
     <string name="summary_psalms">Instead of 1 Psalm, 5 Psalms per day based on day of the week</string>
 
+    <string name="psalms_next">Next</string>
+    <string name="psalms_back">Back</string>
+    <string name="scripture_done">Done</string>
+
     <string name="channel_name">Daily Reading</string>
     <string name="channel_description">The daily reading comes in this channel</string>
     <string name="reset_confirm">Are you sure you want to reset all the lists to 0? This is irreversible</string>

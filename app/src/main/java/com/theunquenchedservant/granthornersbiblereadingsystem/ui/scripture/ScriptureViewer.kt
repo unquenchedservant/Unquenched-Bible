@@ -53,6 +53,7 @@ class ScriptureViewer : Fragment() {
         val act = activity as MainActivity
         act.supportActionBar?.title = chapter
         val url = getESVReference(chapter, psalms, iteration)
+
         (activity as MainActivity).findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
         getESV(url)
         return view
@@ -64,14 +65,70 @@ class ScriptureViewer : Fragment() {
             log("CURRENT ITERATION $iteration")
             var day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             when(iteration){
-                in 2..5 -> day += 30 * (iteration - 1)
+                1 -> {
+                    binding.psalmsBack.isVisible=false
+                    binding.psalmsNext.isVisible=true
+                    binding.psalmsNext.text=getText(R.string.psalms_next)
+                    binding.psalmsNext.setOnClickListener {
+                        val bundle = Bundle()
+                        bundle.putString("chapter", "no")
+                        bundle.putBoolean("psalms", true)
+                        bundle.putInt("iteration", iteration+1)
+                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                    }
+                }
+                in 2..4 ->{
+                    binding.psalmsBack.isVisible=true
+                    binding.psalmsNext.isVisible=true
+                    binding.psalmsBack.text = getText(R.string.psalms_back)
+                    binding.psalmsNext.text=getText(R.string.psalms_next)
+                    binding.psalmsBack.setOnClickListener {
+                        val bundle = Bundle()
+                        bundle.putString("chapter", "no")
+                        bundle.putBoolean("psalms", true)
+                        bundle.putInt("iteration", iteration - 1)
+                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                    }
+                    binding.psalmsNext.setOnClickListener {
+                        val bundle = Bundle()
+                        bundle.putString("chapter", "no")
+                        bundle.putBoolean("psalms", true)
+                        bundle.putInt("iteration", iteration+1)
+                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                    }
+                    day += 30 * (iteration - 1)
+                }
+                5 ->{
+                    binding.psalmsBack.isVisible=true
+                    binding.psalmsNext.isVisible=true
+                    binding.psalmsBack.setOnClickListener {
+                        val bundle = Bundle()
+                        bundle.putString("chapter", "no")
+                        bundle.putBoolean("psalms", true)
+                        bundle.putInt("iteration", iteration-1)
+                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                    }
+                    binding.psalmsNext.setOnClickListener {
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                    }
+                    binding.psalmsNext.text=getText(R.string.scripture_done)
+                    day += 30 * (iteration - 1)
+                }
             }
             title = "Psalm $day"
             url = "https://api.esv.org/v3/passage/html/?q=Psalm$day&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
         }else{
+            binding.psalmsBack.isVisible=false
+            binding.psalmsNext.isVisible=true
+            binding.psalmsNext.text=getText(R.string.scripture_done)
+            binding.psalmsNext.setOnClickListener {
+                (activity as MainActivity).navController.navigate(R.id.navigation_home)
+            }
             title = chapter
             url = "https://api.esv.org/v3/passage/html/?q=$chapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
         }
+        val act = activity as MainActivity
+        act.supportActionBar?.title = title
         return url
     }
     fun getESV(url: String){
