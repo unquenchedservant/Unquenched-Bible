@@ -1,4 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
-
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        app:key="planSettings"
+        app:title="@string/title_planSettings"
+        app:summary="@string/summary_planSettings"/>
+    <Preference
+        app:key="notifications"
+        app:title="@string/title_notifications"
+        app:summary="@string/summary_notications"
+        />
+    <Preference
+        app:key="overrides"
+        app:title="@string/title_overrides"
+        app:summary="@string/summary_overrides"/>
+    <Preference
+        app:key="infoSupport"
+        app:title="@string/title_infoSupport"
+        app:summary="@string/summary_infoSupport"/>
 </PreferenceScreen>
