@@ -6,23 +6,23 @@
 
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:key="notification_category"
-        app:title="Notification Settings">
+        app:title="@string/title_notification_settings">
         <SwitchPreferenceCompat
             android:key="notif_switch"
-            app:title="Notifications" />
+            app:title="@string/title_notifications" />
         <SwitchPreferenceCompat
             android:key="vacation_mode"
-            android:title="Vacation Mode"
-            android:summary="Notifications are paused, streaks are unaffected if you miss a day."/>
+            android:title="@string/title_vacation_mode"
+            android:summary="@string/summary_vacation_mode"/>
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="daily_time"
             app:defaultValue="360"
             style="@style/AppPreference.DialogPreference"
-            app:title="Daily List Time" />
+            app:title="@string/title_daily_list" />
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="remind_time"
             app:defaultValue="1170"
             style="@style/AppPreference.DialogPreference"
-            app:title="Reminder Time"/>
+            app:title="@string/title_reminder_time"/>
     </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 </androidx.preference.PreferenceScreen>

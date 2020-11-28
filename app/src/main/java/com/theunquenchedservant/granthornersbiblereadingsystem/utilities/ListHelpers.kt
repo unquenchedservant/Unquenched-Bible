@@ -54,16 +54,16 @@ object ListHelpers {
 
     fun setTitles(binding: FragmentHomeBinding){
         val resources = App.applicationContext().resources
-        binding.cardList1.listTitle.text = resources.getString(R.string.pgh_list1)
-        binding.cardList2.listTitle.text = resources.getString(R.string.pgh_list2)
-        binding.cardList3.listTitle.text = resources.getString(R.string.pgh_list3)
-        binding.cardList4.listTitle.text = resources.getString(R.string.pgh_list4)
-        binding.cardList5.listTitle.text = resources.getString(R.string.pgh_list5)
-        binding.cardList6.listTitle.text = resources.getString(R.string.pgh_list6)
-        binding.cardList7.listTitle.text = resources.getString(R.string.pgh_list7)
-        binding.cardList8.listTitle.text = resources.getString(R.string.pgh_list8)
-        binding.cardList9.listTitle.text = resources.getString(R.string.pgh_list9)
-        binding.cardList10.listTitle.text = resources.getString(R.string.pgh_list10)
+        binding.cardList1.listTitle.text = resources.getString(R.string.title_pgh_list1)
+        binding.cardList2.listTitle.text = resources.getString(R.string.title_pgh_list2)
+        binding.cardList3.listTitle.text = resources.getString(R.string.title_pgh_list3)
+        binding.cardList4.listTitle.text = resources.getString(R.string.title_pgh_list4)
+        binding.cardList5.listTitle.text = resources.getString(R.string.title_pgh_list5)
+        binding.cardList6.listTitle.text = resources.getString(R.string.title_pgh_list6)
+        binding.cardList7.listTitle.text = resources.getString(R.string.title_pgh_list7)
+        binding.cardList8.listTitle.text = resources.getString(R.string.title_pgh_list8)
+        binding.cardList9.listTitle.text = resources.getString(R.string.title_pgh_list9)
+        binding.cardList10.listTitle.text = resources.getString(R.string.title_pgh_list10)
     }
      fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){
          log("change visibility")

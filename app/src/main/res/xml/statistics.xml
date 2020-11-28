@@ -20,7 +20,7 @@
             app:title="@string/summary_reset_stats"/>
         <SwitchPreferenceCompat
             app:key="allow_partial_switch"
-            app:title="Allow Partial for Streak" />
+            app:title="@string/title_partial" />
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -21,6 +21,19 @@
     <string name="title_reminder">Reminder!</string>
     <string name="title_reset_all">Reset All</string>
     <string name="title_account_found">Account Found</string>
+    <string name="title_about_app">More About The App</string>
+    <string name="title_about_system">About The System</string>
+    <string name="title_licenses">Licenses</string>
+    <string name="title_information">Information</string>
+    <string name="title_support">Support</string>
+    <string name="title_version">App Version 1.3</string>
+    <string name="title_contact">Question/Comments</string>
+    <string name="title_twitter">Follow Dev On Twitter</string>
+    <string name="title_mailchimp">Sign Up for the Mailing List</string>
+    <string name="title_vacation_mode">Vacation Mode</string>
+    <string name="title_daily_list">Daily List Time</string>
+    <string name="title_reminder_time">Reminder Time</string>
+    <string name="title_partial">Allow Partial for Streak</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -34,6 +47,11 @@
     <string name="summary_account_loggedout">Have your progress stored in the cloud so you never have to worry about losing it!</string>
     <string name="summary_account_loggedin"></string>
     <string name="summary_reset_stats">Reset All Stats</string>
+    <string name="summary_version">Click here for changelog</string>
+    <string name="summary_contact">Email the Dev</string>
+    <string name="summary_twitter">Follow @unquenchedbible on twitter for updates and support</string>
+    <string name="summary_mailchimp">Get emails with updates about the upcoming major overhaul to the app!</string>
+    <string name="summary_vacation_mode">Notifications are paused, streaks are unaffected if you miss a day.</string>
 
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>
@@ -59,16 +77,16 @@
     <string name="hint_email">Email Address</string>
     <string name="hint_password">Password</string>
 
-    <string name="pgh_list1">The Gospels</string>
-    <string name="pgh_list2">The Pentateuch</string>
-    <string name="pgh_list3">Epistles 1</string>
-    <string name="pgh_list4">Epistles 2</string>
-    <string name="pgh_list5">Poetry</string>
-    <string name="pgh_list6">Psalms</string>
-    <string name="pgh_list7">Proverbs</string>
-    <string name="pgh_list8">History</string>
-    <string name="pgh_list9">Prophets</string>
-    <string name="pgh_list10">Acts</string>
+    <string name="title_pgh_list1">The Gospels</string>
+    <string name="title_pgh_list2">The Pentateuch</string>
+    <string name="title_pgh_list3">Epistles 1</string>
+    <string name="title_pgh_list4">Epistles 2</string>
+    <string name="title_pgh_list5">Poetry</string>
+    <string name="title_pgh_list6">Psalms</string>
+    <string name="title_pgh_list7">Proverbs</string>
+    <string name="title_pgh_list8">History</string>
+    <string name="title_pgh_list9">Prophets</string>
+    <string name="title_pgh_list10">Acts</string>
 
     <string name="not_done">Mark All Done</string>
     <string name="done">Already Done For Today!</string>

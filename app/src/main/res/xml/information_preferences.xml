@@ -2,16 +2,16 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <PreferenceCategory
-        app:title="Information">
+        app:title="@string/title_information">
         <Preference
             app:key="appInfo"
-            app:title="More About The App"/>
+            app:title="@string/title_about_app"/>
         <Preference
             app:key="systemInfo"
-            app:title="About The System"/>
+            app:title="@string/title_about_system"/>
         <Preference
             app:key="licenses"
-            app:title="Licenses">
+            app:title="@string/title_licenses">
         </Preference>
         <Preference
             app:key="privacy"
@@ -22,24 +22,24 @@
         </Preference>
     </PreferenceCategory>
     <PreferenceCategory
-        app:title="Support">
+        app:title="@string/title_support">
         <Preference
             app:key="currentVersion"
-            app:title="App Version"
-            app:summary="Click here for changelog"
+            app:title="@string/title_version"
+            app:summary="@string/summary_version"
             />
         <Preference
             app:key="contact"
-            app:title="Question/Comments"
-            app:summary="Email the Dev"/>
+            app:title="@string/title_contact"
+            app:summary="@string/summary_contact"/>
         <Preference
             app:key="twitter"
-            app:title="Follow Dev On Twitter"
-            app:summary="Follow @theunqnchdsrvnt on twitter for updates and support"/>
+            app:title="@string/title_twitter"
+            app:summary="@string/summary_twitter"/>
         <Preference
             app:key="mailchimp"
-            app:title="Sign Up for the Mailing List"
-            app:summary="Get emails with updates about the upcoming major overhaul to the app!"/>
+            app:title="@string/title_mailchimp"
+            app:summary="@string/summary_mailchimp"/>
     </PreferenceCategory>
 
 
