@@ -1,7 +1,26 @@
 <resources>
     <string name="app_name">Grant Horners Bible Reading System</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Settings</string>
+
+    <string name="title_home">Reading</string>
+    <string name="title_stats">Stats</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_infoSupport">Information and Support</string>
+    <string name="title_overrides">Override Lists</string>
+    <string name="title_planSettings">Plan Settings</string>
+    <string name="title_overrides_manual">Manually Set Lists</string>
+    <string name="title_overrides_reset">Force Daily Reset</string>
+
+    <string name="cd_home">Home</string>
+    <string name="cd_stats">Stats</string>
+    <string name="cd_settings">Settings</string>
+
+    <string name="summary_notications">Update Notification Settings</string>
+    <string name="summary_infoSupport">Update logs and contact information</string>
+    <string name="summary_overrides">Manually set lists and force daily resets</string>
+    <string name="summary_planSettings">Customize settings regarding to the reading plan</string>
+    <string name="summary_overrides_reset">Forgot to mark lists as done? Mark them now and reset the lists</string>
+
     <string name="channel_name">Daily Reading</string>
     <string name="channel_description">The daily reading comes in this channel</string>
     <string name="reset_confirm">Are you sure you want to reset all the lists to 0? This is irreversible</string>
