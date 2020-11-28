@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         navController.navigate(R.id.navigation_home)
         setupBottomNavigationBar()
     }
-
     private fun setupBottomNavigationBar() {
         switchEnabled("home")
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
