@@ -57,6 +57,10 @@
         android:id="@+id/navigation_overrides"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OverridesFragment"
         android:label="Overrides"/>
+    <fragment
+        android:id="@+id/navigation_plan_settings"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSettingsFragment"
+        android:label="PlanSettings" />
 
 
 

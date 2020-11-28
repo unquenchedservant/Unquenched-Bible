@@ -10,6 +10,7 @@
     <string name="title_planSettings">Plan Settings</string>
     <string name="title_overrides_manual">Manually Set Lists</string>
     <string name="title_overrides_reset">Force Daily Reset</string>
+    <string name="title_psalms">5 Psalms Per Day</string>
 
     <string name="cd_home">Home</string>
     <string name="cd_stats">Stats</string>
@@ -20,6 +21,7 @@
     <string name="summary_overrides">Manually set lists and force daily resets</string>
     <string name="summary_planSettings">Customize settings regarding to the reading plan</string>
     <string name="summary_overrides_reset">Forgot to mark lists as done? Mark them now and reset the lists</string>
+    <string name="summary_psalms">Instead of 1 Psalm, 5 Psalms per day based on day of the week</string>
 
     <string name="channel_name">Daily Reading</string>
     <string name="channel_description">The daily reading comes in this channel</string>

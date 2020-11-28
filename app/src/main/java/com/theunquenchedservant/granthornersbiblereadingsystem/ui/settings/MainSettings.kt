@@ -17,6 +17,11 @@ class MainSettings : PreferenceFragmentCompat() {
         val infoSupport: Preference? = findPreference("infoSupport")
         val mainActivity = activity as MainActivity
 
+        plan!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            mainActivity.supportActionBar?.title="Plan Settings"
+            mainActivity.navController.navigate(R.id.navigation_plan_settings)
+            false
+        }
         notifications!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Notifications"
             mainActivity.navController.navigate(R.id.navigation_notifications)
