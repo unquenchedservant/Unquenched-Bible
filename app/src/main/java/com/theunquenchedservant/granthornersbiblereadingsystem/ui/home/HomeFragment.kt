@@ -97,11 +97,9 @@ class HomeFragment : Fragment() {
         if(savedInstanceState != null) {
             when (getIntPref("firstRun")) {
                 0 -> {
-                    log("Testing again")
                     googleSignIn()
                 }
                 1 -> {
-                    log("alone again, naturally")
                     createAlarms()
                 }
             }
@@ -160,20 +158,17 @@ class HomeFragment : Fragment() {
         }
         when (if (result != null) (result["listsDone"] as Long).toInt() else getIntPref("listsDone")) {
             10 -> {
-                log("10 lists are done")
                 binding.materialButton.setText(R.string.done)
                 binding.materialButton.isEnabled = false
                 binding.materialButton.backgroundTintList = null
                 binding.materialButton.backgroundTintMode = null
             }
             0 -> {
-                log("zero lists are done")
                 binding.materialButton.setText(R.string.notdone)
                 binding.materialButton.isEnabled = true
                 binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
             }
             in 1..9 -> {
-                log("${getIntPref("listsDone")} are done")
                 binding.materialButton.setText(R.string.markRemaining)
                 binding.materialButton.isEnabled = true
                 val opacity = if (getIntPref("listsDone") < 5){
@@ -280,16 +275,6 @@ class HomeFragment : Fragment() {
 
 
 
-    /**
-    private fun getCSBReference(chapter: String){
-        log("START CSB REFERENCE")
-        val title = chapter
-        val url = "https://api.scripture.api.bible/v1/bibles/a556c5305ee15c3f-01/passages/JHN.1"
-        val wv = getCSB(context, url)
-        chapterShower(wv, title, false, 0)
-    }*/
-
-
     private fun googleSignIn(){
         val ctx = App.applicationContext()
         val user = FirebaseAuth.getInstance().currentUser
@@ -341,18 +326,13 @@ class HomeFragment : Fragment() {
                                 builder.setPositiveButton("Use Cloud Data") { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
                                     setIntPref("firstRun", 1)
-                                    //navView.menu.findItem(R.id.google_sign)?.title = "Sign Out"
-                                    //val psalmsItem = navView.menu.findItem(R.id.action_psalms)
                                     val isPsalms = doc.data!!["psalms"] as Boolean
-                                    //if(isPsalms) psalmsItem?.title = resources.getString(R.string.psalmsnav1)
-                                    //    else navView.menu.findItem(R.id.action_psalms).title = resources.getString(R.string.psalmsnav5)
 
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _,_->
                                     SharedPref.preferenceToFireStone()
                                     setIntPref("firstRun", 1)
-                                    //navView.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
                                 builder.setTitle("Account Found")
@@ -361,9 +341,6 @@ class HomeFragment : Fragment() {
                             } else {
                                 setIntPref("firstRun", 1)
                                 SharedPref.preferenceToFireStone()
-                               // navView.menu.findItem(R.id.google_sign).title = "Sign Out"
-                               // val psalmsItem = navView.menu.findItem(R.id.action_psalms)
-                               // psalmsItem.title = resources.getString(R.string.psalmsnav1)
                                 requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                             }
                         }

@@ -19,21 +19,25 @@ class MainSettings : PreferenceFragmentCompat() {
 
         plan!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title="Plan Settings"
+            mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_plan_settings)
             false
         }
         notifications!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Notifications"
+            mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_notifications)
             false
         }
         overrides!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Overrides"
+            mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_overrides)
             false
         }
         infoSupport!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Information & Support"
+            mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_information)
             false
         }

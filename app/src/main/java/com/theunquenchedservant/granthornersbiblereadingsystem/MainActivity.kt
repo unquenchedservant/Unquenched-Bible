@@ -83,6 +83,34 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     }
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
+                R.id.navigation_plan_settings ->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                }
+                R.id.navigation_notifications->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                }
+                R.id.navigation_overrides->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                }
+                R.id.navigation_information->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                }
                 R.id.navigation_home -> {
                     log("home selected")
                     switchEnabled("home")
@@ -104,24 +132,25 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        log("This is the nav item selected ${item.title}")
-        val homeFrag = navHostFragment.childFragmentManager.fragments[0]
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
                 supportActionBar?.title = getDate(0, true)
                 switchEnabled("home")
                 navControl.navigate(R.id.navigation_home)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{
                 log("Stats was pressed")
                 supportActionBar?.title = "Statistics"
                 switchEnabled("stats")
                 navControl.navigate(R.id.navigation_stats)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_settings -> {
                 switchEnabled("Settings")
                 navControl.navigate(R.id.navigation_settings)
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
            /**R.id.google_sign -> {
                 val user = FirebaseAuth.getInstance().currentUser
@@ -167,6 +196,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
+        log("TESTING TESTING TESTING")
         if(navController.currentDestination?.id != R.id.navigation_home){
             navController.popBackStack()
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -218,12 +248,10 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                                 val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
                                     firestoneToPreference(doc)
-                                    //binding.bottomNav.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
                                     preferenceToFireStone()
-                                    //binding.bottomNav.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setTitle("Account Found")
