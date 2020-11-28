@@ -21,12 +21,12 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         psalms!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(ps){
                 setBoolPref("psalms", false)
-                if(FirebaseAuth.getInstance() != null){
+                if(FirebaseAuth.getInstance().currentUser != null){
                     updateFS("psalms", false)
                 }
             }else{
                 setBoolPref("psalms", true)
-                if(FirebaseAuth.getInstance() != null){
+                if(FirebaseAuth.getInstance().currentUser != null){
                     updateFS("psalms", true)
                 }
             }
