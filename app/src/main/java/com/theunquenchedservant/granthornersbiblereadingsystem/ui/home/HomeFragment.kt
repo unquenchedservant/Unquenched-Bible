@@ -4,17 +4,12 @@ import android.app.NotificationManager
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.content.res.Resources
-import android.content.res.XmlResourceParser
 import android.graphics.Color
 import android.graphics.PorterDuff
-import android.graphics.drawable.Drawable
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
 import android.widget.Toast
-import androidx.annotation.DrawableRes
-import androidx.annotation.XmlRes
 import androidx.appcompat.app.AlertDialog
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
@@ -214,8 +209,6 @@ class HomeFragment : Fragment() {
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
-            val stats = navView.menu.findItem(R.id.navigation_stats)
-            stats.title = "Current Streak: ${getIntPref("currentStreak")}"
         }
     }
 
