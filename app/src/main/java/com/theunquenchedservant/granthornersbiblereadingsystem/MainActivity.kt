@@ -152,25 +152,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 navControl.navigate(R.id.navigation_settings)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
-           /**R.id.google_sign -> {
-                val user = FirebaseAuth.getInstance().currentUser
-                if (user != null){
-                    val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
-                    builder.setPositiveButton(getString(R.string.yes)){_,_ ->
-                        FirebaseAuth.getInstance().signOut()
-                        item.title = "Sign In"
-                        navControl.navigate(R.id.navigation_home)
-                        Toast.makeText(applicationContext, "Signed Out!", Toast.LENGTH_LONG).show()
-                    }
-                    builder.setNeutralButton(getString(R.string.no)){dialogInterface, _ ->
-                        dialogInterface.cancel()
-                    }
-                    builder.setMessage("Are you sure you want to sign out ${user.email}?")
-                    builder.setTitle("Sign Out?")
-                    builder.create().show()
-                }
-                googleSignIn()
-            }*/
         }
         return true
     }
@@ -196,7 +177,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
-        log("TESTING TESTING TESTING")
         if(navController.currentDestination?.id != R.id.navigation_home){
             navController.popBackStack()
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -206,66 +186,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             finish()
         }
     }
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == _rcSignIn){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account!!)
-            }catch(e: ApiException){
-                Toast.makeText(applicationContext, "Google Sign In Failed", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-    private fun googleSignIn(){
-        val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
-        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build()
-            val mGoogleSignInClient = GoogleSignIn.getClient(applicationContext, gso)
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(signInIntent, _rcSignIn)
-        }
-        builder.setNeutralButton(R.string.no) { dialogInterface, _ -> log("cancel pressed"); dialogInterface.cancel() }
-        builder.setMessage(R.string.googleCheck).setTitle("Sign In To Google Account")
-        builder.create().show()
-    }
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val auth = FirebaseAuth.getInstance()
-        val navControl = findNavController(this, R.id.nav_host_fragment)
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
-                val db = FirebaseFirestore.getInstance()
-                val user = FirebaseAuth.getInstance().currentUser
-                db.collection("main").document(user!!.uid).get()
-                        .addOnSuccessListener { doc ->
-                            if (doc != null) {
-                                val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
-                                builder.setPositiveButton("Use Cloud Data") { _, _ ->
-                                    firestoneToPreference(doc)
-                                    navControl.navigate(R.id.navigation_home)
-                                }
-                                builder.setNeutralButton("Overwrite with device") { _, _ ->
-                                    preferenceToFireStone()
-                                    navControl.navigate(R.id.navigation_home)
-                                }
-                                builder.setTitle("Account Found")
-                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
-                                builder.create().show()
-                            } else {
-                                preferenceToFireStone()
-                            }
-                        }
-            } else {
-                Toast.makeText(applicationContext, "Google Sign In Failed", Toast.LENGTH_LONG).show()
-            }
-        }
-    }
+
 
 
 

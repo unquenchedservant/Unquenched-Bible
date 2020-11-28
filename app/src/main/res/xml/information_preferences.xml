@@ -15,7 +15,7 @@
         </Preference>
         <Preference
             app:key="privacy"
-            app:title="@string/privacy_policy">
+            app:title="@string/title_privacy">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://www.iubenda.com/privacy-policy/56351106"/>

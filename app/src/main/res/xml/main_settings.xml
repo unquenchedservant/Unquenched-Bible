@@ -18,4 +18,8 @@
         app:key="infoSupport"
         app:title="@string/title_infoSupport"
         app:summary="@string/summary_infoSupport"/>
+    <Preference
+        app:key="googleSignIn"
+        app:title="@string/title_account_loggedout"
+        app:summary="@string/title_account_loggedout"/>
 </PreferenceScreen>

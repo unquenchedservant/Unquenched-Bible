@@ -48,22 +48,22 @@ object listHelpers {
         cardList as CardView
         when(listDone){
             0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-            1-> { material_button.setText(R.string.markRemaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
+            1-> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
         }
     }
 
     fun setTitles(binding: FragmentHomeBinding){
         val resources = App.applicationContext().resources
-        binding.cardList1.listTitle.text = resources.getString(R.string.l1)
-        binding.cardList2.listTitle.text = resources.getString(R.string.l2)
-        binding.cardList3.listTitle.text = resources.getString(R.string.l3)
-        binding.cardList4.listTitle.text = resources.getString(R.string.l4)
-        binding.cardList5.listTitle.text = resources.getString(R.string.l5)
-        binding.cardList6.listTitle.text = resources.getString(R.string.l6)
-        binding.cardList7.listTitle.text = resources.getString(R.string.l7)
-        binding.cardList8.listTitle.text = resources.getString(R.string.l8)
-        binding.cardList9.listTitle.text = resources.getString(R.string.l9)
-        binding.cardList10.listTitle.text = resources.getString(R.string.l10)
+        binding.cardList1.listTitle.text = resources.getString(R.string.pgh_list1)
+        binding.cardList2.listTitle.text = resources.getString(R.string.pgh_list2)
+        binding.cardList3.listTitle.text = resources.getString(R.string.pgh_list3)
+        binding.cardList4.listTitle.text = resources.getString(R.string.pgh_list4)
+        binding.cardList5.listTitle.text = resources.getString(R.string.pgh_list5)
+        binding.cardList6.listTitle.text = resources.getString(R.string.pgh_list6)
+        binding.cardList7.listTitle.text = resources.getString(R.string.pgh_list7)
+        binding.cardList8.listTitle.text = resources.getString(R.string.pgh_list8)
+        binding.cardList9.listTitle.text = resources.getString(R.string.pgh_list9)
+        binding.cardList10.listTitle.text = resources.getString(R.string.pgh_list10)
     }
      fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){
          log("change visibility")

@@ -6,18 +6,18 @@
         android:id="@+id/navigation_home"
         android:icon="@drawable/ic_home_black_24dp"
         android:textColor="@color/menu_text"
-        android:contentDescription="@string/cd_home"
+        android:contentDescription="@string/summary_home"
         android:title="@string/title_home" />
     <item
         android:id="@+id/navigation_stats"
         android:icon="@drawable/ic_home_black_24dp"
         android:textColor="@color/menu_text"
-        android:contentDescription="@string/cd_stats"
+        android:contentDescription="@string/summary_stats"
         android:title="@string/title_stats"/>
     <item
         android:id="@+id/navigation_settings"
         android:icon="@drawable/ic_settings_black_24"
         android:textColor="@color/menu_text"
-        android:contentDescription="@string/cd_settings"
+        android:contentDescription="@string/summary_settings"
         android:title="@string/title_settings"/>
 </menu>

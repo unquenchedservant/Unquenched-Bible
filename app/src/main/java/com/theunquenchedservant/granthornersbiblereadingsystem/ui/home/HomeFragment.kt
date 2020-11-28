@@ -164,12 +164,12 @@ class HomeFragment : Fragment() {
                 binding.materialButton.backgroundTintMode = null
             }
             0 -> {
-                binding.materialButton.setText(R.string.notdone)
+                binding.materialButton.setText(R.string.not_done)
                 binding.materialButton.isEnabled = true
                 binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
             }
             in 1..9 -> {
-                binding.materialButton.setText(R.string.markRemaining)
+                binding.materialButton.setText(R.string.btn_mark_remaining)
                 binding.materialButton.isEnabled = true
                 val opacity = if (getIntPref("listsDone") < 5){
                     100 - (getIntPref("listsDone") * 5)
@@ -247,7 +247,7 @@ class HomeFragment : Fragment() {
                                  100 - ((getIntPref("listsDone") * 5) + 5)
                             }
                             binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}383838"))
-                            binding.materialButton.text = resources.getString(R.string.markRemaining)
+                            binding.materialButton.text = resources.getString(R.string.btn_mark_remaining)
                         }
                     }
                     it.findViewById<MaterialTextView>(R.id.list_read).setOnClickListener{
@@ -287,8 +287,8 @@ class HomeFragment : Fragment() {
                 setIntPref("needNotif", 1)
                 startActivityForResult(signInIntent, 96)
             }
-            builder.setNeutralButton("No") { dialogInterface, _ -> log("cancel pressed"); setIntPref("firstRun", 1); dialogInterface.cancel() }
-            builder.setMessage(R.string.googleCheck).setTitle("Sign In To Google Account")
+            builder.setNeutralButton("No") { dialogInterface, _ -> setIntPref("firstRun", 1); dialogInterface.cancel() }
+            builder.setMessage(R.string.msg_google).setTitle(R.string.title_sign_in)
             builder.create().show()
         }
     }
@@ -300,17 +300,16 @@ class HomeFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account!!)
             }catch(e: ApiException){
-                Toast.makeText(activity?.applicationContext, "Google Sign In Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity?.applicationContext, R.string.msg_google_failed, Toast.LENGTH_LONG).show()
             }
         }
     }
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        log("firebaseAuthWithGoogle: ${acct.id}")
         val auth = FirebaseAuth.getInstance()
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                Toast.makeText(context, "Signed In!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.msg_signed_in, Toast.LENGTH_LONG).show()
                 val db = FirebaseFirestore.getInstance()
                 val user = FirebaseAuth.getInstance().currentUser
                 val mainBinding = ActivityMainBinding.inflate(layoutInflater)
@@ -319,19 +318,19 @@ class HomeFragment : Fragment() {
                         .addOnSuccessListener { doc ->
                             if (doc.get("Doc") != null) {
                                 val builder = AlertDialog.Builder(requireContext())
-                                builder.setPositiveButton("Use Cloud Data") { _,_ ->
+                                builder.setPositiveButton(R.string.btn_use_cloud) { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
                                     setIntPref("firstRun", 1)
                                     val isPsalms = doc.data!!["psalms"] as Boolean
 
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
-                                builder.setNeutralButton("Overwrite with device") { _,_->
+                                builder.setNeutralButton(R.string.btn_use_device) { _,_->
                                     SharedPref.preferenceToFireStone()
                                     setIntPref("firstRun", 1)
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
-                                builder.setTitle("Account Found")
+                                builder.setTitle(R.string.title_account_found)
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
                                 builder.create().show()
                             } else {
@@ -343,7 +342,7 @@ class HomeFragment : Fragment() {
 
             } else {
                 setIntPref("firstRun", 1)
-                Toast.makeText(context, "Google Sign In Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.msg_google_failed, Toast.LENGTH_LONG).show()
             }
         }
     }

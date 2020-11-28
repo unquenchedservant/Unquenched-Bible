@@ -36,8 +36,8 @@ object AlarmCreator {
     fun createNotificationChannel() {
         val primaryChannelId = "primary_notification_channel"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = App.applicationContext().resources.getString(R.string.channel_name)
-            val description = App.applicationContext().getString(R.string.channel_description)
+            val name = App.applicationContext().resources.getString(R.string.notification_channel_name)
+            val description = App.applicationContext().getString(R.string.notification_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(primaryChannelId, name, importance)
             channel.description = description
