@@ -190,7 +190,7 @@ class HomeFragment : Fragment() {
     private fun createButtonListener(){
         val ctx = App.applicationContext()
         val mainBinding = (activity as MainActivity).binding
-        val navView = mainBinding.navView
+        val navView = mainBinding.bottomNav
         val disabled = Color.parseColor("#00383838")
         binding.materialButton.setOnClickListener {
             hideOthers(null, binding)
@@ -212,7 +212,7 @@ class HomeFragment : Fragment() {
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
-            val stats = navView.menu.findItem(R.id.action_statistics)
+            val stats = navView.menu.findItem(R.id.navigation_stats)
             stats.title = "Current Streak: ${getIntPref("currentStreak")}"
         }
     }
@@ -333,7 +333,7 @@ class HomeFragment : Fragment() {
                 val db = FirebaseFirestore.getInstance()
                 val user = FirebaseAuth.getInstance().currentUser
                 val mainBinding = ActivityMainBinding.inflate(layoutInflater)
-                val navView = mainBinding.navView
+                val navView = mainBinding.bottomNav
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
                             if (doc.get("Doc") != null) {
@@ -341,18 +341,18 @@ class HomeFragment : Fragment() {
                                 builder.setPositiveButton("Use Cloud Data") { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
                                     setIntPref("firstRun", 1)
-                                    navView.menu.findItem(R.id.google_sign)?.title = "Sign Out"
-                                    val psalmsItem = navView.menu.findItem(R.id.action_psalms)
+                                    //navView.menu.findItem(R.id.google_sign)?.title = "Sign Out"
+                                    //val psalmsItem = navView.menu.findItem(R.id.action_psalms)
                                     val isPsalms = doc.data!!["psalms"] as Boolean
-                                    if(isPsalms) psalmsItem?.title = resources.getString(R.string.psalmsnav1)
-                                        else navView.menu.findItem(R.id.action_psalms).title = resources.getString(R.string.psalmsnav5)
+                                    //if(isPsalms) psalmsItem?.title = resources.getString(R.string.psalmsnav1)
+                                    //    else navView.menu.findItem(R.id.action_psalms).title = resources.getString(R.string.psalmsnav5)
 
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _,_->
                                     SharedPref.preferenceToFireStone()
                                     setIntPref("firstRun", 1)
-                                    navView.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    //navView.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
                                 builder.setTitle("Account Found")
@@ -361,9 +361,9 @@ class HomeFragment : Fragment() {
                             } else {
                                 setIntPref("firstRun", 1)
                                 SharedPref.preferenceToFireStone()
-                                navView.menu.findItem(R.id.google_sign).title = "Sign Out"
-                                val psalmsItem = navView.menu.findItem(R.id.action_psalms)
-                                psalmsItem.title = resources.getString(R.string.psalmsnav1)
+                               // navView.menu.findItem(R.id.google_sign).title = "Sign Out"
+                               // val psalmsItem = navView.menu.findItem(R.id.action_psalms)
+                               // psalmsItem.title = resources.getString(R.string.psalmsnav1)
                                 requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                             }
                         }
