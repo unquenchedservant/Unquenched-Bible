@@ -2,7 +2,6 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:startDestination="@+id/navigation_home">
-
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment"
@@ -10,22 +9,6 @@
         <action
             android:id="@+id/action_navigation_home_to_scripture"
             app:destination="@id/navigation_scripture"/>
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_notifications"
-            app:destination="@id/navigation_notifications" />
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_manual"
-            app:destination="@id/navigation_manual" />
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_information"
-            app:destination="@id/navigation_information" />
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_stats"
-            app:destination="@id/navigation_stats" />
-        <action
-            android:id="@+id/action_navigation_home_to_navigation_support"
-            app:destination="@id/navigation_support" />
-
     </fragment>
     <fragment
         android:id="@+id/navigation_scripture"
@@ -40,6 +23,14 @@
         <argument
             android:name="iteration"
             app:argType="integer"/>
+        <action
+            android:id="@+id/action_navigation_scripture_to_navigation_home"
+            app:destination="@id/navigation_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_settings"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.MainSettings"
+        android:label="Settings">
     </fragment>
     <fragment
         android:id="@+id/navigation_support"
@@ -49,18 +40,29 @@
         android:id="@+id/navigation_information"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.InformationFragment"
         android:label="Information" />
-    <fragment
-        android:id="@+id/navigation_stats"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.StatisticsFragment"
-        android:label="Statistics"/>
+
     <fragment
         android:id="@+id/navigation_notifications"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.NotificationsFragment"
         android:label="Notifications"/>
     <fragment
         android:label="Manual"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.ManualListSet"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListSet"
         android:id="@+id/navigation_manual" />
+    <fragment
+        android:id="@+id/navigation_stats"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.StatisticsFragment"
+        android:label="Statistics"/>
+    <fragment
+        android:id="@+id/navigation_overrides"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OverridesFragment"
+        android:label="Overrides"/>
+    <fragment
+        android:id="@+id/navigation_plan_settings"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSettingsFragment"
+        android:label="PlanSettings" />
+
+
 
 
 </navigation>

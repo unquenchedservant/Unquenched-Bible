@@ -1,11 +1,11 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
-import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 
 class DoneReceiver : BroadcastReceiver() {

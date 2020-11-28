@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.*
 import android.widget.LinearLayout
@@ -25,29 +26,28 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markAll
-import com.theunquenchedservant.granthornersbiblereadingsystem.Marker.markSingle
-import com.theunquenchedservant.granthornersbiblereadingsystem.SharedPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.DailyCheck
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createAlarms
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications.AlarmCreator.createNotificationChannel
+import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarm
+import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarms
+import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createNotificationChannel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.changeVisibility
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.getListNumber
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.hideOthers
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.listSwitcher
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setTitles
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.listHelpers.setVisibilities
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.changeVisibility
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.getListNumber
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.hideOthers
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.listSwitcher
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setTitles
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import java.util.Calendar
 
 class HomeFragment : Fragment() {
@@ -97,11 +97,9 @@ class HomeFragment : Fragment() {
         if(savedInstanceState != null) {
             when (getIntPref("firstRun")) {
                 0 -> {
-                    log("Testing again")
                     googleSignIn()
                 }
                 1 -> {
-                    log("alone again, naturally")
                     createAlarms()
                 }
             }
@@ -160,21 +158,19 @@ class HomeFragment : Fragment() {
         }
         when (if (result != null) (result["listsDone"] as Long).toInt() else getIntPref("listsDone")) {
             10 -> {
-                log("10 lists are done")
                 binding.materialButton.setText(R.string.done)
                 binding.materialButton.isEnabled = false
-                binding.materialButton.backgroundTintList = null
-                binding.materialButton.backgroundTintMode = null
+                binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+                binding.materialButton.backgroundTintMode= PorterDuff.Mode.ADD
             }
             0 -> {
-                log("zero lists are done")
-                binding.materialButton.setText(R.string.notdone)
+                binding.materialButton.setText(R.string.not_done)
                 binding.materialButton.isEnabled = true
                 binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
+                binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             }
             in 1..9 -> {
-                log("${getIntPref("listsDone")} are done")
-                binding.materialButton.setText(R.string.markRemaining)
+                binding.materialButton.setText(R.string.btn_mark_remaining)
                 binding.materialButton.isEnabled = true
                 val opacity = if (getIntPref("listsDone") < 5){
                     100 - (getIntPref("listsDone") * 5)
@@ -182,6 +178,7 @@ class HomeFragment : Fragment() {
                     100 - ((getIntPref("listsDone") * 5) - 5)
                 }
                 binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}383838"))
+                binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             }
         }
     }
@@ -190,15 +187,15 @@ class HomeFragment : Fragment() {
     private fun createButtonListener(){
         val ctx = App.applicationContext()
         val mainBinding = (activity as MainActivity).binding
-        val navView = mainBinding.navView
+        val navView = mainBinding.bottomNav
         val disabled = Color.parseColor("#00383838")
         binding.materialButton.setOnClickListener {
             hideOthers(null, binding)
             markAll()
             binding.materialButton.isEnabled = false
             binding.materialButton.text = resources.getString(R.string.done)
-            binding.materialButton.backgroundTintList = null
-            binding.materialButton.backgroundTintMode = null
+            binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+            binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             binding.cardList1.root.isEnabled = false; binding.cardList2.root.isEnabled = false
             binding.cardList1.root.setBackgroundColor(disabled);binding.cardList2.root.setBackgroundColor(disabled)
             binding.cardList3.root.isEnabled = false; binding.cardList4.root.isEnabled = false
@@ -212,8 +209,6 @@ class HomeFragment : Fragment() {
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
-            val stats = navView.menu.findItem(R.id.action_statistics)
-            stats.title = "Current Streak: ${getIntPref("currentStreak")}"
         }
     }
 
@@ -242,8 +237,8 @@ class HomeFragment : Fragment() {
                             mNotification.cancel(2)
                             binding.materialButton.text = resources.getString(R.string.done)
                             binding.materialButton.isEnabled = false
-                            binding.materialButton.backgroundTintList = null
-                            binding.materialButton.backgroundTintMode = null
+                            binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+                            binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                         }else{
                             binding.materialButton.isEnabled = true
                             val opacity = if(getIntPref("listsDone") < 5){
@@ -252,16 +247,13 @@ class HomeFragment : Fragment() {
                                  100 - ((getIntPref("listsDone") * 5) + 5)
                             }
                             binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}383838"))
-                            binding.materialButton.text = resources.getString(R.string.markRemaining)
+                            binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
+                            binding.materialButton.text = resources.getString(R.string.btn_mark_remaining)
                         }
                     }
                     it.findViewById<MaterialTextView>(R.id.list_read).setOnClickListener{
                         if(cardList.root != binding.cardList6.root || cardList.root == binding.cardList6.root && !psalms){
                             val chapter = list[getIntPref("list$i")]
-                            /**when(listNumberPref("translation", null)){
-                                1 -> getCSBReference(chapter)
-                                2 -> getESVReference(chapter)
-                            }*/
                             val bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
                             val navControl = findNavController(activity as MainActivity, R.id.nav_host_fragment)
                             navControl.navigate(R.id.navigation_scripture, bundle)
@@ -280,16 +272,6 @@ class HomeFragment : Fragment() {
 
 
 
-    /**
-    private fun getCSBReference(chapter: String){
-        log("START CSB REFERENCE")
-        val title = chapter
-        val url = "https://api.scripture.api.bible/v1/bibles/a556c5305ee15c3f-01/passages/JHN.1"
-        val wv = getCSB(context, url)
-        chapterShower(wv, title, false, 0)
-    }*/
-
-
     private fun googleSignIn(){
         val ctx = App.applicationContext()
         val user = FirebaseAuth.getInstance().currentUser
@@ -306,8 +288,8 @@ class HomeFragment : Fragment() {
                 setIntPref("needNotif", 1)
                 startActivityForResult(signInIntent, 96)
             }
-            builder.setNeutralButton("No") { dialogInterface, _ -> log("cancel pressed"); setIntPref("firstRun", 1); dialogInterface.cancel() }
-            builder.setMessage(R.string.googleCheck).setTitle("Sign In To Google Account")
+            builder.setNeutralButton("No") { dialogInterface, _ -> setIntPref("firstRun", 1); dialogInterface.cancel() }
+            builder.setMessage(R.string.msg_google).setTitle(R.string.title_sign_in)
             builder.create().show()
         }
     }
@@ -319,58 +301,46 @@ class HomeFragment : Fragment() {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account!!)
             }catch(e: ApiException){
-                Toast.makeText(activity?.applicationContext, "Google Sign In Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(activity?.applicationContext, R.string.msg_google_failed, Toast.LENGTH_LONG).show()
             }
         }
     }
     private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        log("firebaseAuthWithGoogle: ${acct.id}")
         val auth = FirebaseAuth.getInstance()
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                Toast.makeText(context, "Signed In!", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.msg_signed_in, Toast.LENGTH_LONG).show()
                 val db = FirebaseFirestore.getInstance()
                 val user = FirebaseAuth.getInstance().currentUser
                 val mainBinding = ActivityMainBinding.inflate(layoutInflater)
-                val navView = mainBinding.navView
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
                             if (doc.get("Doc") != null) {
                                 val builder = AlertDialog.Builder(requireContext())
-                                builder.setPositiveButton("Use Cloud Data") { _,_ ->
+                                builder.setPositiveButton(R.string.btn_use_cloud) { _,_ ->
                                     SharedPref.firestoneToPreference(doc)
                                     setIntPref("firstRun", 1)
-                                    navView.menu.findItem(R.id.google_sign)?.title = "Sign Out"
-                                    val psalmsItem = navView.menu.findItem(R.id.action_psalms)
-                                    val isPsalms = doc.data!!["psalms"] as Boolean
-                                    if(isPsalms) psalmsItem?.title = resources.getString(R.string.psalmsnav1)
-                                        else navView.menu.findItem(R.id.action_psalms).title = resources.getString(R.string.psalmsnav5)
-
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
-                                builder.setNeutralButton("Overwrite with device") { _,_->
+                                builder.setNeutralButton(R.string.btn_use_device) { _,_->
                                     SharedPref.preferenceToFireStone()
                                     setIntPref("firstRun", 1)
-                                    navView.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                                 }
-                                builder.setTitle("Account Found")
+                                builder.setTitle(R.string.title_account_found)
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
                                 builder.create().show()
                             } else {
                                 setIntPref("firstRun", 1)
                                 SharedPref.preferenceToFireStone()
-                                navView.menu.findItem(R.id.google_sign).title = "Sign Out"
-                                val psalmsItem = navView.menu.findItem(R.id.action_psalms)
-                                psalmsItem.title = resources.getString(R.string.psalmsnav1)
                                 requireFragmentManager().beginTransaction().detach(HomeFragment()).attach(HomeFragment()).commit()
                             }
                         }
 
             } else {
                 setIntPref("firstRun", 1)
-                Toast.makeText(context, "Google Sign In Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, R.string.msg_google_failed, Toast.LENGTH_LONG).show()
             }
         }
     }

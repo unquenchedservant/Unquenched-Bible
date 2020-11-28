@@ -38,7 +38,7 @@ class StatisticsFragment : PreferenceFragmentCompat() {
             findPreference<Preference>("currentStreak")?.summary = "0"
             findPreference<Preference>("maxStreak")?.summary = "0"
             fragmentManager?.beginTransaction()?.replace(R.id.nav_host_fragment, StatisticsFragment())?.commit()
-        }.setMessage(R.string.resetStat_confirm)
-                .setTitle(R.string.reset_stats).create().show()
+        }.setMessage(R.string.msg_reset_stats_confirm)
+                .setTitle(R.string.summary_reset_stats).create().show()
     }
 }

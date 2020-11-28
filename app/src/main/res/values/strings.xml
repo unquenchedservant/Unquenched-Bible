@@ -1,51 +1,88 @@
 <resources>
     <string name="app_name">Grant Horners Bible Reading System</string>
-    <string name="title_home">Home</string>
-    <string name="title_dashboard">Settings</string>
-    <string name="channel_name">Daily Reading</string>
-    <string name="channel_description">The daily reading comes in this channel</string>
-    <string name="reset_confirm">Are you sure you want to reset all the lists to 0? This is irreversible</string>
-    <string name="reset_title">Reset Lists</string>
-    <string name="googleCheck">Signing in to Google allows you to use the app across multiple devices without losing your place. Would you like to continue?</string>
-    <string name="statistic_title">Statistics</string>
-    <string name="privacy_policy">Privacy Policy</string>
-    <string name="notif">Notifications</string>
-    <string name="notifnav">Notification Options</string>
-    <string name="psalmsnav5">Switch to 5 Psalms</string>
-    <string name="psalmsnav1">Switch to 1 Psalms</string>
-    <string name="manualnav">Manually Set Lists</string>
-    <string name="forcedailynav">Force Daily Reset</string>
-    <string name="infonav">Information</string>
-    <string name="about">About</string>
+
+    <string name="title_home">Reading</string>
+    <string name="title_stats">Statistics</string>
+    <string name="title_settings">Settings</string>
+    <string name="title_notifications">Notifications</string>
+    <string name="title_notification_settings">Notification Settings</string>
+    <string name="title_infoSupport">Information and Support</string>
+    <string name="title_overrides">Override Lists</string>
+    <string name="title_planSettings">Plan Settings</string>
+    <string name="title_overrides_manual">Manually Set Lists</string>
+    <string name="title_overrides_reset">Force Daily Reset</string>
+    <string name="title_psalms">5 Psalms Per Day</string>
+    <string name="title_account_loggedout">Sign In</string>
+    <string name="title_account_loggedin">Sign Out</string>
+    <string name="title_sign_out">Sign Out?</string>
+    <string name="title_sign_in">Sign In To Google Account</string>
+    <string name="title_reset">Reset Lists</string>
+    <string name="title_privacy">Privacy Policy</string>
+    <string name="title_reminder">Reminder!</string>
+    <string name="title_reset_all">Reset All</string>
+    <string name="title_account_found">Account Found</string>
+
+    <string name="summary_home">Home</string>
+    <string name="summary_stats">Stats</string>
+    <string name="summary_settings">Settings</string>
+    <string name="summary_notications">Update Notification Settings</string>
+    <string name="summary_infoSupport">Update logs and contact information</string>
+    <string name="summary_overrides">Manually set lists and force daily resets</string>
+    <string name="summary_planSettings">Customize settings regarding to the reading plan</string>
+    <string name="summary_overrides_reset">Forgot to mark lists as done? Mark them now and reset the lists</string>
+    <string name="summary_psalms">Instead of 1 Psalm, 5 Psalms per day based on day of the week</string>
+    <string name="summary_account_loggedout">Have your progress stored in the cloud so you never have to worry about losing it!</string>
+    <string name="summary_account_loggedin"></string>
+    <string name="summary_reset_stats">Reset All Stats</string>
+
+    <string name="psalms_next">Next</string>
+    <string name="psalms_back">Back</string>
+    <string name="scripture_done">Done</string>
+
+    <string name="msg_sign_out">Are you sure you want to sign out?</string>
+    <string name="msg_reset">Are you sure you want to reset all the lists to 0? This is irreversible</string>
+    <string name="msg_google">Signing in to Google allows you to use the app across multiple devices without losing your place. Would you like to continue?</string>
+    <string name="msg_login">Log in with Google or email/password for multi-device support and cloud backup!</string>
+    <string name="msg_logout">Logging out will remove multi-device features</string>
+    <string name="msg_google_failed">Google Sign In Failed</string>
+    <string name="msg_signed_in">Signed In!</string>
+    <string name="msg_reset_stats_confirm">Are you sure you want to reset all stats?</string>
+
+
+    <string name="notification_channel_name">Daily Reading</string>
+    <string name="notification_channel_description">The daily reading comes in this channel</string>
+
+
     <string name="yes">Yes</string>
     <string name="no">Cancel</string>
-    <string name="emailHint">Email Address</string>
-    <string name="passwordHint">Password</string>
-    <string name="l1">The Gospels</string>
-    <string name="l2">The Pentateuch</string>
-    <string name="l3">Epistles 1</string>
-    <string name="l4">Epistles 2</string>
-    <string name="l5">Poetry</string>
-    <string name="l6">Psalms</string>
-    <string name="l7">Proverbs</string>
-    <string name="l8">History</string>
-    <string name="l9">Prophets</string>
-    <string name="l10">Acts</string>
-    <string name="notdone">Mark All Done</string>
+
+    <string name="hint_email">Email Address</string>
+    <string name="hint_password">Password</string>
+
+    <string name="pgh_list1">The Gospels</string>
+    <string name="pgh_list2">The Pentateuch</string>
+    <string name="pgh_list3">Epistles 1</string>
+    <string name="pgh_list4">Epistles 2</string>
+    <string name="pgh_list5">Poetry</string>
+    <string name="pgh_list6">Psalms</string>
+    <string name="pgh_list7">Proverbs</string>
+    <string name="pgh_list8">History</string>
+    <string name="pgh_list9">Prophets</string>
+    <string name="pgh_list10">Acts</string>
+
+    <string name="not_done">Mark All Done</string>
     <string name="done">Already Done For Today!</string>
-    <string name="curStreak">Current Streak:</string>
-    <string name="maxStreak">Max Streak:</string>
-    <string name="remTitle">Reminder!</string>
-    <string name="reset_stats">Reset All Stats</string>
-    <string name="resetStat_confirm">Are you sure you want to reset all stats?</string>
-    <string name="markRemaining">Mark Remaining Lists Done</string>
-    <string name="resetAll">Reset All</string>
-    <string name="register_button">Register</string>
-    <string name="signinnav">Sign In</string>
-    <string name="signoutnav">Sign Out</string>
-    <string name="login_button">Log In</string>
-    <string name="markdone">Mark Done</string>
-    <string name="login_summary">Log in with Google or email/password for multi-device support and cloud backup!</string>
-    <string name="logout_summary">Logging out will remove multi-device features</string>
-    <string name="title_activity_settings">Settings</string>
+
+    <string name="current_streak">Current Streak:</string>
+    <string name="max_streak">Max Streak:</string>
+
+    <string name="btn_mark_remaining">Mark Remaining Lists Done</string>
+    <string name="btn_use_cloud">Use Cloud Data</string>
+    <string name="btn_use_device">Overwrite with device</string>
+
+    <string name="btn_signin">Sign In</string>
+    <string name="btn_signout">Sign Out</string>
+    <string name="btn_register">Register</string>
+    <string name="btn_login">Log In</string>
+    <string name="btn_mark_done">Mark Done</string>
 </resources>

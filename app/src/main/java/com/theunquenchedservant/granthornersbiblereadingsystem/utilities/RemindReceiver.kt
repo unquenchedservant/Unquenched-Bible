@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.notifications
+package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -47,7 +47,7 @@ class RemindReceiver : BroadcastReceiver() {
     }
 
     private fun deliverNotification(context: Context, partial:Boolean) {
-        val rem = context.resources.getString(R.string.remTitle)
+        val rem = context.resources.getString(R.string.title_reminder)
         val content : String = if(partial){
             "Don't forget to finish the reading!"
         }else{

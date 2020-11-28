@@ -1,24 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
-        app:title="Notifications">
+    <PreferenceCategory>
         <Preference
             android:clickable="false"
             android:focusableInTouchMode="false"
             app:key="currentStreak"
-            app:title="@string/curStreak" />
+            app:title="@string/current_streak" />
         <Preference
             android:clickable="false"
             android:focusableInTouchMode="false"
             app:key="MaximumStreak"
-            app:title="@string/maxStreak" />
+            app:title="@string/max_streak" />
     </PreferenceCategory>
     <PreferenceCategory
         app:title="">
         <Preference
             app:key="reset_statistics"
-            app:title="@string/reset_stats"/>
+            app:title="@string/summary_reset_stats"/>
         <SwitchPreferenceCompat
             app:key="allow_partial_switch"
             app:title="Allow Partial for Streak" />

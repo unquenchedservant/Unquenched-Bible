@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem
+package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth

@@ -15,7 +15,7 @@
         android:name=".App"
         android:theme="@style/splash">
         <receiver
-            android:name=".ui.notifications.ServiceStarted"
+            android:name=".service.ServiceStarted"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -23,15 +23,15 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".ui.notifications.RemindReceiver"
+            android:name=".utilities.RemindReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".ui.notifications.DailyCheck"
+            android:name=".utilities.DailyCheck"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".ui.notifications.DoneReceiver"
+            android:name=".utilities.DoneReceiver"
             android:enabled="true"
             android:exported="false" />
 
@@ -48,7 +48,7 @@
         </activity>
 
         <receiver
-            android:name=".ui.notifications.AlarmReceiver"
+            android:name=".service.AlarmReceiver"
             android:enabled="true"
             android:exported="false" />
 
