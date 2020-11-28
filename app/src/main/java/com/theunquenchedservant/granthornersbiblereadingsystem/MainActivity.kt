@@ -64,16 +64,13 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         supportActionBar?.title = getDate(0, true)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
-        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)!!
         binding.bottomNav.setupWithNavController(navController)
         navController.navigate(R.id.navigation_home)
         setupBottomNavigationBar()
     }
 
     private fun setupBottomNavigationBar() {
-        log("setupBottomNavigationBar 1")
         switchEnabled("home")
-        log("setupBottomNavigationBar 2")
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
@@ -144,24 +141,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     builder.create().show()
                 }
                 googleSignIn()
-            }*/
-           /** R.id.action_psalms -> {
-                val ps = getBoolPref("psalms")
-                if (ps) {
-                    setBoolPref("psalms", false)
-                    if (FirebaseAuth.getInstance().currentUser != null) {
-                        updateFS("psalms", false)
-                    }
-                    item.title = resources.getString(R.string.psalmsnav5)
-                    navHostFragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
-                } else {
-                    setBoolPref("psalms", true)
-                    if (FirebaseAuth.getInstance().currentUser != null) {
-                        updateFS("psalms", true)
-                    }
-                    item.title = resources.getString(R.string.psalmsnav1)
-                    navHostFragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
-                }
             }*/
         }
         return true
@@ -269,15 +248,5 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }
 
 
-    }
-}
-class InformationFragment : PreferenceFragmentCompat(){
-    override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?){
-        setPreferencesFromResource(R.xml.information_preferences, rootKey)
-        val license: Preference? = findPreference("licenses")
-        license!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            startActivity(Intent(context, OssLicensesMenuActivity::class.java))
-            false
-        }
     }
 }
