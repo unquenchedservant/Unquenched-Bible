@@ -57,140 +57,76 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         WebView(applicationContext)
         AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this, R.layout.activity_main)
-        binding.lifecycleOwner = this
+        binding = ActivityMainBinding.inflate(layoutInflater)
         user = FirebaseAuth.getInstance().currentUser
+        setContentView(binding.root)
         setSupportActionBar(findViewById(R.id.my_toolbar))
+        supportActionBar?.title = getDate(0, true)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
+        val bottomNav = findViewById<BottomNavigationView>(R.id.bottom_nav)!!
+        binding.bottomNav.setupWithNavController(navController)
         navController.navigate(R.id.navigation_home)
-        toggle = ActionBarDrawerToggle(this, binding.container, findViewById(R.id.my_toolbar), R.string.nav_app_bar_open_drawer_description, R.string.nav_app_bar_open_drawer_description).apply{
-            binding.container.addDrawerListener(this)
-            this.syncState()
-        }
-        setupDrawer()
+        setupBottomNavigationBar()
     }
 
-
-    private fun setupDrawer() {
+    private fun setupBottomNavigationBar() {
+        log("setupBottomNavigationBar 1")
         switchEnabled("home")
-        setStreak()
-        setDrawerTitles()
-        binding.navView.setNavigationItemSelectedListener(this)
+        log("setupBottomNavigationBar 2")
+        binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
-            if(destination.id == R.id.navigation_scripture){
-                toggle.isDrawerIndicatorEnabled = false
-                binding.container.setDrawerLockMode(DrawerLayout.LOCK_MODE_LOCKED_CLOSED)
-                toggle.setToolbarNavigationClickListener { navController.navigate(R.id.navigation_home) }
-                supportActionBar?.setDisplayHomeAsUpEnabled(true)
-            }else{
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                binding.container.setDrawerLockMode(DrawerLayout.LOCK_MODE_UNLOCKED)
-                toggle.isDrawerIndicatorEnabled = true
-                toggle.toolbarNavigationClickListener = null
-                toggle.syncState()
-                if (destination.id == R.id.navigation_home){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            when (destination.id) {
+                R.id.navigation_scripture ->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_home)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_home -> {
+                    log("home selected")
                     switchEnabled("home")
                     supportActionBar?.title = getDate(0, true)
-                }else if (destination.id == R.id.navigation_stats){
+                    supportActionBar?.show()
+                }
+                R.id.navigation_stats -> {
+                    log("stats selected")
                     switchEnabled("stats")
                     supportActionBar?.title = destination.label
-                }else if(destination.id == R.id.navigation_information){
-                    switchEnabled("information")
-                    supportActionBar?.title = destination.label
-                }else if(destination.id == R.id.navigation_manual){
-                    switchEnabled("manual")
-                    supportActionBar?.title = destination.label
-                }else if(destination.id == R.id.navigation_support){
-                    switchEnabled("support")
-                    supportActionBar?.title = destination.label
-                }else if(destination.id == R.id.navigation_notifications){
-                    switchEnabled("notif")
+                }
+                R.id.navigation_settings -> {
+                    switchEnabled("settings")
                     supportActionBar?.title = destination.label
                 }
             }
-
         }
+
     }
 
-    private fun setDrawerTitles(){
-        val menu = binding.navView.menu
-        val stats = menu.findItem(R.id.action_statistics)
-        val psalms = menu.findItem(R.id.action_psalms)
-        val googleSign = menu.findItem(R.id.google_sign)
-        val ps = getBoolPref("psalms")
-        supportActionBar?.title = getDate(0, true)
-        stats?.title = "Current Streak: ${getIntPref("currentStreak")}"
-        if (ps) psalms?.title = resources.getString(R.string.psalmsnav1) else psalms?.title = resources.getString(R.string.psalmsnav5)
-        if (user != null) googleSign?.title = resources.getString(R.string.signoutnav) else googleSign?.title = resources.getString(R.string.signinnav)
-    }
-    /**
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        menuInflater.inflate(R.menu.translation, menu)
-        val spinner = menu?.findItem(R.id.translation_selector)
-        val spin = spinner?.actionView as Spinner
-        ArrayAdapter.createFromResource(this, R.array.translationArray,
-                android.R.layout.simple_spinner_item).also {
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            spin.adapter = it
-            spin.setSelection(listNumberPref("translation", null))
-        }
-        spin.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
-            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                when (parent?.getItemAtPosition(position).toString()) {
-                    "CSB" -> listNumberPref("translation", 1)
-                    "ESV" -> listNumberPref("translation", 2)
-                }
-            }
-
-            override fun onNothingSelected(parent: AdapterView<*>?) {
-
-            }
-        }
-        return true
-    } */
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        log("This is the nav item selected ${item.title}")
         val homeFrag = navHostFragment.childFragmentManager.fragments[0]
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
-            R.id.action_home ->{
+            R.id.navigation_home ->{
                 supportActionBar?.title = getDate(0, true)
                 switchEnabled("home")
                 navControl.navigate(R.id.navigation_home)
             }
-            R.id.action_manual ->{
-                supportActionBar?.title = "Manually Set List"
-                switchEnabled("manual")
-                navControl.navigate(R.id.navigation_manual)
-            }
-            R.id.action_support -> {
-                supportActionBar?.title = "Support"
-                switchEnabled("support")
-                navControl.navigate(R.id.navigation_support)
-            }
-            R.id.action_information -> {
-                supportActionBar?.title = "Information"
-                switchEnabled("information")
-                navControl.navigate(R.id.navigation_information)
-            }
-            R.id.action_statistics -> {
+            R.id.navigation_stats ->{
+                log("Stats was pressed")
                 supportActionBar?.title = "Statistics"
                 switchEnabled("stats")
                 navControl.navigate(R.id.navigation_stats)
             }
-            R.id.action_notifications -> {
-                supportActionBar?.title = "Notifications"
-                switchEnabled("notif")
-                navControl.navigate(R.id.navigation_notifications)
+            R.id.navigation_settings -> {
+                switchEnabled("Settings")
+                navControl.navigate(R.id.navigation_settings)
             }
-            R.id.action_daily_reset -> {
-                resetDaily()
-                navControl.navigate(R.id.navigation_home)
-                switchEnabled("home")
-                Toast.makeText(this, "Forced Daily Reset", Toast.LENGTH_LONG).show()
-            }
-            R.id.google_sign -> {
+           /**R.id.google_sign -> {
                 val user = FirebaseAuth.getInstance().currentUser
                 if (user != null){
                     val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
@@ -208,8 +144,8 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     builder.create().show()
                 }
                 googleSignIn()
-            }
-            R.id.action_psalms -> {
+            }*/
+           /** R.id.action_psalms -> {
                 val ps = getBoolPref("psalms")
                 if (ps) {
                     setBoolPref("psalms", false)
@@ -226,10 +162,16 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     item.title = resources.getString(R.string.psalmsnav1)
                     navHostFragment.childFragmentManager.beginTransaction().detach(homeFrag).attach(homeFrag).commit()
                 }
-            }
+            }*/
         }
-        binding.container.closeDrawer(GravityCompat.START)
         return true
+    }
+
+    private fun switchEnabled(current: String){
+        val menu = binding.bottomNav.menu
+        menu.findItem(R.id.navigation_home)?.isEnabled = current != "home"
+        menu.findItem(R.id.navigation_stats)?.isEnabled = current != "stats"
+        menu.findItem(R.id.navigation_settings)?.isEnabled = current != "settings"
     }
 
     override fun onPostCreate(savedInstanceState: Bundle?) {
@@ -246,14 +188,13 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
-        if (binding.container.isDrawerOpen(GravityCompat.START)) {
-            binding.container.closeDrawer(GravityCompat.START)
-        } else {
-            if(navController.currentDestination?.id != R.id.navigation_home){
-                navController.navigate(R.id.navigation_home)
-            }else {
-                finish()
-            }
+        if(navController.currentDestination?.id != R.id.navigation_home){
+            navController.popBackStack()
+            supportActionBar?.setDisplayHomeAsUpEnabled(false)
+            binding.bottomNav.isVisible = true
+            supportActionBar?.show()
+        }else{
+            finish()
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -298,12 +239,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                                 val builder = AlertDialog.Builder(ContextThemeWrapper(this, R.style.unquenchedAlert))
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
                                     firestoneToPreference(doc)
-                                    binding.navView.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    //binding.bottomNav.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
                                     preferenceToFireStone()
-                                    binding.navView.menu.findItem(R.id.google_sign).title = "Sign Out"
+                                    //binding.bottomNav.menu.findItem(R.id.google_sign).title = "Sign Out"
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setTitle("Account Found")
