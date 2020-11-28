@@ -318,70 +318,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             }
         }
     }
-    private fun resetDaily(){
-        val isLogged = FirebaseAuth.getInstance().currentUser
-        val db = FirebaseFirestore.getInstance()
-        var resetStreak  = false
-        var resetCurrent = false
-        val vacation = getBoolPref("vacationMode")
-        when (getIntPref("dailyStreak")) {
-            1 -> {
-                setIntPref("dailyStreak", 0)
-                log("DAILY CHECK - daily streak set to 0")
-                resetStreak = true
-            }
-            0 -> {
-                when (vacation) {
-                    false -> {
-                        if (!checkDate("both", false))
-                            resetCurrent = true
-                        log("DAILY CHECK - currentStreak set to 0")
-                        setIntPref("currentStreak", 0)
-                    }
-                }
-            }
-        }
-        for(i in 1..10){
-            when(getIntPref("list${i}Done")){
-                1 -> {
-                    resetList("list$i", "list${i}Done")
-                }
-            }
-        }
-        setIntPref("listsDone", 0)
-        if(isLogged != null) {
-            val data = mutableMapOf<String, Any>()
-            for (i in 1..10){
-                data["list$i"] = getIntPref("list$i")
-                data["list${i}Done"] = getIntPref("list${i}Done")
-            }
-            data["listsDone"] = 0
-            if(resetCurrent) {
-                data["currentStreak"] = 0
-            }else if(resetStreak) {
-                data["dailyStreak"] = 0
-            }
-            db.collection("main").document(isLogged.uid).update(data)
-        }
-    }
 
-    private fun resetList(listName: String, listNameDone: String){
-        log("$listName is now set to ${getIntPref(listName)}")
-        increaseIntPref(listName, 1)
-        log("$listName index is now ${getIntPref( listName)}")
-        setIntPref(listNameDone, 0)
-        log("$listNameDone set to 0")
-    }
 
-    private fun switchEnabled(current: String){
-        val menu = binding.navView.menu
-        menu.findItem(R.id.action_home)?.isEnabled = current != "home"
-        menu.findItem(R.id.action_information)?.isEnabled = current != "information"
-        menu.findItem(R.id.action_manual)?.isEnabled = current != "manual"
-        menu.findItem(R.id.action_statistics)?.isEnabled = current != "stats"
-        menu.findItem(R.id.action_notifications)?.isEnabled = current != "notif"
-        menu.findItem(R.id.action_support)?.isEnabled = current != "support"
-    }
+
     companion object{
 
         fun log(logString:String){
