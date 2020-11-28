@@ -253,10 +253,6 @@ class HomeFragment : Fragment() {
                     it.findViewById<MaterialTextView>(R.id.list_read).setOnClickListener{
                         if(cardList.root != binding.cardList6.root || cardList.root == binding.cardList6.root && !psalms){
                             val chapter = list[getIntPref("list$i")]
-                            /**when(listNumberPref("translation", null)){
-                                1 -> getCSBReference(chapter)
-                                2 -> getESVReference(chapter)
-                            }*/
                             val bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
                             val navControl = findNavController(activity as MainActivity, R.id.nav_host_fragment)
                             navControl.navigate(R.id.navigation_scripture, bundle)
