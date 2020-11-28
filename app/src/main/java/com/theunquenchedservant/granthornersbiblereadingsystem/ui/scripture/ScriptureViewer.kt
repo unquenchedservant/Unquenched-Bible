@@ -4,9 +4,13 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Base64
 import android.view.LayoutInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
+import androidx.activity.OnBackPressedCallback
+import androidx.activity.addCallback
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.android.volley.RequestQueue
 import com.android.volley.Response
@@ -14,12 +18,15 @@ import com.android.volley.toolbox.BasicNetwork
 import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.JsonObjectRequest
+import com.google.android.material.appbar.MaterialToolbar
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ScriptureViewerBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment
 import java.util.*
 import kotlin.collections.HashMap
 
@@ -46,10 +53,10 @@ class ScriptureViewer : Fragment() {
         val act = activity as MainActivity
         act.supportActionBar?.title = chapter
         val url = getESVReference(chapter, psalms, iteration)
+        (activity as MainActivity).findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
         getESV(url)
         return view
     }
-
     fun getESVReference(chapter: String, psalms: Boolean, iteration: Int) : String {
         val title : String
         val url: String
