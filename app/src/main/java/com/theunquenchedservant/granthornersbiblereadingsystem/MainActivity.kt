@@ -95,6 +95,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     switchEnabled("home")
                     supportActionBar?.title = getDate(0, true)
                     supportActionBar?.show()
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                 }
                 R.id.navigation_stats -> {
                     log("stats selected")
