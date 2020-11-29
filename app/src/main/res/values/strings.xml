@@ -1,6 +1,8 @@
 <resources>
     <string name="app_name">Grant Horners Bible Reading System</string>
 
+    <string name="title_new_update">Changelog for Version 1.4</string>
+
     <string name="title_home">Reading</string>
     <string name="title_stats">Statistics</string>
     <string name="title_settings">Settings</string>
@@ -34,6 +36,7 @@
     <string name="title_daily_list">Daily List Time</string>
     <string name="title_reminder_time">Reminder Time</string>
     <string name="title_partial">Allow Partial for Streak</string>
+    <string name="title_hold_plan">Hold Plan Until All Done</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -52,6 +55,8 @@
     <string name="summary_twitter">Follow @unquenchedbible on twitter for updates and support</string>
     <string name="summary_mailchimp">Get emails with updates about the upcoming major overhaul to the app!</string>
     <string name="summary_vacation_mode">Notifications are paused, streaks are unaffected if you miss a day.</string>
+    <string name="summary_hold_plan">Makes it so the lists don\'t advance until you complete all 10.</string>
+    <string name="summary_partial">Streak won\'t break if you do less than 10 lists (but more than 1)</string>
 
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>
@@ -73,6 +78,7 @@
 
     <string name="yes">Yes</string>
     <string name="no">Cancel</string>
+    <string name="ok">Ok</string>
 
     <string name="hint_email">Email Address</string>
     <string name="hint_password">Password</string>

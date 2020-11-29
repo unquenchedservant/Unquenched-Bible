@@ -13,10 +13,34 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.plan_preferences, rootKey)
         val psalms: Preference? = findPreference("psalms")
+        val holdPlan: Preference? = findPreference("holdTilAll")
+        val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
 
         val ps = getBoolPref("psalms")
         if(ps){
-            psalms!!.setDefaultValue("true")
+            psalms!!.setDefaultValue(true)
+        }
+        val hold = getBoolPref("holdPlan")
+        if(hold){
+            holdPlan!!.setDefaultValue(true)
+        }
+        val partial = getBoolPref("allow_partial_switch")
+        if(partial){
+            partialStreakAllow!!.setDefaultValue(true)
+        }
+        holdPlan!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if(hold){
+                setBoolPref("holdPlan", false)
+                if(FirebaseAuth.getInstance().currentUser != null){
+                    updateFS("holdPlan", false)
+                }
+            }else{
+                setBoolPref("holdPlan", true)
+                if(FirebaseAuth.getInstance().currentUser != null){
+                    updateFS("holdPlan", true)
+                }
+            }
+            true
         }
         psalms!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(ps){
@@ -28,6 +52,21 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
                 setBoolPref("psalms", true)
                 if(FirebaseAuth.getInstance().currentUser != null){
                     updateFS("psalms", true)
+                }
+            }
+            true
+        }
+
+        partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+            if(partial){
+                setBoolPref("allow_partial_switch", false)
+                if(FirebaseAuth.getInstance().currentUser != null){
+                    updateFS("allowPartial", false)
+                }
+            }else{
+                setBoolPref("allow_partial_switch", true)
+                if(FirebaseAuth.getInstance().currentUser != null){
+                    updateFS("allowPartial", true)
                 }
             }
             true

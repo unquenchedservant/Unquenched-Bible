@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.ContextThemeWrapper
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
@@ -21,12 +22,7 @@ class StatisticsFragment : PreferenceFragmentCompat() {
             resetCheck()
             true
         }
-        val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
-        partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
 
-            true
-        }
-        partialStreakAllow.summary = "Streak won't break if you do less than 10 lists (but more than 1)"
     }
     private fun resetCheck(){
         val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
@@ -37,7 +33,7 @@ class StatisticsFragment : PreferenceFragmentCompat() {
             setIntPref("maxStreak", 0)
             findPreference<Preference>("currentStreak")?.summary = "0"
             findPreference<Preference>("maxStreak")?.summary = "0"
-            fragmentManager?.beginTransaction()?.replace(R.id.nav_host_fragment, StatisticsFragment())?.commit()
+            (activity as MainActivity).navController.navigate(R.id.navigation_stats)
         }.setMessage(R.string.msg_reset_stats_confirm)
                 .setTitle(R.string.summary_reset_stats).create().show()
     }

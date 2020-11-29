@@ -50,14 +50,16 @@ class DailyCheck : BroadcastReceiver() {
                 }
             }
         }
-        setIntPref("listsDone", 0)
+        if(!getBoolPref("holdPlan") || getIntPref("listsDone") == 10) {
+            setIntPref("listsDone", 0)
+        }
         if(isLogged != null) {
             val data = mutableMapOf<String, Any>()
             for (i in 1..10){
                 data["list$i"] = getIntPref("list$i")
                 data["list${i}Done"] = getIntPref("list${i}Done")
             }
-            data["listsDone"] = 0
+            data["listsDone"] = getIntPref("listsDone")
             if(resetCurrent) {
                 data["currentStreak"] = 0
             }else if(resetStreak) {
@@ -68,9 +70,11 @@ class DailyCheck : BroadcastReceiver() {
     }
     private fun resetList(listName: String, listNameDone: String){
         log("$listName is now set to ${getIntPref(listName)}")
-        increaseIntPref(listName, 1)
-        log("$listName index is now ${getIntPref(listName)}")
-        setIntPref(listNameDone, 0)
-        log("$listNameDone set to 0")
+        if(!getBoolPref("holdPlan") || getIntPref("listsDone") == 10) {
+            increaseIntPref(listName, 1)
+            log("$listName index is now ${getIntPref(listName)}")
+            setIntPref(listNameDone, 0)
+            log("$listNameDone set to 0")
+        }
     }
 }
