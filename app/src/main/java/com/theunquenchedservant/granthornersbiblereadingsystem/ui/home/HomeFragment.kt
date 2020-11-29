@@ -15,7 +15,6 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateViewModelFactory
-import androidx.navigation.Navigation.findNavController
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -64,6 +63,30 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(getIntPref("versionNumber") != 49){
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton(R.string.ok) { something ,_ ->
+                setIntPref("versionNumber", 49)
+                something.dismiss()
+            }
+            builder.setTitle(R.string.title_new_update)
+            builder.setMessage(
+                    "[ADDED] Mailchimp mailing list sign up(under Info and support)\n\n"+
+                            "[ADDED] Remote notifications for easy contact with users for future updates\n\n"+
+                            "[ADDED] Ability to hold all lists in place until all 10 are finished\n\n" +
+                            "[FIXED] Current streak should not get reset every day\n\n" +
+                            "[FIXED] An issue with Song of Solomon in the Manually Set List menu\n\n" +
+                            "[FIXED] A lot of issues with scripture viewer\n\n" +
+                            "[FIXED] Psalms once again have ability to go backwards and forwards in scripture viewer\n\n" +
+                            "[FIXED] Occasional crash when opening the app \n\n" +
+                            "[UPDATED] A lot of backend logic so that things should run smoother\n\n" +
+                            "[UPDATED] Contact information\n\n"+
+                            "[UPDATED] Removed a lot of unnecessary files, so app size should be smaller\n\n" +
+                            "[UPDATED] Side drawer is now a bottom navigation layout\n\n" +
+                            "[UPDATED] icons on the bottom bar"
+            )
+            builder.create().show()
+        }
         val enabled = Color.parseColor("#383838")
         val disabled = Color.parseColor("#00383838")
         viewModel.list1.observe(viewLifecycleOwner){
@@ -165,7 +188,7 @@ class HomeFragment : Fragment() {
             }
             binding.cardList10.listReading.text = it.listReading
             binding.cardList10.listTitle.text = resources.getString(R.string.title_pgh_list10)
-            createCardListener(binding.cardList2, R.array.list_10, false, "list10Done", "list10")
+            createCardListener(binding.cardList10, R.array.list_10, false, "list10Done", "list10")
         }
         viewModel.listsDone.observe(viewLifecycleOwner){
             when(it.listsDone){
@@ -195,10 +218,10 @@ class HomeFragment : Fragment() {
             }
         }
 
-        setVisibilities(binding)
         createButtonListener()
         createNotificationChannel()
         createAlarm("dailyCheck")
+        setVisibilities(binding)
         allowResume = false
         if(savedInstanceState != null) {
             when (getIntPref("firstRun")) {
@@ -213,7 +236,6 @@ class HomeFragment : Fragment() {
     }
 
 
-
     private fun createButtonListener(){
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {
@@ -222,9 +244,10 @@ class HomeFragment : Fragment() {
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
+            (activity as MainActivity).navController.navigate(R.id.navigation_home)
         }
-    }
 
+    }
 
     private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, psalms: Boolean, listDone: String, listName: String){
         val list = resources.getStringArray(arrayId)
@@ -237,39 +260,18 @@ class HomeFragment : Fragment() {
                     changeVisibility(cardView, false)
                     markSingle(listDone)
                     cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-                    if(getIntPref("listsDone") == 10){
-                        val mNotification = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                        mNotification.cancel(1)
-                        mNotification.cancel(2)
-                        binding.materialButton.text = resources.getString(R.string.done)
-                        binding.materialButton.isEnabled = false
-                        binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-                        binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
-                    }else{
-                        binding.materialButton.isEnabled = true
-                        val opacity = if(getIntPref("listsDone") < 5){
-                            100 - (getIntPref("listsDone") * 5)
-                        }else{
-                            100 - ((getIntPref("listsDone") * 5) + 5)
-                        }
-                        binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}383838"))
-                        binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
-                        binding.materialButton.text = resources.getString(R.string.btn_mark_remaining)
-                    }
+                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
                 }
                 cardView.listRead.setOnClickListener {
+                    lateinit var bundle: Bundle
                     if(cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms){
                         val chapter = list[getIntPref(listName)]
-                        val bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
-                        val navControl = findNavController(activity as MainActivity, R.id.nav_host_fragment)
-                        navControl.navigate(R.id.navigation_scripture, bundle)
+                        bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
+
                     }else if(cardView.root == binding.cardList6.root && psalms){
-                        val bundle = Bundle()
-                        bundle.putString("chapter", "no")
-                        bundle.putBoolean("psalms", true)
-                        bundle.putInt("iteration", 1)
-                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                        bundle = bundleOf("chapter" to "no", "psalms" to true, "iteration" to 1)
                     }
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
                 }
             }
         }
