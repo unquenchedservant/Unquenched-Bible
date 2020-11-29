@@ -74,6 +74,7 @@ object SharedPref {
         results["maxStreak"] = getIntPref("maxStreak")
         results["notifications"] = getBoolPref("notif_switch")
         results["psalms"] = getBoolPref("psalms")
+        results["planHold"] = getBoolPref("planHold")
         results["vacationMode"] = getBoolPref("vacation_mode")
         results["allowPartial"] = getBoolPref("allow_partial_switch")
         results["dailyNotif"] = getIntPref( "daily_time")
@@ -101,6 +102,9 @@ object SharedPref {
             setIntPref("daily_time", (data["dailyNotif"] as Long).toInt())
             setIntPref("remind_time", (data["remindNotif"] as Long).toInt())
             setStringPref("dateChecked", (data["dateChecked"] as String))
+            if(data["holdPlan"] != null) {
+                setBoolPref("holdPlan", data["holdPlan"] as Boolean)
+            }
         }
     }
 
