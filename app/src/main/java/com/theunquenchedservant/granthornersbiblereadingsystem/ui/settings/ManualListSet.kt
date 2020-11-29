@@ -8,9 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.*
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.ViewModelProviders
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeView
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
@@ -67,39 +65,39 @@ class ManualListSet: Fragment() {
 
                             override fun onNothingSelected(parent: AdapterView<*>?) {
                             }
-                            } }
+                        } }
 
                     "The Gospels"      -> {
-                             val cInfo                    = getCurrentInfo(1)
-                             val cBook                    = cInfo[0] as String
-                             val cVerse                   = cInfo[1] as Int
-                             verseSelector.visibility     = View.VISIBLE
+                        val cInfo                    = getCurrentInfo(1)
+                        val cBook                    = cInfo[0] as String
+                        val cVerse                   = cInfo[1] as Int
+                        verseSelector.visibility     = View.VISIBLE
 
-                             button.isEnabled             = true
-                             button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isEnabled             = true
+                        button.setBackgroundColor(Color.parseColor("#383838"))
 
-                             ArrayAdapter.createFromResource(
-                                     context!!,
-                                     R.array.list1Book,
-                                     android.R.layout.simple_spinner_item).also{
-                                 it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                 list.adapter = it
-                                 list.setSelection(it.getPosition(cBook)) }
+                        ArrayAdapter.createFromResource(
+                                context!!,
+                                R.array.list1Book,
+                                android.R.layout.simple_spinner_item).also{
+                            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            list.adapter = it
+                            list.setSelection(it.getPosition(cBook)) }
 
-                             list.onItemSelectedListener  = object : AdapterView.OnItemSelectedListener{
+                        list.onItemSelectedListener  = object : AdapterView.OnItemSelectedListener{
 
-                                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                                       val book                  = parent?.getItemAtPosition(position).toString()
-                                       val verse                 = root.findViewById<NumberPicker>(R.id.listSpinner2)
-                                       verse.minValue            = 1
-                                       verse.visibility = View.VISIBLE
+                            override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                                val book                  = parent?.getItemAtPosition(position).toString()
+                                val verse                 = root.findViewById<NumberPicker>(R.id.listSpinner2)
+                                verse.minValue            = 1
+                                verse.visibility = View.VISIBLE
 
-                                     when(book){
-                                            "Matthew"                       -> { verse.maxValue = 28; verse.value = cVerse }
-                                            "Mark"                          -> { verse.maxValue = 16; verse.value = cVerse }
-                                            "Luke"                          -> { verse.maxValue = 24; verse.value = cVerse }
-                                            "John"                          -> { verse.maxValue = 21; verse.value = cVerse }
-                                       } }
+                                when(book){
+                                    "Matthew"                       -> { verse.maxValue = 28; verse.value = cVerse }
+                                    "Mark"                          -> { verse.maxValue = 16; verse.value = cVerse }
+                                    "Luke"                          -> { verse.maxValue = 24; verse.value = cVerse }
+                                    "John"                          -> { verse.maxValue = 21; verse.value = cVerse }
+                                } }
 
                             override fun onNothingSelected(parent: AdapterView<*>?) {} } }
 
@@ -420,7 +418,6 @@ class ManualListSet: Fragment() {
 
 
         button.setOnClickListener {
-            val model             = ViewModelProviders.of(this).get(HomeView::class.java)
             val alert             = AlertDialog.Builder(requireContext())
             val listSelected      = root.findViewById<Spinner>(R.id.listSelector)
             val selectedList      = listSelected.selectedItem
@@ -438,7 +435,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_1)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list1", num)
-                        model.list1.value = array[num]
                         updateFS( "list1", num)
                     }
 
@@ -447,7 +443,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_2)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list2", num)
-                        model.list2.value = array[num]
                         updateFS("list2", num)}
 
 
@@ -455,7 +450,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_3)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list3", num)
-                        model.list3.value = array[num]
                         updateFS("list3", num)}
 
 
@@ -467,7 +461,6 @@ class ManualListSet: Fragment() {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
                         setIntPref("list4", num)
-                        model.list4.value = array[num]
                         updateFS("list4", num)}
 
 
@@ -475,7 +468,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_5)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list5", num)
-                        model.list5.value = array[num]
                         updateFS("list5", num)}
 
 
@@ -483,7 +475,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_6)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list6", num)
-                        model.list6.value = array[num]
                         updateFS("list6", num)}
 
 
@@ -491,7 +482,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_7)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list7", num)
-                        model.list7.value = array[num]
                         updateFS( "list7", num)}
 
 
@@ -499,7 +489,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_8)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list8", num)
-                        model.list8.value = array[num]
                         updateFS( "list8", num)}
 
 
@@ -511,7 +500,6 @@ class ManualListSet: Fragment() {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
                         setIntPref("list9", num)
-                        model.list9.value = array[num]
                         updateFS("list9", num)}
 
 
@@ -519,7 +507,6 @@ class ManualListSet: Fragment() {
                         val array = resources.getStringArray(R.array.list_10)
                         val num = array.indexOf("$selectedBook $selectedVerse")
                         setIntPref("list10", num)
-                        model.list10.value = array[num]
                         updateFS( "list10", num)}}
 
 

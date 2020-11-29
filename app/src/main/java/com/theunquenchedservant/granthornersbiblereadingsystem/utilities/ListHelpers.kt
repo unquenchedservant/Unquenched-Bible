@@ -3,12 +3,8 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 import android.graphics.Color
 import android.view.View
 import android.widget.Button
-import android.widget.LinearLayout
 import androidx.cardview.widget.CardView
-import androidx.core.view.get
-import com.google.android.material.textview.MaterialTextView
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
@@ -29,6 +25,7 @@ object ListHelpers {
         changeVisibility(binding.cardList9, false)
         changeVisibility(binding.cardList10, false)
     }
+
     fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding){
         changeVisibility(binding.cardList1, cardList == binding.cardList1.root)
         changeVisibility(binding.cardList2, cardList == binding.cardList2.root)
@@ -52,27 +49,11 @@ object ListHelpers {
         }
     }
 
-    fun setTitles(binding: FragmentHomeBinding){
-        val resources = App.applicationContext().resources
-        binding.cardList1.listTitle.text = resources.getString(R.string.title_pgh_list1)
-        binding.cardList2.listTitle.text = resources.getString(R.string.title_pgh_list2)
-        binding.cardList3.listTitle.text = resources.getString(R.string.title_pgh_list3)
-        binding.cardList4.listTitle.text = resources.getString(R.string.title_pgh_list4)
-        binding.cardList5.listTitle.text = resources.getString(R.string.title_pgh_list5)
-        binding.cardList6.listTitle.text = resources.getString(R.string.title_pgh_list6)
-        binding.cardList7.listTitle.text = resources.getString(R.string.title_pgh_list7)
-        binding.cardList8.listTitle.text = resources.getString(R.string.title_pgh_list8)
-        binding.cardList9.listTitle.text = resources.getString(R.string.title_pgh_list9)
-        binding.cardList10.listTitle.text = resources.getString(R.string.title_pgh_list10)
-    }
-     fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){
-         log("change visibility")
+    fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){
         if(isCardView){
-            log("Hiding reading, showing buttons")
             cardList.listButtons.visibility = View.VISIBLE
             cardList.listReading.visibility = View.GONE
         }else {
-            log("hiding buttons, showing reading")
             cardList.listButtons.visibility = View.GONE
             cardList.listReading.visibility = View.VISIBLE
         }
@@ -81,7 +62,6 @@ object ListHelpers {
         val number = if(result != null){
             (result[listName] as Long).toInt()
         }else{
-            log("NUMBER = ${getIntPref(listName)}")
             getIntPref(listName)
         }
         val list = App.applicationContext().resources.getStringArray(listId)
@@ -94,7 +74,6 @@ object ListHelpers {
                 list[0]
             }
             else -> {
-                log("THIS IS THE NUMBER $number")
                 setIntPref(listName, number)
                 list[number]
             }
