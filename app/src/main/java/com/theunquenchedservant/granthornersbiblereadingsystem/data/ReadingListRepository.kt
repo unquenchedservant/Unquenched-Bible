@@ -25,8 +25,8 @@ class ReadingListRepository {
                         if (it.result != null) {
                             val psalmChecked = it.result!!.data!!["psalms"] as Boolean
                             val listId = getListId(listName)
-                            val reading = getReading((it.result!!.data!!["listName"] as Long).toInt(), listId, listName, true, psalmChecked)
-                            val resultObject: ReadingLists = ReadingLists(listName, (it.result!!.data!!["${listName}Done"] as Long).toInt(), (it.result!!.data!![listName] as Long).toInt(), reading)
+                            val reading = getReading((it.result!!.data!![listName] as Long).toInt(), listId, listName, true, psalmChecked)
+                            val resultObject = ReadingLists(listName, (it.result!!.data!!["${listName}Done"] as Long).toInt(), (it.result!!.data!![listName] as Long).toInt(), reading)
                             data.value = resultObject
                         }else{
                             log("RESULT WAS NULL")
