@@ -67,27 +67,16 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") != 49){
+        if(getIntPref("versionNumber") != 50){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 49)
+                setIntPref("versionNumber", 50)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "[ADDED] Mailchimp mailing list sign up(under Info and support)\n\n"+
-                            "[ADDED] Remote notifications for easy contact with users for future updates\n\n"+
-                            "[ADDED] Ability to hold all lists in place until all 10 are finished\n\n" +
-                            "[FIXED] Current streak should not get reset every day\n\n" +
-                            "[FIXED] An issue with Song of Solomon in the Manually Set List menu\n\n" +
-                            "[FIXED] A lot of issues with scripture viewer\n\n" +
-                            "[FIXED] Psalms once again have ability to go backwards and forwards in scripture viewer\n\n" +
-                            "[FIXED] Occasional crash when opening the app \n\n" +
-                            "[UPDATED] A lot of backend logic so that things should run smoother\n\n" +
-                            "[UPDATED] Contact information\n\n"+
-                            "[UPDATED] Removed a lot of unnecessary files, so app size should be smaller\n\n" +
-                            "[UPDATED] Side drawer is now a bottom navigation layout\n\n" +
-                            "[UPDATED] icons on the bottom bar"
+                    "[ADDED] A day mode option! (feedback is welcome)\n\n"+
+                            "[FIXED] The Prophets list was displaying chapters from the Pentateuch\n\n"
             )
             builder.create().show()
         }

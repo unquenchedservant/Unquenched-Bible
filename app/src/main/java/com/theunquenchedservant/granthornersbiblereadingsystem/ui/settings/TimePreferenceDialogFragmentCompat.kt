@@ -42,12 +42,8 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
             val is24hour = DateFormat.is24HourFormat(context)
 
             mTimePicker!!.setIs24HourView(is24hour)
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mTimePicker!!.hour = hours
-            }
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                mTimePicker!!.minute = minutes
-            }
+            mTimePicker!!.hour = hours
+            mTimePicker!!.minute = minutes
         }
     }
 
