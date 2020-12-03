@@ -1,8 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="backg">#121212</color>
-    <color name="colorPrimaryDark">#9CB9D3</color>
-    <color name="unquenchedText">#E1E2E6</color>
-    <color name="unquenchedEmph">#9CB9D3</color>
-    <color name="buttonBackground">#383838</color>
+    <color name="backg">#e1e2e6</color>
+    <color name="backg_night">#121212</color>
+    <color name="colorPrimary">#E1E2E6</color>
+    <color name="colorPrimaryDark">#383838</color>
+    <color name="unquenchedTextDark">#e1e2e6</color>
+    <color name="unquenchedText">#121212</color>
+    <color name="unquenchedEmph">#121212</color>
+    <color name="unquenchedEmphDark">#9CB9D3</color>
+    <color name="buttonBackground">#e1e2e6</color>
+    <color name="buttonBackgroundDark">#383838</color>
 </resources>

@@ -10,6 +10,9 @@
         app:title="@string/title_notifications"
         app:summary="@string/summary_notications"
         />
+    <CheckBoxPreference
+        app:key="darkMode"
+        app:title="@string/title_dark_mode"/>
     <Preference
         app:key="overrides"
         app:title="@string/title_overrides"

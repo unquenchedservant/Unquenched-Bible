@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
+import androidx.appcompat.app.AppCompatDelegate
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -17,7 +18,9 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 
 class MainSettings : PreferenceFragmentCompat() {
 
@@ -30,7 +33,15 @@ class MainSettings : PreferenceFragmentCompat() {
         val overrides: Preference? = findPreference("overrides")
         val infoSupport: Preference? = findPreference("infoSupport")
         val account: Preference? = findPreference("googleSignIn")
+        val darkMode: Preference? = findPreference("darkMode")
         val mainActivity = activity as MainActivity
+
+        val dark = getBoolPref("darkMode")
+        if(dark){
+            darkMode!!.setDefaultValue(true)
+        }else{
+            darkMode!!.setDefaultValue(false)
+        }
 
         if(FirebaseAuth.getInstance().currentUser != null){
             account?.title = getString(R.string.title_account_loggedin)
@@ -60,6 +71,18 @@ class MainSettings : PreferenceFragmentCompat() {
                 mainActivity.navController.navigate(R.id.navigation_settings)
                 false
             }
+        }
+        darkMode.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            if(dark){
+                setBoolPref("darkMode", false)
+                mainActivity.navController.navigate(R.id.navigation_home)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            }else{
+                setBoolPref("darkMode", true)
+                mainActivity.navController.navigate(R.id.navigation_home)
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            }
+            false
         }
         plan!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title="Plan Settings"

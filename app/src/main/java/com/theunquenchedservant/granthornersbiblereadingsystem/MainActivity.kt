@@ -1,23 +1,32 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
+import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.drawable.ColorStateListDrawable
+import android.graphics.drawable.Drawable
+import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
+import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.ContextCompat
+import androidx.core.content.res.ColorStateListInflaterCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
@@ -35,16 +44,26 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         WebView(applicationContext)
-        AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+        val toolbarColor: Int
+        if(getBoolPref("darkMode")){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+        }else{
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground)
+        }
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         user = FirebaseAuth.getInstance().currentUser
         setContentView(binding.root)
+        val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
+        toolbar.setBackgroundColor(toolbarColor)
         setSupportActionBar(findViewById(R.id.my_toolbar))
         supportActionBar?.title = getDate(0, true)
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNav.setupWithNavController(navController)
+        binding.bottomNav.setBackgroundColor(toolbarColor)
         navController.navigate(R.id.navigation_home)
         setupBottomNavigationBar()
     }
@@ -52,7 +71,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         switchEnabled("home")
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{

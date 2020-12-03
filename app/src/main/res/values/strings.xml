@@ -37,6 +37,7 @@
     <string name="title_reminder_time">Reminder Time</string>
     <string name="title_partial">Allow Partial for Streak</string>
     <string name="title_hold_plan">Hold Plan Until All Done</string>
+    <string name="title_dark_mode">Dark Mode</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
