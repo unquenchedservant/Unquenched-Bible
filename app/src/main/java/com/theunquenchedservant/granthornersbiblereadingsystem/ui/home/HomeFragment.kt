@@ -178,7 +178,7 @@ class HomeFragment : Fragment() {
             }
             binding.cardList9.listReading.text = it.listReading
             binding.cardList9.listTitle.text = resources.getString(R.string.title_pgh_list9)
-            createCardListener(binding.cardList9, R.array.list_9, false, "list9Done", "list2")
+            createCardListener(binding.cardList9, R.array.list_9, false, "list9Done", "list9")
         }
         viewModel.list10.observe(viewLifecycleOwner){
             val cardList = binding.cardList10.root
