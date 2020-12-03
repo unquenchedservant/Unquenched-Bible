@@ -186,7 +186,7 @@ class HomeFragment : Fragment() {
             lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
         }else{
             enabled = getColor(App.applicationContext(), R.color.buttonBackground)
-            lineColor = getColor(App.applicationContext(), R.color.unquenchedEmph)
+            lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
         }
         val disabled = Color.parseColor("#00383838")
         when(readingLists.listDone){

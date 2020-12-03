@@ -2,6 +2,7 @@ package com.theunquenchedservant.granthornersbiblereadingsystem
 
 import android.content.res.ColorStateList
 import android.content.res.Configuration
+import android.graphics.Color
 import android.graphics.drawable.ColorStateListDrawable
 import android.graphics.drawable.Drawable
 import android.graphics.drawable.StateListDrawable
@@ -44,14 +45,28 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         WebView(applicationContext)
+        val stateList = arrayOf(
+            intArrayOf(android.R.attr.state_checked),
+            intArrayOf(-android.R.attr.state_checked)
+        )
+        val colorList: IntArray
         val toolbarColor: Int
         if(getBoolPref("darkMode")){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+            colorList = intArrayOf(
+                    ContextCompat.getColor(this, R.color.unquenchedEmphDark),
+                    ContextCompat.getColor(this, R.color.unquenchedTextDark)
+            )
         }else{
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground)
+            colorList = intArrayOf(
+                    ContextCompat.getColor(this, R.color.unquenchedOrange),
+                    ContextCompat.getColor(this, R.color.unquenchedText)
+            )
         }
+        val colorStateList = ColorStateList(stateList, colorList)
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         user = FirebaseAuth.getInstance().currentUser
@@ -63,7 +78,10 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNav.setupWithNavController(navController)
+        log("TESTING ${binding.bottomNav.itemIconTintList?.defaultColor}")
         binding.bottomNav.setBackgroundColor(toolbarColor)
+        binding.bottomNav.itemIconTintList = colorStateList
+        binding.bottomNav.itemTextColor = colorStateList
         navController.navigate(R.id.navigation_home)
         setupBottomNavigationBar()
     }
@@ -111,6 +129,11 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 R.id.navigation_home -> {
                     log("home selected")
                     switchEnabled("home")
+                    if(getBoolPref("darkMode")) {
+                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
+                    }else {
+                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    }
                     supportActionBar?.title = getDate(0, true)
                     supportActionBar?.show()
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -175,6 +198,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
+        log("TESTING TESTING TESTING")
         if(navController.currentDestination?.id != R.id.navigation_home){
             navController.popBackStack()
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -183,6 +207,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }else{
             finish()
         }
+
     }
 
 

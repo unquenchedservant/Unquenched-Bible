@@ -9,12 +9,14 @@
         <item name="android:actionMenuTextColor">@color/menu_text</item>
         <item name="android:colorPrimaryDark">@color/unquenchedEmph</item>
         <item name="android:colorPrimary">@color/unquenchedEmphDark</item>
-        <item name="android:colorAccent">@color/unquenchedEmph</item>
+        <item name="android:colorAccent">@color/unquenchedText</item>
         <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>
     </style>
     <style name="AppThemeWAction" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
         <item name="preferenceTheme">@style/PreferenceThemeOverlay.v14.Material</item>
         <item name="android:actionMenuTextColor">@color/menu_text</item>
+        <item name="colorAccent">@color/unquenchedEmph</item>
+        <item name="colorPrimary">@color/unquenchedEmph</item>
         <item name="materialButtonStyle">@style/Widget.MaterialComponents.Button.OutlinedButton</item>
     </style>
     <style name="AppTheme.Base" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
