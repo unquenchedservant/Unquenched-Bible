@@ -4,6 +4,8 @@ import android.graphics.Color
 import android.view.View
 import android.widget.Button
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContentProviderCompat.requireContext
+import androidx.core.content.ContextCompat.getColor
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
@@ -40,7 +42,11 @@ object ListHelpers {
     }
 
     fun listSwitcher(cardList: View, listDone: Int, material_button: Button){
-        val enabled = Color.parseColor("#383838")
+        val enabled = if(SharedPref.getBoolPref("darkMode")){
+            getColor(App.applicationContext(), android.R.color.background_dark)
+        }else{
+            getColor(App.applicationContext(), android.R.color.background_light)
+        }
         val disabled = Color.parseColor("#00383838")
         cardList as CardView
         when(listDone){

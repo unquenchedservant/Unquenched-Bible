@@ -10,7 +10,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
+import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
+import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,6 +32,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.ReadingLists
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarm
@@ -63,134 +67,61 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") != 49){
+        if(getIntPref("versionNumber") != 50){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 49)
+                setIntPref("versionNumber", 50)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "[ADDED] Mailchimp mailing list sign up(under Info and support)\n\n"+
-                            "[ADDED] Remote notifications for easy contact with users for future updates\n\n"+
-                            "[ADDED] Ability to hold all lists in place until all 10 are finished\n\n" +
-                            "[FIXED] Current streak should not get reset every day\n\n" +
-                            "[FIXED] An issue with Song of Solomon in the Manually Set List menu\n\n" +
-                            "[FIXED] A lot of issues with scripture viewer\n\n" +
-                            "[FIXED] Psalms once again have ability to go backwards and forwards in scripture viewer\n\n" +
-                            "[FIXED] Occasional crash when opening the app \n\n" +
-                            "[UPDATED] A lot of backend logic so that things should run smoother\n\n" +
-                            "[UPDATED] Contact information\n\n"+
-                            "[UPDATED] Removed a lot of unnecessary files, so app size should be smaller\n\n" +
-                            "[UPDATED] Side drawer is now a bottom navigation layout\n\n" +
-                            "[UPDATED] icons on the bottom bar"
+                    "[ADDED] A day mode option! (feedback is welcome)\n\n"+
+                            "[FIXED] The Prophets list was displaying chapters from the Pentateuch\n\n"
             )
             builder.create().show()
         }
-        val enabled = Color.parseColor("#383838")
-        val disabled = Color.parseColor("#00383838")
         viewModel.list1.observe(viewLifecycleOwner){
-            val cardList = binding.cardList1.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList1.listReading.text = it.listReading
-            binding.cardList1.listTitle.text = resources.getString(R.string.title_pgh_list1)
-            createCardListener(binding.cardList1, R.array.list_1, false, "list1Done", "list1")
+            createCard(binding.cardList1, it, R.string.title_pgh_list1, "list1", R.array.list_1, false)
         }
         viewModel.list2.observe(viewLifecycleOwner){
-            val cardList = binding.cardList2.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList2.listReading.text = it.listReading
-            binding.cardList2.listTitle.text = resources.getString(R.string.title_pgh_list2)
-            createCardListener(binding.cardList2, R.array.list_2, false, "list2Done", "list2")
+            createCard(binding.cardList2, it, R.string.title_pgh_list2, "list2", R.array.list_2, false)
         }
         viewModel.list3.observe(viewLifecycleOwner){
-            val cardList = binding.cardList3.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList3.listReading.text = it.listReading
-            binding.cardList3.listTitle.text = resources.getString(R.string.title_pgh_list3)
-            createCardListener(binding.cardList3, R.array.list_3, false, "list3Done", "list3")
+            createCard(binding.cardList3, it, R.string.title_pgh_list3, "list3", R.array.list_3, false)
         }
         viewModel.list4.observe(viewLifecycleOwner){
-            val cardList = binding.cardList4.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList4.listReading.text = it.listReading
-            binding.cardList4.listTitle.text = resources.getString(R.string.title_pgh_list4)
-            createCardListener(binding.cardList4, R.array.list_4, false, "list4Done", "list4")
+            createCard(binding.cardList4, it, R.string.title_pgh_list4, "list4", R.array.list_4, false)
         }
         viewModel.list5.observe(viewLifecycleOwner){
-            val cardList = binding.cardList5.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList5.listReading.text = it.listReading
-            binding.cardList5.listTitle.text = resources.getString(R.string.title_pgh_list5)
-            createCardListener(binding.cardList5, R.array.list_5, false, "list5Done", "list5")
+            createCard(binding.cardList5, it, R.string.title_pgh_list5, "list5", R.array.list_5, false)
         }
         viewModel.list6.observe(viewLifecycleOwner){
-            val cardList = binding.cardList6.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList6.listReading.text = it.listReading
-            binding.cardList6.listTitle.text = resources.getString(R.string.title_pgh_list6)
             val psalms = getBoolPref("psalms")
-            createCardListener(binding.cardList6, R.array.list_6, psalms, "list6Done", "list6")
+            createCard(binding.cardList6, it, R.string.title_pgh_list6, "list6", R.array.list_6, psalms)
         }
         viewModel.list7.observe(viewLifecycleOwner){
-            val cardList = binding.cardList7.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList7.listReading.text = it.listReading
-            binding.cardList7.listTitle.text = resources.getString(R.string.title_pgh_list7)
-            createCardListener(binding.cardList7, R.array.list_7, false, "list7Done", "list7")
+            createCard(binding.cardList7, it, R.string.title_pgh_list7, "list7", R.array.list_7, false)
         }
         viewModel.list8.observe(viewLifecycleOwner){
-            val cardList = binding.cardList8.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList8.listReading.text = it.listReading
-            binding.cardList8.listTitle.text = resources.getString(R.string.title_pgh_list8)
-            createCardListener(binding.cardList8, R.array.list_8, false, "list8Done", "list8")
+            createCard(binding.cardList8, it, R.string.title_pgh_list8, "list8", R.array.list_8, false)
         }
         viewModel.list9.observe(viewLifecycleOwner){
-            val cardList = binding.cardList9.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList9.listReading.text = it.listReading
-            binding.cardList9.listTitle.text = resources.getString(R.string.title_pgh_list9)
-            createCardListener(binding.cardList9, R.array.list_9, false, "list9Done", "list9")
+            createCard(binding.cardList9, it, R.string.title_pgh_list9, "list9", R.array.list_9, false)
         }
         viewModel.list10.observe(viewLifecycleOwner){
-            val cardList = binding.cardList10.root
-            when(it.listDone){
-                0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-                1-> { cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-            }
-            binding.cardList10.listReading.text = it.listReading
-            binding.cardList10.listTitle.text = resources.getString(R.string.title_pgh_list10)
-            createCardListener(binding.cardList10, R.array.list_10, false, "list10Done", "list10")
+            createCard(binding.cardList10, it, R.string.title_pgh_list10, "list10", R.array.list_10, false)
         }
         viewModel.listsDone.observe(viewLifecycleOwner){
+            val backgroundColor:Int
+            if(getBoolPref("darkMode")){
+                val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
+                backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                binding.materialButton.setTextColor(color)
+            }else{
+                val color = getColor(App.applicationContext(), R.color.unquenchedText)
+                backgroundColor = getColor(App.applicationContext(), R.color.buttonBackground)
+                binding.materialButton.setTextColor(color)
+            }
             when(it.listsDone){
                 10 -> {
                     binding.materialButton.setText(R.string.done)
@@ -201,8 +132,8 @@ class HomeFragment : Fragment() {
                 0 -> {
                     binding.materialButton.setText(R.string.not_done)
                     binding.materialButton.isEnabled = true
-                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
-                    binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
+                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+                    //binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
                 in 1..9 -> {
                     binding.materialButton.setText(R.string.btn_mark_remaining)
@@ -212,7 +143,7 @@ class HomeFragment : Fragment() {
                     }else{
                         100 - ((getIntPref("listsDone") * 5) - 5)
                     }
-                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}383838"))
+                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(backgroundColor)
                     binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
             }
@@ -235,7 +166,39 @@ class HomeFragment : Fragment() {
         }
     }
 
-
+    private fun createCard(cardList: CardviewsBinding, readingLists: ReadingLists, readingString: Int, listName: String, listArray: Int, psalms:Boolean){
+        val cardListRoot = cardList.root
+        val enabled: Int
+        val lineColor: Int
+        if(getBoolPref("darkMode")){
+            enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+            lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+        }else{
+            enabled = getColor(App.applicationContext(), R.color.buttonBackground)
+            lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+        }
+        val disabled = Color.parseColor("#00383838")
+        when(readingLists.listDone){
+            0 -> {
+                cardListRoot.isEnabled = true
+                cardListRoot.setCardBackgroundColor(enabled)
+                cardList.listButtons.setBackgroundColor(enabled)
+            }
+            1-> {
+                cardListRoot.isEnabled = false
+                cardListRoot.setCardBackgroundColor(disabled)
+                cardList.listButtons.setBackgroundColor(disabled)
+            }
+        }
+        cardList.listReading.setTextColor(lineColor)
+        cardList.listDone.setTextColor(lineColor)
+        cardList.listRead.setTextColor(lineColor)
+        cardList.buttonSeparator.setBackgroundColor(lineColor)
+        cardList.lineSeparator.setBackgroundColor(lineColor)
+        cardList.listReading.text = readingLists.listReading
+        cardList.listTitle.text = resources.getString(readingString)
+        createCardListener(cardList, listArray, psalms, "${listName}Done", listName)
+    }
     private fun createButtonListener(){
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {

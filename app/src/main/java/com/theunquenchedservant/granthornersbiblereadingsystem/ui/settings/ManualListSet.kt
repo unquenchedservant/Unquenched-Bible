@@ -1,14 +1,21 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.app.AlertDialog
+import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.*
+import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
@@ -23,7 +30,25 @@ class ManualListSet: Fragment() {
         super.onResume()
         val root = requireView()
         val listSelector = root.findViewById<Spinner>(R.id.listSelector)
-
+        val listSpinner1 = root.findViewById<Spinner>(R.id.listSpinner1)
+        val listSpinner2 = root.findViewById<NumberPicker>(R.id.listSpinner2)
+        val dark = getBoolPref("darkMode")
+        val button = root.findViewById<Button>(R.id.set_button)
+        if(dark){
+            listSelector.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)
+            listSelector.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme))
+            listSpinner1.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)
+            listSpinner1.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme))
+            listSpinner2.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)
+            button.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+        }else{
+            listSelector.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
+            listSelector.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme))
+            listSpinner1.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
+            listSpinner1.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme))
+            listSpinner2.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
+            button.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+        }
         ArrayAdapter.createFromResource(
                 requireContext(),
                 R.array.listNames,
@@ -35,6 +60,12 @@ class ManualListSet: Fragment() {
         listSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                val buttonColor: Int
+                if(dark){
+                    buttonColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                }else{
+                    buttonColor = getColor(App.applicationContext(), R.color.buttonBackground)
+                }
 
                 val selectedItem      = parent?.getItemAtPosition(position).toString()
                 val list              = root.findViewById<Spinner>(R.id.listSpinner1)
@@ -44,8 +75,9 @@ class ManualListSet: Fragment() {
                 when(selectedItem){
                     "----"             -> {
 
-                        button.isEnabled             = false
-                        button.setBackgroundColor(Color.parseColor("#00383838"))
+                        button.isEnabled = false
+                        button.isVisible = false
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -74,7 +106,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList    = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -90,7 +123,7 @@ class ManualListSet: Fragment() {
                                 val book                  = parent?.getItemAtPosition(position).toString()
                                 val verse                 = root.findViewById<NumberPicker>(R.id.listSpinner2)
                                 verse.minValue            = 1
-                                verse.visibility = View.VISIBLE
+                                verse.visibility          = View.VISIBLE
 
                                 when(book){
                                     "Matthew"                       -> { verse.maxValue = 28; verse.value = cVerse }
@@ -108,7 +141,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList    = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -144,7 +178,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -178,7 +213,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -217,7 +253,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -250,7 +287,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility   = View.VISIBLE
 
                         button.isEnabled           = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible           = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -279,7 +317,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -309,7 +348,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -348,7 +388,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -390,7 +431,8 @@ class ManualListSet: Fragment() {
                         verseSelector.visibility     = View.VISIBLE
 
                         button.isEnabled             = true
-                        button.setBackgroundColor(Color.parseColor("#383838"))
+                        button.isVisible             = true
+                        button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
                                 context!!,
@@ -414,7 +456,6 @@ class ManualListSet: Fragment() {
             override fun onNothingSelected(parent: AdapterView<*>?) {} }
 
 
-        val button      = root.findViewById<Button>(R.id.set_button)
 
 
         button.setOnClickListener {
