@@ -21,6 +21,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class MainSettings : PreferenceFragmentCompat() {
 
@@ -75,10 +76,16 @@ class MainSettings : PreferenceFragmentCompat() {
         darkMode.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(dark){
                 setBoolPref("darkMode", false)
+                if(FirebaseAuth.getInstance().currentUser != null){
+                    updateFS("darkMode", false)
+                }
                 mainActivity.navController.navigate(R.id.navigation_home)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }else{
                 setBoolPref("darkMode", true)
+                if(FirebaseAuth.getInstance().currentUser != null){
+                    updateFS("darkMode", true)
+                }
                 mainActivity.navController.navigate(R.id.navigation_home)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }
