@@ -67,17 +67,18 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") != 51){
+        if(getIntPref("versionNumber") != 52){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 51)
+                setIntPref("versionNumber", 52)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
                     "[ADDED] A day mode option! (feedback is welcome)\n\n"+
                             "[FIXED] The Prophets list was displaying chapters from the Pentateuch\n\n"+
-                            "[FIXED] An issue with the Psalms list when switching from 5 per day to 1 per day"
+                            "[FIXED] An issue with the Psalms list when switching from 5 per day to 1 per day\n\n"+
+                            "[FIXED] An issue where pressing done in the scripture viewer would keep the bottom nav bar hidden\n\n"
             )
             builder.create().show()
         }
