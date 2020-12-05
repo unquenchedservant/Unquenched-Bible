@@ -113,7 +113,6 @@ class ScriptureViewer : Fragment() {
                         bundle.putString("chapter", "no")
                         bundle.putBoolean("psalms", true)
                         bundle.putInt("iteration", iteration+1)
-
                         (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
                     }
                     day += 30 * (iteration - 1)
@@ -130,6 +129,7 @@ class ScriptureViewer : Fragment() {
                     }
                     binding.psalmsNext.setOnClickListener {
                         (activity as MainActivity).binding.bottomNav.isVisible = true
+
                         (activity as MainActivity).navController.navigate(R.id.navigation_home)
                     }
                     binding.psalmsNext.text=getText(R.string.scripture_done)
@@ -143,6 +143,7 @@ class ScriptureViewer : Fragment() {
             binding.psalmsNext.visibility = View.VISIBLE
             binding.psalmsNext.text=getText(R.string.scripture_done)
             binding.psalmsNext.setOnClickListener {
+                (activity as MainActivity).binding.bottomNav.isVisible = true
                 (activity as MainActivity).navController.navigate(R.id.navigation_home)
             }
             title = chapter
