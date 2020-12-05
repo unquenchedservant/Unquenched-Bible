@@ -71,8 +71,10 @@ class DailyCheck : BroadcastReceiver() {
     private fun resetList(listName: String, listNameDone: String){
         log("$listName is now set to ${getIntPref(listName)}")
         if(!getBoolPref("holdPlan") || getIntPref("listsDone") == 10) {
-            increaseIntPref(listName, 1)
-            log("$listName index is now ${getIntPref(listName)}")
+            if(listName != "list6" || (listName == "list6" && !getBoolPref("psalms"))) {
+                increaseIntPref(listName, 1)
+                log("$listName index is now ${getIntPref(listName)}")
+            }
             setIntPref(listNameDone, 0)
             log("$listNameDone set to 0")
         }
