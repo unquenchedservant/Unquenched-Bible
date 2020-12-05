@@ -67,16 +67,17 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") != 50){
+        if(getIntPref("versionNumber") != 51){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 50)
+                setIntPref("versionNumber", 51)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
                     "[ADDED] A day mode option! (feedback is welcome)\n\n"+
-                            "[FIXED] The Prophets list was displaying chapters from the Pentateuch\n\n"
+                            "[FIXED] The Prophets list was displaying chapters from the Pentateuch\n\n"+
+                            "[FIXED] An issue with the Psalms list when switching from 5 per day to 1 per day"
             )
             builder.create().show()
         }
