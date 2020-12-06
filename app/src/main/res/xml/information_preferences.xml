@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <PreferenceCategory
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:title="@string/title_information">
         <Preference
             app:key="appInfo"
@@ -20,8 +20,8 @@
                 android:action="android.intent.action.VIEW"
                 android:data="https://www.iubenda.com/privacy-policy/56351106"/>
         </Preference>
-    </PreferenceCategory>
-    <PreferenceCategory
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
         app:title="@string/title_support">
         <Preference
             app:key="currentVersion"
@@ -37,10 +37,14 @@
             app:title="@string/title_twitter"
             app:summary="@string/summary_twitter"/>
         <Preference
+            app:key="discordLink"
+            app:title="@string/title_discord"
+            app:summary="@string/summary_discord"/>
+        <Preference
             app:key="mailchimp"
             app:title="@string/title_mailchimp"
             app:summary="@string/summary_mailchimp"/>
-    </PreferenceCategory>
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 
 
 </PreferenceScreen>
