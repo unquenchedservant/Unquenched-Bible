@@ -110,4 +110,9 @@
     <string name="btn_register">Register</string>
     <string name="btn_login">Log In</string>
     <string name="btn_mark_done">Mark Done</string>
+
+    <string name="btn_background_color">e1e2e6</string>
+    <string name="btn_background_color_dark">383838</string>
+    <string name="done_btn_background_color_dark">121212</string>
+    <string name="done_btn_background_color">FFFFFF</string>
 </resources>

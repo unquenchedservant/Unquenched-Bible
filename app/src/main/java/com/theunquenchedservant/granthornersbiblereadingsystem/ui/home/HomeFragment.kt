@@ -32,6 +32,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.ReadingLists
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
@@ -114,38 +115,43 @@ class HomeFragment : Fragment() {
             createCard(binding.cardList10, it, R.string.title_pgh_list10, "list10", R.array.list_10, false)
         }
         viewModel.listsDone.observe(viewLifecycleOwner){
-            val backgroundColor:Int
+            val backgroundColor: String
+            val allDoneBackgroundColor: String
             if(getBoolPref("darkMode")){
                 val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
-                backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                backgroundColor = getString(R.string.btn_background_color_dark)
+                allDoneBackgroundColor = getString(R.string.done_btn_background_color_dark)
                 binding.materialButton.setTextColor(color)
             }else{
                 val color = getColor(App.applicationContext(), R.color.unquenchedText)
-                backgroundColor = getColor(App.applicationContext(), R.color.buttonBackground)
+                backgroundColor = getString(R.string.btn_background_color)
+                allDoneBackgroundColor = getString(R.string.done_btn_background_color)
                 binding.materialButton.setTextColor(color)
             }
             when(it.listsDone){
                 10 -> {
                     binding.materialButton.setText(R.string.done)
                     binding.materialButton.isEnabled = false
-                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
+                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$allDoneBackgroundColor"))
                     binding.materialButton.backgroundTintMode= PorterDuff.Mode.ADD
                 }
                 0 -> {
                     binding.materialButton.setText(R.string.not_done)
                     binding.materialButton.isEnabled = true
-                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
                     //binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
                 in 1..9 -> {
                     binding.materialButton.setText(R.string.btn_mark_remaining)
                     binding.materialButton.isEnabled = true
-                    val opacity = if (getIntPref("listsDone") < 5){
-                        100 - (getIntPref("listsDone") * 5)
+                    val opacity = if (it.listsDone < 5){
+                        100 - (it.listsDone * 5)
                     }else{
-                        100 - ((getIntPref("listsDone") * 5) - 5)
+                        100 - ((it.listsDone * 5) - 5)
                     }
-                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(backgroundColor)
+                    log("testing testing $backgroundColor")
+                    log("testing testing #${opacity}$backgroundColor")
+                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
                     binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
             }
