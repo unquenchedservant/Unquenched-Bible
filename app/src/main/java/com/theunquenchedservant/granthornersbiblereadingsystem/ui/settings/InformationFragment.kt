@@ -22,6 +22,7 @@ class InformationFragment : PreferenceFragmentCompat() {
         val contact: Preference? = findPreference("contact")
         val twitter: Preference? = findPreference("twitter")
         val currentVersion: Preference? = findPreference("currentVersion")
+        val discord: Preference? = findPreference("discordLink")
         val mailchimp: Preference? = findPreference("mailchimp")
 
         systemInfo!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -41,14 +42,14 @@ class InformationFragment : PreferenceFragmentCompat() {
         currentVersion?.title = "Current Version - 1.2"
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://theunquenchedservant.com/changelog/"))
-            if(i.resolveActivity(App.applicationContext().packageManager)!= null){
+            if(i.resolveActivity(applicationContext().packageManager)!= null){
                 startActivity(i)
             }
             false
         }
         twitter!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/unquenchedbible"))
-            if(i.resolveActivity(App.applicationContext().packageManager)!= null){
+            if(i.resolveActivity(applicationContext().packageManager)!= null){
                 startActivity(i)
             }
             false
@@ -59,7 +60,7 @@ class InformationFragment : PreferenceFragmentCompat() {
                     .setData(Uri.parse("mailto:"))
                     .putExtra(Intent.EXTRA_EMAIL, arrayOf("contact@unquenched.tech"))
                     .putExtra(Intent.EXTRA_SUBJECT, "COMMENT/QUESTION - PGH APP")
-            if(i.resolveActivity(App.applicationContext().packageManager) != null){
+            if(i.resolveActivity(applicationContext().packageManager) != null){
                 MainActivity.log("STARTING ACTIVITY SOON")
                 startActivity(i)
             }else{
@@ -67,9 +68,16 @@ class InformationFragment : PreferenceFragmentCompat() {
             }
             false
         }
+        discord!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/AKrefXRyuA"))
+            if(i.resolveActivity(applicationContext().packageManager)!= null){
+                startActivity(i)
+            }
+            false
+        }
         mailchimp!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("http://eepurl.com/g_jIob"))
-            if(i.resolveActivity(App.applicationContext().packageManager)!= null){
+            if(i.resolveActivity(applicationContext().packageManager)!= null){
                 startActivity(i)
             }
             false

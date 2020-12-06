@@ -25,4 +25,8 @@
         app:key="googleSignIn"
         app:title="@string/title_account_loggedout"
         app:summary="@string/title_account_loggedout"/>
+    <Preference
+        app:key="discordLink"
+        app:title="@string/title_discord"
+        app:summary="@string/summary_discord"/>
 </PreferenceScreen>

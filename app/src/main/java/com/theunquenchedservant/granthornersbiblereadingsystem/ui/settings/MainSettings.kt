@@ -2,6 +2,7 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.app.AlertDialog
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
@@ -35,6 +36,7 @@ class MainSettings : PreferenceFragmentCompat() {
         val infoSupport: Preference? = findPreference("infoSupport")
         val account: Preference? = findPreference("googleSignIn")
         val darkMode: Preference? = findPreference("darkMode")
+        val discord: Preference? = findPreference("discordLink")
         val mainActivity = activity as MainActivity
 
         val dark = getBoolPref("darkMode")
@@ -113,6 +115,13 @@ class MainSettings : PreferenceFragmentCompat() {
             mainActivity.supportActionBar?.title = "Information & Support"
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_information)
+            false
+        }
+        discord!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/AKrefXRyuA"))
+            if(i.resolveActivity(App.applicationContext().packageManager)!= null){
+                startActivity(i)
+            }
             false
         }
     }
