@@ -118,10 +118,8 @@ class MainSettings : PreferenceFragmentCompat() {
             false
         }
         discord!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/AKrefXRyuA"))
-            if(i.resolveActivity(App.applicationContext().packageManager)!= null){
-                startActivity(i)
-            }
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://discord.gg/AKrefXRyuA"))
+            startActivity(i)
             false
         }
     }

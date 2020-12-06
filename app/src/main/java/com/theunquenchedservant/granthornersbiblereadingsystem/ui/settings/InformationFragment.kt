@@ -30,28 +30,19 @@ class InformationFragment : PreferenceFragmentCompat() {
             startActivity(i)
             false
         }
-        appHelp!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://theunquenchedservant.com/bible-reading-system"))
-            startActivity(i)
-            false
-        }
         license!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             false
         }
         currentVersion?.title = "Current Version - 1.2"
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://theunquenchedservant.com/changelog/"))
-            if(i.resolveActivity(applicationContext().packageManager)!= null){
-                startActivity(i)
-            }
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/unquenchedservant/BRP_android/releases"))
+            startActivity(i)
             false
         }
         twitter!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://twitter.com/unquenchedbible"))
-            if(i.resolveActivity(applicationContext().packageManager)!= null){
-                startActivity(i)
-            }
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://twitter.com/unquenchedbible"))
+            startActivity(i)
             false
         }
         contact!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
@@ -60,26 +51,17 @@ class InformationFragment : PreferenceFragmentCompat() {
                     .setData(Uri.parse("mailto:"))
                     .putExtra(Intent.EXTRA_EMAIL, arrayOf("contact@unquenched.tech"))
                     .putExtra(Intent.EXTRA_SUBJECT, "COMMENT/QUESTION - PGH APP")
-            if(i.resolveActivity(applicationContext().packageManager) != null){
-                MainActivity.log("STARTING ACTIVITY SOON")
-                startActivity(i)
-            }else{
-                MainActivity.log("PACKAGE MANAGER ${i.resolveActivity(App.applicationContext().packageManager)}")
-            }
+            startActivity(i)
             false
         }
         discord!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://discord.gg/AKrefXRyuA"))
-            if(i.resolveActivity(applicationContext().packageManager)!= null){
-                startActivity(i)
-            }
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://discord.gg/AKrefXRyuA"))
+            startActivity(i)
             false
         }
         mailchimp!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW, Uri.parse("http://eepurl.com/g_jIob"))
-            if(i.resolveActivity(applicationContext().packageManager)!= null){
-                startActivity(i)
-            }
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://eepurl.com/g_jIob"))
+            startActivity(i)
             false
         }
     }
