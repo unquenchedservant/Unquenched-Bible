@@ -68,18 +68,22 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") != 52){
+        if(getIntPref("versionNumber") != 53){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 52)
+                setIntPref("versionNumber", 53)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
                     "[ADDED] A day mode option! (feedback is welcome)\n\n"+
+                            "[ADDED] A link to a discord server in the main settings, used for communication to/from dev and forming a community! \n\n" +
                             "[FIXED] The Prophets list was displaying chapters from the Pentateuch\n\n"+
                             "[FIXED] An issue with the Psalms list when switching from 5 per day to 1 per day\n\n"+
-                            "[FIXED] An issue where pressing done in the scripture viewer would keep the bottom nav bar hidden\n\n"
+                            "[FIXED] An issue where pressing done in the scripture viewer would keep the bottom nav bar hidden\n\n" +
+                            "[FIXED] Some links in settings weren't working\n\n" +
+                            "[FIXED] Some setting titles were unreadable\n\n"+
+                            "[FIXED] The \"Mark All Done\" button wasn't changing color according to amount of lists done\n\n"
             )
             builder.create().show()
         }

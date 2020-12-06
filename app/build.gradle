@@ -30,8 +30,8 @@ android {
         applicationId "com.theunquenchedservant.granthornersbiblereadingsystem"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 53
-        versionName "1.52"
+        versionCode 54
+        versionName "1.5.3"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
