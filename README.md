@@ -1,4 +1,4 @@
-# BRP_android
+# Unquenched Bible
 Android app for Grant Horner's Bible Reading System
 
 What started as a Google spreadsheet has now become an app! 
