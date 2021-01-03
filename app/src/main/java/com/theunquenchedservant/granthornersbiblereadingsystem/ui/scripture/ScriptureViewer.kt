@@ -120,6 +120,7 @@ class ScriptureViewer : Fragment() {
                 5 ->{
                     binding.psalmsBack.visibility = View.VISIBLE
                     binding.psalmsNext.visibility = View.VISIBLE
+                    binding.psalmsNext.text=getString(R.string.scripture_home)
                     binding.psalmsBack.setOnClickListener {
                         val bundle = Bundle()
                         bundle.putString("chapter", "no")
@@ -132,7 +133,6 @@ class ScriptureViewer : Fragment() {
 
                         (activity as MainActivity).navController.navigate(R.id.navigation_home)
                     }
-                    binding.psalmsNext.text=getText(R.string.scripture_done)
                     day += 30 * (iteration - 1)
                 }
             }
@@ -141,7 +141,7 @@ class ScriptureViewer : Fragment() {
         }else{
             binding.psalmsBack.visibility = View.INVISIBLE
             binding.psalmsNext.visibility = View.VISIBLE
-            binding.psalmsNext.text=getText(R.string.scripture_done)
+            binding.psalmsNext.text=getText(R.string.scripture_home)
             binding.psalmsNext.setOnClickListener {
                 (activity as MainActivity).binding.bottomNav.isVisible = true
                 (activity as MainActivity).navController.navigate(R.id.navigation_home)
