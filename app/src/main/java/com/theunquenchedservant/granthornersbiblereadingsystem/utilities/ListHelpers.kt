@@ -45,7 +45,7 @@ object ListHelpers {
     }
 
     fun listSwitcher(cardList: View, listDone: Int, material_button: Button){
-        val enabled = if(SharedPref.getBoolPref("darkMode")){
+        val enabled = if(SharedPref.getBoolPref("darkMode", true)){
             getColor(App.applicationContext(), android.R.color.background_dark)
         }else{
             getColor(App.applicationContext(), android.R.color.background_light)

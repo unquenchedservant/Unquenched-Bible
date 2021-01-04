@@ -32,7 +32,7 @@ class ManualListSet: Fragment() {
         val listSelector = root.findViewById<Spinner>(R.id.listSelector)
         val listSpinner1 = root.findViewById<Spinner>(R.id.listSpinner1)
         val listSpinner2 = root.findViewById<NumberPicker>(R.id.listSpinner2)
-        val dark = getBoolPref("darkMode")
+        val dark = getBoolPref("darkMode", true)
         val button = root.findViewById<Button>(R.id.set_button)
         if(dark){
             listSelector.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)

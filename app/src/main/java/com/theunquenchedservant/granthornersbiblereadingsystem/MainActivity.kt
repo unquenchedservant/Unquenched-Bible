@@ -51,7 +51,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         )
         val colorList: IntArray
         val toolbarColor: Int
-        if(getBoolPref("darkMode")){
+        if(getBoolPref("darkMode", true)){
             AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
             colorList = intArrayOf(
@@ -129,7 +129,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 R.id.navigation_home -> {
                     log("home selected")
                     switchEnabled("home")
-                    if(getBoolPref("darkMode")) {
+                    if(getBoolPref("darkMode", true)) {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
                     }else {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))

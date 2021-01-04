@@ -58,7 +58,7 @@ class ScriptureViewer : Fragment() {
         val url = getESVReference(chapter, psalms, iteration)
 
         (activity as MainActivity).findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
-        if(getBoolPref("darkMode")){
+        if(getBoolPref("darkMode", true)){
             act.binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
         }else{
             act.binding.navHostFragment.setBackgroundColor(Color.parseColor("#fffaf0"))
@@ -69,7 +69,7 @@ class ScriptureViewer : Fragment() {
     fun getESVReference(chapter: String, psalms: Boolean, iteration: Int) : String {
         val title : String
         val url: String
-        if(getBoolPref("darkMode")){
+        if(getBoolPref("darkMode", true)){
             binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
             binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
             binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
@@ -166,7 +166,7 @@ class ScriptureViewer : Fragment() {
                 Response.Listener { response ->
                     val css: String
                     html = response.getJSONArray("passages").getString(0)
-                    if(getBoolPref("darkMode")){
+                    if(getBoolPref("darkMode", true)){
                         css = "https://unquenched.bible/esv-2.css"
                     }else{
                         css = "https://unquenched.bible/esv-day2.css"

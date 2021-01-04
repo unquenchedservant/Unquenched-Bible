@@ -119,7 +119,7 @@ class HomeFragment : Fragment() {
         viewModel.listsDone.observe(viewLifecycleOwner){
             val backgroundColor: String
             val allDoneBackgroundColor: String
-            if(getBoolPref("darkMode")){
+            if(getBoolPref("darkMode", true)){
                 val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
                 backgroundColor = getString(R.string.btn_background_color_dark)
                 allDoneBackgroundColor = getString(R.string.done_btn_background_color_dark)
@@ -179,7 +179,7 @@ class HomeFragment : Fragment() {
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
-        if(getBoolPref("darkMode")){
+        if(getBoolPref("darkMode", true)){
             enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
             lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
         }else{
@@ -265,7 +265,7 @@ class HomeFragment : Fragment() {
             }
         }else{
             val enabled: Int
-            if(getBoolPref("darkMode")){
+            if(getBoolPref("darkMode", true)){
                 enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
             }else{
                 enabled = getColor(App.applicationContext(), R.color.buttonBackground)

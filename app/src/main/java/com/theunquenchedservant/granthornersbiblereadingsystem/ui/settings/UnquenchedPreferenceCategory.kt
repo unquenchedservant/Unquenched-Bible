@@ -20,7 +20,7 @@ override fun onBindViewHolder(holder: PreferenceViewHolder?) {
     super.onBindViewHolder(holder)
     val view: View = holder?.itemView!!
     val titleView = view.findViewById<TextView>(android.R.id.title)
-    if(getBoolPref("darkMode")) {
+    if(getBoolPref("darkMode", true)) {
         titleView.setTextColor(Color.parseColor("#9CB9D3"))
     }else{
         titleView.setTextColor(Color.parseColor("#000000"))
