@@ -65,10 +65,13 @@ object Marker {
         val listDoneDaily = getIntPref(cardDoneDaily)
         val listsDone = if (listDoneDaily == 0){
             setIntPref(cardDoneDaily, 1)
+            log("Should be increasing lists done")
             increaseIntPref("listsDone", 1)
         }else{
+            log("should not be increasing lists done")
             getIntPref("listsDone")
         }
+        log("Lists Done is ${getIntPref("listsDone")}")
         if (getIntPref(cardDone) != 1) {
             setIntPref(cardDone, 1)
             setStringPref("dateChecked", getDate(0, false))

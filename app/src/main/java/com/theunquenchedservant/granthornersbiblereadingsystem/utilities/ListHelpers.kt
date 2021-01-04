@@ -78,9 +78,9 @@ object ListHelpers {
             }
         }
         for(i in 1..10){
-            when(getIntPref("lists${i}DoneDaily")){
+            when(getIntPref("list${i}DoneDaily")){
                 1->{
-                    setIntPref("lists${i}DoneDaily", 0)
+                    setIntPref("list${i}DoneDaily", 0)
                 }
             }
             when(getIntPref("list${i}Done")){
