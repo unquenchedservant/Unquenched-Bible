@@ -45,6 +45,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.changeVisibility
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.hideOthers
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.listSwitcher
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 
 class HomeFragment : Fragment() {
@@ -221,7 +222,22 @@ class HomeFragment : Fragment() {
             mNotificationManager.cancel(2)
             (activity as MainActivity).navController.navigate(R.id.navigation_home)
         }
-
+        if(getIntPref("listsDone") == 10){
+            binding.materialButton.setOnLongClickListener {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setPositiveButton(getString(R.string.yes)){diag,_->
+                    resetDaily()
+                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                }
+                builder.setNegativeButton(getString(R.string.no)){diag,_->
+                    diag.dismiss()
+                }
+                builder.setMessage(getString(R.string.msg_reset_all))
+                builder.setTitle(getString(R.string.title_reset_lists))
+                builder.show()
+                true
+            }
+        }
     }
 
     private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, psalms: Boolean, listDone: String, listName: String){
@@ -272,7 +288,8 @@ class HomeFragment : Fragment() {
                 builder.setNegativeButton(getString(R.string.no)){diag, _ ->
                     diag.dismiss()
                 }
-                builder.setTitle(R.string.title_increase)
+                builder.setMessage(R.string.msg_reset_one)
+                builder.setTitle(R.string.title_reset_list)
                 builder.show()
                 true
             }
