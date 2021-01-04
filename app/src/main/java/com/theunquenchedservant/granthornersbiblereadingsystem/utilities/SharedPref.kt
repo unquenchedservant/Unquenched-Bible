@@ -54,8 +54,8 @@ object SharedPref {
     fun setBoolPref(name: String, value: Boolean){
         getPref().edit().putBoolean(name, value).apply()
     }
-    fun getBoolPref(name: String): Boolean{
-        return getPref().getBoolean(name, false)
+    fun getBoolPref(name: String, defaultValue:Boolean=false): Boolean{
+        return getPref().getBoolean(name, defaultValue)
     }
 
     private val user = FirebaseAuth.getInstance().currentUser
