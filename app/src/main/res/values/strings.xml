@@ -64,6 +64,7 @@
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>
     <string name="scripture_done">Done</string>
+    <string name="scripture_home">Home</string>
 
     <string name="msg_sign_out">Are you sure you want to sign out?</string>
     <string name="msg_reset">Are you sure you want to reset all the lists to 0? This is irreversible</string>
