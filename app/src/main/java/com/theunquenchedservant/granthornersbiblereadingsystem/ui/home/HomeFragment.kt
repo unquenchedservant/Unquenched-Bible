@@ -45,6 +45,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.changeVisibility
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.hideOthers
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.listSwitcher
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 
 class HomeFragment : Fragment() {
@@ -135,7 +136,7 @@ class HomeFragment : Fragment() {
             when(it.listsDone){
                 10 -> {
                     binding.materialButton.setText(R.string.done)
-                    binding.materialButton.isEnabled = false
+                    binding.materialButton.isEnabled = true
                     binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$allDoneBackgroundColor"))
                     binding.materialButton.backgroundTintMode= PorterDuff.Mode.ADD
                 }
@@ -197,7 +198,7 @@ class HomeFragment : Fragment() {
                 cardList.listButtons.setBackgroundColor(enabled)
             }
             1-> {
-                cardListRoot.isEnabled = false
+                cardListRoot.isEnabled = true
                 cardListRoot.setCardBackgroundColor(disabled)
                 cardList.listButtons.setBackgroundColor(disabled)
             }
@@ -221,33 +222,76 @@ class HomeFragment : Fragment() {
             mNotificationManager.cancel(2)
             (activity as MainActivity).navController.navigate(R.id.navigation_home)
         }
-
+        if(getIntPref("listsDone") == 10){
+            binding.materialButton.setOnLongClickListener {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setPositiveButton(getString(R.string.yes)){diag,_->
+                    resetDaily()
+                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                }
+                builder.setNegativeButton(getString(R.string.no)){diag,_->
+                    diag.dismiss()
+                }
+                builder.setMessage(getString(R.string.msg_reset_all))
+                builder.setTitle(getString(R.string.title_reset_lists))
+                builder.show()
+                true
+            }
+        }
     }
 
     private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, psalms: Boolean, listDone: String, listName: String){
         val list = resources.getStringArray(arrayId)
-        cardView.root.setOnClickListener {
-            if(cardView.listButtons.isVisible){
-                listSwitcher(it, getIntPref(listDone), binding.materialButton)
+        if (getIntPref(listDone) == 0){
+            cardView.root.setOnClickListener {
+                if (cardView.listButtons.isVisible) {
+                    listSwitcher(it, getIntPref(listDone), binding.materialButton)
+                } else {
+                    hideOthers(cardView.root, binding)
+                    cardView.listDone.setOnClickListener {
+                        changeVisibility(cardView, false)
+                        markSingle(listDone)
+                        cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                    }
+                    cardView.listRead.setOnClickListener {
+                        lateinit var bundle: Bundle
+                        if (cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms) {
+                            val chapter = list[getIntPref(listName)]
+                            bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
+
+                        } else if (cardView.root == binding.cardList6.root && psalms) {
+                            bundle = bundleOf("chapter" to "no", "psalms" to true, "iteration" to 1)
+                        }
+                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                    }
+                }
+            }
+        }else{
+            val enabled: Int
+            if(getBoolPref("darkMode")){
+                enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
             }else{
-                hideOthers(cardView.root, binding)
-                cardView.listDone.setOnClickListener {
-                    changeVisibility(cardView, false)
-                    markSingle(listDone)
-                    cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                enabled = getColor(App.applicationContext(), R.color.buttonBackground)
+            }
+            cardView.root.setOnLongClickListener {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setPositiveButton(getString(R.string.yes)){diag, _ ->
+                    setIntPref(listDone, 0)
+                    setIntPref(listName, getIntPref(listName) + 1)
+                    cardView.root.isEnabled = true
+                    cardView.root.setCardBackgroundColor(enabled)
+                    cardView.listButtons.setBackgroundColor(enabled)
+                    diag.dismiss()
                     (activity as MainActivity).navController.navigate(R.id.navigation_home)
                 }
-                cardView.listRead.setOnClickListener {
-                    lateinit var bundle: Bundle
-                    if(cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms){
-                        val chapter = list[getIntPref(listName)]
-                        bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
-
-                    }else if(cardView.root == binding.cardList6.root && psalms){
-                        bundle = bundleOf("chapter" to "no", "psalms" to true, "iteration" to 1)
-                    }
-                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                builder.setNegativeButton(getString(R.string.no)){diag, _ ->
+                    diag.dismiss()
                 }
+                builder.setMessage(R.string.msg_reset_one)
+                builder.setTitle(R.string.title_reset_list)
+                builder.show()
+                true
             }
         }
     }

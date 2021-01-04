@@ -18,6 +18,10 @@ object Marker {
     fun markAll() {
         for (i in 1..10) {
             setIntPref("list${i}Done", 1)
+            val doneDaily = getIntPref("list${i}DoneDaily")
+            if(doneDaily == 0){
+                setIntPref("list${i}DoneDaily", 1)
+            }
         }
         setIntPref("listsDone", 10)
         if (getIntPref("dailyStreak") == 0) {
@@ -34,6 +38,10 @@ object Marker {
             val updateValues = mutableMapOf<String, Any>()
             for (i in 1..10) {
                 updateValues["list${i}Done"] = 1
+                val doneDaily = getIntPref("list${i}DoneDaily")
+                if(doneDaily == 0){
+                    setIntPref("list${i}DoneDaily", 1)
+                }
             }
             updateValues["listsDone"] = 10
             updateValues["dateChecked"] = getDate(0,false)
@@ -51,9 +59,16 @@ object Marker {
         }
     }
     fun markSingle(cardDone: String) {
+        val cardDoneDaily = "${cardDone}Daily"
         val db = FirebaseFirestore.getInstance()
         val allowPartial = getBoolPref("allow_partial_switch")
-        val listsDone = increaseIntPref("listsDone", 1)
+        val listDoneDaily = getIntPref(cardDoneDaily)
+        val listsDone = if (listDoneDaily == 0){
+            setIntPref(cardDoneDaily, 1)
+            increaseIntPref("listsDone", 1)
+        }else{
+            getIntPref("listsDone")
+        }
         if (getIntPref(cardDone) != 1) {
             setIntPref(cardDone, 1)
             setStringPref("dateChecked", getDate(0, false))
@@ -74,6 +89,9 @@ object Marker {
                 data["listsDone"] = listsDone
                 data["dateChecked"] = getDate(0, false)
                 data[cardDone] = 1
+                if(listDoneDaily == 0) {
+                    data[cardDoneDaily] = 1
+                }
                 db.collection("main").document(isLogged.uid).update(data)
             }
         }

@@ -42,6 +42,9 @@ class AlarmReceiver : BroadcastReceiver() {
     private fun deliverNotification(context: Context) {
         val today = getDate(0, false)
         val tapIntent = Intent(context, MainActivity::class.java)
+        val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        mNotificationManager.cancel(1)
+        mNotificationManager.cancel(2)
         tapIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val tapPending = PendingIntent.getActivity(context, 0, tapIntent, 0)
         val builder : Notification = NotificationCompat.Builder(context, _primaryChannelId)
@@ -51,6 +54,6 @@ class AlarmReceiver : BroadcastReceiver() {
                 .setContentIntent(tapPending)
                 .setAutoCancel(false)
                 .build()
-        mNotificationManager!!.notify(_notificationId, builder)
+        mNotificationManager.notify(_notificationId, builder)
     }
 }

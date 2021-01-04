@@ -58,6 +58,7 @@ class DailyCheck : BroadcastReceiver() {
             for (i in 1..10){
                 data["list$i"] = getIntPref("list$i")
                 data["list${i}Done"] = getIntPref("list${i}Done")
+                data["list${i}DoneDaily"] = getIntPref("list${i}DoneDaily")
             }
             data["listsDone"] = getIntPref("listsDone")
             if(resetCurrent) {
@@ -75,6 +76,7 @@ class DailyCheck : BroadcastReceiver() {
                 increaseIntPref(listName, 1)
                 log("$listName index is now ${getIntPref(listName)}")
             }
+            setIntPref("${listNameDone}Daily", 0)
             setIntPref(listNameDone, 0)
             log("$listNameDone set to 0")
         }
