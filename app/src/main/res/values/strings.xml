@@ -39,7 +39,8 @@
     <string name="title_hold_plan">Hold Plan Until All Done</string>
     <string name="title_dark_mode">Dark Mode</string>
     <string name="title_discord">Join the Discord Server!</string>
-    <string name="title_increase">Advance This List?</string>
+    <string name="title_reset_list">Reset List?</string>
+    <string name="title_reset_lists">Reset Lists?</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -75,7 +76,8 @@
     <string name="msg_google_failed">Google Sign In Failed</string>
     <string name="msg_signed_in">Signed In!</string>
     <string name="msg_reset_stats_confirm">Are you sure you want to reset all stats?</string>
-
+    <string name="msg_reset_all">Are you sure you want to advance all 10 lists?</string>
+    <string name="msg_reset_one">Are you sure you want to advance this list?</string>
 
     <string name="notification_channel_name">Daily Reading</string>
     <string name="notification_channel_description">The daily reading comes in this channel</string>
