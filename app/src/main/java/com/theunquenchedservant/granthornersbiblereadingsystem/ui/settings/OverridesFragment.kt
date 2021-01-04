@@ -56,6 +56,11 @@ class OverridesFragment:PreferenceFragmentCompat(){
             }
         }
         for(i in 1..10){
+            when(getIntPref("lists${i}DoneDaily")){
+                1->{
+                    setIntPref("lists${i}DoneDaily", 0)
+                }
+            }
             when(getIntPref("list${i}Done")){
                 1 -> {
                     resetList("list$i", "list${i}Done")
