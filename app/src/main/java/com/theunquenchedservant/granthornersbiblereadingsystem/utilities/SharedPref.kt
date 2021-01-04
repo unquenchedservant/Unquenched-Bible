@@ -54,7 +54,7 @@ object SharedPref {
     fun setBoolPref(name: String, value: Boolean){
         getPref().edit().putBoolean(name, value).apply()
     }
-    fun getBoolPref(name: String, defaultValue:Boolean=false): Boolean{
+    fun getBoolPref(name: String, defaultValue: Boolean=false): Boolean{
         return getPref().getBoolean(name, defaultValue)
     }
 

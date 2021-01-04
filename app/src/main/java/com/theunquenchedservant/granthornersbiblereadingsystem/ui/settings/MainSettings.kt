@@ -17,6 +17,7 @@ import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
@@ -40,11 +41,12 @@ class MainSettings : PreferenceFragmentCompat() {
         val survey: Preference? = findPreference("surveyLink")
         val mainActivity = activity as MainActivity
 
-        val dark = getBoolPref("darkMode")
+        val dark = getBoolPref("darkMode", true)
+        darkMode!!.setDefaultValue(true)
         if(dark){
-            darkMode!!.setDefaultValue(true)
+            darkMode.setDefaultValue(true)
         }else{
-            darkMode!!.setDefaultValue(false)
+            darkMode.setDefaultValue(false)
         }
 
         if(FirebaseAuth.getInstance().currentUser != null){

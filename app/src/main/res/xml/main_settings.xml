@@ -12,6 +12,7 @@
         />
     <CheckBoxPreference
         app:key="darkMode"
+        app:defaultValue="true"
         app:title="@string/title_dark_mode"/>
     <Preference
         app:key="overrides"

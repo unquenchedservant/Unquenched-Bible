@@ -30,6 +30,8 @@ class RemindReceiver : BroadcastReceiver() {
                             deliverNotification(context, false)
                         }
                         in 0..9 -> {
+                            mNotificationManager?.cancel(1)
+                            mNotificationManager?.cancel(2)
                             deliverNotification(context, true)
                         }
                         10 ->{
