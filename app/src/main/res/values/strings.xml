@@ -39,6 +39,7 @@
     <string name="title_hold_plan">Hold Plan Until All Done</string>
     <string name="title_dark_mode">Dark Mode</string>
     <string name="title_discord">Join the Discord Server!</string>
+    <string name="title_increase">Advance This List?</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
