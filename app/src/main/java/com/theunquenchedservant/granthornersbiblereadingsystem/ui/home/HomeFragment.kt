@@ -144,7 +144,6 @@ class HomeFragment : Fragment() {
                     binding.materialButton.setText(R.string.not_done)
                     binding.materialButton.isEnabled = true
                     binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
-                    //binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
                 in 1..9 -> {
                     binding.materialButton.setText(R.string.btn_mark_remaining)
