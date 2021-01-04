@@ -41,6 +41,7 @@
     <string name="title_discord">Join the Discord Server!</string>
     <string name="title_reset_list">Reset List?</string>
     <string name="title_reset_lists">Reset Lists?</string>
+    <string name="title_survey">Survey Link</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -62,6 +63,7 @@
     <string name="summary_hold_plan">Makes it so the lists don\'t advance until you complete all 10.</string>
     <string name="summary_partial">Streak won\'t break if you do less than 10 lists (but more than 1)</string>
     <string name="summary_discord">Discord is a way for us to communicate and form a community of people who use the app and system!</string>
+    <string name="summary_survey">Fill out the two question survey to help out the dev with upcoming updates!</string>
 
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>
