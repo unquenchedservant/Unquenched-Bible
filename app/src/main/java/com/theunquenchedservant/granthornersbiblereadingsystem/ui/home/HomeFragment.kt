@@ -67,10 +67,10 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") != 54){
+        if(getIntPref("versionNumber") < 54){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 54)
+                setIntPref("versionNumber", 55)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
@@ -78,9 +78,22 @@ class HomeFragment : Fragment() {
                     "[ADDED] Once you're done with a list, holding the list card will allow you to advance just that list\n\n"+
                             "[ADDED] If you've finished all 10 lists, holding the 'Already Done For Today' button will advance all the lists. (Thank you Byard for the suggestion). \n\n" +
                             "[FIXED] Changed the button in the Scripture page to better reflect what it does (goes to the home screen) (Thank you Sheila for bringing this up)\n\n"+
+                            "[FIXED] Advancing a single list now works for users who are logged in to google in the app.\n\n"+
                             "[UPDATED] Dark Mode is now the default\n\n\n"+
                             "IMPORTANT: If you have a minute, fill out the Google Form survey (under the Settings tab).\n\nI am trying to gauge interest in an app name change as well as adding other reading plans/systems such as the M'Cheyne system."
                             
+            )
+            builder.create().show()
+        }
+        if(getIntPref("versionNumber") == 54){
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton(R.string.ok) { something ,_ ->
+                setIntPref("versionNumber", 55)
+                something.dismiss()
+            }
+            builder.setTitle(R.string.title_new_update)
+            builder.setMessage(
+                    "[FIXED] Advancing a single list now works for users who are logged in to google in the app."
             )
             builder.create().show()
         }
