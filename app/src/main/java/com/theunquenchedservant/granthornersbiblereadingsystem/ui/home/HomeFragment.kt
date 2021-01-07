@@ -10,10 +10,8 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.core.content.ContextCompat
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
-import androidx.core.view.children
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -168,6 +166,7 @@ class HomeFragment : Fragment() {
             when (getIntPref("firstRun")) {
                 0 -> {
                     googleSignIn()
+                    setIntPref("firstRun", 1)
                 }
                 1 -> {
                     createAlarms()
@@ -276,6 +275,13 @@ class HomeFragment : Fragment() {
                 builder.setPositiveButton(getString(R.string.yes)){diag, _ ->
                     setIntPref(listDone, 0)
                     setIntPref(listName, getIntPref(listName) + 1)
+                    val isLogged = FirebaseAuth.getInstance().currentUser
+                    if(isLogged != null){
+                        val data = mutableMapOf<String, Any>()
+                        data[listDone] = 0
+                        data[listName] = getIntPref(listName) + 1
+                        db.collection("main").document(isLogged.uid).update(data)
+                    }
                     cardView.root.isEnabled = true
                     cardView.root.setCardBackgroundColor(enabled)
                     cardView.listButtons.setBackgroundColor(enabled)
@@ -316,6 +322,7 @@ class HomeFragment : Fragment() {
             builder.create().show()
         }
     }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if(requestCode == 96){
