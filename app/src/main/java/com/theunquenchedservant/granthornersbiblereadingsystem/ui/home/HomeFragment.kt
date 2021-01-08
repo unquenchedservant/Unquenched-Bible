@@ -88,7 +88,7 @@ class HomeFragment : Fragment() {
         if(getIntPref("versionNumber") == 54 || getIntPref("versionNumber") == 55){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 55)
+                setIntPref("versionNumber", 56)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
