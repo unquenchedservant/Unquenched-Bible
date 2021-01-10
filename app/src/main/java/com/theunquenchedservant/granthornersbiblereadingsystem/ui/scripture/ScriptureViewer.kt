@@ -381,7 +381,6 @@ class ScriptureViewer : Fragment() {
                     }
                     log("THIS IS THE CURRENT INDEX OF YES THIS WORKED OUT WELL AGAIN")
                     html += "<p class=\"copyright\">$copyright</p> $FUMS"
-                    log("THIS IS THE HTML $html")
                     binding.scriptureWeb.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
                 Response.ErrorListener { error ->
@@ -414,7 +413,6 @@ class ScriptureViewer : Fragment() {
                         css = "https://unquenched.bible/esv-day2.css"
                     }
                     html = html.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", css)
-                    log("THIS IS THE HTML $html")
                     binding.scriptureWeb.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
 

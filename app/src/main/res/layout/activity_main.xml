@@ -19,7 +19,7 @@
             android:id="@+id/translation_selector"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="30dp"
+            android:layout_marginStart="50dp"
             android:entries="@array/translationArray"/>
     </com.google.android.material.appbar.MaterialToolbar>
     <androidx.fragment.app.FragmentContainerView
