@@ -49,13 +49,52 @@ class ManualListSet: Fragment() {
             listSpinner2.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
             button.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
         }
-        ArrayAdapter.createFromResource(
-                requireContext(),
-                R.array.listNames,
-                android.R.layout.simple_spinner_item).also{
-            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-            listSelector.adapter = it
+        var listNames = ArrayList<String>()
+        listNames.add("----")
+        listNames.add("The Gospels")
+        listNames.add("The Pentateuch")
+        listNames.add("Epistles I")
+        listNames.add("Epistles II")
+        listNames.add("Poetry")
+        listNames.add("Psalms")
+        listNames.add("Proverbs")
+        listNames.add("History")
+        listNames.add("Prophets")
+        listNames.add("Acts")
+        if(getIntPref("list1Done") == 1){
+            listNames.remove("The Gospels")
         }
+        if(getIntPref("list2Done") == 1){
+            listNames.remove("The Pentateuch")
+        }
+        if(getIntPref("list3Done") == 1){
+            listNames.remove("Epistles I")
+        }
+        if(getIntPref("list4Done") == 1){
+            listNames.remove("Epistles II")
+        }
+        if(getIntPref("list5Done") == 1){
+            listNames.remove("Poetry")
+        }
+        if(getIntPref("list6Done") == 1){
+            listNames.remove("Psalms")
+        }
+        if(getIntPref("list7Done") == 1){
+            listNames.remove("Proverbs")
+        }
+        if(getIntPref("list8Done") == 1){
+            listNames.remove("History")
+        }
+        if(getIntPref("list9Done") == 1){
+            listNames.remove("Prophets")
+        }
+        if(getIntPref("list10Done") == 1){
+            listNames.remove("Acts")
+        }
+        val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listNames)
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        listSelector.adapter = adapter
+
 
         listSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
