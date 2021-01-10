@@ -309,9 +309,9 @@ class ScriptureViewer : Fragment() {
                     val copyright = response.getJSONObject("data").getString("copyright")
                     val FUMS = response.getJSONObject("meta").getString("fums")
                     if (getBoolPref("darkMode", true)) {
-                        css = "api_bible_night.css"
+                        css = "https://unquenched.bible/api_bible_night.css"
                     } else {
-                        css = "api_bible_day.css"
+                        css = "https://unquenched.bible/api_bible_day.css"
                     }
                     html = "<link rel=\"stylesheet\" type=\"text/css\" href=\"$css\" media=\"all\">$html"
                     html = html.replace("1</span>", "1&nbsp;</span>")
