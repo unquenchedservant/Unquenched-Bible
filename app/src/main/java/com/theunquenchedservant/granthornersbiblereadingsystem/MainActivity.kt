@@ -10,7 +10,9 @@ import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.webkit.WebView
+import android.widget.AdapterView
 import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
@@ -28,6 +30,9 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
@@ -39,7 +44,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     lateinit var navController: NavController
     lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
-
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -78,13 +82,14 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
         navController = navHostFragment.navController
         binding.bottomNav.setupWithNavController(navController)
-        log("TESTING ${binding.bottomNav.itemIconTintList?.defaultColor}")
         binding.bottomNav.setBackgroundColor(toolbarColor)
         binding.bottomNav.itemIconTintList = colorStateList
         binding.bottomNav.itemTextColor = colorStateList
         navController.navigate(R.id.navigation_home)
+        binding.translationSelector.isVisible = false
         setupBottomNavigationBar()
     }
+
     private fun setupBottomNavigationBar() {
         switchEnabled("home")
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
@@ -96,6 +101,14 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
+                    when (getStringPref("bibleVersion", "ESV")){
+                        "AMP" -> binding.translationSelector.setSelection(1)
+                        "CSB" -> binding.translationSelector.setSelection(2)
+                        "ESV" -> binding.translationSelector.setSelection(3)
+                        "KJV" -> binding.translationSelector.setSelection(4)
+                        "NASB" -> binding.translationSelector.setSelection(5)
+                    }
+                    binding.translationSelector.isVisible = true
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_plan_settings ->{
@@ -104,6 +117,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
+                    binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_notifications->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -111,6 +125,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
+                    binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_overrides->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -118,6 +133,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
+                    binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_information->{
                     binding.myToolbar.setNavigationOnClickListener {
@@ -125,6 +141,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
+                    binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_home -> {
                     log("home selected")
@@ -137,15 +154,18 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.title = getDate(0, true)
                     supportActionBar?.show()
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_stats -> {
                     log("stats selected")
                     switchEnabled("stats")
                     supportActionBar?.title = destination.label
+                    binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_settings -> {
                     switchEnabled("settings")
                     supportActionBar?.title = destination.label
+                    binding.translationSelector.isVisible = false
                 }
             }
         }

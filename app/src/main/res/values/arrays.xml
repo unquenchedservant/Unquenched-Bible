@@ -2,8 +2,11 @@
     <!-- Reply Preference -->
     <string-array name="translationArray">
         <item>---</item>
+        <item>AMP</item>
         <item>CSB</item>
         <item>ESV</item>
+        <item>KJV</item>
+        <item>NASB2020</item>
     </string-array>
     <string-array name="listNames">
         <item>----</item>
