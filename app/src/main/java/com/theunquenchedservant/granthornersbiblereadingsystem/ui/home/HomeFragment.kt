@@ -68,9 +68,18 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+        if(allowResume){
+            (activity as MainActivity).navController.navigate(R.id.navigation_home)
+            allowResume = false
+        }
     }
-    
+
+    override fun onPause() {
+        super.onPause()
+        if(!allowResume){
+            allowResume = true
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if(getIntPref("versionNumber") < 54){
