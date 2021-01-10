@@ -38,7 +38,6 @@ class MainSettings : PreferenceFragmentCompat() {
         val account: Preference? = findPreference("googleSignIn")
         val darkMode: Preference? = findPreference("darkMode")
         val discord: Preference? = findPreference("discordLink")
-        val survey: Preference? = findPreference("surveyLink")
         val mainActivity = activity as MainActivity
 
         val dark = getBoolPref("darkMode", true)
@@ -122,11 +121,6 @@ class MainSettings : PreferenceFragmentCompat() {
         }
         discord!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://discord.gg/AKrefXRyuA"))
-            startActivity(i)
-            false
-        }
-        survey!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://forms.gle/euZ2QDjR5hwnVQSy6"))
             startActivity(i)
             false
         }

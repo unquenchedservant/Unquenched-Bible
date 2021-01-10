@@ -326,9 +326,9 @@ span.small-caps, span.divine-name {
 
 
 .esv-text ul.surrounding-chapters li:before { content: "| "; }
-.esv-text ul.surrounding-chapters li:first-child:before { content: "Â« "; }
+.esv-text ul.surrounding-chapters li:first-child:before { content: "Ã‚Â« "; }
 
-.esv-text ul.surrounding-chapters li:last-child:after { content: " Â»"; }
+.esv-text ul.surrounding-chapters li:last-child:after { content: " Ã‚Â»"; }
 
 .esv-text ul.surrounding-days {
     padding-left: 0;
@@ -338,8 +338,8 @@ span.small-caps, span.divine-name {
     list-style-type: none;
 }
 
-.esv-text ul.surrounding-days:before { content: "Â« "; }
-.esv-text ul.surrounding-days li:last-child:after { content: " Â»"; }
+.esv-text ul.surrounding-days:before { content: "Ã‚Â« "; }
+.esv-text ul.surrounding-days li:last-child:after { content: " Ã‚Â»"; }
 .esv-text ul.surrounding-days li:last-child:before { content: "| "; }
 
 .esv-text small.audio{

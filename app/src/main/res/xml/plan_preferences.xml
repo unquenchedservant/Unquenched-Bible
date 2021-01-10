@@ -15,4 +15,10 @@
         app:key="allow_partial_switch"
         app:title="@string/title_partial"
         app:summary="@string/summary_partial"/>
+    <DropDownPreference
+        app:key="bibleTranslation"
+        app:title="@string/title_translation_selection"
+        app:summary="@string/summary_translation_selection"
+        app:useSimpleSummaryProvider="true"
+        />
 </PreferenceScreen>

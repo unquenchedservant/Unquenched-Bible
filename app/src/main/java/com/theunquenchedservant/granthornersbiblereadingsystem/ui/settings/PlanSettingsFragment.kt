@@ -1,12 +1,16 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
+import androidx.preference.DropDownPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.firebase.auth.FirebaseAuth
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class PlanSettingsFragment: PreferenceFragmentCompat() {
@@ -15,6 +19,14 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         val psalms: Preference? = findPreference("psalms")
         val holdPlan: Preference? = findPreference("holdTilAll")
         val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
+        val translation: DropDownPreference? = findPreference("bibleTranslation")
+        translation!!.setEntries(R.array.translationArray)
+        translation.setEntryValues(R.array.translationArray)
+        var currentTranslation = getStringPref("bibleVersion", "ESV")
+        if(currentTranslation == "NASB"){
+            currentTranslation = "NASB2020"
+        }
+        translation.value = currentTranslation
 
         val ps = getBoolPref("psalms")
         if(ps){
@@ -70,6 +82,17 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
                 }
             }
             true
+        }
+        translation.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { it, newValue ->
+            translation.value = newValue as String
+            if(newValue == "NASB2020"){
+                updateFS("bibleVersion", "NASB")
+                setStringPref("bibleVersion", "NASB")
+            }else{
+                updateFS("bibleVersion", newValue)
+                setStringPref("bibleVersion", newValue)
+            }
+            false
         }
     }
 }

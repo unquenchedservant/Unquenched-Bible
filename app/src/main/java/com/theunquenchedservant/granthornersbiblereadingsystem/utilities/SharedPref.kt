@@ -40,15 +40,15 @@ object SharedPref {
         setIntPref(name, start+value)
         return start+value
     }
-    fun getIntPref(name: String): Int {
-        return getPref().getInt(name, 0)
+    fun getIntPref(name: String, defaultValue: Int = 0): Int {
+        return getPref().getInt(name, defaultValue)
     }
 
     fun setStringPref(name:String, value: String) {
         getPref().edit().putString(name, value).apply()
     }
-    fun getStringPref(name:String): String{
-        return getPref().getString(name, "itsdeadjim")!!
+    fun getStringPref(name:String, defaultValue: String = "itsdeadjim"): String{
+        return getPref().getString(name, defaultValue)!!
     }
 
     fun setBoolPref(name: String, value: Boolean){
