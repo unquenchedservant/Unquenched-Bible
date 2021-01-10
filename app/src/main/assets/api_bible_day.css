@@ -11,6 +11,9 @@ body {
 .verse-span {
 	color: #000000;
 }
+a {
+    color: #b36c38;
+}
 p {
     color: #000000;
     font-family:Georgia,"Times New Roman",Times,serif;

@@ -82,33 +82,18 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") < 54){
+        if(getIntPref("versionNumber") < 57){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 56)
+                setIntPref("versionNumber", 57)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "[ADDED] Once you're done with a list, holding the list card will allow you to advance just that list\n\n"+
-                            "[ADDED] If you've finished all 10 lists, holding the 'Already Done For Today' button will advance all the lists. (Thank you Byard for the suggestion). \n\n" +
-                            "[FIXED] Changed the button in the Scripture page to better reflect what it does (goes to the home screen) (Thank you Sheila for bringing this up)\n\n"+
-                            "[FIXED] Advancing a single list now works for users who are logged in to google in the app without doubling.\n\n"+
-                            "[UPDATED] Dark Mode is now the default\n\n\n"+
-                            "IMPORTANT: If you have a minute, fill out the Google Form survey (under the Settings tab).\n\nI am trying to gauge interest in an app name change as well as adding other reading plans/systems such as the M'Cheyne system."
-                            
-            )
-            builder.create().show()
-        }
-        if(getIntPref("versionNumber") == 54 || getIntPref("versionNumber") == 55){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 56)
-                something.dismiss()
-            }
-            builder.setTitle(R.string.title_new_update)
-            builder.setMessage(
-                    "[FIXED] Advancing a single list now works for users who are logged in to google in the app without doubling."
+                    "[ADDED] New Bible Versions (AMP, CSB, KJV and the NASB 2020)\n\n"+
+                            "You can change the translation in the scripture window or under Plan Settings\n\n"+
+                            "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
+                            "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
             )
             builder.create().show()
         }

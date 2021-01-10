@@ -296,17 +296,26 @@ class ScriptureViewer : Fragment() {
     fun getScriptureView(url: String){
         val key = String(Base64.decode(getBibleApiKey(), Base64.DEFAULT))
         var html = ""
+        var copyright = ""
         val context = App.applicationContext()
         val cache = DiskBasedCache(context.cacheDir, 1024 * 1024)
         val network = BasicNetwork(HurlStack())
         val requestQueue = RequestQueue(cache, network).apply{
             start()
         }
+        if (getStringPref("bibleVersion", "ESV") == "AMP"){
+            copyright = "Amplified® Bible (AMP), copyright © 1954, 1958, 1962, 1964, 1965, 1987, 2015 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
+        }else if(getStringPref("bibleVersion", "ESV") == "CSB"){
+            copyright = "<center>Christian Standard Bible® Copyright © 2017 by Holman Bible Publishers</center><br>Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. Used by permission."
+        }else if(getStringPref("bibleVersion", "ESV") == "NASB"){
+            copyright = "New American Standard Bible Copyright 1960, 1971, 1977, 1995, 2020 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br ><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
+        }else if(getStringPref("bibleVersion", "ESV") == "KJV"){
+            copyright = "PUBLIC DOMAIN"
+        }
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET, url, null,
                 Response.Listener { response ->
                     val css: String
                     html = response.getJSONObject("data").getString("content")
-                    val copyright = response.getJSONObject("data").getString("copyright")
                     val FUMS = response.getJSONObject("meta").getString("fums")
                     if (getBoolPref("darkMode", true)) {
                         css = "https://unquenched.bible/api_bible_night.css"
@@ -380,7 +389,7 @@ class ScriptureViewer : Fragment() {
                         }
                     }
                     log("THIS IS THE CURRENT INDEX OF YES THIS WORKED OUT WELL AGAIN")
-                    html += "<p class=\"copyright\">$copyright</p> $FUMS"
+                    html += "<br><br><div class=\"copyright\">$copyright</div> $FUMS"
                     binding.scriptureWeb.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
                 Response.ErrorListener { error ->

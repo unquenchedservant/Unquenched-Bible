@@ -34,7 +34,8 @@
             android:name=".utilities.DoneReceiver"
             android:enabled="true"
             android:exported="false" />
-
+        <activity android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
+            android:theme="@style/licensesTheme"/>
         <activity
             android:name=".MainActivity"
             android:label="PGH Bible System"
