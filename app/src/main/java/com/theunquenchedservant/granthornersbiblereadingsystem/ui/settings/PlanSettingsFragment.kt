@@ -23,9 +23,6 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         translation!!.setEntries(R.array.translationArray)
         translation.setEntryValues(R.array.translationArray)
         var currentTranslation = getStringPref("bibleVersion", "ESV")
-        if(currentTranslation == "NASB"){
-            currentTranslation = "NASB2020"
-        }
         translation.value = currentTranslation
 
         val ps = getBoolPref("psalms")
@@ -85,13 +82,8 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         }
         translation.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { it, newValue ->
             translation.value = newValue as String
-            if(newValue == "NASB2020"){
-                updateFS("bibleVersion", "NASB")
-                setStringPref("bibleVersion", "NASB")
-            }else{
-                updateFS("bibleVersion", newValue)
-                setStringPref("bibleVersion", newValue)
-            }
+            updateFS("bibleVersion", newValue)
+            setStringPref("bibleVersion", newValue)
             false
         }
     }

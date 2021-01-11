@@ -101,12 +101,17 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
+                    if (getStringPref("bibleVersion", "ESV") == "NASB"){
+                        setStringPref("bibleVersion", "NASB20")
+                        updateFS("bibleVersion", "NASB20")
+                    }
                     when (getStringPref("bibleVersion", "ESV")){
                         "AMP" -> binding.translationSelector.setSelection(1)
                         "CSB" -> binding.translationSelector.setSelection(2)
                         "ESV" -> binding.translationSelector.setSelection(3)
                         "KJV" -> binding.translationSelector.setSelection(4)
-                        "NASB" -> binding.translationSelector.setSelection(5)
+                        "NASB95" -> binding.translationSelector.setSelection(5)
+                        "NASB20" -> binding.translationSelector.setSelection(6)
                     }
                     binding.translationSelector.isVisible = true
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)

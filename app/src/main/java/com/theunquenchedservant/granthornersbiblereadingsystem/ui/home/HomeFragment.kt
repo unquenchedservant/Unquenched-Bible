@@ -82,15 +82,15 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") < 57){
+        if(getIntPref("versionNumber") < 58){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 57)
+                setIntPref("versionNumber", 58)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "[ADDED] New Bible Versions (AMP, CSB, KJV and the NASB 2020)\n\n"+
+                    "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n"+
                             "You can change the translation in the scripture window or under Plan Settings\n\n"+
                             "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
                             "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"

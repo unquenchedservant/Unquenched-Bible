@@ -45,7 +45,7 @@ class ScriptureViewer : Fragment() {
 
     private external fun getBibleApiKey() : String
 
-    private var bibleIDs : Map<String, String> = mapOf<String, String>("KJV" to "55212e3cf5d04d49-01","CSB" to "a556c5305ee15c3f-01","NASB" to "a761ca71e0b3ddcf-01", "AMP" to "a81b73293d3080c9-01")
+    private var bibleIDs : Map<String, String> = mapOf<String, String>("KJV" to "55212e3cf5d04d49-01","CSB" to "a556c5305ee15c3f-01","NASB95" to "b8ee27bcd1cae43a-01", "NASB20" to "a761ca71e0b3ddcf-01", "AMP" to "a81b73293d3080c9-01")
     private val bookIDs : Map<String, String> = mapOf(
             "Genesis" to "GEN", "Exodus" to "EXO", "Leviticus" to "LEV",
             "Numbers" to "NUM", "Deuteronomy" to "DEU", "Joshua" to "JOS",
@@ -196,12 +196,17 @@ class ScriptureViewer : Fragment() {
     fun getReference(chapter: String, psalms: Boolean, iteration: Int) : String{
         val title : String
         var url: String
+        if (getStringPref("bibleVersion", "ESV") == "NASB"){
+            setStringPref("bibleVersion", "NASB20")
+            updateFS("bibleVersion", "NASB20")
+        }
         val versionId: String? = when (getStringPref("bibleVersion", "ESV")){
             "ESV" ->  bibleIDs["ESV"]
             "CSB" -> bibleIDs["CSB"]
             "AMP" -> bibleIDs["AMP"]
             "KJV" -> bibleIDs["KJV"]
-            "NASB" -> bibleIDs["NASB"]
+            "NASB95" -> bibleIDs["NASB95"]
+            "NASB20" -> bibleIDs["NASB20"]
             else -> ""
         }
         url = "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/"
@@ -307,7 +312,7 @@ class ScriptureViewer : Fragment() {
             copyright = "Amplified® Bible (AMP), copyright © 1954, 1958, 1962, 1964, 1965, 1987, 2015 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
         }else if(getStringPref("bibleVersion", "ESV") == "CSB"){
             copyright = "<center>Christian Standard Bible® Copyright © 2017 by Holman Bible Publishers</center><br>Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. Used by permission."
-        }else if(getStringPref("bibleVersion", "ESV") == "NASB"){
+        }else if(getStringPref("bibleVersion", "ESV") == "NASB95" || getStringPref("bibleVersion", "ESV") == "NASB20"){
             copyright = "New American Standard Bible Copyright 1960, 1971, 1977, 1995, 2020 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br ><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
         }else if(getStringPref("bibleVersion", "ESV") == "KJV"){
             copyright = "PUBLIC DOMAIN"
