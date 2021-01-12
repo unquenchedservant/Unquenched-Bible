@@ -11,11 +11,17 @@ h2, p{
 h3 {
     color: white;
 }
+h4.speaker {
+	color: white;
+}
 .verse-num, .chapter-num, .psalm-title{
 	color: white !important;
 }
 a {
     color: white;
+}
+span.line {
+	color: #9cb9d3;
 }
 .esv-text h2{
 	color:#9CB9D3;
@@ -160,6 +166,7 @@ span.small-caps, span.divine-name {
 	}
 /* denotation of speaker e.g. Song of Solomon 1:2 */
 .esv-text h4.speaker {
+    color: #ffffff important;
     font-variant: small-caps;
     margin-bottom: 0em;
     font-size:0.9em;
