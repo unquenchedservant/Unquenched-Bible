@@ -85,7 +85,7 @@ class HomeFragment : Fragment() {
         if(getIntPref("versionNumber") < 58){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 58)
+                setIntPref("versionNumber", 59)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
@@ -93,7 +93,22 @@ class HomeFragment : Fragment() {
                     "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n"+
                             "You can change the translation in the scripture window or under Plan Settings\n\n"+
                             "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
+                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors. (Thank you Meinhard)\n\n" +
                             "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
+            )
+            builder.create().show()
+        }
+        if(getIntPref("versionNumber") == 58){
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton(R.string.ok) { something, _ ->
+                setIntPref("versionNumber", 59)
+                something.dismiss()
+            }
+            builder.setTitle(R.string.title_new_update)
+            builder.setMessage(
+                    "[FIXED] Acts and Revelation now work on AMP, CSB, KJV, and the NASBs\n\n" +
+                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors \n\n"+
+                            "Thank you Meinhard for bringing both of these to my attention."
             )
             builder.create().show()
         }
