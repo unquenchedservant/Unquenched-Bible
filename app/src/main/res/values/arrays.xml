@@ -62,7 +62,7 @@
         <item>2 John</item>
         <item>3 John</item>
         <item>Jude</item>
-        <item>Revelations</item>
+        <item>Revelation</item>
     </string-array>
     <string-array name="list5Book">
         <item>Job</item>
@@ -875,28 +875,28 @@
         <item>2 John</item>
         <item>3 John</item>
         <item>Jude</item>
-        <item>Revelations 1</item>
-        <item>Revelations 2</item>
-        <item>Revelations 3</item>
-        <item>Revelations 4</item>
-        <item>Revelations 5</item>
-        <item>Revelations 6</item>
-        <item>Revelations 7</item>
-        <item>Revelations 8</item>
-        <item>Revelations 9</item>
-        <item>Revelations 10</item>
-        <item>Revelations 11</item>
-        <item>Revelations 12</item>
-        <item>Revelations 13</item>
-        <item>Revelations 14</item>
-        <item>Revelations 15</item>
-        <item>Revelations 16</item>
-        <item>Revelations 17</item>
-        <item>Revelations 18</item>
-        <item>Revelations 19</item>
-        <item>Revelations 20</item>
-        <item>Revelations 21</item>
-        <item>Revelations 22</item>
+        <item>Revelation 1</item>
+        <item>Revelation 2</item>
+        <item>Revelation 3</item>
+        <item>Revelation 4</item>
+        <item>Revelation 5</item>
+        <item>Revelation 6</item>
+        <item>Revelation 7</item>
+        <item>Revelation 8</item>
+        <item>Revelation 9</item>
+        <item>Revelation 10</item>
+        <item>Revelation 11</item>
+        <item>Revelation 12</item>
+        <item>Revelation 13</item>
+        <item>Revelation 14</item>
+        <item>Revelation 15</item>
+        <item>Revelation 16</item>
+        <item>Revelation 17</item>
+        <item>Revelation 18</item>
+        <item>Revelation 19</item>
+        <item>Revelation 20</item>
+        <item>Revelation 21</item>
+        <item>Revelation 22</item>
     </string-array>
     <string-array name="list_4_notif">
         <item>1Th. 1</item>

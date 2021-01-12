@@ -280,7 +280,7 @@ class ManualListSet: Fragment() {
                                     "2 Timothy"                     -> { verse.maxValue =  4; verse.value = cVerse; verse.visibility = View.VISIBLE   }
                                     "Philemon", "2 John",
                                     "3 John", "Jude"                -> { verse.maxValue =  1; verse.value = cVerse; verse.visibility = View.INVISIBLE }
-                                    "Revelations"                   -> { verse.maxValue = 22; verse.value = cVerse; verse.visibility = View.VISIBLE   } } }
+                                    "Revelation"                   -> { verse.maxValue = 22; verse.value = cVerse; verse.visibility = View.VISIBLE   } } }
 
                             override fun onNothingSelected(parent: AdapterView<*>?) {} }}
 
