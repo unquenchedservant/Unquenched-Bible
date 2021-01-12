@@ -58,7 +58,7 @@ class ScriptureViewer : Fragment() {
             "Daniel" to "DAN", "Hosea" to "HOS", "Joel" to "JOL", "Amos" to "AMO", "Obadiah" to "OBA",
             "Jonah" to "JON", "Micah" to "MIC", "Nahum" to "NAM", "Habakkuk" to "HAB", "Zephaniah" to "ZEP",
             "Haggai" to "HAG", "Zechariah" to "ZEC", "Malachi" to "MAL", "Matthew" to "MAT",
-            "Mark" to "MRK", "Luke" to "LUK", "John" to "JHN", "Acts" to "ACTS", "Romans" to "ROM",
+            "Mark" to "MRK", "Luke" to "LUK", "John" to "JHN", "Acts" to "ACT", "Romans" to "ROM",
             "1 Corinthians" to "1CO", "2 Corinthians" to "2CO", "Galatians" to "GAL", "Ephesians" to "EPH",
             "Philippians" to "PHP", "Colossians" to "COL", "1 Thessalonians" to "1TH", "2 Thessalonians" to "2TH",
             "1 Timothy" to "1TI", "2 Timothy" to "2TI", "Titus" to "TIT", "Philemon" to "PHM", "Hebrews" to "HEB",
