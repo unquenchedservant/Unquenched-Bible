@@ -42,7 +42,10 @@
     <string name="title_reset_list">Reset List?</string>
     <string name="title_reset_lists">Reset Lists?</string>
     <string name="title_translation_selection">Bible Translation</string>
-
+    <string name="title_bible_stat">Percentage of Bible Read</string>
+    <string name="title_old_testament_read">Old Testament</string>
+    <string name="title_new_testament_read">New Testament</string>
+    <string name="title_bible_read">Amount of Times Bible Read</string>
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
     <string name="summary_settings">Settings</string>

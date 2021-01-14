@@ -15,9 +15,16 @@ class StatisticsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.statistics, rootKey)
         val curStreak: Preference? = findPreference("currentStreak")
         val maxStreak: Preference? = findPreference("MaximumStreak")
+        val bibleStats: Preference? = findPreference("bibleStatMain")
         curStreak?.summary = String.format("%d", getIntPref("currentStreak"))
         maxStreak?.summary = String.format("%d", getIntPref("maxStreak"))
+        val mainActivity = activity as MainActivity
         val statReset : Preference? = findPreference("reset_statistics")
+
+        bibleStats!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            mainActivity.navController.navigate(R.id.navigation_bible_stats_main)
+            true
+        }
         statReset!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
             resetCheck()
             true

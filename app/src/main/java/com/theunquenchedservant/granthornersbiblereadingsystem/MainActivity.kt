@@ -124,6 +124,42 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     }
                     binding.translationSelector.isVisible = false
                 }
+                R.id.navigation_bible_stats_main ->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_stats)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                    supportActionBar?.title = "Bible Statistics"
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_bible_stats_new ->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_bible_stats_main)
+                        binding.bottomNav.isVisible = true
+                    }
+                    supportActionBar?.title = "New Testament Statistics"
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_bible_stats_old->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_bible_stats_main)
+                        binding.bottomNav.isVisible = true
+                    }
+                    supportActionBar?.title = "Old Testament Statistics"
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_book_stats->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.popBackStack()
+                        binding.bottomNav.isVisible = true
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
                 R.id.navigation_notifications->{
                     binding.myToolbar.setNavigationOnClickListener{
                         navController.navigate(R.id.navigation_settings)
@@ -223,7 +259,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
-        log("TESTING TESTING TESTING")
         if(navController.currentDestination?.id != R.id.navigation_home){
             navController.popBackStack()
             supportActionBar?.setDisplayHomeAsUpEnabled(false)

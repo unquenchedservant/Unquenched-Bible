@@ -12,6 +12,12 @@
             android:focusableInTouchMode="false"
             app:key="MaximumStreak"
             app:title="@string/max_streak" />
+        <Preference
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:summary="0%"
+            app:key="bibleStatMain"
+            app:title="@string/title_bible_stat"/>
     </PreferenceCategory>
     <PreferenceCategory
         app:title="">
