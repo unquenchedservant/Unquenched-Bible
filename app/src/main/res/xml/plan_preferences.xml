@@ -5,20 +5,26 @@
         app:key="psalms"
         app:title="@string/title_psalms"
         app:summary="@string/summary_psalms"
-        app:defaultValue="false"/>
+        app:defaultValue="false"
+        app:allowDividerBelow="true"/>
     <CheckBoxPreference
         app:key="holdTilAll"
         app:title="@string/title_hold_plan"
         app:summary="@string/summary_hold_plan"
-        app:defaultValue="false"/>
+        app:defaultValue="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <CheckBoxPreference
         app:key="allow_partial_switch"
         app:title="@string/title_partial"
-        app:summary="@string/summary_partial"/>
+        app:summary="@string/summary_partial"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <DropDownPreference
         app:key="bibleTranslation"
         app:title="@string/title_translation_selection"
         app:summary="@string/summary_translation_selection"
         app:useSimpleSummaryProvider="true"
+        app:allowDividerAbove="true"
         />
 </PreferenceScreen>

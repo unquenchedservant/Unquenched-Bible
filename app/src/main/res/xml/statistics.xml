@@ -6,17 +6,21 @@
             android:clickable="false"
             android:focusableInTouchMode="false"
             app:key="currentStreak"
-            app:title="@string/current_streak" />
+            app:title="@string/current_streak"
+            app:allowDividerBelow="true"/>
         <Preference
             android:clickable="false"
             android:focusableInTouchMode="false"
             app:key="MaximumStreak"
-            app:title="@string/max_streak" />
+            app:title="@string/max_streak"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
         <Preference
             android:clickable="true"
             android:focusableInTouchMode="true"
             android:summary="0%"
             app:key="bibleStatMain"
+            app:allowDividerAbove="true"
             app:title="@string/title_bible_stat"/>
     </PreferenceCategory>
     <PreferenceCategory

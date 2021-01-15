@@ -9,20 +9,26 @@
         app:title="@string/title_notification_settings">
         <SwitchPreferenceCompat
             android:key="notif_switch"
-            app:title="@string/title_notifications" />
+            app:title="@string/title_notifications"
+            app:allowDividerBelow="true"/>
         <SwitchPreferenceCompat
             android:key="vacation_mode"
             android:title="@string/title_vacation_mode"
-            android:summary="@string/summary_vacation_mode"/>
+            android:summary="@string/summary_vacation_mode"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="daily_time"
             app:defaultValue="360"
             style="@style/AppPreference.DialogPreference"
-            app:title="@string/title_daily_list" />
+            app:title="@string/title_daily_list"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
         <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
             app:key="remind_time"
             app:defaultValue="1170"
             style="@style/AppPreference.DialogPreference"
-            app:title="@string/title_reminder_time"/>
+            app:title="@string/title_reminder_time"
+            app:allowDividerAbove="true" />
     </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 </androidx.preference.PreferenceScreen>
