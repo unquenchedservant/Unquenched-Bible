@@ -134,21 +134,11 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     binding.translationSelector.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
-                R.id.navigation_bible_stats_new ->{
+                R.id.navigation_bible_testament_stats ->{
                     binding.myToolbar.setNavigationOnClickListener{
                         navController.navigate(R.id.navigation_bible_stats_main)
                         binding.bottomNav.isVisible = true
                     }
-                    supportActionBar?.title = "New Testament Statistics"
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                }
-                R.id.navigation_bible_stats_old->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_bible_stats_main)
-                        binding.bottomNav.isVisible = true
-                    }
-                    supportActionBar?.title = "Old Testament Statistics"
                     binding.translationSelector.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }

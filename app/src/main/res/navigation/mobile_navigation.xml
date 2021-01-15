@@ -62,20 +62,12 @@
             app:destination="@id/navigation_stats"/>
     </fragment>
     <fragment
-        android:id="@+id/navigation_bible_stats_old"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleStatsOldFragment"
-        android:label="Old Testament Statistics">
-        <action
-            android:id="@+id/action_navigation_bible_stats_old_to_navigation_bible_stats_main"
-            app:destination="@id/navigation_bible_stats_main"/>
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_bible_stats_new"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleStatsNewFragment"
-        android:label="Old Testament Statistics">
-        <action
-            android:id="@+id/action_navigation_bible_stats_new_to_navigation_bible_stats_main"
-            app:destination="@id/navigation_bible_stats_main"/>
+        android:id="@+id/navigation_bible_testament_stats"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleStatsTestamentFragment"
+        android:label="Testament Statistics">
+        <argument
+            android:name="testament"
+            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_book_stats"
