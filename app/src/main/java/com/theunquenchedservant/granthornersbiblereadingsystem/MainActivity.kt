@@ -83,21 +83,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         navController.navigate(R.id.navigation_home)
         binding.translationSelector.isVisible = false
         setupBottomNavigationBar()
-        if(!getBoolPref("testRest")){
-            setIntPref("genesis_1_amount_read", 4)
-            setIntPref("matthew_4_amount_read", 3)
-            setIntPref("genesis_amount_read", 3)
-            setIntPref("genesis_chapters_read", 10)
-            setIntPref("matthew_amount_read", 2)
-            setIntPref("matthew_chapters_read", 5)
-            setIntPref("old_amount_read", 39)
-            setIntPref("new_amount_read", 40)
-            setIntPref("new_chapters_read", 39)
-            setIntPref("old_chapters_read", 40)
-            setIntPref("total_chapters_read", 503)
-            setIntPref("bible_amount_read", 53)
-            setBoolPref("testRest", true)
-        }
     }
 
     private fun setupBottomNavigationBar() {
