@@ -6,18 +6,32 @@
             android:clickable="false"
             android:focusableInTouchMode="false"
             app:key="currentStreak"
-            app:title="@string/current_streak" />
+            app:title="@string/current_streak"
+            app:allowDividerBelow="true"/>
         <Preference
             android:clickable="false"
             android:focusableInTouchMode="false"
             app:key="MaximumStreak"
-            app:title="@string/max_streak" />
+            app:title="@string/max_streak"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
+        <Preference
+            android:clickable="true"
+            android:focusableInTouchMode="true"
+            android:summary="0%"
+            app:key="bibleStatMain"
+            app:allowDividerAbove="true"
+            app:title="@string/title_bible_stat"/>
     </PreferenceCategory>
     <PreferenceCategory
         app:title="">
         <Preference
             app:key="reset_statistics"
             app:title="@string/summary_reset_stats"/>
+        <Preference
+            app:key="reset_bible_menu"
+            app:title="@string/title_reset_bible_menu"
+            app:summary="@string/summary_reset_bible_menu"/>
     </PreferenceCategory>
 
 </PreferenceScreen>

@@ -12,6 +12,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import java.util.*
 
 class ReadingListRepository {
@@ -75,7 +76,7 @@ class ReadingListRepository {
         return when(index){
             list.size -> {
                 if(fromFirebase){
-                    SharedPref.updateFS(listName, 0)
+                    updateFS(listName, 0)
                 }
                 setIntPref(listName, 0)
                 list[0]

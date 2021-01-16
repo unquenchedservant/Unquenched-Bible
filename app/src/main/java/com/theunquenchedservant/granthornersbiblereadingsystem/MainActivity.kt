@@ -3,22 +3,15 @@ package com.theunquenchedservant.granthornersbiblereadingsystem
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
-import android.graphics.drawable.ColorStateListDrawable
-import android.graphics.drawable.Drawable
-import android.graphics.drawable.StateListDrawable
 import android.os.Bundle
 import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
-import android.view.View
 import android.webkit.WebView
-import android.widget.AdapterView
-import android.widget.Toolbar
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
-import androidx.core.content.res.ColorStateListInflaterCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -31,6 +24,8 @@ import com.google.firebase.auth.FirebaseUser
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
@@ -124,6 +119,49 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     }
                     binding.translationSelector.isVisible = false
                 }
+                R.id.navigation_bible_stats_main ->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_stats)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                    supportActionBar?.title = "Bible Statistics"
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_bible_testament_stats ->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_bible_stats_main)
+                        binding.bottomNav.isVisible = true
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_book_stats->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.popBackStack()
+                        binding.bottomNav.isVisible = true
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_bible_reset_menu->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_stats)
+                        binding.bottomNav.isVisible = true
+                    }
+                    supportActionBar?.title = "Reset Bible Stats"
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_books_reset_menu->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.popBackStack()
+                        binding.bottomNav.isVisible = true
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
                 R.id.navigation_notifications->{
                     binding.myToolbar.setNavigationOnClickListener{
                         navController.navigate(R.id.navigation_settings)
@@ -164,6 +202,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 R.id.navigation_stats -> {
                     log("stats selected")
                     switchEnabled("stats")
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     supportActionBar?.title = destination.label
                     binding.translationSelector.isVisible = false
                 }
@@ -223,7 +262,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
-        log("TESTING TESTING TESTING")
         if(navController.currentDestination?.id != R.id.navigation_home){
             navController.popBackStack()
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
