@@ -6,6 +6,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatDelegate
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -39,6 +40,11 @@ class MainSettings : PreferenceFragmentCompat() {
         val darkMode: Preference? = findPreference("darkMode")
         val discord: Preference? = findPreference("discordLink")
         val mainActivity = activity as MainActivity
+
+        plan!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+        notifications!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+        overrides!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+        infoSupport!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
 
         val dark = getBoolPref("darkMode", true)
         darkMode!!.setDefaultValue(true)

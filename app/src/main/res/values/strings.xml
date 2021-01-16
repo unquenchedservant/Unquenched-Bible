@@ -21,7 +21,7 @@
     <string name="title_reset">Reset Lists</string>
     <string name="title_privacy">Privacy Policy</string>
     <string name="title_reminder">Reminder!</string>
-    <string name="title_reset_all">Reset All</string>
+    <string name="title_reset_all">Reset Streak Stats</string>
     <string name="title_account_found">Account Found</string>
     <string name="title_about_app">More About The App</string>
     <string name="title_about_system">About The System</string>
@@ -46,6 +46,8 @@
     <string name="title_old_testament_read">Old Testament</string>
     <string name="title_new_testament_read">New Testament</string>
     <string name="title_bible_read">Amount of Times Bible Read</string>
+    <string name="title_reset_bible_menu">Reset Bible Stats</string>
+
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
     <string name="summary_settings">Settings</string>
@@ -57,7 +59,7 @@
     <string name="summary_psalms">Instead of 1 Psalm, 5 Psalms per day based on day of the week</string>
     <string name="summary_account_loggedout">Have your progress stored in the cloud so you never have to worry about losing it!</string>
     <string name="summary_account_loggedin"></string>
-    <string name="summary_reset_stats">Reset All Stats</string>
+    <string name="summary_reset_stats">Reset Streak Stats</string>
     <string name="summary_version">Click here for changelog</string>
     <string name="summary_contact">Email the Dev</string>
     <string name="summary_twitter">Follow @unquenchedbible on twitter for updates and support</string>
@@ -67,6 +69,7 @@
     <string name="summary_partial">Streak won\'t break if you do less than 10 lists (but more than 1)</string>
     <string name="summary_discord">Discord is a way for us to communicate and form a community of people who use the app and system!</string>
     <string name="summary_translation_selection">Choose between AMP, CSB, ESV, KJV &amp; NASB (2020)</string>
+    <string name="summary_reset_bible_menu">Completely reset the whole Bible, or do a reset of a specific testament or book.</string>
 
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>

@@ -58,6 +58,8 @@ object Marker {
         if (getIntPref("${codedBook}_chapters_read") == bookChaps){
             updateValues["${codedBook}_chapters_read"] = 0
             setIntPref("${codedBook}_chapters_read", 0)
+            setIntPref("${codedBook}_amount_read", getIntPref("${codedBook}_amount_read") + 1)
+            updateValues["${codedBook}_amount_read"] = getIntPref("${codedBook}_amount_read")
             for (i in 1..bookChaps){
                 updateValues["${codedBook}_${i}_read"] = false
                 setBoolPref("${codedBook}_${i}_read", false)

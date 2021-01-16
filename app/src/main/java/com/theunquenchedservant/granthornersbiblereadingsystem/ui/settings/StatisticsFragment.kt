@@ -3,6 +3,7 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 import android.app.AlertDialog
 import android.os.Bundle
 import android.view.ContextThemeWrapper
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
@@ -19,18 +20,30 @@ class StatisticsFragment : PreferenceFragmentCompat() {
         val bibleStats: Preference? = findPreference("bibleStatMain")
         curStreak?.summary = String.format("%d", getIntPref("currentStreak"))
         maxStreak?.summary = String.format("%d", getIntPref("maxStreak"))
-        val biblePercentRead_1 = getIntPref("total_chapters_read").toDouble() / 1189
-        val biblePercentRead = (biblePercentRead_1 * 100).roundToInt()
-        bibleStats?.summary = "$biblePercentRead %"
+        val biblePercentRead = if(getIntPref("total_chapters_read") != 0){
+            val biblePercentRead_1 = getIntPref("total_chapters_read").toDouble() / 1189
+            (biblePercentRead_1 * 100).roundToInt()
+        }else{
+            0
+        }
+
+        val bibleAmountRead = getIntPref("bible_amount_read")
+        bibleStats?.summary = "$biblePercentRead % | Times Read: $bibleAmountRead"
         val mainActivity = activity as MainActivity
         val statReset : Preference? = findPreference("reset_statistics")
-
-        bibleStats!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        val bibleResetMenu: Preference? = findPreference("reset_bible_menu")
+        bibleStats!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+        bibleResetMenu!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+        bibleStats.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.navController.navigate(R.id.navigation_bible_stats_main)
             true
         }
         statReset!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
             resetCheck()
+            true
+        }
+        bibleResetMenu.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            mainActivity.navController.navigate(R.id.navigation_bible_reset_menu)
             true
         }
 

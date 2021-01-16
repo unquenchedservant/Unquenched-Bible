@@ -78,6 +78,29 @@
             app:argType="string"/>
     </fragment>
     <fragment
+        android:id="@+id/navigation_bible_reset_menu"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleResetMenuFragment"
+        android:label="Bible Reset Menu"/>
+    <fragment
+        android:id="@+id/navigation_books_reset_menu"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ResetBookMenuFragment"
+        android:label="Books Reset Menu">
+        <argument
+            android:name="testament"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_book_reset_menu"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BookResetMenuFragment"
+        android:label="Book Reset Menu">
+        <argument
+            android:name="book"
+            app:argType="string"/>
+        <argument
+            android:name="testament"
+            app:argType="string"/>
+    </fragment>
+    <fragment
         android:id="@+id/navigation_overrides"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OverridesFragment"
         android:label="Overrides"/>

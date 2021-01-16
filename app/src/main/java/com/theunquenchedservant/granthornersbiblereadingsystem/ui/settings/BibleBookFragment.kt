@@ -1,6 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
