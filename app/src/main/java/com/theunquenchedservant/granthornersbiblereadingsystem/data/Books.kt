@@ -39,6 +39,25 @@ object Books {
             "peter2" to "2 Peter", "john1" to "1 John",  "john2" to "2 John", "john3" to "3 John",
             "jude" to "Jude", "revelation" to "Revelation"
     )
+    val bookNamesCoded : Map<String, String> = mapOf(
+            "Genesis" to "genesis", "Exodus" to "exodus", "Leviticus" to "leviticus", "Numbers" to "numbers",
+            "Deuteronomy" to "deuteronomy", "Joshua" to "joshua", "Judges" to "judges", "Ruth" to "ruth",
+            "1 Samuel" to "samuel1", "2 Samuel" to "samuel2", "1 Kings" to "kings1", "2 Kings" to "kings2",
+            "1 Chronicles" to "chronicles1", "2 Chronicles" to "chronicles2", "Ezra" to "ezra", "Nehemiah" to "nehemiah",
+            "Esther" to "esther", "Job" to "job", "Psalm" to "psalm", "Proverbs" to "proverbs",
+            "Ecclesiastes" to "ecclesiastes", "Song of Solomon" to "song", "Isaiah" to "isaiah", "Jeremiah" to "jeremiah",
+            "Lamentations" to "lamentations", "Ezekiel" to "ezekiel", "Daniel" to "daniel", "Hosea" to "hosea",
+            "Joel" to "joel", "Amos" to "amos", "Obadiah" to "obadiah", "Jonah" to "jonah",
+            "Micah" to "micah", "Nahum" to "nahum", "Habakkuk" to "habakkuk", "Zephaniah" to "zephaniah",
+            "Haggai" to "haggai", "Zechariah" to "zechariah", "Malachi" to "malachi", "Matthew" to "matthew",
+            "Mark" to "mark", "Luke" to "luke", "John" to "john", "Acts" to "acts",
+            "Romans" to "romans", "1 Corinthians" to "corinthians1", "2 Corinthians" to "corinthians2", "Galatians" to "galatians",
+            "Ephesians" to "ephesians", "Philippians" to "philippians", "Colossians" to "colossians", "1 Thessalonians" to "thessalonians1",
+            "2 Thessalonians" to "thessalonians2", "1 Timothy" to "timothy1", "2 Timothy" to "timothy2", "Titus" to "titus",
+            "Philemon" to "philemon", "Hebrews" to "hebrews", "James" to "james", "1 Peter" to "peter1",
+            "2 Peter" to "peter2", "1 John" to "john1",  "2 John" to "john2", "3 John" to "john3",
+            "Jude" to "jude", "Revelation" to "revelation"
+    )
     val otBooks = arrayOf("genesis", "exodus", "leviticus", "numbers", "deuteronomy",
             "joshua", "judges", "ruth", "samuel1", "samuel2", "kings1", "kings2",
             "chronicles1", "chronicles2", "ezra", "nehemiah", "esther", "job",
