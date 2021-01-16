@@ -10,6 +10,9 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNames
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
 class BibleBookFragment : PreferenceFragmentCompat(){
 
@@ -24,7 +27,9 @@ class BibleBookFragment : PreferenceFragmentCompat(){
         for(i in 1..chapters!!){
             val chapterPref = Preference(App.applicationContext())
             chapterPref.title = "$bookName $i"
-            chapterPref.summary = "Read: No|Times Read: 0"
+            val has_been_read = if(getBoolPref("${book}_${i}_read")) "Yes " else "No "
+            val amount_read = getIntPref("${book}_${i}_amount_read")
+            chapterPref.summary = "Read: $has_been_read| Times Read: $amount_read"
             screen.addPreference(chapterPref)
         }
         preferenceScreen = screen

@@ -10,23 +10,32 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import java.math.RoundingMode
+import java.text.DecimalFormat
 import java.util.*
+import kotlin.math.roundToInt
 
 class BibleStatsTestamentFragment : PreferenceFragmentCompat()  {
-
+    private lateinit var testament: String
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         val mainActivity = activity as MainActivity
         val b = arguments
-        val testament = b?.getString("testament")!!
+        testament = b?.getString("testament")!!
         mainActivity.supportActionBar?.title = "${testament.capitalize(Locale.ROOT)} Testament Statistics"
         val books = getBooks(testament)!!
         val screen = preferenceManager.createPreferenceScreen(App.applicationContext())
         for (book in books){
             val bookPref = Preference(App.applicationContext())
             bookPref.title = bookNames[book]
-            bookPref.summary = "0% | Times Read: 0"
+            val timesRead = getIntPref("${book}_amount_read")
+            val percentRead_1 = getIntPref("${book}_chapters_read").toDouble() / bookChapters[book]!!
+            val percentRead = (percentRead_1 * 100).roundToInt()
+            bookPref.summary = "$percentRead % | Times Read: $timesRead"
             val bundle = bundleOf("book" to book)
             bookPref.onPreferenceClickListener = Preference.OnPreferenceClickListener {
                 mainActivity.navController.navigate(R.id.navigation_book_stats, bundle)
@@ -35,5 +44,11 @@ class BibleStatsTestamentFragment : PreferenceFragmentCompat()  {
             screen.addPreference(bookPref)
         }
         preferenceScreen = screen
+    }
+
+    override fun onResume() {
+        val mainActivity = activity as MainActivity
+        mainActivity.supportActionBar?.title = "${testament.capitalize(Locale.ROOT)} Testament Statistics"
+        super.onResume()
     }
 }

@@ -9,6 +9,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
+import kotlin.math.roundToInt
 
 class StatisticsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -18,6 +19,9 @@ class StatisticsFragment : PreferenceFragmentCompat() {
         val bibleStats: Preference? = findPreference("bibleStatMain")
         curStreak?.summary = String.format("%d", getIntPref("currentStreak"))
         maxStreak?.summary = String.format("%d", getIntPref("maxStreak"))
+        val biblePercentRead_1 = getIntPref("total_chapters_read").toDouble() / 1189
+        val biblePercentRead = (biblePercentRead_1 * 100).roundToInt()
+        bibleStats?.summary = "$biblePercentRead %"
         val mainActivity = activity as MainActivity
         val statReset : Preference? = findPreference("reset_statistics")
 
