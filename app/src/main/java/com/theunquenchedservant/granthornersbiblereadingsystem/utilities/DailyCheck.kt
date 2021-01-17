@@ -24,6 +24,7 @@ class DailyCheck : BroadcastReceiver() {
             1 -> {
                 setIntPref("dailyStreak", 0)
                 log("DAILY CHECK - daily streak set to 0")
+                setIntPref("graceTime", 0)
                 resetStreak = true
             }
             0 -> {
@@ -72,8 +73,11 @@ class DailyCheck : BroadcastReceiver() {
                 data["currentStreak"] = 0
                 data["isGrace"] = getBoolPref("isGrace")
                 data["holdStreak"] = getIntPref("holdStreak")
+                data["graceTime"] = 0
             }else if(resetStreak) {
                 data["dailyStreak"] = 0
+                data["graceTime"] = 0
+                data["isGrace"] = getBoolPref("isGrace")
             }
             db.collection("main").document(isLogged.uid).update(data)
         }

@@ -156,11 +156,6 @@ object Marker {
         return "Hi"
     }
     fun markAll() {
-        if(getBoolPref("isGrace")){
-            setIntPref("currentStreak", getIntPref("holdStreak"))
-            setIntPref("holdStreak",0)
-            setBoolPref("isGrace", false)
-        }
         for (i in 1..10) {
             update_reading_statistic("list${i}")
             setIntPref("list${i}Done", 1)
@@ -170,7 +165,16 @@ object Marker {
             }
         }
         setIntPref("listsDone", 10)
-        if (getIntPref("dailyStreak") == 0) {
+        if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
+            if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){
+                setIntPref("graceTime", 1)
+            }
+            if(getBoolPref("isGrace") && getIntPref("graceTime") == 1){
+                setIntPref("graceTime", 2)
+                setBoolPref("isGrace", false)
+                setIntPref("currentStreak", getIntPref("holdStreak") + 1)
+                setIntPref("holdStreak",0)
+            }
             if(!checkDate("current", false)){
                 val currentStreak = increaseIntPref("currentStreak", 1)
                 setStringPref("dateChecked", getDate(0,false))
@@ -190,6 +194,7 @@ object Marker {
                     setIntPref("list${i}DoneDaily", 1)
                 }
             }
+            updateValues["graceTime"] = getIntPref("graceTime")
             updateValues["isGrace"] = getBoolPref("isGrace")
             updateValues["listsDone"] = 10
             updateValues["holdStreak"] = getIntPref("holdStreak")
@@ -227,8 +232,12 @@ object Marker {
             setIntPref(cardDone, 1)
             setStringPref("dateChecked", getDate(0, false))
             if (allowPartial || listsDone == 10) {
-                if (getIntPref("dailyStreak") == 0) {
-                    if(getBoolPref("isGrace")){
+                if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
+                    if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){
+                        setIntPref("graceTime", 1)
+                    }
+                    if(getBoolPref("isGrace") && getIntPref("graceTime") == 1){
+                        setIntPref("graceTime", 2)
                         setIntPref("currentStreak", getIntPref("holdStreak"))
                         setIntPref("holdStreak", 0)
                         setBoolPref("isGrace", false)
@@ -245,6 +254,7 @@ object Marker {
                 data["maxStreak"] = getIntPref("maxStreak")
                 data["currentStreak"] = getIntPref("currentStreak")
                 data["isGrace"] = getBoolPref("isGrace")
+                data["graceTime"] = getIntPref("graceTime")
                 data["holdStreak"] = getIntPref("holdStreak")
                 data["dailyStreak"] = 1
                 data["listsDone"] = listsDone
