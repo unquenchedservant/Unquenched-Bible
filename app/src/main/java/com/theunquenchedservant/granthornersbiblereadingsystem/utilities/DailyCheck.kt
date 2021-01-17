@@ -32,6 +32,13 @@ class DailyCheck : BroadcastReceiver() {
                         if(!checkDate("yesterday", false)){
                                 resetCurrent = true
                                 log("DAILY CHECK - currentStreak set to 0")
+                                if(!getBoolPref("isGrace")){
+                                    setIntPref("holdStreak", getIntPref("currentStreak"))
+                                    setBoolPref("isGrace", true)
+                                }else{
+                                    setBoolPref("isGrace", false)
+                                    setIntPref("holdStreak", 0)
+                                }
                                 setIntPref("currentStreak", 0)
                         }
                     }
@@ -63,6 +70,8 @@ class DailyCheck : BroadcastReceiver() {
             data["listsDone"] = getIntPref("listsDone")
             if(resetCurrent) {
                 data["currentStreak"] = 0
+                data["isGrace"] = getBoolPref("isGrace")
+                data["holdStreak"] = getIntPref("holdStreak")
             }else if(resetStreak) {
                 data["dailyStreak"] = 0
             }

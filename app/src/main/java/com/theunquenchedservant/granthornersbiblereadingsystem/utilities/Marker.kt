@@ -55,6 +55,7 @@ object Marker {
 
     fun update_statistics(codedBook: String, bookChaps: Int, testament: String, testament_chapters: Int, chapter: Int){
         val updateValues = mutableMapOf<String, Any>()
+
         if (getIntPref("${codedBook}_chapters_read") == bookChaps){
             updateValues["${codedBook}_chapters_read"] = 0
             setIntPref("${codedBook}_chapters_read", 0)
@@ -155,6 +156,11 @@ object Marker {
         return "Hi"
     }
     fun markAll() {
+        if(getBoolPref("isGrace")){
+            setIntPref("currentStreak", getIntPref("holdStreak"))
+            setIntPref("holdStreak",0)
+            setBoolPref("isGrace", false)
+        }
         for (i in 1..10) {
             update_reading_statistic("list${i}")
             setIntPref("list${i}Done", 1)
@@ -173,6 +179,7 @@ object Marker {
             }
             setIntPref("dailyStreak", 1)
         }
+
         if (isLogged != null) {
             val db = FirebaseFirestore.getInstance()
             val updateValues = mutableMapOf<String, Any>()
@@ -183,7 +190,9 @@ object Marker {
                     setIntPref("list${i}DoneDaily", 1)
                 }
             }
+            updateValues["isGrace"] = getBoolPref("isGrace")
             updateValues["listsDone"] = 10
+            updateValues["holdStreak"] = getIntPref("holdStreak")
             updateValues["dateChecked"] = getDate(0,false)
             updateValues["dailyStreak"] = getIntPref("dailyStreak")
             updateValues["currentStreak"] = getIntPref("currentStreak")
@@ -219,6 +228,11 @@ object Marker {
             setStringPref("dateChecked", getDate(0, false))
             if (allowPartial || listsDone == 10) {
                 if (getIntPref("dailyStreak") == 0) {
+                    if(getBoolPref("isGrace")){
+                        setIntPref("currentStreak", getIntPref("holdStreak"))
+                        setIntPref("holdStreak", 0)
+                        setBoolPref("isGrace", false)
+                    }
                     val currentStreak = increaseIntPref("currentStreak", 1)
                     if (currentStreak > getIntPref("maxStreak")) {
                         setIntPref("maxStreak", currentStreak)
@@ -230,6 +244,8 @@ object Marker {
                 val data = mutableMapOf<String, Any>()
                 data["maxStreak"] = getIntPref("maxStreak")
                 data["currentStreak"] = getIntPref("currentStreak")
+                data["isGrace"] = getBoolPref("isGrace")
+                data["holdStreak"] = getIntPref("holdStreak")
                 data["dailyStreak"] = 1
                 data["listsDone"] = listsDone
                 data["dateChecked"] = getDate(0, false)
