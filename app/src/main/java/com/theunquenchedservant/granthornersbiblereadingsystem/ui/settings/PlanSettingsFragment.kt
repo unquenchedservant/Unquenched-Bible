@@ -1,6 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
+import androidx.core.content.res.ResourcesCompat
 import androidx.preference.DropDownPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
@@ -28,6 +29,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         var currentTranslation = getStringPref("bibleVersion", "ESV")
         translation.value = currentTranslation
         planType!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${getStringPref("planType", "horner").capitalize()}"
+        planType.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
         when (getStringPref("planType", "horner")){
             "horner"->{
                 holdPlan!!.isEnabled = true
