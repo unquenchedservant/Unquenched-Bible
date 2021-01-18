@@ -162,6 +162,16 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     binding.translationSelector.isVisible = false
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
+                R.id.navigation_plan_type->{
+                    binding.myToolbar.setNavigationOnClickListener{
+                        navController.navigate(R.id.navigation_plan_settings)
+                        supportActionBar?.title = "Plan Settings"
+                        binding.bottomNav.isVisible = true
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.title = "Plan Method"
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
                 R.id.navigation_notifications->{
                     binding.myToolbar.setNavigationOnClickListener{
                         navController.navigate(R.id.navigation_settings)
