@@ -11,6 +11,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import java.util.*
@@ -73,18 +74,41 @@ class ReadingListRepository {
                 }
             }
         }
-        return when(index){
-            list.size -> {
-                if(fromFirebase){
-                    updateFS(listName, 0)
+        when (getStringPref("planType", "horner")) {
+            "horner" -> {
+                return when (index) {
+                    list.size -> {
+                        if (fromFirebase) {
+                            updateFS(listName, 0)
+                        }
+                        setIntPref(listName, 0)
+                        list[0]
+                    }
+                    else -> {
+                        setIntPref(listName, index)
+                        list[index]
+                    }
                 }
-                setIntPref(listName, 0)
-                list[0]
             }
-            else -> {
-                setIntPref(listName, index)
-                list[index]
+            "numerical" -> {
+                var newIndex = getIntPref("currentDayIndex", 0)
+                if (newIndex >= list.size){
+                    while(newIndex >= list.size){
+                        newIndex -= list.size
+                    }
+                }
+                return list[newIndex]
             }
+            "calendar" -> {
+                var newIndex = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1
+                if (newIndex >= list.size){
+                    while(newIndex >= list.size){
+                        newIndex -= list.size
+                    }
+                }
+                return list[newIndex]
+            }
+            else -> return list[index]
         }
     }
 }
