@@ -8,6 +8,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
@@ -16,6 +17,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.c
 class DailyCheck : BroadcastReceiver() {
     private val isLogged = FirebaseAuth.getInstance().currentUser
     override fun onReceive(context: Context, intent: Intent) {
+        val planType = getStringPref("planType", "horner")
         val db = FirebaseFirestore.getInstance()
         var resetStreak  = false
         var resetCurrent = false
@@ -23,7 +25,6 @@ class DailyCheck : BroadcastReceiver() {
         when (getIntPref("dailyStreak")) {
             1 -> {
                 setIntPref("dailyStreak", 0)
-                log("DAILY CHECK - daily streak set to 0")
                 setIntPref("graceTime", 0)
                 resetStreak = true
             }
@@ -52,21 +53,43 @@ class DailyCheck : BroadcastReceiver() {
             }
         }
         for(i in 1..10){
-            when(getIntPref("list${i}Done")){
-                1 -> {
-                    resetList("list$i", "list${i}Done")
+            if(planType == "horner") {
+                when (getIntPref("list${i}Done")) {
+                    1 -> {
+                        resetList("list$i", "list${i}Done")
+                    }
                 }
+                when(getIntPref("list${i}DoneDaily")){
+                    1->{
+                        setIntPref("list${i}DoneDaily", 0)
+                    }
+                }
+            }else if(planType == "numerical"){
+                setIntPref("list${i}Done", 0)
+            }else if(planType == "calendar"){
+                setIntPref("list${i}Done", 0)
             }
         }
+
+        if(planType== "numerical" && resetStreak) {
+            increaseIntPref("currentDayIndex", 1)
+        }
+
         if(!getBoolPref("holdPlan") || getIntPref("listsDone") == 10) {
             setIntPref("listsDone", 0)
         }
+
         if(isLogged != null) {
             val data = mutableMapOf<String, Any>()
             for (i in 1..10){
-                data["list$i"] = getIntPref("list$i")
+                if(planType == "horner") {
+                    data["list$i"] = getIntPref("list$i")
+                }
                 data["list${i}Done"] = getIntPref("list${i}Done")
                 data["list${i}DoneDaily"] = getIntPref("list${i}DoneDaily")
+            }
+            if (planType=="numerical" && resetStreak){
+                data["currentDayIndex"] = getIntPref("currentDayIndex")
             }
             data["listsDone"] = getIntPref("listsDone")
             if(resetCurrent) {
