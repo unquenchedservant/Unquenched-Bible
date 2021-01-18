@@ -30,6 +30,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         translation.value = currentTranslation
         planType!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${getStringPref("planType", "horner").capitalize()}"
         planType.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+        translation.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24, mainActivity.theme)
         when (getStringPref("planType", "horner")){
             "horner"->{
                 holdPlan!!.isEnabled = true
