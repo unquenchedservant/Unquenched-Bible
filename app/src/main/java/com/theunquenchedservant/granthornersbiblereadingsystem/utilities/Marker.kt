@@ -12,6 +12,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNa
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNamesCoded
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
@@ -150,7 +151,24 @@ object Marker {
     fun update_reading_statistic(listName: String): String{
         val listId= getListId(listName)
         val list = App.applicationContext().resources.getStringArray(listId)
-        val list_index = getIntPref(listName)
+        val list_index = when(getStringPref("planType", "horner")){
+            "horner"->getIntPref(listName)
+            "numerical"->{
+                var index = getIntPref("currentDayIndex")
+                while(index >= list.size){
+                    index -= list.size
+                }
+                index
+            }
+            "calendar"->{
+                var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1
+                while (index >= list.size){
+                    index -= list.size
+                }
+                index
+            }
+            else->getIntPref(listName)
+        }
         if(listName == "list6" && getBoolPref("psalms")) {
             val codedBook = "psalm"
             val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)

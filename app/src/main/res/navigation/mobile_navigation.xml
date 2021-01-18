@@ -46,6 +46,10 @@
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListSet"
         android:id="@+id/navigation_manual" />
     <fragment
+        android:label="Manual Numerical"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListNumericalSet"
+        android:id="@+id/navigation_manual_numerical" />
+    <fragment
         android:id="@+id/navigation_stats"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.StatisticsFragment"
         android:label="Statistics">
@@ -100,6 +104,10 @@
             android:name="testament"
             app:argType="string"/>
     </fragment>
+    <fragment
+        android:id="@+id/navigation_plan_type"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanTypeFragment"
+        android:label="Plan Type Menu"/>
     <fragment
         android:id="@+id/navigation_overrides"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OverridesFragment"

@@ -22,6 +22,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
@@ -40,10 +41,16 @@ class MainSettings : PreferenceFragmentCompat() {
         val darkMode: Preference? = findPreference("darkMode")
         val discord: Preference? = findPreference("discordLink")
         val mainActivity = activity as MainActivity
+        if (getStringPref("planType", "horner") == "calendar"){
+            overrides!!.isEnabled = false
+            overrides.summary = "This option is not available with the current reading method"
+        }else{
+            overrides!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+        }
 
         plan!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
         notifications!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-        overrides!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
+
         infoSupport!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
 
         val dark = getBoolPref("darkMode", true)
@@ -101,13 +108,13 @@ class MainSettings : PreferenceFragmentCompat() {
             }
             false
         }
-        plan!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        plan.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title="Plan Settings"
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_plan_settings)
             false
         }
-        notifications!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        notifications.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Notifications"
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_notifications)

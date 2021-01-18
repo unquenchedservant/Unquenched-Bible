@@ -14,6 +14,8 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
@@ -58,6 +60,7 @@ object ListHelpers {
         }
     }
     fun resetDaily(){
+        val planType = getStringPref("planType", "horner")
         val isLogged = FirebaseAuth.getInstance().currentUser
         val db = FirebaseFirestore.getInstance()
         var resetStreak  = false
@@ -65,7 +68,6 @@ object ListHelpers {
         val vacation = SharedPref.getBoolPref("vacationMode")
         when (getIntPref("dailyStreak")) {
             1 -> {
-                MainActivity.log("DAILY CHECK - daily streak set to 0")
                 resetStreak = true
             }
             0 -> {
@@ -78,23 +80,35 @@ object ListHelpers {
             }
         }
         for(i in 1..10){
-            when(getIntPref("list${i}DoneDaily")){
-                1->{
-                    setIntPref("list${i}DoneDaily", 0)
+            if(planType == "horner") {
+                when (getIntPref("list${i}DoneDaily")) {
+                    1 -> {
+                        setIntPref("list${i}DoneDaily", 0)
+                    }
                 }
-            }
-            when(getIntPref("list${i}Done")){
-                1 -> {
-                    resetList("list$i", "list${i}Done")
+                when (getIntPref("list${i}Done")) {
+                    1 -> {
+                        resetList("list$i", "list${i}Done")
+                    }
                 }
+            }else if(planType == "numerical"){
+                setIntPref("list${i}Done", 0)
             }
+        }
+        if(planType== "numerical" && resetStreak) {
+            increaseIntPref("currentDayIndex", 1)
         }
         setIntPref("listsDone", 0)
         if(isLogged != null) {
             val data = mutableMapOf<String, Any>()
             for (i in 1..10){
-                data["list$i"] = getIntPref("list$i")
+                if(planType == "horner") {
+                    data["list$i"] = getIntPref("list$i")
+                }
                 data["list${i}Done"] = getIntPref("list${i}Done")
+            }
+            if (planType=="numerical" && resetStreak){
+                data["currentDayIndex"] = getIntPref("currentDayIndex")
             }
             data["listsDone"] = 0
             if(resetCurrent) {
@@ -108,7 +122,7 @@ object ListHelpers {
 
     private fun resetList(listName: String, listNameDone: String){
         MainActivity.log("$listName is now set to ${getIntPref(listName)}")
-        SharedPref.increaseIntPref(listName, 1)
+        increaseIntPref(listName, 1)
         MainActivity.log("$listName index is now ${getIntPref(listName)}")
         setIntPref(listNameDone, 0)
         MainActivity.log("$listNameDone set to 0")
