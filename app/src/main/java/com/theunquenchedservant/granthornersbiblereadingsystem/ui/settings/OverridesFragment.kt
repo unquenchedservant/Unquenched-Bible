@@ -11,6 +11,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates
@@ -21,8 +22,21 @@ class OverridesFragment:PreferenceFragmentCompat(){
         val manual: Preference? = findPreference("manualSetLists")
         val dailyReset: Preference? = findPreference("resetDaily")
         val mainActivity = activity as MainActivity
+        if(getStringPref("planType") == "calendar"){
+            manual!!.isEnabled = false //Can't change the current date, can ya?
+        }
+        if(getStringPref("planType") == "numerical" && getIntPref("listsDone") != 0){
+            manual!!.isEnabled  = false //can't make a change if you've already completed some of the lists.
+        }
         manual!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            mainActivity.navController.navigate(R.id.navigation_manual)
+            when(getStringPref("planType", "horner")) {
+                "horner" -> {
+                    mainActivity.navController.navigate(R.id.navigation_manual)
+                }
+                "numerical"->{
+                    mainActivity.navController.navigate(R.id.navigation_manual_numerical)
+                }
+            }
             false
         }
         dailyReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {

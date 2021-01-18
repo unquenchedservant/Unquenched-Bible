@@ -187,6 +187,25 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
                     binding.translationSelector.isVisible = false
+                    supportActionBar?.title="Overrides"
+                }
+                R.id.navigation_manual->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_overrides)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.title="Manual Override"
+                }
+                R.id.navigation_manual_numerical->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_overrides)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.title="Manual Override"
                 }
                 R.id.navigation_information->{
                     binding.myToolbar.setNavigationOnClickListener {

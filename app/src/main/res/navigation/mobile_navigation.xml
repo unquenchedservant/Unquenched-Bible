@@ -46,6 +46,10 @@
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListSet"
         android:id="@+id/navigation_manual" />
     <fragment
+        android:label="Manual Numerical"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListNumericalSet"
+        android:id="@+id/navigation_manual_numerical" />
+    <fragment
         android:id="@+id/navigation_stats"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.StatisticsFragment"
         android:label="Statistics">

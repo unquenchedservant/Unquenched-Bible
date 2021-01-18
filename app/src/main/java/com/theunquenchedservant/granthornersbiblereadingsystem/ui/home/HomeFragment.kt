@@ -178,8 +178,6 @@ class HomeFragment : Fragment() {
                     }else{
                         100 - ((it.listsDone * 5) - 5)
                     }
-                    log("testing testing $backgroundColor")
-                    log("testing testing #${opacity}$backgroundColor")
                     binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
                     binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
