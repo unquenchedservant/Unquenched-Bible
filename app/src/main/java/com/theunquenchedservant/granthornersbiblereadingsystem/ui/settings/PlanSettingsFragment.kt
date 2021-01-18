@@ -33,11 +33,13 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
                 holdPlan!!.isEnabled = true
                 partialStreakAllow!!.isEnabled = true
             }
+            "numerical"->{
+                holdPlan!!.isEnabled = true
+                partialStreakAllow!!.isEnabled = true
+            }
             else->{
                 holdPlan!!.summary = "Not available under current reading method"
                 holdPlan.isEnabled = false
-                partialStreakAllow!!.summary = "Not available under current reading method"
-                partialStreakAllow.isEnabled = false
             }
         }
         val ps = getBoolPref("psalms")
@@ -50,7 +52,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         }
         val partial = getBoolPref("allow_partial_switch")
         if(partial){
-            partialStreakAllow.setDefaultValue(true)
+            partialStreakAllow!!.setDefaultValue(true)
         }
         planType.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.navController.navigate(R.id.navigation_plan_type)
@@ -85,7 +87,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
             true
         }
 
-        partialStreakAllow.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+        partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
             if(partial){
                 setBoolPref("allow_partial_switch", false)
                 if(FirebaseAuth.getInstance().currentUser != null){

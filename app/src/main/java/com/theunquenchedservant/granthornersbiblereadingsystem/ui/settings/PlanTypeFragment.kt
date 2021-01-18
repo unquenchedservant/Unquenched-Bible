@@ -4,7 +4,6 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
@@ -48,8 +47,6 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
             updateFS("planType", "numerical")
             setBoolPref("grantHorner", false)
             setBoolPref("calendarDay", false)
-            setBoolPref("holdPlan", false)
-            setBoolPref("allow_partial_switch", false)
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
         }
@@ -59,7 +56,6 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
             setBoolPref("numericalDay", false)
             setBoolPref("grantHorner", false)
             setBoolPref("holdPlan", false)
-            setBoolPref("allow_partial_switch", false)
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
         }
