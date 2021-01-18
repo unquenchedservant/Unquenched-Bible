@@ -27,24 +27,36 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         translation.setEntryValues(R.array.translationArray)
         var currentTranslation = getStringPref("bibleVersion", "ESV")
         translation.value = currentTranslation
-
+        planType!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${getStringPref("planType", "horner").capitalize()}"
+        when (getStringPref("planType", "horner")){
+            "horner"->{
+                holdPlan!!.isEnabled = true
+                partialStreakAllow!!.isEnabled = true
+            }
+            else->{
+                holdPlan!!.summary = "Not available under current reading method"
+                holdPlan.isEnabled = false
+                partialStreakAllow!!.summary = "Not available under current reading method"
+                partialStreakAllow.isEnabled = false
+            }
+        }
         val ps = getBoolPref("psalms")
         if(ps){
             psalms!!.setDefaultValue(true)
         }
         val hold = getBoolPref("holdPlan")
         if(hold){
-            holdPlan!!.setDefaultValue(true)
+            holdPlan.setDefaultValue(true)
         }
         val partial = getBoolPref("allow_partial_switch")
         if(partial){
-            partialStreakAllow!!.setDefaultValue(true)
+            partialStreakAllow.setDefaultValue(true)
         }
-        planType!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        planType.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
         }
-        holdPlan!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        holdPlan.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(hold){
                 setBoolPref("holdPlan", false)
                 if(FirebaseAuth.getInstance().currentUser != null){
@@ -73,7 +85,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
             true
         }
 
-        partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
+        partialStreakAllow.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
             if(partial){
                 setBoolPref("allow_partial_switch", false)
                 if(FirebaseAuth.getInstance().currentUser != null){
@@ -87,7 +99,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
             }
             true
         }
-        translation.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { it, newValue ->
+        translation.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             translation.value = newValue as String
             updateFS("bibleVersion", newValue)
             setStringPref("bibleVersion", newValue)
