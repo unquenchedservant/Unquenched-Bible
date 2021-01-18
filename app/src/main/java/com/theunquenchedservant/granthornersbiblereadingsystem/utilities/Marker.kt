@@ -223,7 +223,12 @@ object Marker {
             }
             if(!checkDate("current", false)){
                 val currentStreak = increaseIntPref("currentStreak", 1)
-                when(currentStreak){
+                val streak = if(currentStreak > 365){
+                    currentStreak - 365
+                }else{
+                    currentStreak
+                }
+                when(streak){
                     7->makeStreakAlert("week")
                     30->makeStreakAlert("month")
                     90->makeStreakAlert("3month")
