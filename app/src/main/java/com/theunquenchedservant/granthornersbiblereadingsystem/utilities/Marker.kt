@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
+import android.app.AlertDialog
 import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -52,10 +53,30 @@ object Marker {
             else->"old"
         }
     }
-
+    fun bibleAlertBuilder(type:String, name:String){
+        val alert = AlertDialog.Builder(App.applicationContext())
+        alert.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val message = when(type) {
+            "book" -> "You just finished $name, keep it up!"
+            "testament"-> "You just read through all of the $name Testament! Wow!"
+            "bible"-> "You've officially read through the entire Bible using your reading system! Congratulations!"
+            else->""
+        }
+        val title = when(type){
+            "book"->"$name Finished!"
+            "testament"->"$name Testament Finished!"
+            "bible"->"Whole Bible Finished!"
+            else->""
+        }
+        alert.setTitle(title)
+        alert.setMessage(message)
+        alert.show()
+    }
     fun update_statistics(codedBook: String, bookChaps: Int, testament: String, testament_chapters: Int, chapter: Int){
         val updateValues = mutableMapOf<String, Any>()
-
+        val bookName = bookNames[codedBook]
         if (getIntPref("${codedBook}_chapters_read") == bookChaps){
             updateValues["${codedBook}_chapters_read"] = 0
             setIntPref("${codedBook}_chapters_read", 0)
@@ -104,6 +125,15 @@ object Marker {
         if(!getBoolPref("${codedBook}_done_whole")){
             setIntPref("total_chapters_read", getIntPref("total_chapters_read") + 1)
             updateValues["total_chapters_read"] = getIntPref("total_chapters_read")
+        }
+        if (getIntPref("${codedBook}_chapters_read") == bookChaps){
+            bibleAlertBuilder("book", bookName!!)
+        }
+        if (getIntPref("${testament}_chapters_read") == testament_chapters){
+            bibleAlertBuilder("testament", testament.capitalize(Locale.ROOT))
+        }
+        if (getIntPref("total_chapters_read") == 1189){
+            bibleAlertBuilder("bible", "bible")
         }
         if (isLogged != null) {
             val db = FirebaseFirestore.getInstance()
@@ -155,6 +185,22 @@ object Marker {
 
         return "Hi"
     }
+    fun makeStreakAlert(type:String) {
+        val alert = AlertDialog.Builder(App.applicationContext())
+        alert.setPositiveButton("OK") { dialog, _ ->
+            dialog.dismiss()
+        }
+        val message = when(type) {
+            "week" -> "You've kept up with your reading plan for 1 week! Keep going!"
+            "month"-> "Wow! You've kept it up for a whole month!"
+            "3month"-> "Keep going! You've read consistently every day for the last 3 months!"
+            "year"-> "Big congrats, you've kept up with your reading plan every day for the last year!"
+            else->""
+        }
+        alert.setTitle("Congratulations! Keep It Up!")
+        alert.setMessage(message)
+        alert.show()
+    }
     fun markAll() {
         for (i in 1..10) {
             update_reading_statistic("list${i}")
@@ -177,6 +223,12 @@ object Marker {
             }
             if(!checkDate("current", false)){
                 val currentStreak = increaseIntPref("currentStreak", 1)
+                when(currentStreak){
+                    7->makeStreakAlert("week")
+                    30->makeStreakAlert("month")
+                    90->makeStreakAlert("3month")
+                    365->makeStreakAlert("1year")
+                }
                 setStringPref("dateChecked", getDate(0,false))
                 if(currentStreak > getIntPref("maxStreak"))
                     setIntPref("maxStreak", currentStreak)
