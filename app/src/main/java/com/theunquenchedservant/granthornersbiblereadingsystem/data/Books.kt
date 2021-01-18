@@ -18,7 +18,7 @@ object Books {
             "thessalonians2" to 3, "timothy1" to 6, "timothy2" to 4, "titus" to 3,
             "philemon" to 1, "hebrews" to 13, "james" to 5, "peter1" to 5,
             "peter2" to 3, "john1" to 5, "john2" to 1, "john3" to 1,
-            "jude" to 1, "revelation" to 1
+            "jude" to 1, "revelation" to 22
     )
     val bookNames : Map<String, String> = mapOf(
             "genesis" to "Genesis", "exodus" to "Exodus", "leviticus" to "Leviticus", "numbers" to "Numbers",
