@@ -101,13 +101,13 @@ class MainSettings : PreferenceFragmentCompat() {
             }
             false
         }
-        plan!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        plan.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title="Plan Settings"
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_plan_settings)
             false
         }
-        notifications!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        notifications.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Notifications"
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_notifications)

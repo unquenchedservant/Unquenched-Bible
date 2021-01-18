@@ -47,6 +47,10 @@
     <string name="title_new_testament_read">New Testament</string>
     <string name="title_bible_read">Amount of Times Bible Read</string>
     <string name="title_reset_bible_menu">Reset Bible Stats</string>
+    <string name="title_reading_type">Reading Plan Method</string>
+    <string name="title_horner_method">Grant Horner Method</string>
+    <string name="title_numerical_method">Numerical Day Method</string>
+    <string name="title_calendar_method">Calendar Based Method</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -70,6 +74,10 @@
     <string name="summary_discord">Discord is a way for us to communicate and form a community of people who use the app and system!</string>
     <string name="summary_translation_selection">Choose between AMP, CSB, ESV, KJV &amp; NASB (2020)</string>
     <string name="summary_reset_bible_menu">Completely reset the whole Bible, or do a reset of a specific testament or book.</string>
+    <string name="summary_reading_type">Choose between the Grant Horner Method, a numerical day method, or a calendar day method</string>
+    <string name="summary_horner_method">Each list is independent of the other, and will go at your own pace. This is the traditional Grant Horner system.</string>
+    <string name="summary_numerical_method">All lists are connected, partial completion of the list isn\'t possible. All lists advance at once, and are based on a number day that you are on.</string>
+    <string name="summary_calendar_method">All lists are connected, and will advance whether you complete the list or not. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system.</string>
 
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>

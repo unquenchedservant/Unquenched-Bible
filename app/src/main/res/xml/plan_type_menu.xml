@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <CheckBoxPreference
+        app:key="grantHorner"
+        app:title="@string/title_horner_method"
+        app:summary="@string/summary_horner_method"
+        app:defaultValue="true"
+        app:allowDividerBelow="true"/>
+    <CheckBoxPreference
+        app:key="numericalDay"
+        app:title="@string/title_numerical_method"
+        app:summary="@string/summary_numerical_method"
+        app:defaultValue="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <CheckBoxPreference
+        app:key="calendarDay"
+        app:title="@string/title_calendar_method"
+        app:summary="@string/summary_calendar_method"
+        app:defaultValue="false"
+        app:allowDividerAbove="true"/>
+</PreferenceScreen>
