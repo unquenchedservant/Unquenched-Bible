@@ -45,6 +45,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.listSwitcher
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
 class HomeFragment : Fragment() {
 
@@ -236,7 +237,7 @@ class HomeFragment : Fragment() {
         cardList.listTitle.text = resources.getString(readingString)
         createCardListener(cardList, listArray, psalms, "${listName}Done", listName)
     }
-    private fun createButtonListener(){
+    private fun createButtonListener() {
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {
             hideOthers(null, binding)
@@ -246,20 +247,22 @@ class HomeFragment : Fragment() {
             mNotificationManager.cancel(2)
             (activity as MainActivity).navController.navigate(R.id.navigation_home)
         }
-        if(getIntPref("listsDone") == 10){
-            binding.materialButton.setOnLongClickListener {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setPositiveButton(getString(R.string.yes)){diag,_->
-                    resetDaily()
-                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
+        if (getIntPref("listsDone") == 10) {
+            if (getStringPref("planType", "horner") != "calendar") {
+                binding.materialButton.setOnLongClickListener {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
+                        resetDaily()
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                    }
+                    builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
+                        diag.dismiss()
+                    }
+                    builder.setMessage(getString(R.string.msg_reset_all))
+                    builder.setTitle(getString(R.string.title_reset_lists))
+                    builder.show()
+                    true
                 }
-                builder.setNegativeButton(getString(R.string.no)){diag,_->
-                    diag.dismiss()
-                }
-                builder.setMessage(getString(R.string.msg_reset_all))
-                builder.setTitle(getString(R.string.title_reset_lists))
-                builder.show()
-                true
             }
         }
     }
@@ -291,38 +294,40 @@ class HomeFragment : Fragment() {
                     }
                 }
             }
-        }else{
-            val enabled: Int
-            if(getBoolPref("darkMode", true)){
-                enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            }else{
-                enabled = getColor(App.applicationContext(), R.color.buttonBackground)
-            }
-            cardView.root.setOnLongClickListener {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setPositiveButton(getString(R.string.yes)){diag, _ ->
-                    setIntPref(listDone, 0)
-                    setIntPref(listName, getIntPref(listName) + 1)
-                    val isLogged = FirebaseAuth.getInstance().currentUser
-                    if(isLogged != null){
-                        val data = mutableMapOf<String, Any>()
-                        data[listDone] = 0
-                        data[listName] = getIntPref(listName)
-                        db.collection("main").document(isLogged.uid).update(data)
+        }else {
+            if (getStringPref("planType", "horner") == "horner") {
+                val enabled: Int
+                if (getBoolPref("darkMode", true)) {
+                    enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                } else {
+                    enabled = getColor(App.applicationContext(), R.color.buttonBackground)
+                }
+                cardView.root.setOnLongClickListener {
+                    val builder = AlertDialog.Builder(requireContext())
+                    builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
+                        setIntPref(listDone, 0)
+                        setIntPref(listName, getIntPref(listName) + 1)
+                        val isLogged = FirebaseAuth.getInstance().currentUser
+                        if (isLogged != null) {
+                            val data = mutableMapOf<String, Any>()
+                            data[listDone] = 0
+                            data[listName] = getIntPref(listName)
+                            db.collection("main").document(isLogged.uid).update(data)
+                        }
+                        cardView.root.isEnabled = true
+                        cardView.root.setCardBackgroundColor(enabled)
+                        cardView.listButtons.setBackgroundColor(enabled)
+                        diag.dismiss()
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
                     }
-                    cardView.root.isEnabled = true
-                    cardView.root.setCardBackgroundColor(enabled)
-                    cardView.listButtons.setBackgroundColor(enabled)
-                    diag.dismiss()
-                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                    builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
+                        diag.dismiss()
+                    }
+                    builder.setMessage(R.string.msg_reset_one)
+                    builder.setTitle(R.string.title_reset_list)
+                    builder.show()
+                    true
                 }
-                builder.setNegativeButton(getString(R.string.no)){diag, _ ->
-                    diag.dismiss()
-                }
-                builder.setMessage(R.string.msg_reset_one)
-                builder.setTitle(R.string.title_reset_list)
-                builder.show()
-                true
             }
         }
     }
