@@ -28,9 +28,7 @@ jobs:
       env:
         CPP_SECRET: ${{ secrets.CPP_SECRET }}
       run: echo $CPP_SECRET > app/src/main/cpp/native-lib.cpp  
-    - name: Enable gradle
-      run: chmod +ux gradlew
     - name: Run kLint check
       run: ./gradlew ktlintCheck
     - name: Build with Gradle
-      run: ./gradlew test
+      run: ./gradlew build
