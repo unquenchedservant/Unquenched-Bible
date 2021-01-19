@@ -49,6 +49,7 @@ object BibleStatsReset {
         updateValues["${bookName}_chapters_read"] = 0
         if (hardReset){
             setIntPref("${bookName}_amount_read", 0)
+            updateValues["${bookName}_amount_read"] = 0
         }
         if (isLogged != null && !internal) {
             val db = FirebaseFirestore.getInstance()

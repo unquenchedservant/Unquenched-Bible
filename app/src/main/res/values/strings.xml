@@ -51,6 +51,8 @@
     <string name="title_horner_method">Grant Horner Method</string>
     <string name="title_numerical_method">Numerical Day Method</string>
     <string name="title_calendar_method">Calendar Based Method</string>
+    <string name="title_account_settings">Account Settings</string>
+    <string name="title_confirm_delete">WARNING! PERMANENT!</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -94,6 +96,7 @@
     <string name="msg_reset_stats_confirm">Are you sure you want to reset all stats?</string>
     <string name="msg_reset_all">Are you sure you want to advance all 10 lists?</string>
     <string name="msg_reset_one">Are you sure you want to advance this list?</string>
+    <string name="msg_confirm_delete">Deleting your account is permanent and cannot be undone! ARE YOU SURE YOU WANT TO CONTINUE</string>
 
     <string name="notification_channel_name">Daily Reading</string>
     <string name="notification_channel_description">The daily reading comes in this channel</string>

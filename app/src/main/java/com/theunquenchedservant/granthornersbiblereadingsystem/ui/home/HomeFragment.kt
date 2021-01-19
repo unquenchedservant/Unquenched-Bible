@@ -46,6 +46,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import java.util.*
 
 class HomeFragment : Fragment() {
 
@@ -282,7 +283,24 @@ class HomeFragment : Fragment() {
                     cardView.listRead.setOnClickListener {
                         lateinit var bundle: Bundle
                         if (cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms) {
-                            val chapter = list[getIntPref(listName)]
+                            val chapter: String = when (getStringPref("planType", "horner")) {
+                                "horner" -> list[getIntPref(listName)]
+                                "numerical" -> {
+                                    var index = getIntPref("currentDayIndex", 0)
+                                    while (index >= list.size) {
+                                        index -= list.size
+                                    }
+                                    list[index]
+                                }
+                                "calendar" -> {
+                                    var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                                    while (index >= list.size) {
+                                        index -= list.size
+                                    }
+                                    list[index]
+                                }
+                                else -> list[getIntPref(listName)]
+                            }
                             bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
 
                         } else if (cardView.root == binding.cardList6.root && psalms) {

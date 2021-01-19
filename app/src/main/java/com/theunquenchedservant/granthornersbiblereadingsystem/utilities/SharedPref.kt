@@ -10,6 +10,9 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ntBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.otBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
 import java.io.File
 
@@ -67,6 +70,7 @@ object SharedPref {
         for(i in 1..10){
             results["list$i"] = getIntPref("list$i")
             results["list${i}Done"] = getIntPref("list${i}Done")
+            results["list${i}DoneDaily"] = getIntPref("list${i}DoneDaily")
         }
         results["listsDone"] = getIntPref("listsDone")
         results["currentStreak"] = getIntPref("currentStreak")
@@ -74,36 +78,138 @@ object SharedPref {
         results["maxStreak"] = getIntPref("maxStreak")
         results["notifications"] = getBoolPref("notif_switch")
         results["psalms"] = getBoolPref("psalms")
-        results["planHold"] = getBoolPref("planHold")
+        results["holdPlan"] = getBoolPref("holdPlan")
+        results["graceTime"] = getIntPref("graceTime")
+        results["isGrace"] = getBoolPref("isGrace")
+        results["currentDayIndex"] = getIntPref("currentDayIndex")
+        results["grantHorner"] = getBoolPref("grantHorner", true)
+        results["numericalDay"] = getBoolPref("numericalDay", false)
+        results["calendarDay"] = getBoolPref("calendarDay", false)
         results["vacationMode"] = getBoolPref("vacation_mode")
         results["allowPartial"] = getBoolPref("allow_partial_switch")
         results["dailyNotif"] = getIntPref( "daily_time")
         results["remindNotif"] = getIntPref("remind_time")
         results["dateChecked"] = getStringPref( "dateChecked")
+        results["versionNumber"] = getIntPref("versionNumber")
+        results["darkMode"] = getBoolPref("darkMode", true)
+        results["planType"] = getStringPref("planType", "horner")
+        results["bibleVersion"] = getStringPref("bibleVersion", "esv")
+        results["old_chapters_read"] = getIntPref("old_chapters_read")
+        results["new_chapters_read"] = getIntPref("new_chapters_read")
+        results["old_amount_read"] = getIntPref("old_amount_read")
+        results["new_amount_read"] = getIntPref("new_amount_read")
+        results["bible_amount_read"] = getIntPref("bible_amount_read")
+        results["total_chapters_read"] = getIntPref("total_chapters_read")
+        for(book in otBooks){
+            results["${book}_amount_read"] = getIntPref("${book}_amount_read")
+            results["${book}_chapters_read"] = getIntPref("${book}_chapters_read")
+            results["${book}_done_testament"] = getBoolPref("${book}_done_testament")
+            results["${book}_done_whole"] = getBoolPref("${book}_done_whole")
+            for(chapter in 1..bookChapters[book]!!){
+                results["${book}_${chapter}_read"] = getBoolPref("${book}_${chapter}_read")
+                results["${book}_${chapter}_amount_read"] = getIntPref("${book}_${chapter}_amount_read")
+            }
+        }
+        for(book in ntBooks){
+            results["${book}_amount_read"] = getIntPref("${book}_amount_read")
+            results["${book}_chapters_read"] = getIntPref("${book}_chapters_read")
+            results["${book}_done_testament"] = getBoolPref("${book}_done_testament")
+            results["${book}_done_whole"] = getBoolPref("${book}_done_whole")
+            for(chapter in 1..bookChapters[book]!!){
+                results["${book}_${chapter}_read"] = getBoolPref("${book}_${chapter}_read")
+                results["${book}_${chapter}_amount_read"] = getIntPref("${book}_${chapter}_amount_read")
+            }
+        }
         db.collection("main").document(user2!!.uid).set(results)
                 .addOnSuccessListener { MainActivity.log("Data transferred to firestore") }
                 .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
+    }
+    fun updateIntPref(data: MutableMap<String, Any>, key:String, secondKey: String=""){
+        val prefKey = if(secondKey == ""){
+            key
+        }else{
+            secondKey
+        }
+        if(data[key] != null){
+            setIntPref(prefKey, (data[key] as Long).toInt())
+        }
+    }
+    fun updateBoolPref(data: MutableMap<String, Any>, key:String, secondKey:String = ""){
+        val prefKey = if (secondKey == ""){
+            key
+        }else{
+            secondKey
+        }
+        if(data[key] != null){
+            setBoolPref(prefKey, data[key] as Boolean)
+        }
+    }
+    fun updateStringPref(data: MutableMap<String, Any>, key:String, secondKey:String=""){
+        val prefKey = if(secondKey == ""){
+            key
+        }else{
+            secondKey
+        }
+        if(data[key] != null){
+            setStringPref(prefKey, data[key] as String)
+        }
     }
     fun firestoneToPreference(database: DocumentSnapshot){
         val data = database.data
         if(data != null) {
             MainActivity.log("User document exists")
             for (i in 1..10) {
-                setIntPref("list$i", (data["list$i"] as Long).toInt())
-                setIntPref("List${i}Done", (data["list${i}Done"] as Long).toInt())
+                updateIntPref(data, "list${i}")
+                updateIntPref(data, "list${i}Done")
+                updateIntPref(data, "list${i}DoneDaily")
             }
-            setIntPref("dailyStreak", (data["dailyStreak"] as Long).toInt())
-            setIntPref("currentStreak", (data["currentStreak"] as Long).toInt())
-            setIntPref("maxStreak", (data["maxStreak"] as Long).toInt())
-            setBoolPref("psalms", data["psalms"] as Boolean)
-            setBoolPref("allow_partial_switch", data["allowPartial"] as Boolean)
-            setBoolPref("vacation_mode", data["vacationMode"] as Boolean)
-            setBoolPref("notif_switch", data["notifications"] as Boolean)
-            setIntPref("daily_time", (data["dailyNotif"] as Long).toInt())
-            setIntPref("remind_time", (data["remindNotif"] as Long).toInt())
-            setStringPref("dateChecked", (data["dateChecked"] as String))
-            if(data["holdPlan"] != null) {
-                setBoolPref("holdPlan", data["holdPlan"] as Boolean)
+            updateIntPref(data, "dailyStreak")
+            updateIntPref(data, "currentStreak")
+            updateIntPref(data, "maxStreak")
+            updateBoolPref(data, "psalms")
+            updateBoolPref(data, "allowPartial", "allow_partial_switch")
+            updateBoolPref(data, "vacationMode", "vacation_mode")
+            updateBoolPref(data, "notifications", "notif_switch")
+            updateIntPref(data, "dailyNotif", "daily_time")
+            updateIntPref(data, "remindNotif", "remind_time")
+            updateStringPref(data, "dateChecked")
+            updateBoolPref(data, "holdPlan")
+            updateIntPref(data, "versionNumber")
+            updateBoolPref(data, "darkMode")
+            updateIntPref(data, "listsDone")
+            updateStringPref(data, "planType")
+            updateStringPref(data, "bibleVersion")
+            updateIntPref(data, "old_chapters_read")
+            updateIntPref(data, "new_chapters_read")
+            updateIntPref(data, "old_amount_read")
+            updateIntPref(data, "new_amount_read")
+            updateIntPref(data, "bible_amount_read")
+            updateIntPref(data, "total_chapters_read")
+            updateIntPref(data, "currentDayIndex")
+            updateBoolPref(data, "grantHorner")
+            updateBoolPref(data, "numericalDay")
+            updateBoolPref(data, "calendarDay")
+            updateIntPref(data, "graceTime")
+            updateBoolPref(data, "isGrace")
+            for(book in otBooks){
+                updateIntPref(data, "${book}_amount_read")
+                updateIntPref(data, "${book}_chapters_read")
+                updateBoolPref(data, "${book}_done_testament")
+                updateBoolPref(data, "${book}_done_whole")
+                for(chapter in 1..bookChapters[book]!!){
+                    updateBoolPref(data, "${book}_${chapter}_read")
+                    updateIntPref(data, "${book}_${chapter}_amount_read")
+                }
+            }
+            for(book in ntBooks){
+                updateIntPref(data, "${book}_amount_read")
+                updateIntPref(data, "${book}_chapters_read")
+                updateBoolPref(data, "${book}_done_testament")
+                updateBoolPref(data, "${book}_done_whole")
+                for(chapter in 1..bookChapters[book]!!){
+                    updateBoolPref(data, "${book}_${chapter}_read")
+                    updateIntPref(data, "${book}_${chapter}_amount_read")
+                }
             }
         }
     }

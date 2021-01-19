@@ -215,8 +215,47 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     }
                     binding.translationSelector.isVisible = false
                 }
+                R.id.navigation_account_settings->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    supportActionBar?.title = "Account Settings"
+                }
+                R.id.navigation_update_email->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_account_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    supportActionBar?.title = "Update Email"
+                }
+                R.id.navigation_update_password->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_account_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    supportActionBar?.title = "Update Password"
+                }
+                R.id.navigation_confirm_delete->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_account_settings)
+                        binding.bottomNav.isVisible = true
+                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    supportActionBar?.title = "Delete Account"
+                }
                 R.id.navigation_home -> {
-                    log("home selected")
                     switchEnabled("home")
                     if(getBoolPref("darkMode", true)) {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
@@ -229,7 +268,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_stats -> {
-                    log("stats selected")
                     switchEnabled("stats")
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     supportActionBar?.title = destination.label
@@ -255,7 +293,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{
-                log("Stats was pressed")
                 supportActionBar?.title = "Statistics"
                 switchEnabled("stats")
                 navControl.navigate(R.id.navigation_stats)
