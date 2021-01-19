@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
+import android.app.Activity
 import android.app.AlertDialog
 import android.content.Intent
 import android.net.Uri
@@ -9,6 +10,8 @@ import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -85,7 +88,7 @@ class MainSettings : PreferenceFragmentCompat() {
             account?.title = getString(R.string.title_account_loggedout)
             account?.summary = getString(R.string.summary_account_loggedout)
             account!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
-                googleSignIn()
+                createSignIn()
                 mainActivity.navController.navigate(R.id.navigation_settings)
                 false
             }
@@ -120,13 +123,13 @@ class MainSettings : PreferenceFragmentCompat() {
             mainActivity.navController.navigate(R.id.navigation_notifications)
             false
         }
-        overrides!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        overrides.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Overrides"
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_overrides)
             false
         }
-        infoSupport!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+        infoSupport.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.supportActionBar?.title = "Information & Support"
             mainActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
             mainActivity.navController.navigate(R.id.navigation_information)
@@ -140,15 +143,55 @@ class MainSettings : PreferenceFragmentCompat() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        val mainActivity = activity as MainActivity
         if(requestCode == _rcSignIn){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
+            val response = IdpResponse.fromResultIntent(data)
+            if(resultCode == Activity.RESULT_OK){
+                val user = FirebaseAuth.getInstance().currentUser
+                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
+                val db = FirebaseFirestore.getInstance()
+                db.collection("main").document(user!!.uid).get()
+                        .addOnSuccessListener { doc ->
+                            if (doc != null) {
+                                val builder = AlertDialog.Builder(context)
+                                builder.setPositiveButton("Use Cloud Data") { _, _ ->
+                                    firestoneToPreference(doc)
+                                    mainActivity.navController.navigate(R.id.navigation_home)
+                                }
+                                builder.setNeutralButton("Overwrite with device") { _, _ ->
+                                    preferenceToFireStone()
+                                    mainActivity.navController.navigate(R.id.navigation_home)
+                                }
+                                builder.setTitle("Account Found")
+                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
+                                builder.create().show()
+                            } else {
+                                preferenceToFireStone()
+                            }
+                        }
+            }
+            /*val task = GoogleSignIn.getSignedInAccountFromIntent(data)
             try {
                 val account = task.getResult(ApiException::class.java)
                 firebaseAuthWithGoogle(account!!)
             }catch(e: ApiException){
                 Toast.makeText(App.applicationContext(), "Google Sign In Failed", Toast.LENGTH_LONG).show()
-            }
+            }*/
         }
+    }
+    private fun createSignIn(){
+        val providers = arrayListOf(
+                AuthUI.IdpConfig.EmailBuilder().build(),
+                AuthUI.IdpConfig.GoogleBuilder().build(),
+                AuthUI.IdpConfig.AppleBuilder().build()
+        )
+        startActivityForResult(
+                AuthUI.getInstance()
+                        .createSignInIntentBuilder()
+                        .setLogo(R.drawable.logo2)
+                        .setTheme(R.style.AppTheme)
+                        .setAvailableProviders(providers)
+                        .build(), _rcSignIn)
     }
     private fun googleSignIn(){
         val builder = AlertDialog.Builder(context)
