@@ -34,7 +34,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             false
         }
-        currentVersion?.title = "Current Version - 1.2"
+        currentVersion?.title = resources.getString(R.string.title_version)
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/unquenchedservant/BRP_android/releases"))
             startActivity(i)

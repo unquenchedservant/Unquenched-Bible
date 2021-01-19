@@ -216,7 +216,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_home -> {
-                    log("home selected")
                     switchEnabled("home")
                     if(getBoolPref("darkMode", true)) {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
@@ -229,7 +228,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_stats -> {
-                    log("stats selected")
                     switchEnabled("stats")
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     supportActionBar?.title = destination.label
@@ -255,7 +253,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{
-                log("Stats was pressed")
                 supportActionBar?.title = "Statistics"
                 switchEnabled("stats")
                 navControl.navigate(R.id.navigation_stats)

@@ -33,7 +33,7 @@ class NotificationsFragment : PreferenceFragmentCompat() {
         }
         dailyList.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
             setIntPref("daily_time", o as Int)
-            updateFS("remindNotif", o)
+            updateFS("dailyNotif", o)
             true
         }
 

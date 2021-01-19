@@ -393,7 +393,6 @@ class ScriptureViewer : Fragment() {
                             }
                         }
                     }
-                    log("THIS IS THE CURRENT INDEX OF YES THIS WORKED OUT WELL AGAIN")
                     html += "<br><br><div class=\"copyright\">$copyright</div> $FUMS"
                     binding.scriptureWeb.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
