@@ -22,11 +22,11 @@ jobs:
         FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
       run: 
         echo $FIREBASE_SECRET > app/google-services.json
+    - name: Create CPP directory
+      run: mkdir app/src/main/cpp/
     - name: Decode native-lib.cpp
       env:
         CPP_SECRET: ${{ secrets.CPP_SECRET }}
-      run: 
-        mkdir app/src/main/cpp 
-        echo $CPP_SECRET > app/src/main/cpp/native-lib.cpp  
+      run: echo $CPP_SECRET > app/src/main/cpp/native-lib.cpp  
     - name: Build with Gradle
       run: ./gradlew build
