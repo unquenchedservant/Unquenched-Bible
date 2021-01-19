@@ -65,23 +65,10 @@ class MainSettings : PreferenceFragmentCompat() {
         }
 
         if(FirebaseAuth.getInstance().currentUser != null){
-            account?.title = getString(R.string.title_account_loggedin)
-            account?.summary = getString(R.string.summary_account_loggedin)
+            account?.title = getString(R.string.title_account_settings)
+            account?.summary = ""
             account!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                val builder = AlertDialog.Builder(context)
-                builder.setPositiveButton(getString(R.string.yes)){_,_->
-                    FirebaseAuth.getInstance().signOut()
-                    account.title = getString(R.string.title_account_loggedout)
-                    account.summary = getString(R.string.summary_account_loggedout)
-                    Toast.makeText(context, "Signed Out!", Toast.LENGTH_LONG).show()
-                    mainActivity.navController.navigate(R.id.navigation_settings)
-                }
-                builder.setNeutralButton(getString(R.string.no)){dialogInterface, _->
-                    dialogInterface.cancel()
-                }
-                builder.setMessage(getString(R.string.msg_sign_out))
-                builder.setTitle(getString(R.string.title_sign_out))
-                builder.create().show()
+                mainActivity.navController.navigate(R.id.navigation_account_settings)
                 false
             }
         }else{
@@ -152,7 +139,7 @@ class MainSettings : PreferenceFragmentCompat() {
                 val db = FirebaseFirestore.getInstance()
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
-                            if (doc != null) {
+                            if (doc["list1"] != null) {
                                 val builder = AlertDialog.Builder(context)
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
                                     firestoneToPreference(doc)
@@ -167,23 +154,16 @@ class MainSettings : PreferenceFragmentCompat() {
                                 builder.create().show()
                             } else {
                                 preferenceToFireStone()
+                                mainActivity.navController.navigate(R.id.navigation_settings)
                             }
                         }
             }
-            /*val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account!!)
-            }catch(e: ApiException){
-                Toast.makeText(App.applicationContext(), "Google Sign In Failed", Toast.LENGTH_LONG).show()
-            }*/
         }
     }
     private fun createSignIn(){
         val providers = arrayListOf(
-                AuthUI.IdpConfig.EmailBuilder().build(),
-                AuthUI.IdpConfig.GoogleBuilder().build(),
-                AuthUI.IdpConfig.AppleBuilder().build()
+                AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
+                AuthUI.IdpConfig.GoogleBuilder().build()
         )
         startActivityForResult(
                 AuthUI.getInstance()

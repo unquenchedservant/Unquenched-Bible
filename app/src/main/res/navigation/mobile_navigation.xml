@@ -109,6 +109,37 @@
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanTypeFragment"
         android:label="Plan Type Menu"/>
     <fragment
+        android:id="@+id/navigation_account_settings"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.AccountSettingsFragment"
+        android:label="Account Settings"/>
+    <fragment
+        android:id="@+id/navigation_update_email"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.updateEmailFragment"
+        android:label="Update Email">
+        <argument
+            android:name="error"
+            app:argType="string"/>
+        <argument
+            android:name="email"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_update_password"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.updatePasswordFragment"
+        android:label="Update Password">
+        <argument
+            android:name="error"
+            app:argType="string"/>
+    </fragment>
+    <fragment
+        android:id="@+id/navigation_confirm_delete"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.DeleteAccountFragment"
+        android:label="Delete Account">
+        <argument
+            android:name="error"
+            app:argType="string"/>
+    </fragment>
+    <fragment
         android:id="@+id/navigation_overrides"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OverridesFragment"
         android:label="Overrides"/>
