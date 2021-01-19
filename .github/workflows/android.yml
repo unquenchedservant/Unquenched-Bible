@@ -12,6 +12,11 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+    - uses: actions/checkout@v2
+    - name: set up JDK 1.8
+      uses: actions/setup-java@v1
+      with:
+        java-version: 1.8
     - name: Decode google-services.json
       env:
         FIREBASE_SECRET: ${{ secrets.FIREBASE_SECRET }}
@@ -19,11 +24,6 @@ jobs:
     - name: Decode native-lib.cpp
       env:
         CPP_SECRET: ${{ secrets.CPP_SECRET }}
-      run: echo $CPP_SECRET > app/src/main/cpp/native-lib.cpp
-    - uses: actions/checkout@v2
-    - name: set up JDK 1.8
-      uses: actions/setup-java@v1
-      with:
-        java-version: 1.8
+      run: echo $CPP_SECRET > app/src/main/cpp/native-lib.cpp  
     - name: Build with Gradle
       run: ./gradlew build
