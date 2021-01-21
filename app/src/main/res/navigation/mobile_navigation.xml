@@ -109,6 +109,10 @@
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanTypeFragment"
         android:label="Plan Type Menu"/>
     <fragment
+        android:id="@+id/navigation_plan_system"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSystemFragment"
+        android:label="Plan System Menu"/>
+    <fragment
         android:id="@+id/navigation_account_settings"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.AccountSettingsFragment"
         android:label="Account Settings"/>
