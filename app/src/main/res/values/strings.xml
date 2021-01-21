@@ -112,14 +112,19 @@
 
     <string name="title_pgh_list1">The Gospels</string>
     <string name="title_pgh_list2">The Pentateuch</string>
-    <string name="title_pgh_list3">Epistles 1</string>
-    <string name="title_pgh_list4">Epistles 2</string>
+    <string name="title_pgh_list3">Epistles I</string>
+    <string name="title_pgh_list4">Epistles II</string>
     <string name="title_pgh_list5">Poetry</string>
     <string name="title_pgh_list6">Psalms</string>
     <string name="title_pgh_list7">Proverbs</string>
     <string name="title_pgh_list8">History</string>
     <string name="title_pgh_list9">Prophets</string>
     <string name="title_pgh_list10">Acts</string>
+
+    <string name="title_mcheyne_list1">Family I</string>
+    <string name="title_mcheyne_list2">Family II</string>
+    <string name="title_mcheyne_list3">Secret I</string>
+    <string name="title_mcheyne_list4">Secret II</string>
 
     <string name="not_done">Mark All Done</string>
     <string name="done">Already Done For Today!</string>

@@ -115,16 +115,16 @@ class HomeMCheyneFragment : Fragment() {
             builder.create().show()
         }
         viewModel.list1.observe(viewLifecycleOwner){
-            createCard(binding.cardList1, it, R.string.title_pgh_list1, "mcheyne_list1", R.array.mcheyne_list1, false)
+            createCard(binding.cardList1, it, R.string.title_mcheyne_list1, "mcheyne_list1", R.array.mcheyne_list1, false)
         }
         viewModel.list2.observe(viewLifecycleOwner){
-            createCard(binding.cardList2, it, R.string.title_pgh_list2, "mcheyne_list2", R.array.mcheyne_list2, false)
+            createCard(binding.cardList2, it, R.string.title_mcheyne_list2, "mcheyne_list2", R.array.mcheyne_list2, false)
         }
         viewModel.list3.observe(viewLifecycleOwner){
-            createCard(binding.cardList3, it, R.string.title_pgh_list3, "mcheyne_list3", R.array.mcheyne_list3, false)
+            createCard(binding.cardList3, it, R.string.title_mcheyne_list3, "mcheyne_list3", R.array.mcheyne_list3, false)
         }
         viewModel.list4.observe(viewLifecycleOwner){
-            createCard(binding.cardList4, it, R.string.title_pgh_list4, "mcheyne_list4", R.array.mcheyne_list4, false)
+            createCard(binding.cardList4, it, R.string.title_mcheyne_list4, "mcheyne_list4", R.array.mcheyne_list4, false)
         }
         viewModel.listsDone.observe(viewLifecycleOwner){
             val backgroundColor: String
