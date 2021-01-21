@@ -165,8 +165,11 @@ class HomeMCheyneFragment : Fragment() {
                 }
             }
         }
-
-        createButtonListener()
+        if(getStringPref("planType", "horner") == "calendar" && Calendar.getInstance().get(Calendar.MONTH) == Calendar.FEBRUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 29){
+            setIntPref("dailyStreak", 1)
+        }else{
+            createButtonListener()
+        }
         createNotificationChannel()
         createAlarm("dailyCheck")
         setVisibilities(binding)
@@ -205,15 +208,20 @@ class HomeMCheyneFragment : Fragment() {
         cardList.listRead.setTextColor(lineColor)
         cardList.buttonSeparator.setBackgroundColor(lineColor)
         cardList.lineSeparator.setBackgroundColor(lineColor)
-        cardList.listReading.text = readingLists.listReading
-        cardList.listTitle.text = resources.getString(readingString)
-        createCardListener(cardList, listArray, psalms, "${listName}Done", listName)
+        if(getStringPref("planType", "horner") == "calendar" && Calendar.getInstance().get(Calendar.MONTH) == Calendar.FEBRUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 29){
+            cardList.listReading.text = "DAY OFF"
+            cardList.listTitle.text = resources.getString(readingString)
+        }else{
+            cardList.listReading.text = readingLists.listReading
+            cardList.listTitle.text = resources.getString(readingString)
+            createCardListener(cardList, listArray, psalms, "${listName}Done", listName)
+        }
     }
     private fun createButtonListener() {
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {
             hideOthers(null, binding)
-            markAll()
+            markAll("mcheyne")
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
@@ -224,8 +232,8 @@ class HomeMCheyneFragment : Fragment() {
                 binding.materialButton.setOnLongClickListener {
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
-                        resetDaily()
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                        resetDaily("mcheyne")
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
                     }
                     builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
                         diag.dismiss()
@@ -246,39 +254,35 @@ class HomeMCheyneFragment : Fragment() {
                 if (cardView.listButtons.isVisible) {
                     listSwitcher(it, getIntPref(listDone), binding.materialButton)
                 } else {
-                    hideOthers(cardView.root, binding)
+                    hideOthers(cardView.root, binding, true)
                     cardView.listDone.setOnClickListener {
                         changeVisibility(cardView, false)
                         markSingle(listDone)
                         cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
                     }
                     cardView.listRead.setOnClickListener {
                         lateinit var bundle: Bundle
-                        if (cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms) {
-                            val chapter: String = when (getStringPref("planType", "horner")) {
-                                "horner" -> list[getIntPref(listName)]
-                                "numerical" -> {
-                                    var index = getIntPref("currentDayIndex", 0)
-                                    while (index >= list.size) {
-                                        index -= list.size
-                                    }
-                                    list[index]
+                        val chapter: String = when (getStringPref("planType", "horner")) {
+                            "horner" -> list[getIntPref(listName)]
+                            "numerical" -> {
+                                var index = getIntPref("currentDayIndex", 0)
+                                while (index >= list.size) {
+                                    index -= list.size
                                 }
-                                "calendar" -> {
-                                    var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                                    while (index >= list.size) {
-                                        index -= list.size
-                                    }
-                                    list[index]
-                                }
-                                else -> list[getIntPref(listName)]
+                                list[index]
                             }
-                            bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
-
-                        } else if (cardView.root == binding.cardList6.root && psalms) {
-                            bundle = bundleOf("chapter" to "no", "psalms" to true, "iteration" to 1)
+                            "calendar" -> {
+                                var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                                while (index >= list.size) {
+                                    index -= list.size
+                                }
+                                list[index]
+                            }
+                            else -> list[getIntPref(listName)]
                         }
+                        bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
+
                         (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
                     }
                 }
@@ -307,7 +311,7 @@ class HomeMCheyneFragment : Fragment() {
                         cardView.root.setCardBackgroundColor(enabled)
                         cardView.listButtons.setBackgroundColor(enabled)
                         diag.dismiss()
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
                     }
                     builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
                         diag.dismiss()
