@@ -80,19 +80,27 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         binding.bottomNav.setBackgroundColor(toolbarColor)
         binding.bottomNav.itemIconTintList = colorStateList
         binding.bottomNav.itemTextColor = colorStateList
-        navController.navigate(R.id.navigation_home)
+        if(getStringPref("planSystem", "pgh") == "pgh") {
+            navController.navigate(R.id.navigation_home)
+        }else if(getStringPref("planSystem", "pgh") == "mcheyne"){
+            navController.navigate(R.id.navigation_home_mcheyne)
+        }
         binding.translationSelector.isVisible = false
         setupBottomNavigationBar()
     }
 
     private fun setupBottomNavigationBar() {
         switchEnabled("home")
+        val homeId = when(getStringPref("planSystem", "pgh")){
+            "pgh"->R.id.navigation_home
+            else->R.id.navigation_home
+        }
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_home)
+                        navController.navigate(homeId)
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
@@ -294,12 +302,16 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val homeId = when(getStringPref("planSystem", "pgh")){
+            "pgh"->R.id.navigation_home
+            else->R.id.navigation_home
+        }
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
                 supportActionBar?.title = getDate(0, true)
                 switchEnabled("home")
-                navControl.navigate(R.id.navigation_home)
+                navControl.navigate(homeId)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{
