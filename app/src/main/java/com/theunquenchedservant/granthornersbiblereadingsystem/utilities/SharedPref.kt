@@ -100,6 +100,9 @@ object SharedPref {
         results["new_amount_read"] = getIntPref("new_amount_read")
         results["bible_amount_read"] = getIntPref("bible_amount_read")
         results["total_chapters_read"] = getIntPref("total_chapters_read")
+        results["planSystem"] = getStringPref("planSystem")
+        results["pgh_system"] = getBoolPref("pgh_system")
+        results["mcheyne_system"] = getBoolPref("mcheyne_system")
         for(book in otBooks){
             results["${book}_amount_read"] = getIntPref("${book}_amount_read")
             results["${book}_chapters_read"] = getIntPref("${book}_chapters_read")
@@ -191,6 +194,9 @@ object SharedPref {
             updateBoolPref(data, "calendarDay")
             updateIntPref(data, "graceTime")
             updateBoolPref(data, "isGrace")
+            updateStringPref(data, "planSystem")
+            updateBoolPref(data, "pgh_system")
+            updateBoolPref(data, "mcheyne_system")
             for(book in otBooks){
                 updateIntPref(data, "${book}_amount_read")
                 updateIntPref(data, "${book}_chapters_read")
