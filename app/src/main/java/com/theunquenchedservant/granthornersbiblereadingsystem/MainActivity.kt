@@ -91,17 +91,16 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
     private fun setupBottomNavigationBar() {
         switchEnabled("home")
-        val homeId = when(getStringPref("planSystem", "pgh")){
-            "pgh"->R.id.navigation_home
-            "mcheyne"->R.id.navigation_home_mcheyne
-            else->R.id.navigation_home
-        }
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(homeId)
+                        if(getStringPref("planSystem", "pgh") == "pgh"){
+                            navController.navigate(R.id.navigation_home)
+                        }else{
+                            navController.navigate(R.id.navigation_home_mcheyne)
+                        }
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
