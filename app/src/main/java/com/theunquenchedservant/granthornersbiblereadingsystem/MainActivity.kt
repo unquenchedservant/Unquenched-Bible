@@ -93,6 +93,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         switchEnabled("home")
         val homeId = when(getStringPref("planSystem", "pgh")){
             "pgh"->R.id.navigation_home
+            "mcheyne"->R.id.navigation_home_mcheyne
             else->R.id.navigation_home
         }
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
@@ -285,6 +286,18 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     binding.translationSelector.isVisible = false
                 }
+                R.id.navigation_home_mcheyne -> {
+                    switchEnabled("home")
+                    if(getBoolPref("darkMode", true)) {
+                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
+                    }else {
+                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    }
+                    supportActionBar?.title = getDate(0, true)
+                    supportActionBar?.show()
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    binding.translationSelector.isVisible = false
+                }
                 R.id.navigation_stats -> {
                     switchEnabled("stats")
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -304,6 +317,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         val homeId = when(getStringPref("planSystem", "pgh")){
             "pgh"->R.id.navigation_home
+            "mcheyne"->R.id.navigation_home_mcheyne
             else->R.id.navigation_home
         }
         val navControl = findNavController(this, R.id.nav_host_fragment)

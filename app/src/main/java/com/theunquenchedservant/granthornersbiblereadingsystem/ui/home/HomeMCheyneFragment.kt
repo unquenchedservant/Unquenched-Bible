@@ -34,6 +34,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.ReadingLists
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createNotificationChannel
@@ -54,8 +55,8 @@ class HomeMCheyneFragment : Fragment() {
     private var user: FirebaseUser? = null
     private var allowResume = true
     private var skipped = false
-    private lateinit var binding: FragmentHomeBinding
-    private val viewModel: HomeView by viewModels(
+    private lateinit var binding: FragmentHomeMcheyneBinding
+    private val viewModel: HomeMCheyneView by viewModels(
             factoryProducer =  { SavedStateViewModelFactory((activity as MainActivity).application, this) }
     )
 
@@ -64,7 +65,7 @@ class HomeMCheyneFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater,  container, false)
+        binding = FragmentHomeMcheyneBinding.inflate(inflater,  container, false)
         return binding.root
     }
 
@@ -172,7 +173,7 @@ class HomeMCheyneFragment : Fragment() {
         }
         createNotificationChannel()
         createAlarm("dailyCheck")
-        setVisibilities(binding)
+        setVisibilities(binding=null, binding, true)
         allowResume = false
         if(savedInstanceState != null) {
             createAlarms()
@@ -220,7 +221,7 @@ class HomeMCheyneFragment : Fragment() {
     private fun createButtonListener() {
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {
-            hideOthers(null, binding)
+            hideOthers(null, null, binding, true)
             markAll("mcheyne")
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
@@ -254,7 +255,7 @@ class HomeMCheyneFragment : Fragment() {
                 if (cardView.listButtons.isVisible) {
                     listSwitcher(it, getIntPref(listDone), binding.materialButton)
                 } else {
-                    hideOthers(cardView.root, binding, true)
+                    hideOthers(cardView.root, null, binding, true)
                     cardView.listDone.setOnClickListener {
                         changeVisibility(cardView, false)
                         markSingle(listDone)
@@ -266,7 +267,7 @@ class HomeMCheyneFragment : Fragment() {
                         val chapter: String = when (getStringPref("planType", "horner")) {
                             "horner" -> list[getIntPref(listName)]
                             "numerical" -> {
-                                var index = getIntPref("currentDayIndex", 0)
+                                var index = getIntPref("mcheyne_currentDayIndex", 0)
                                 while (index >= list.size) {
                                     index -= list.size
                                 }

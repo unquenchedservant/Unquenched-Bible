@@ -148,13 +148,14 @@ object Marker {
                     }
         }
     }
-    fun update_reading_statistic(listName: String): String{
+    fun update_reading_statistic(listName: String, prefix: String =""): String{
         val listId= getListId(listName)
+
         val list = App.applicationContext().resources.getStringArray(listId)
         val list_index = when(getStringPref("planType", "horner")){
             "horner"->getIntPref(listName)
             "numerical"->{
-                var index = getIntPref("currentDayIndex")
+                var index = getIntPref("${prefix}currentDayIndex")
                 while(index >= list.size){
                     index -= list.size
                 }
@@ -232,7 +233,7 @@ object Marker {
             else->""
         }
         for (i in 1..doneMax) {
-            update_reading_statistic("${prefix}list${i}")
+            update_reading_statistic("${prefix}list${i}", prefix)
             setIntPref("${prefix}list${i}Done", 1)
             val doneDaily = getIntPref("${prefix}list${i}DoneDaily")
             if(doneDaily == 0){

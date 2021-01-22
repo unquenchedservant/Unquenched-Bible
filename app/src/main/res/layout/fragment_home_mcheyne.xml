@@ -1,0 +1,71 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:backgroundTint="#383838"
+    android:backgroundTintMode="add"
+    android:gravity="center_vertical"
+    android:orientation="vertical">
+
+
+        <include
+            android:id="@+id/cardList1"
+            layout="@layout/cardviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp"
+            />
+
+        <include
+            android:id="@+id/cardList2"
+            layout="@layout/cardviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp" />
+
+        <include
+            android:id="@+id/cardList3"
+            layout="@layout/cardviews"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp" />
+
+        <include
+            android:id="@+id/cardList4"
+            layout="@layout/cardviews"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="40dp" />
+
+    <Button
+        android:id="@+id/material_button"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="match_parent"
+        android:layout_height="48dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="20dp"
+        android:layout_weight="0"
+        android:backgroundTint="#383838"
+        android:clickable="true"
+        android:focusable="true"
+        android:gravity="center_horizontal|center_vertical"
+        android:maxHeight="48dp"
+        android:minHeight="48dp"
+        android:text="@string/not_done"
+        android:textAlignment="center"
+        android:textColor="@android:color/background_light"
+        android:textIsSelectable="false"
+        android:textSize="14sp"
+        android:typeface="normal"
+        android:visibility="visible" />
+</LinearLayout>

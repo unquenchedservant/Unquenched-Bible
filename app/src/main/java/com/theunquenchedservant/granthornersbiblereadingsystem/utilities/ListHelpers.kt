@@ -13,6 +13,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
@@ -20,33 +21,43 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 object ListHelpers {
-    fun setVisibilities(binding: FragmentHomeBinding, isMcheyne: Boolean=false){
-        changeVisibility(binding.cardList1, false)
-        changeVisibility(binding.cardList2, false)
-        changeVisibility(binding.cardList3, false)
-        changeVisibility(binding.cardList4, false)
+    fun setVisibilities(binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne: Boolean=false){
         if(!isMcheyne) {
+            changeVisibility(binding!!.cardList1, false)
+            changeVisibility(binding.cardList2, false)
+            changeVisibility(binding.cardList3, false)
+            changeVisibility(binding.cardList4, false)
             changeVisibility(binding.cardList5, false)
             changeVisibility(binding.cardList6, false)
             changeVisibility(binding.cardList7, false)
             changeVisibility(binding.cardList8, false)
             changeVisibility(binding.cardList9, false)
             changeVisibility(binding.cardList10, false)
+        }else{
+            changeVisibility(bindingMCheyne!!.cardList1, false)
+            changeVisibility(bindingMCheyne.cardList2, false)
+            changeVisibility(bindingMCheyne.cardList3, false)
+            changeVisibility(bindingMCheyne.cardList4, false)
         }
     }
 
-    fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding, isMcheyne:Boolean=false){
-        changeVisibility(binding.cardList1, cardList == binding.cardList1.root)
-        changeVisibility(binding.cardList2, cardList == binding.cardList2.root)
-        changeVisibility(binding.cardList3, cardList == binding.cardList3.root)
-        changeVisibility(binding.cardList4, cardList == binding.cardList4.root)
-        if(!isMcheyne) {
+    fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne:Boolean=false){
+        if(!isMcheyne){
+            changeVisibility(binding!!.cardList1, cardList == binding.cardList1.root)
+            changeVisibility(binding.cardList2, cardList == binding.cardList2.root)
+            changeVisibility(binding.cardList3, cardList == binding.cardList3.root)
+            changeVisibility(binding.cardList4, cardList == binding.cardList4.root)
             changeVisibility(binding.cardList5, cardList == binding.cardList5.root)
             changeVisibility(binding.cardList6, cardList == binding.cardList6.root)
             changeVisibility(binding.cardList7, cardList == binding.cardList7.root)
             changeVisibility(binding.cardList8, cardList == binding.cardList8.root)
             changeVisibility(binding.cardList9, cardList == binding.cardList9.root)
             changeVisibility(binding.cardList10, cardList == binding.cardList10.root)
+        }else{
+            changeVisibility(bindingMCheyne!!.cardList1, cardList == bindingMCheyne.cardList1.root)
+            changeVisibility(bindingMCheyne.cardList2, cardList == bindingMCheyne.cardList2.root)
+            changeVisibility(bindingMCheyne.cardList3, cardList == bindingMCheyne.cardList3.root)
+            changeVisibility(bindingMCheyne.cardList4, cardList == bindingMCheyne.cardList4.root)
         }
     }
 

@@ -60,6 +60,10 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         if(partial){
             partialStreakAllow!!.setDefaultValue(true)
         }
+        planType.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            mainActivity.navController.navigate(R.id.navigation_plan_system)
+            true
+        }
         planMethod.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
