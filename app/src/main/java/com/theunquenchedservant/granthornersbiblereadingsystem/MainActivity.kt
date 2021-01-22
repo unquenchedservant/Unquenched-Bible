@@ -80,7 +80,11 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         binding.bottomNav.setBackgroundColor(toolbarColor)
         binding.bottomNav.itemIconTintList = colorStateList
         binding.bottomNav.itemTextColor = colorStateList
-        navController.navigate(R.id.navigation_home)
+        if(getStringPref("planSystem", "pgh") == "pgh") {
+            navController.navigate(R.id.navigation_home)
+        }else if(getStringPref("planSystem", "pgh") == "mcheyne"){
+            navController.navigate(R.id.navigation_home_mcheyne)
+        }
         binding.translationSelector.isVisible = false
         setupBottomNavigationBar()
     }
@@ -92,7 +96,11 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_home)
+                        if(getStringPref("planSystem", "pgh") == "pgh"){
+                            navController.navigate(R.id.navigation_home)
+                        }else{
+                            navController.navigate(R.id.navigation_home_mcheyne)
+                        }
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
@@ -170,6 +178,16 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     }
                     binding.translationSelector.isVisible = false
                     supportActionBar?.title = "Plan Method"
+                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                }
+                R.id.navigation_plan_system->{
+                    binding.myToolbar.setNavigationOnClickListener {
+                        navController.navigate(R.id.navigation_plan_settings)
+                        supportActionBar?.title = "Plan Settings"
+                        binding.bottomNav.isVisible = true
+                    }
+                    binding.translationSelector.isVisible = false
+                    supportActionBar?.title = "Plan System"
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_notifications->{
@@ -267,6 +285,18 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     binding.translationSelector.isVisible = false
                 }
+                R.id.navigation_home_mcheyne -> {
+                    switchEnabled("home")
+                    if(getBoolPref("darkMode", true)) {
+                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
+                    }else {
+                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    }
+                    supportActionBar?.title = getDate(0, true)
+                    supportActionBar?.show()
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    binding.translationSelector.isVisible = false
+                }
                 R.id.navigation_stats -> {
                     switchEnabled("stats")
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -284,12 +314,17 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        val homeId = when(getStringPref("planSystem", "pgh")){
+            "pgh"->R.id.navigation_home
+            "mcheyne"->R.id.navigation_home_mcheyne
+            else->R.id.navigation_home
+        }
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
                 supportActionBar?.title = getDate(0, true)
                 switchEnabled("home")
-                navControl.navigate(R.id.navigation_home)
+                navControl.navigate(homeId)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{

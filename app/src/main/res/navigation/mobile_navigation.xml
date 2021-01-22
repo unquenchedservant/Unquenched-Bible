@@ -11,6 +11,14 @@
             app:destination="@id/navigation_scripture"/>
     </fragment>
     <fragment
+        android:id="@+id/navigation_home_mcheyne"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeMCheyneFragment"
+        android:label="@string/title_home">
+        <action
+            android:id="@+id/action_navigation_home_to_scripture"
+            app:destination="@id/navigation_scripture"/>
+    </fragment>
+    <fragment
         android:id="@+id/navigation_scripture"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.scripture.ScriptureViewer"
         android:label="Scripture">
@@ -23,9 +31,6 @@
         <argument
             android:name="iteration"
             app:argType="integer"/>
-        <action
-            android:id="@+id/action_navigation_scripture_to_navigation_home"
-            app:destination="@id/navigation_home" />
     </fragment>
     <fragment
         android:id="@+id/navigation_settings"
@@ -108,6 +113,10 @@
         android:id="@+id/navigation_plan_type"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanTypeFragment"
         android:label="Plan Type Menu"/>
+    <fragment
+        android:id="@+id/navigation_plan_system"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSystemFragment"
+        android:label="Plan System Menu"/>
     <fragment
         android:id="@+id/navigation_account_settings"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.AccountSettingsFragment"

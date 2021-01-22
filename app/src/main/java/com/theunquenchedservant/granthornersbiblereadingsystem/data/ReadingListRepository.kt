@@ -28,8 +28,15 @@ class ReadingListRepository {
                         if (it.result != null) {
                             val psalmChecked = it.result!!.data!!["psalms"] as Boolean
                             val listId = getListId(listName)
-                            val reading = getReading((it.result!!.data!![listName] as Long).toInt(), listId, listName, true, psalmChecked)
-                            val resultObject = ReadingLists(listName, (it.result!!.data!!["${listName}Done"] as Long).toInt(), (it.result!!.data!![listName] as Long).toInt(), reading)
+                            val reading: String
+                            val resultObject: ReadingLists
+                            if(it.result!!.data!![listName] != null) {
+                                reading = getReading((it.result!!.data!![listName] as Long).toInt(), listId, listName, true, psalmChecked)
+                                resultObject = ReadingLists(listName, (it.result!!.data!!["${listName}Done"] as Long).toInt(), (it.result!!.data!![listName] as Long).toInt(), reading)
+                            }else{
+                                reading = getReading(0, listId, listName, true, psalmChecked)
+                                resultObject = ReadingLists(listName, 0, 0, reading)
+                            }
                             data.value = resultObject
                         }else{
                             log("RESULT WAS NULL")
@@ -59,11 +66,21 @@ class ReadingListRepository {
             "list8"-> R.array.list_8
             "list9"-> R.array.list_9
             "list10"-> R.array.list_10
+            "mcheyne_list1"->R.array.mcheyne_list1
+            "mcheyne_list2"->R.array.mcheyne_list2
+            "mcheyne_list3"->R.array.mcheyne_list3
+            "mcheyne_list4"->R.array.mcheyne_list4
             else-> 0
         }
     }
     fun getReading(index:Int, listId: Int, listName: String, fromFirebase: Boolean, psalmChecked: Boolean): String {
         val list = App.applicationContext().resources.getStringArray(listId)
+        val planSystem = getStringPref("planSystem", "pgh")
+        val prefix = when(planSystem){
+            "pgh" -> ""
+            "mcheyne"->"mcheyne_"
+            else->""
+        }
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         if (listName == "list6") {
             if (psalmChecked) {
@@ -91,7 +108,7 @@ class ReadingListRepository {
                 }
             }
             "numerical" -> {
-                var newIndex = getIntPref("currentDayIndex", 0)
+                var newIndex = getIntPref("${prefix}currentDayIndex", 0)
                 if (newIndex >= list.size){
                     while(newIndex >= list.size){
                         newIndex -= list.size

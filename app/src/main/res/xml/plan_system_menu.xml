@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <CheckBoxPreference
+        app:key="pgh_system"
+        app:title="Grant Horner System"
+        app:summary="The 10 list system made by Professor Grant Horner."
+        app:allowDividerBelow="true"/>
+    <CheckBoxPreference
+        app:key="mcheyne_system"
+        app:title="M'Cheyne System"
+        app:summary="The 4 list system made by Robert Murray M'Cheyne."
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <Preference
+        app:key="planMoreInfo"
+        app:title="More Information On These Systems"
+        app:summary="Click here for more information on both of these systems"
+        app:allowDividerAbove="true"/>
+</PreferenceScreen>

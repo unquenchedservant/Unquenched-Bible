@@ -68,6 +68,11 @@ class ScriptureViewer : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?) : View? {
         _binding = ScriptureViewerBinding.inflate(inflater, container, false)
         val view = binding.root
+        return view
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val b = arguments
         chapter = b?.getString("chapter")!!
         psalms = b.getBoolean("psalms")
@@ -88,9 +93,42 @@ class ScriptureViewer : Fragment() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {} }
         val url = if(getStringPref("bibleVersion", "ESV") == "ESV"){
-            getESVReference(chapter, psalms, iteration)
+            val returnURL = if(getStringPref("planSystem", "pgh") == "pgh") {
+                getESVReference(chapter, psalms, iteration)
+            }else{
+                val maxIteration = chapter.filter { it == ',' }.count()
+                log("THIS IS THE MAX ITERATION $maxIteration")
+                val currentIteration = if(maxIteration == 0){
+                    0
+                }else{
+                    val returnIter = if(iteration == 0) {
+                        1
+                    }else{
+                        iteration
+                    }
+                    returnIter
+                }
+                getESVReferenceMCheyne(chapter, currentIteration, maxIteration + 1)
+            }
+            returnURL
         }else{
-            getReference(chapter, psalms, iteration)
+            val returnURL = if(getStringPref("planSystem", "pgh") == "pgh"){
+                getReference(chapter, psalms, iteration)
+            }else{
+                val maxIteration = chapter.filter{ it == ','}.count()
+                val currentIteration = if(maxIteration == 0){
+                    0
+                }else{
+                    val returnIter = if(iteration == 0){
+                        1
+                    }else{
+                        iteration
+                    }
+                    returnIter
+                }
+                getReferenceMCheyne(chapter, currentIteration, maxIteration + 1)
+            }
+            returnURL
         }
         (activity as MainActivity).findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
         if(getBoolPref("darkMode", true)){
@@ -103,8 +141,276 @@ class ScriptureViewer : Fragment() {
         }else{
             getScriptureView(url)
         }
-        getESV(url)
-        return view
+    }
+    fun getReferenceMCheyne(chapter: String, iteration: Int, maxIteration: Int):String{
+        val title : String
+        var url: String
+        val chapters = mutableListOf<String>()
+        if (getStringPref("bibleVersion", "ESV") == "NASB"){
+            setStringPref("bibleVersion", "NASB20")
+            updateFS("bibleVersion", "NASB20")
+        }
+        val versionId: String? = when (getStringPref("bibleVersion", "ESV")){
+            "ESV" ->  bibleIDs["ESV"]
+            "CSB" -> bibleIDs["CSB"]
+            "AMP" -> bibleIDs["AMP"]
+            "KJV" -> bibleIDs["KJV"]
+            "NASB95" -> bibleIDs["NASB95"]
+            "NASB20" -> bibleIDs["NASB20"]
+            else -> ""
+        }
+        if(getBoolPref("darkMode", true)){
+            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+        }else{
+            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
+            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
+            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+        }
+        val book: String
+        if ("," in chapter){
+            val temp = chapter.split(", ")
+            val temp2 = temp[0]
+            val temp4 = temp.subList(1, temp.lastIndex+1)
+            val temp3 = temp2.split(" ")
+            chapters.add(temp3.drop(1)[0])
+            for(ch in temp4){
+                chapters.add(ch)
+            }
+            val temp5 = temp3.subList(0, temp3.lastIndex)
+            book = temp5.joinToString(" ")
+        }else{
+            book = ""
+        }
+        when(iteration){
+            0->{
+                binding.psalmsBack.visibility = View.INVISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsNext.text=getText(R.string.scripture_home)
+                binding.psalmsNext.setOnClickListener {
+                    (activity as MainActivity).binding.bottomNav.isVisible = true
+                    (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                }
+                title = chapter
+                if(":" in chapter){
+                    val chapterSection = chapter.split(":")[0]
+                    val verseSection = chapter.split(":")[1]
+                    val verses = verseSection.split("–")
+                    val startVerse = verses[0]
+                    val endVerse = verses[1]
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/passages/${bookIDs[book]}.${chapterSection}.${startVerse}-${bookIDs[book]}.${chapterSection}.${endVerse}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }else{
+                    val temp = title.split(" ")
+                    val realChapter = temp[temp.lastIndex]
+                    val temp2 = temp.dropLast(1)
+                    val realBook = temp2.joinToString(" ")
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/${bookIDs[realBook]}.${realChapter}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }
+            }
+            1->{
+                binding.psalmsBack.visibility = View.INVISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsNext.text=getText(R.string.psalms_next)
+                binding.psalmsNext.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration+1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+                val currentChapter = chapters[iteration-1]
+                title = "$book $currentChapter"
+                if(":" in currentChapter){
+                    val chapterSection = currentChapter.split(":")[0]
+                    val verseSection = currentChapter.split(":")[1]
+                    val verses = verseSection.split("–")
+                    val startVerse = verses[0]
+                    val endVerse = verses[1]
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/passages/${bookIDs[book]}.${chapterSection}.${startVerse}-${bookIDs[book]}.${chapterSection}.${endVerse}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }else{
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/${bookIDs[book]}.${currentChapter}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }
+            }
+            in 2 until maxIteration ->{
+                binding.psalmsBack.visibility = View.VISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsBack.text = getText(R.string.psalms_back)
+                binding.psalmsNext.text=getText(R.string.psalms_next)
+                binding.psalmsBack.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration-1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+                binding.psalmsNext.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration+1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+                val currentChapter = chapters[iteration-1]
+                title = "$book $currentChapter"
+                if(":" in currentChapter){
+                    val chapterSection = currentChapter.split(":")[0]
+                    val verseSection = currentChapter.split(":")[1]
+                    val verses = verseSection.split("–")
+                    val startVerse = verses[0]
+                    val endVerse = verses[1]
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/passages/${bookIDs[book]}.${chapterSection}.${startVerse}-${bookIDs[book]}.${chapterSection}.${endVerse}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }else{
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/${bookIDs[book]}.${currentChapter}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }
+            }
+            maxIteration-> {
+                binding.psalmsBack.visibility = View.VISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsNext.text = getString(R.string.scripture_home)
+                binding.psalmsBack.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration - 1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+                binding.psalmsNext.setOnClickListener {
+                    (activity as MainActivity).binding.bottomNav.isVisible = true
+                    (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                }
+                val currentChapter = chapters[iteration-1]
+                title = "$book $currentChapter"
+                if(":" in currentChapter){
+                    val chapterSection = currentChapter.split(":")[0]
+                    val verseSection = currentChapter.split(":")[1]
+                    val verses = verseSection.split("–")
+                    val startVerse = verses[0]
+                    val endVerse = verses[1]
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/passages/${bookIDs[book]}.${chapterSection}.${startVerse}-${bookIDs[book]}.${chapterSection}.${endVerse}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }else{
+                    url = "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/${bookIDs[book]}.${currentChapter}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
+                }
+            }
+            else -> {
+                url = ""
+                title = ""
+            }
+        }
+        val act = activity as MainActivity
+        act.supportActionBar?.title = title
+        return url
+    }
+    fun getESVReferenceMCheyne(chapter: String, iteration: Int, maxIteration: Int):String{
+        val title : String
+        val url: String
+        val chapters = mutableListOf<String>()
+        if(getBoolPref("darkMode", true)){
+            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+        }else{
+            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
+            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
+            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+        }
+        val book: String
+        if ("," in chapter){
+            val temp = chapter.split(", ")
+            val temp2 = temp[0]
+            val temp4 = temp.subList(1, temp.lastIndex+1)
+            val temp3 = temp2.split(" ")
+            chapters.add(temp3.drop(1)[0])
+            for(ch in temp4){
+                chapters.add(ch)
+            }
+            val temp5 = temp3.subList(0, temp3.lastIndex)
+            book = temp5.joinToString(" ")
+        }else{
+            book = ""
+        }
+        when(iteration){
+            0->{
+                binding.psalmsBack.visibility = View.INVISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsNext.text=getText(R.string.scripture_home)
+                binding.psalmsNext.setOnClickListener {
+                    (activity as MainActivity).binding.bottomNav.isVisible = true
+                    (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                }
+                title = chapter
+                url = "https://api.esv.org/v3/passage/html/?q=$chapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
+            }
+            1->{
+                binding.psalmsBack.visibility = View.INVISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsNext.text=getText(R.string.psalms_next)
+                binding.psalmsNext.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration+1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+
+                val currentChapter = chapters[iteration-1]
+                title = "$book $currentChapter"
+                url = "https://api.esv.org/v3/passage/html/?q=${book}.$currentChapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
+            }
+            in 2 until maxIteration ->{
+                binding.psalmsBack.visibility = View.VISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsBack.text = getText(R.string.psalms_back)
+                binding.psalmsNext.text=getText(R.string.psalms_next)
+                binding.psalmsBack.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration-1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+                binding.psalmsNext.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration+1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+                val currentChapter = chapters[iteration-1]
+                title = "$book $currentChapter"
+                url = "https://api.esv.org/v3/passage/html/?q=${book}.$currentChapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
+            }
+            maxIteration-> {
+                binding.psalmsBack.visibility = View.VISIBLE
+                binding.psalmsNext.visibility = View.VISIBLE
+                binding.psalmsNext.text = getString(R.string.scripture_home)
+                binding.psalmsBack.setOnClickListener {
+                    val bundle = Bundle()
+                    bundle.putString("chapter", chapter)
+                    bundle.putBoolean("psalms", false)
+                    bundle.putInt("iteration", iteration - 1)
+                    (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                }
+                binding.psalmsNext.setOnClickListener {
+                    (activity as MainActivity).binding.bottomNav.isVisible = true
+                    (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                }
+                val currentChapter = chapters[iteration-1]
+                title = "$book $currentChapter"
+                url = "https://api.esv.org/v3/passage/html/?q=${book}.$currentChapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
+            }
+            else -> {
+                url = ""
+                title = ""
+            }
+        }
+        val act = activity as MainActivity
+        act.supportActionBar?.title = title
+        return url
     }
     fun getESVReference(chapter: String, psalms: Boolean, iteration: Int) : String {
         val title : String
@@ -121,7 +427,6 @@ class ScriptureViewer : Fragment() {
             binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
         }
         if(psalms){
-            log("CURRENT ITERATION $iteration")
             var day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             when(iteration){
                 1 -> {
@@ -193,15 +498,29 @@ class ScriptureViewer : Fragment() {
         act.supportActionBar?.title = title
         return url
     }
-    fun getReference(chapter: String, psalms: Boolean, iteration: Int) : String{
-        val title : String
-        var url: String
-        if (getStringPref("bibleVersion", "ESV") == "NASB"){
+    fun getReference(chapter: String, psalms: Boolean, iteration: Int) : String {
+        val title: String
+        var url: String = ""
+        val realChapter: String
+        val realBook: String
+        if (getStringPref("bibleVersion", "ESV") == "NASB") {
             setStringPref("bibleVersion", "NASB20")
             updateFS("bibleVersion", "NASB20")
         }
-        val versionId: String? = when (getStringPref("bibleVersion", "ESV")){
-            "ESV" ->  bibleIDs["ESV"]
+        if (getBoolPref("darkMode", true)) {
+            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+        } else {
+            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
+            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
+            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+        }
+
+        val versionId: String? = when (getStringPref("bibleVersion", "ESV")) {
+            "ESV" -> bibleIDs["ESV"]
             "CSB" -> bibleIDs["CSB"]
             "AMP" -> bibleIDs["AMP"]
             "KJV" -> bibleIDs["KJV"]
@@ -210,18 +529,7 @@ class ScriptureViewer : Fragment() {
             else -> ""
         }
         url = "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/"
-        if(getBoolPref("darkMode", true)){
-            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
-            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
-            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
-            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
-        }else{
-            binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
-            binding.psalmsNext.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
-            binding.psalmsBack.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
-            binding.psalmsBack.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
-        }
-        if(psalms) {
+        if (psalms) {
             log("CURRENT ITERATION $iteration")
             var day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             when (iteration) {
@@ -279,10 +587,10 @@ class ScriptureViewer : Fragment() {
             }
             url += "PSA.$day?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false"
             title = "Psalm $day"
-        }else{
+        } else {
             binding.psalmsBack.visibility = View.INVISIBLE
             binding.psalmsNext.visibility = View.VISIBLE
-            binding.psalmsNext.text=getText(R.string.scripture_home)
+            binding.psalmsNext.text = getText(R.string.scripture_home)
             binding.psalmsNext.setOnClickListener {
                 (activity as MainActivity).binding.bottomNav.isVisible = true
                 (activity as MainActivity).navController.navigate(R.id.navigation_home)

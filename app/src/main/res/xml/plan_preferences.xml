@@ -3,9 +3,15 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
         app:key="planType"
+        app:title="@string/title_plan_type"
+        app:summary="@string/summary_plan_type"
+        app:allowDividerBelow="true"/>
+    <Preference
+        app:key="planMethod"
         app:title="@string/title_reading_type"
         app:summary="@string/summary_reading_type"
-        app:allowDividerBelow="true"/>
+        app:allowDividerBelow="true"
+        app:allowDividerAbove="true"/>
     <CheckBoxPreference
         app:key="psalms"
         app:title="@string/title_psalms"

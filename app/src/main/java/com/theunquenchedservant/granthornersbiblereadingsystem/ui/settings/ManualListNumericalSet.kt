@@ -19,6 +19,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
@@ -47,17 +48,27 @@ class ManualListNumericalSet: Fragment() {
         }
         dayPicker.minValue = 1
         dayPicker.maxValue = 9999
-        dayPicker.value = getIntPref("currentDayIndex", 0) + 1
+        val prefix = when(getStringPref("planSystem", "pgh")){
+            "pgh" ->""
+            "mcheyne"->"mcheyne_"
+            else->""
+        }
+        val homeId = when(getStringPref("planSystem", "pgh")){
+            "pgh"->R.id.navigation_home
+            "mcheyne"->R.id.navigation_home_mcheyne
+            else->R.id.navigation_home
+        }
+        dayPicker.value = getIntPref("${prefix}currentDayIndex", 0) + 1
         selectButton.setOnClickListener {
             val alert             = AlertDialog.Builder(requireContext())
             alert.setTitle("Set Day?")
             alert.setMessage("Are you sure you want to set the current day of reading to ${dayPicker.value}")
             alert.setPositiveButton("Yes") { dialogInterface, _ ->
-                setIntPref("currentDayIndex", dayPicker.value)
-                updateFS("currentDayIndex", dayPicker.value)
+                setIntPref("${prefix}currentDayIndex", dayPicker.value)
+                updateFS("${prefix}currentDayIndex", dayPicker.value)
                 dialogInterface.dismiss()
                 Toast.makeText(context, "Changed current day of reading", Toast.LENGTH_LONG).show()
-                mainActivity.navController.navigate(R.id.navigation_home)
+                mainActivity.navController.navigate(homeId)
             }
             alert.setNeutralButton("Cancel"){dialogInterface, _ ->
                 dialogInterface.dismiss()

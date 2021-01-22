@@ -53,6 +53,7 @@
     <string name="title_calendar_method">Calendar Based Method</string>
     <string name="title_account_settings">Account Settings</string>
     <string name="title_confirm_delete">WARNING! PERMANENT!</string>
+    <string name="title_plan_type">Change Reading Plan</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -80,7 +81,7 @@
     <string name="summary_horner_method">Each list is independent of the other, and will go at your own pace. This is the traditional Grant Horner system.</string>
     <string name="summary_numerical_method">All lists are connected, partial completion is possible, but all lists will advance at once.</string>
     <string name="summary_calendar_method">All lists are connected, and will advance whether you complete all the readings or not. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system.</string>
-
+    <string name="summary_plan_type">Select The Reading Plan system you want to use!</string>
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>
     <string name="scripture_done">Done</string>
@@ -111,14 +112,19 @@
 
     <string name="title_pgh_list1">The Gospels</string>
     <string name="title_pgh_list2">The Pentateuch</string>
-    <string name="title_pgh_list3">Epistles 1</string>
-    <string name="title_pgh_list4">Epistles 2</string>
+    <string name="title_pgh_list3">Epistles I</string>
+    <string name="title_pgh_list4">Epistles II</string>
     <string name="title_pgh_list5">Poetry</string>
     <string name="title_pgh_list6">Psalms</string>
     <string name="title_pgh_list7">Proverbs</string>
     <string name="title_pgh_list8">History</string>
     <string name="title_pgh_list9">Prophets</string>
     <string name="title_pgh_list10">Acts</string>
+
+    <string name="title_mcheyne_list1">Family I</string>
+    <string name="title_mcheyne_list2">Family II</string>
+    <string name="title_mcheyne_list3">Secret I</string>
+    <string name="title_mcheyne_list4">Secret II</string>
 
     <string name="not_done">Mark All Done</string>
     <string name="done">Already Done For Today!</string>

@@ -148,13 +148,14 @@ object Marker {
                     }
         }
     }
-    fun update_reading_statistic(listName: String): String{
+    fun update_reading_statistic(listName: String, prefix: String =""): String{
         val listId= getListId(listName)
+
         val list = App.applicationContext().resources.getStringArray(listId)
         val list_index = when(getStringPref("planType", "horner")){
             "horner"->getIntPref(listName)
             "numerical"->{
-                var index = getIntPref("currentDayIndex")
+                var index = getIntPref("${prefix}currentDayIndex")
                 while(index >= list.size){
                     index -= list.size
                 }
@@ -219,16 +220,27 @@ object Marker {
         alert.setMessage(message)
         alert.show()
     }
-    fun markAll() {
-        for (i in 1..10) {
-            update_reading_statistic("list${i}")
-            setIntPref("list${i}Done", 1)
-            val doneDaily = getIntPref("list${i}DoneDaily")
+
+    fun markAll(planType: String = "") {
+        val doneMax = when (planType){
+            "pgh"->10
+            "mcheyne"->4
+            else->10
+        }
+        val prefix = when(planType){
+            "pgh"->""
+            "mcheyne"->"mcheyne_"
+            else->""
+        }
+        for (i in 1..doneMax) {
+            update_reading_statistic("${prefix}list${i}", prefix)
+            setIntPref("${prefix}list${i}Done", 1)
+            val doneDaily = getIntPref("${prefix}list${i}DoneDaily")
             if(doneDaily == 0){
-                setIntPref("list${i}DoneDaily", 1)
+                setIntPref("${prefix}list${i}DoneDaily", 1)
             }
         }
-        setIntPref("listsDone", 10)
+        setIntPref("listsDone", doneMax)
         if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
             if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){
                 setIntPref("graceTime", 1)
@@ -262,16 +274,16 @@ object Marker {
         if (isLogged != null) {
             val db = FirebaseFirestore.getInstance()
             val updateValues = mutableMapOf<String, Any>()
-            for (i in 1..10) {
-                updateValues["list${i}Done"] = 1
-                val doneDaily = getIntPref("list${i}DoneDaily")
+            for (i in 1..doneMax) {
+                updateValues["${prefix}list${i}Done"] = 1
+                val doneDaily = getIntPref("${prefix}list${i}DoneDaily")
                 if(doneDaily == 0){
-                    setIntPref("list${i}DoneDaily", 1)
+                    setIntPref("${prefix}list${i}DoneDaily", 1)
                 }
             }
             updateValues["graceTime"] = getIntPref("graceTime")
             updateValues["isGrace"] = getBoolPref("isGrace")
-            updateValues["listsDone"] = 10
+            updateValues["listsDone"] = doneMax
             updateValues["holdStreak"] = getIntPref("holdStreak")
             updateValues["dateChecked"] = getDate(0,false)
             updateValues["dailyStreak"] = getIntPref("dailyStreak")
@@ -287,7 +299,12 @@ object Marker {
                     }
         }
     }
-    fun markSingle(cardDone: String) {
+    fun markSingle(cardDone: String, planSystem: String="") {
+        val doneMax = when(planSystem){
+            "pgh"->10
+            "mcheyne"->4
+            else->10
+        }
         val cardDoneDaily = "${cardDone}Daily"
         val listName = cardDone.replace("Done", "")
         val db = FirebaseFirestore.getInstance()
@@ -295,10 +312,8 @@ object Marker {
         val listDoneDaily = getIntPref(cardDoneDaily)
         val listsDone = if (listDoneDaily == 0){
             setIntPref(cardDoneDaily, 1)
-            log("Should be increasing lists done")
             increaseIntPref("listsDone", 1)
         }else{
-            log("should not be increasing lists done")
             getIntPref("listsDone")
         }
         log("Lists Done is ${getIntPref("listsDone")}")
@@ -306,7 +321,7 @@ object Marker {
             update_reading_statistic(listName)
             setIntPref(cardDone, 1)
             setStringPref("dateChecked", getDate(0, false))
-            if (allowPartial || listsDone == 10) {
+            if (allowPartial || listsDone == doneMax) {
                 if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
                     if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){
                         setIntPref("graceTime", 1)

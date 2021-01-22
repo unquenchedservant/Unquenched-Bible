@@ -11,6 +11,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
 class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
@@ -24,17 +25,22 @@ class RemindReceiver : BroadcastReceiver() {
                     log("lists done so far = $check")
                     val allowPartial = getBoolPref("allow_partial_switch")
                     log("Allow partial is $allowPartial")
+                    val doneMax = when(getStringPref("planSystem", "pgh")){
+                        "pgh"->10
+                        "mcheyne"->4
+                        else->10
+                    }
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     when (check) {
                         0 -> {
                             deliverNotification(context, false)
                         }
-                        in 0..9 -> {
+                         in 1 until doneMax -> {
                             mNotificationManager?.cancel(1)
                             mNotificationManager?.cancel(2)
                             deliverNotification(context, true)
                         }
-                        10 ->{
+                        doneMax ->{
                             log("All lists done, not sending notification")
                         }
                     }

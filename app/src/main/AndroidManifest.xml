@@ -9,7 +9,7 @@
         android:allowBackup="true"
         android:fullBackupContent="@xml/backup_descriptor"
         android:icon="@mipmap/ic_launcher"
-        android:label="PGH Bible System"
+        android:label="Unquenched Bible"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:name=".App"
@@ -38,7 +38,7 @@
             android:theme="@style/licensesTheme"/>
         <activity
             android:name=".MainActivity"
-            android:label="PGH Bible System"
+            android:label="Unquenched Bible"
             android:configChanges="keyboardHidden|screenLayout|orientation"
             android:screenOrientation="portrait"
             android:launchMode="singleTop">
