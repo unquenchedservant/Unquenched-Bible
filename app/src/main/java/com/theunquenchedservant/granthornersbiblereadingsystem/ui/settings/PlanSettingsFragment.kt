@@ -49,8 +49,14 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
             }
         }
         val ps = getBoolPref("psalms")
-        if(ps){
-            psalms!!.setDefaultValue(true)
+        if (getStringPref("planSystem", "pgh") == "pgh") {
+            if (ps) {
+                psalms!!.setDefaultValue(true)
+            }
+        }else{
+            setBoolPref("psalms", false)
+            psalms!!.setDefaultValue(false)
+            psalms.isEnabled = false
         }
         val hold = getBoolPref("holdPlan")
         if(hold){
