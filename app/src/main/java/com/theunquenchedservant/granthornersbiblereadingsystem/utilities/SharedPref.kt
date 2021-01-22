@@ -72,6 +72,11 @@ object SharedPref {
             results["list${i}Done"] = getIntPref("list${i}Done")
             results["list${i}DoneDaily"] = getIntPref("list${i}DoneDaily")
         }
+        for(i in 1..4){
+            results["mcheyne_list$i"] = getIntPref("mcheyne_list$i")
+            results["mcheyne_${i}Done"] = getIntPref("mcheyne_${i}Done")
+            results["mcheyne_${i}DoneDaily"] = getIntPref("mcheyne_${i}DoneDaily")
+        }
         results["listsDone"] = getIntPref("listsDone")
         results["currentStreak"] = getIntPref("currentStreak")
         results["dailyStreak"] = getIntPref("dailyStreak")
@@ -82,6 +87,7 @@ object SharedPref {
         results["graceTime"] = getIntPref("graceTime")
         results["isGrace"] = getBoolPref("isGrace")
         results["currentDayIndex"] = getIntPref("currentDayIndex")
+        results["mcheyne_currentDayIndex"] = getIntPref("mcheyne_currentDayIndex")
         results["grantHorner"] = getBoolPref("grantHorner", true)
         results["numericalDay"] = getBoolPref("numericalDay", false)
         results["calendarDay"] = getBoolPref("calendarDay", false)
@@ -166,6 +172,11 @@ object SharedPref {
                 updateIntPref(data, "list${i}Done")
                 updateIntPref(data, "list${i}DoneDaily")
             }
+            for (i in 1..4){
+                updateIntPref(data, "mcheyne_list$i")
+                updateIntPref(data, "mcheyne_list$i")
+                updateIntPref(data, "mcheyne_list$i")
+            }
             updateIntPref(data, "dailyStreak")
             updateIntPref(data, "currentStreak")
             updateIntPref(data, "maxStreak")
@@ -188,6 +199,7 @@ object SharedPref {
             updateIntPref(data, "new_amount_read")
             updateIntPref(data, "bible_amount_read")
             updateIntPref(data, "total_chapters_read")
+            updateIntPref(data, "mcheyne_currentDayIndex")
             updateIntPref(data, "currentDayIndex")
             updateBoolPref(data, "grantHorner")
             updateBoolPref(data, "numericalDay")

@@ -16,7 +16,19 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.c
 
 class DailyCheck : BroadcastReceiver() {
     private val isLogged = FirebaseAuth.getInstance().currentUser
+
     override fun onReceive(context: Context, intent: Intent) {
+        val planSystem = getStringPref("planSystem", "pgh")
+        val doneMax = when(planSystem){
+            "pgh"->10
+            "mcheyne"->4
+            else->10
+        }
+        val prefix = when(planSystem){
+            "pgh"->""
+            "mcheyne"->"mcheyne_"
+            else->""
+        }
         val planType = getStringPref("planType", "horner")
         val db = FirebaseFirestore.getInstance()
         var resetStreak  = false
@@ -52,44 +64,44 @@ class DailyCheck : BroadcastReceiver() {
                 }
             }
         }
-        for(i in 1..10){
+        for(i in 1..doneMax){
             if(planType == "horner") {
-                when (getIntPref("list${i}Done")) {
+                when (getIntPref("${prefix}list${i}Done")) {
                     1 -> {
-                        resetList("list$i", "list${i}Done")
+                        resetList("${prefix}list$i", "${prefix}list${i}Done")
                     }
                 }
-                when(getIntPref("list${i}DoneDaily")){
+                when(getIntPref("${prefix}list${i}DoneDaily")){
                     1->{
-                        setIntPref("list${i}DoneDaily", 0)
+                        setIntPref("${prefix}list${i}DoneDaily", 0)
                     }
                 }
             }else if(planType == "numerical"){
-                setIntPref("list${i}Done", 0)
+                setIntPref("${prefix}list${i}Done", 0)
             }else if(planType == "calendar"){
-                setIntPref("list${i}Done", 0)
+                setIntPref("${prefix}list${i}Done", 0)
             }
         }
 
         if(planType== "numerical" && resetStreak) {
-            increaseIntPref("currentDayIndex", 1)
+            increaseIntPref("${prefix}currentDayIndex", 1)
         }
 
-        if(!getBoolPref("holdPlan") || getIntPref("listsDone") == 10) {
+        if(!getBoolPref("holdPlan") || getIntPref("listsDone") == doneMax) {
             setIntPref("listsDone", 0)
         }
 
         if(isLogged != null) {
             val data = mutableMapOf<String, Any>()
-            for (i in 1..10){
+            for (i in 1..doneMax){
                 if(planType == "horner") {
-                    data["list$i"] = getIntPref("list$i")
+                    data["${prefix}list$i"] = getIntPref("${prefix}list$i")
                 }
-                data["list${i}Done"] = getIntPref("list${i}Done")
-                data["list${i}DoneDaily"] = getIntPref("list${i}DoneDaily")
+                data["${prefix}list${i}Done"] = getIntPref("${prefix}list${i}Done")
+                data["${prefix}list${i}DoneDaily"] = getIntPref("${prefix}list${i}DoneDaily")
             }
             if (planType=="numerical" && resetStreak){
-                data["currentDayIndex"] = getIntPref("currentDayIndex")
+                data["${prefix}currentDayIndex"] = getIntPref("${prefix}currentDayIndex")
             }
             data["listsDone"] = getIntPref("listsDone")
             if(resetCurrent) {
