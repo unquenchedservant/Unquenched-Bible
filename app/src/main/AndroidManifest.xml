@@ -38,7 +38,7 @@
             android:theme="@style/licensesTheme"/>
         <activity
             android:name=".MainActivity"
-            android:label="PGH Bible System"
+            android:label="Unquenched Bible"
             android:configChanges="keyboardHidden|screenLayout|orientation"
             android:screenOrientation="portrait"
             android:launchMode="singleTop">
