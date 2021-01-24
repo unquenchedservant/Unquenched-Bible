@@ -1,10 +1,12 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
+import android.widget.Switch
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.DropDownPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import androidx.preference.SwitchPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
@@ -23,6 +25,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         val partialStreakAllow : Preference? = findPreference("allowPartial")
         val translation: DropDownPreference? = findPreference("bibleTranslation")
         val planType: Preference? = findPreference("planType")
+        val weekendMode: SwitchPreference? = findPreference("weekendMode")
         translation!!.setEntries(R.array.translationArray)
         translation.setEntryValues(R.array.translationArray)
         val currentTranslation = getStringPref("bibleVersion", "ESV")
@@ -32,7 +35,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         planMethod!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${getStringPref(name="planType", defaultValue="horner").capitalize(Locale.ROOT)}"
         planMethod.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
         translation.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24, mainActivity.theme)
-        when (getStringPref("planType", "horner")){
+        when (getStringPref(name="planType", defaultValue="horner")){
             "horner"->{
                 holdPlan!!.isEnabled = true
                 partialStreakAllow!!.isEnabled = true
@@ -79,6 +82,11 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
                 setBoolPref(name="holdPlan", value=true, updateFS=true)
             }
             true
+        }
+        weekendMode!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, value ->
+            val boolValue = value as Boolean
+            setBoolPref(name="weekendMode", value=boolValue, updateFS=true)
+            false
         }
         psalms!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(ps){
