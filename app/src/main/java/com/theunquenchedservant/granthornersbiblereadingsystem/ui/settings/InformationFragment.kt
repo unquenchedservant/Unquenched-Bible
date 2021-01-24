@@ -24,9 +24,13 @@ class InformationFragment : PreferenceFragmentCompat() {
         val currentVersion: Preference? = findPreference("currentVersion")
         val discord: Preference? = findPreference("discordLink")
         val mailchimp: Preference? = findPreference("mailchimp")
-
+        appHelp!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible"))
+            startActivity(i)
+            false
+        }
         systemInfo!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("http://grant-horner-bible-reading-plan-pdf.weebly.com/uploads/4/5/9/7/45977741/professor-grant-horners-bible-reading-system.pdf"))
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/the-reading-plans/"))
             startActivity(i)
             false
         }

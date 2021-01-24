@@ -40,7 +40,7 @@ class PlanSystemFragment : PreferenceFragmentCompat() {
             true
         }
         moreInfo!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://unquenched.bible/"))
+            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/the-reading-plans/"))
             startActivity(i)
             false
         }
