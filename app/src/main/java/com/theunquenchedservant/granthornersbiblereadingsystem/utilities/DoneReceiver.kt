@@ -11,17 +11,17 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 
 class DoneReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
-        val doneMax = when(SharedPref.getStringPref("planSystem", "pgh")){
+        val doneMax = when(getStringPref(name="planSystem", defaultValue="pgh")){
             "pgh"->10
             "mcheyne"->4
             else->10
         }
-        when(getIntPref("listsDone")) {
+        when(getIntPref(name="listsDone")) {
             in 0 until doneMax -> {
-                if(getStringPref("planSystem", "pgh") == "pgh") {
+                if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh") {
                     markAll()
                 }else{
-                    markAll("mcheyne")
+                    markAll(planType="mcheyne")
                 }
                 Toast.makeText(context, "Lists Marked!", Toast.LENGTH_LONG)
                         .show()

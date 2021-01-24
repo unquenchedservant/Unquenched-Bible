@@ -29,7 +29,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
         hardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetBook(book!!, testament!!, true)
+                resetBook(book!!, testament!!, hardReset = true)
                 dialog.dismiss()
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->

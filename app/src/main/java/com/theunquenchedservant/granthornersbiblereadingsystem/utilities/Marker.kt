@@ -19,8 +19,8 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
 import java.util.*
 
 
@@ -38,10 +38,10 @@ object Marker {
             "list8"-> R.array.list_8
             "list9"-> R.array.list_9
             "list10"-> R.array.list_10
-            "mcheyne_list1"->R.array.mcheyne_list1
-            "mcheyne_list2"->R.array.mcheyne_list2
-            "mcheyne_list3"->R.array.mcheyne_list3
-            "mcheyne_list4"->R.array.mcheyne_list4
+            "mcheynelist1"->R.array.mcheyne_list1
+            "mcheynelist2"->R.array.mcheyne_list2
+            "mcheynelist3"->R.array.mcheyne_list3
+            "mcheynelist4"->R.array.mcheyne_list4
             else-> 0
         }
     }
@@ -73,64 +73,52 @@ object Marker {
         alert.setMessage(message)
         alert.show()
     }
-    private fun updateStatistics(codedBook: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int){
+    private fun updateStatistics(book: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int){
         val updateValues = mutableMapOf<String, Any>()
-        val bookName = bookNames[codedBook]
-        if (getIntPref("${codedBook}_chapters_read") == bookChaps){
-            updateValues["${codedBook}_chapters_read"] = 0
-            setIntPref("${codedBook}_chapters_read", 0)
-            setIntPref("${codedBook}_amount_read", getIntPref("${codedBook}_amount_read") + 1)
-            updateValues["${codedBook}_amount_read"] = getIntPref("${codedBook}_amount_read")
+        val bookName = bookNames[book]
+        if (getIntPref(name="${book}ChaptersRead") == bookChaps){
+            updateValues["${book}ChaptersRead"] = setIntPref(name="${book}ChaptersRead", value=0)
+            updateValues["${book}AmountRead"] = increaseIntPref(name="${book}AmountRead",value=1)
             for (i in 1..bookChaps){
-                updateValues["${codedBook}_${i}_read"] = false
-                setBoolPref("${codedBook}_${i}_read", false)
+                updateValues["${book}${i}Read"] = setBoolPref(name="${book}${i}Read", value=false)
             }
-            if(!getBoolPref("${codedBook}_done_testament")) {
-                updateValues["${codedBook}_done_testament"] = true
-                setBoolPref("${codedBook}_done_testament", true)
-                if (getIntPref("${testament}_chapters_read") == testamentChapters) {
-                    updateValues["${testament}_chapters_read"]
-                    setIntPref("${testament}_chapters_read", 0)
+            if(!getBoolPref(name="${book}DoneTestament")) {
+                updateValues["${book}DoneTestament"] = setBoolPref(name="${book}DoneTestament", value=true)
+                if (getIntPref(name="${testament}ChaptersRead") == testamentChapters) {
+                    updateValues["${testament}ChaptersRead"] = setIntPref(name="${testament}ChaptersRead", value=0)
                     for(item in bookNames){
-                        updateValues["${item}_done_testament"] = false
-                        setBoolPref("${item}_done_testament", false)
+                        updateValues["${item}DoneTestament"] = setBoolPref(name="${item}DoneTestament", value=false)
                     }
-                    setIntPref("${testament}_amount_read", getIntPref("${testament}_amount_read") + 1)
-                    updateValues["${testament}_amount_read"] = getIntPref("${testament}_amount_read")
+                    updateValues["${testament}AmountRead"] = increaseIntPref(name="${testament}AmountRead",  value=1)
                 }
             }
-            if(!getBoolPref("${codedBook}_done_whole")){
-                updateValues["${codedBook}_done_whole"] = true
-                setBoolPref("${codedBook}_done_whole", true)
-                if(getIntPref("total_chapters_read") == 1189){
-                    updateValues["total_chapters_read"] = 0
-                    setIntPref("total_chapters_read", 0)
+            if(!getBoolPref(name="${book}DoneWhole")){
+                updateValues["${book}DoneWhole"] = setBoolPref(name="${book}DoneWhole", value=true)
+                if(getIntPref(name="totalChaptersRead") == 1189){
+                    updateValues["totalChaptersRead"] = setIntPref(name="totalChaptersRead", value=0)
                     for(item in bookNames){
-                        updateValues["${item}_done_whole"] = false
-                        setBoolPref("${item}_done_whole", false)
+                        updateValues["${item}DoneWhole"] = setBoolPref(name="${item}DoneWhole", value=false)
                     }
-                    setIntPref("bible_amount_read", getIntPref("bible_amount_read") + 1)
-                    updateValues["bible_amount_read"] = getIntPref("bible_amount_read")
+                    updateValues["bibleAmountRead"] = increaseIntPref(name="bibleAmountRead", value=1)
                 }
             }
         }
-        setIntPref("${codedBook}_chapters_read", getIntPref("${codedBook}_chapters_read") + 1)
-        setBoolPref("${codedBook}_${chapter}_read", true)
-        setIntPref("${codedBook}_${chapter}_amount_read", getIntPref("${codedBook}_${chapter}_amount_read") + 1)
-        if(!getBoolPref("${codedBook}_done_testament")){
-            setIntPref("${testament}_chapters_read", getIntPref("${testament}_chapters_read") + 1)
-            updateValues["${testament}_chapters_read"] = getIntPref("${testament}_chapters_read")
+        updateValues["${book}ChaptersRead"] = increaseIntPref(name="${book}ChaptersRead",value=1)
+        updateValues["${book}${chapter}Read"] = setBoolPref(name="${book}${chapter}Read", value=true)
+        updateValues["${book}${chapter}AmountRead"] = increaseIntPref(name="${book}${chapter}AmountRead", value=1)
+        if(!getBoolPref(name="${book}DoneTestament")){
+            updateValues["${testament}ChaptersRead"] = increaseIntPref(name="${testament}ChaptersRead", value=1)
         }
-        if(!getBoolPref("${codedBook}_done_whole")){
-            updateValues["totalChaptersRead"] = increaseIntPref(name="total_chapters_read", value=1)
+        if(!getBoolPref("${book}DoneWhole")){
+            updateValues["totalChaptersRead"] = increaseIntPref(name="totalChaptersRead", value=1)
         }
-        if (getIntPref("${codedBook}_chapters_read") == bookChaps){
+        if (getIntPref("${book}ChaptersRead") == bookChaps){
             bibleAlertBuilder("book", bookName!!)
         }
-        if (getIntPref("${testament}_chapters_read") == testamentChapters){
+        if (getIntPref("${testament}ChaptersRead") == testamentChapters){
             bibleAlertBuilder("testament", testament.capitalize(Locale.ROOT))
         }
-        if (getIntPref("total_chapters_read") == 1189){
+        if (getIntPref("totalChaptersRead") == 1189){
             bibleAlertBuilder("bible", "bible")
         }
         if (isLogged != null) {
@@ -145,13 +133,13 @@ object Marker {
                     }
         }
     }
-    private fun updateReadingStatistic(listName: String, prefix: String =""){
+    private fun updateReadingStatistic(listName: String){
         val listId= getListId(listName)
         val list = App.applicationContext().resources.getStringArray(listId)
-        val listIndex = when(getStringPref("planType", "horner")){
+        val listIndex = when(getStringPref(name="planType", defaultValue="horner")){
             "horner"->getIntPref(listName)
             "numerical"->{
-                var index = getIntPref("${prefix}currentDayIndex")
+                var index = if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh") getIntPref(name="currentDayIndex") else getIntPref(name="mcheyneCurrentDayIndex")
                 while(index >= list.size){
                     index -= list.size
                 }
@@ -166,16 +154,16 @@ object Marker {
             }
             else->getIntPref(listName)
         }
-        if(listName == "list6" && getBoolPref("psalms")) {
+        if(listName == "list6" && getBoolPref(name="psalms")) {
             val codedBook = "psalm"
             val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             if (day != 31) {
                 val bookChapters = 150
-                if (!getBoolPref(name="psalm_${day}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day)
-                if (!getBoolPref(name="psalm_${day+30}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 30)
-                if (!getBoolPref(name="psalm_${day+60}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 60)
-                if (!getBoolPref(name="psalm_${day+90}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 90)
-                if (!getBoolPref(name="psalm_${day+120}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 120)
+                if (!getBoolPref(name="psalm${day}Read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day)
+                if (!getBoolPref(name="psalm${day+30}Read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 30)
+                if (!getBoolPref(name="psalm${day+60}Read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 60)
+                if (!getBoolPref(name="psalm${day+90}Read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 90)
+                if (!getBoolPref(name="psalm${day+120}Read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 120)
             }
         }else{
             val reading = list[listIndex]
@@ -213,17 +201,21 @@ object Marker {
             "mcheyne"->4
             else->10
         }
-        val prefix = when(planType){
-            "pgh"->""
-            "mcheyne"->"mcheyne_"
-            else->""
-        }
         for (i in 1..doneMax) {
-            updateReadingStatistic(listName="${prefix}list${i}", prefix)
-            setIntPref(name="${prefix}list${i}Done", value=1)
-            val doneDaily = getIntPref(name="${prefix}list${i}DoneDaily")
-            if(doneDaily == 0){
-                setIntPref(name="${prefix}list${i}DoneDaily", value=1)
+            if(planType == "pgh"){
+                updateReadingStatistic(listName="list${i}")
+                setIntPref(name="list${i}Done", value=1)
+                val doneDaily = getIntPref(name="list${i}DoneDaily")
+                if(doneDaily == 0){
+                    setIntPref(name="list${i}DoneDaily", value=1)
+                }
+            }else{
+                updateReadingStatistic(listName="mcheyneList${i}")
+                setIntPref(name="mcheyneList${i}Done", value=1)
+                val doneDaily = getIntPref("mcheyneList${i}DoneDaily")
+                if(doneDaily == 0){
+                    setIntPref(name="mcheyneList${i}DoneDaily", value=1)
+                }
             }
         }
         setIntPref("listsDone", doneMax)
@@ -261,10 +253,22 @@ object Marker {
             val db = FirebaseFirestore.getInstance()
             val updateValues = mutableMapOf<String, Any>()
             for (i in 1..doneMax) {
-                updateValues["${prefix}list${i}Done"] = 1
-                val doneDaily = getIntPref("${prefix}list${i}DoneDaily")
+                if(planType == "pgh"){
+                    updateValues["list${i}Done"] = 1
+                }else{
+                    updateValues["mcheyneList${i}Done"] = 1
+                }
+                val doneDaily = if(planType == "pgh"){
+                    getIntPref("list${i}DoneDaily")
+                }else{
+                    getIntPref("mcheyneList${i}DoneDaily")
+                }
                 if(doneDaily == 0){
-                    setIntPref("${prefix}list${i}DoneDaily", 1)
+                    if(planType == "pgh"){
+                        setIntPref("list${i}DoneDaily", 1)
+                    }else{
+                        setIntPref("mcheyneList${i}DoneDaily", 1)
+                    }
                 }
             }
             updateValues["graceTime"] = getIntPref("graceTime")
@@ -294,7 +298,7 @@ object Marker {
         val cardDoneDaily = "${cardDone}Daily"
         val listName = cardDone.replace("Done", "")
         val db = FirebaseFirestore.getInstance()
-        val allowPartial = getBoolPref("allow_partial_switch")
+        val allowPartial = getBoolPref("allowPartial")
         val listDoneDaily = getIntPref(cardDoneDaily)
         val listsDone = if (listDoneDaily == 0){
             setIntPref(cardDoneDaily, 1)

@@ -5,15 +5,13 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.preference.DropDownPreference
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
-import com.google.firebase.auth.FirebaseAuth
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
+import java.util.*
 
 class PlanSettingsFragment: PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -21,17 +19,17 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         val mainActivity = activity as MainActivity
         val planMethod: Preference? = findPreference("planMethod")
         val psalms: Preference? = findPreference("psalms")
-        val holdPlan: Preference? = findPreference("holdTilAll")
-        val partialStreakAllow : Preference? = findPreference("allow_partial_switch")
+        val holdPlan: Preference? = findPreference("holdPlan")
+        val partialStreakAllow : Preference? = findPreference("allowPartial")
         val translation: DropDownPreference? = findPreference("bibleTranslation")
         val planType: Preference? = findPreference("planType")
         translation!!.setEntries(R.array.translationArray)
         translation.setEntryValues(R.array.translationArray)
-        var currentTranslation = getStringPref("bibleVersion", "ESV")
+        val currentTranslation = getStringPref("bibleVersion", "ESV")
         translation.value = currentTranslation
-        planType!!.summary = "${getString(R.string.summary_plan_type)} Current Plan: ${getStringPref("planSystem", "pgh").toUpperCase()}"
+        planType!!.summary = "${getString(R.string.summary_plan_type)} Current Plan: ${getStringPref(name="planSystem", defaultValue="pgh").toUpperCase(Locale.ROOT)}"
         planType.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-        planMethod!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${getStringPref("planType", "horner").capitalize()}"
+        planMethod!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${getStringPref(name="planType", defaultValue="horner").capitalize(Locale.ROOT)}"
         planMethod.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
         translation.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24, mainActivity.theme)
         when (getStringPref("planType", "horner")){
@@ -62,7 +60,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         if(hold){
             holdPlan.setDefaultValue(true)
         }
-        val partial = getBoolPref("allow_partial_switch")
+        val partial = getBoolPref("allowPartial")
         if(partial){
             partialStreakAllow!!.setDefaultValue(true)
         }
@@ -93,9 +91,9 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
 
         partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
             if(partial){
-                setBoolPref(name="allow_partial_switch", value=false, updateFS=true)
+                setBoolPref(name="allowPartial", value=false, updateFS=true)
             }else{
-                setBoolPref(name="allow_partial_switch", value=true, updateFS=true)
+                setBoolPref(name="allowPartial", value=true, updateFS=true)
             }
             true
         }

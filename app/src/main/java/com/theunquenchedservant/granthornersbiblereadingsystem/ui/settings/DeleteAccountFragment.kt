@@ -39,7 +39,7 @@ class DeleteAccountFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val dark = SharedPref.getBoolPref("darkMode", true)
+        val dark = SharedPref.getBoolPref(name="darkMode", defaultValue=true)
         val b = arguments
         val errorMsg: String
         val root = requireView()

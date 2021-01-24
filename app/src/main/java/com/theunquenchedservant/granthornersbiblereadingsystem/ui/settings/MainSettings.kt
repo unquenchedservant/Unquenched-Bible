@@ -41,7 +41,7 @@ class MainSettings : PreferenceFragmentCompat() {
         val darkMode: Preference? = findPreference("darkMode")
         val discord: Preference? = findPreference("discordLink")
         val mainActivity = activity as MainActivity
-        if (getStringPref("planType", "horner") == "calendar"){
+        if (getStringPref(name="planType", defaultValue="horner") == "calendar"){
             overrides!!.isEnabled = false
             overrides.summary = "This option is not available with the current reading method"
         }else{
@@ -53,7 +53,7 @@ class MainSettings : PreferenceFragmentCompat() {
 
         infoSupport!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
 
-        val dark = getBoolPref("darkMode", true)
+        val dark = getBoolPref(name="darkMode", defaultValue=true)
         darkMode!!.setDefaultValue(true)
         if(dark){
             darkMode.setDefaultValue(true)

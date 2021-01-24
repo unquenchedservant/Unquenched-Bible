@@ -30,15 +30,15 @@ class OnboardingFragmentThree : Fragment() {
     ): View {
 
         vieww = inflater.inflate(R.layout.fragment_onboarding_page_three, container, false)
-        val dark = getBoolPref("darkMode", true)
+        val dark = getBoolPref(name="darkMode", defaultValue=true)
         val title = vieww.findViewById<TextView>(R.id.title)
-        titleHorner = vieww.findViewById<TextView>(R.id.title_horner)
+        titleHorner = vieww.findViewById(R.id.title_horner)
         val summaryHorner = vieww.findViewById<TextView>(R.id.summary_horner)
         checkboxHorner = vieww.findViewById(R.id.checkbox_horner)
         val titleNumerical = vieww.findViewById<TextView>(R.id.title_numerical)
         val summaryNumerical = vieww.findViewById<TextView>(R.id.summary_numerical)
         checkboxNumerical = vieww.findViewById(R.id.checkbox_numerical)
-        titleCalendar = vieww.findViewById<TextView>(R.id.title_calendar)
+        titleCalendar = vieww.findViewById(R.id.title_calendar)
         val summaryCalendar = vieww.findViewById<TextView>(R.id.summary_calendar)
         checkboxCalendar = vieww.findViewById(R.id.checkbox_calendar)
         if(dark){

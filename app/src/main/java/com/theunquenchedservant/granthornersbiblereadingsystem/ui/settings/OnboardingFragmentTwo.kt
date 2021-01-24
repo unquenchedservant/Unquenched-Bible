@@ -27,7 +27,7 @@ class OnboardingFragmentTwo : Fragment() {
             savedInstanceState: Bundle?
     ): View {
        val view = inflater.inflate(R.layout.fragment_onboarding_page_two, container, false)
-        val dark = getBoolPref("darkMode", true)
+        val dark = getBoolPref(name="darkMode", defaultValue=true)
         val title = view.findViewById<TextView>(R.id.title)
         val titlePgh = view.findViewById<TextView>(R.id.title_pgh)
         val summaryPgh = view.findViewById<TextView>(R.id.summary_pgh)
@@ -65,13 +65,13 @@ class OnboardingFragmentTwo : Fragment() {
             val check = it as CheckBox
             if(check.isChecked){
                 setStringPref(name="planSystem", value="pgh")
-                setBoolPref(name="pgh_system", value=true)
-                setBoolPref(name="mcheyne_system", value=false)
+                setBoolPref(name="pghSystem", value=true)
+                setBoolPref(name="mcheyneSystem", value=false)
                 setBoolPref(name="onboardOneDone", value=true)
                 checkboxMcheyne.isChecked = false
             }else{
                 setStringPref(name="planSystem", value="")
-                setBoolPref(name="pgh_system", value=false)
+                setBoolPref(name="pghSystem", value=false)
                 setBoolPref(name="onboardOneDone", value=false)
             }
         }
@@ -79,13 +79,13 @@ class OnboardingFragmentTwo : Fragment() {
             val check = it as CheckBox
             if(check.isChecked){
                 setStringPref(name="planSystem", value="mcheyne")
-                setBoolPref(name="mcheyne_system", value=true)
-                setBoolPref(name="pgh_system", value=false)
+                setBoolPref(name="mcheyneSystem", value=true)
+                setBoolPref(name="pghSystem", value=false)
                 setBoolPref(name="onboardOneDone", value=true)
                 checkboxPgh.isChecked = false
             }else{
                 setStringPref(name="planSystem", value="")
-                setBoolPref(name="mcheyne_system", value=false)
+                setBoolPref(name="mcheyneSystem", value=false)
                 setBoolPref(name="onboardOneDone", value=false)
             }
         }

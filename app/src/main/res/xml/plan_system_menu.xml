@@ -2,12 +2,12 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <CheckBoxPreference
-        app:key="pgh_system"
+        app:key="pghSystem"
         app:title="Grant Horner System"
         app:summary="The 10 list system made by Professor Grant Horner."
         app:allowDividerBelow="true"/>
     <CheckBoxPreference
-        app:key="mcheyne_system"
+        app:key="mcheyneSystem"
         app:title="M'Cheyne System"
         app:summary="The 4 list system made by Robert Murray M'Cheyne."
         app:allowDividerAbove="true"

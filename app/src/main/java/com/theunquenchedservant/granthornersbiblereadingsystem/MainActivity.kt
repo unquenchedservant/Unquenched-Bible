@@ -32,25 +32,24 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
 
     private var _rcSignIn = 96
     private var user: FirebaseUser? = null
     private var globalmenu : Menu? = null
-    lateinit var toggle: ActionBarDrawerToggle
+    private lateinit var toggle: ActionBarDrawerToggle
     lateinit var navController: NavController
-    lateinit var navHostFragment: NavHostFragment
+    private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
 
 
@@ -64,6 +63,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         )
         val colorList: IntArray
         val toolbarColor: Int
+        if(!getBoolPref("updatedValues", false)){
+            updatePrefNames()
+        }
         if(FirebaseAuth.getInstance().currentUser == null) {
             val providers = arrayListOf(
                     AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
@@ -393,17 +395,21 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
-        if(FirebaseAuth.getInstance().currentUser == null){
-            finish()
-            val i = Intent(App.applicationContext(), MainActivity::class.java)
-            startActivity(i)
-        }else if(navController.currentDestination?.id != R.id.navigation_home){
-            navController.popBackStack()
-            supportActionBar?.setDisplayHomeAsUpEnabled(false)
-            binding.bottomNav.isVisible = true
-            supportActionBar?.show()
-        }else{
-            finish()
+        when {
+            FirebaseAuth.getInstance().currentUser == null -> {
+                finish()
+                val i = Intent(App.applicationContext(), MainActivity::class.java)
+                startActivity(i)
+            }
+            navController.currentDestination?.id != R.id.navigation_home -> {
+                navController.popBackStack()
+                supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                binding.bottomNav.isVisible = true
+                supportActionBar?.show()
+            }
+            else -> {
+                finish()
+            }
         }
 
     }
@@ -479,18 +485,18 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             if (doc != null) {
                                 val builder = AlertDialog.Builder(this)
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
-                                    SharedPref.firestoneToPreference(doc)
+                                    firestoneToPreference(doc)
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
-                                    SharedPref.preferenceToFireStone()
+                                    preferenceToFireStone()
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setTitle("Account Found")
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
                                 builder.create().show()
                             } else {
-                                SharedPref.preferenceToFireStone()
+                                preferenceToFireStone()
                             }
                         }
             } else {

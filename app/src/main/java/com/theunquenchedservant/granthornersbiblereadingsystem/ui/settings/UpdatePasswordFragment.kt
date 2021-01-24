@@ -1,6 +1,5 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -26,14 +25,14 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 
-class updatePasswordFragment: Fragment() {
+class UpdatePasswordFragment: Fragment() {
         override fun onCreateView(inflater: LayoutInflater,
                                   container: ViewGroup?, savedInstanceState: Bundle?): View? {
             return inflater.inflate(R.layout.fragment_update_password, container, false)
         }
         override fun onResume() {
             super.onResume()
-            val dark = SharedPref.getBoolPref("darkMode", true)
+            val dark = SharedPref.getBoolPref(name="darkMode", defaultValue=true)
             val b = arguments
             val errorMsg: String
             val root = requireView()
@@ -89,8 +88,8 @@ class updatePasswordFragment: Fragment() {
                 }else{
                     val credential = EmailAuthProvider.getCredential(user!!.email.toString(), currentPassword.text.toString())
                     user.reauthenticate(credential)
-                            .addOnCompleteListener{
-                                if(it.isSuccessful){
+                            .addOnCompleteListener{ task ->
+                                if(task.isSuccessful){
                                     user.updatePassword(newPassword.text.toString())
                                             .addOnCompleteListener {
                                                 if(it.isSuccessful){
@@ -110,11 +109,11 @@ class updatePasswordFragment: Fragment() {
                                                 }
                                             }
                                 }else{
-                                    if(it.exception is FirebaseAuthInvalidCredentialsException){
+                                    if(task.exception is FirebaseAuthInvalidCredentialsException){
                                         val bundle = bundleOf("error" to "Incorrect Password")
                                         mainActivity.navController.navigate(R.id.navigation_update_password, bundle)
                                     }else{
-                                        log("This is the reason the password update failed: ${it.exception}")
+                                        log("This is the reason the password update failed: ${task.exception}")
                                         val bundle = bundleOf("error" to "Unknown Error")
                                         mainActivity.navController.navigate(R.id.navigation_update_password, bundle)
                                     }

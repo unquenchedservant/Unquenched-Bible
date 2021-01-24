@@ -13,7 +13,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ntBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.otBooks
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import java.io.File
 
 
@@ -35,11 +35,15 @@ object SharedPref {
             db.collection("main").document(user.uid).update(name, value)
     }
 
-    fun setIntPref(name: String, value: Int, updateFS:Boolean=false){
+    fun setIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
         getPref().edit().putInt(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
+        return value
+    }
+    private fun deletePref(name:String){
+        getPref().edit().remove(name).apply()
     }
     fun increaseIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
         val start = getIntPref(name)
@@ -53,21 +57,23 @@ object SharedPref {
         return getPref().getInt(name, defaultValue)
     }
 
-    fun setStringPref(name:String, value: String, updateFS: Boolean = false) {
+    fun setStringPref(name:String, value: String, updateFS: Boolean = false):String {
         getPref().edit().putString(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
+        return value
     }
     fun getStringPref(name:String, defaultValue: String = "itsdeadjim"): String{
         return getPref().getString(name, defaultValue)!!
     }
 
-    fun setBoolPref(name: String, value: Boolean, updateFS:Boolean=false){
+    fun setBoolPref(name: String, value: Boolean, updateFS:Boolean=false):Boolean{
         getPref().edit().putBoolean(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
+        return value
     }
     fun getBoolPref(name: String, defaultValue: Boolean=false): Boolean{
         return getPref().getBoolean(name, defaultValue)
@@ -80,73 +86,73 @@ object SharedPref {
         val user2 = FirebaseAuth.getInstance().currentUser
         val results = mutableMapOf<String?, Any?>()
         for(i in 1..10){
-            results["list$i"] = getIntPref("list$i")
-            results["list${i}Done"] = getIntPref("list${i}Done")
-            results["list${i}DoneDaily"] = getIntPref("list${i}DoneDaily")
+            results["list$i"] = getIntPref(name="list$i")
+            results["list${i}Done"] = getIntPref(name="list${i}Done")
+            results["list${i}DoneDaily"] = getIntPref(name="list${i}DoneDaily")
         }
         for(i in 1..4){
-            results["mcheyne_list$i"] = getIntPref("mcheyne_list$i")
-            results["mcheyne_${i}Done"] = getIntPref("mcheyne_${i}Done")
-            results["mcheyne_${i}DoneDaily"] = getIntPref("mcheyne_${i}DoneDaily")
+            results["mcheyneList$i"] = getIntPref(name="mcheyneList$i")
+            results["mcheyneList${i}Done"] = getIntPref(name="mcheyneList${i}Done")
+            results["mcheyneList${i}DoneDaily"] = getIntPref(name="mcheyneList${i}DoneDaily")
         }
-        results["listsDone"] = getIntPref("listsDone")
-        results["currentStreak"] = getIntPref("currentStreak")
-        results["dailyStreak"] = getIntPref("dailyStreak")
-        results["maxStreak"] = getIntPref("maxStreak")
-        results["notifications"] = getBoolPref("notif_switch")
-        results["psalms"] = getBoolPref("psalms")
-        results["holdPlan"] = getBoolPref("holdPlan")
-        results["graceTime"] = getIntPref("graceTime")
-        results["isGrace"] = getBoolPref("isGrace")
-        results["currentDayIndex"] = getIntPref("currentDayIndex")
-        results["mcheyne_currentDayIndex"] = getIntPref("mcheyne_currentDayIndex")
-        results["grantHorner"] = getBoolPref("grantHorner", true)
-        results["numericalDay"] = getBoolPref("numericalDay", false)
-        results["calendarDay"] = getBoolPref("calendarDay", false)
-        results["vacationMode"] = getBoolPref("vacation_mode")
-        results["allowPartial"] = getBoolPref("allow_partial_switch")
-        results["dailyNotif"] = getIntPref( "daily_time")
-        results["remindNotif"] = getIntPref("remind_time")
-        results["dateChecked"] = getStringPref( "dateChecked")
-        results["versionNumber"] = getIntPref("versionNumber")
-        results["darkMode"] = getBoolPref("darkMode", true)
-        results["planType"] = getStringPref("planType", "horner")
-        results["bibleVersion"] = getStringPref("bibleVersion", "esv")
-        results["old_chapters_read"] = getIntPref("old_chapters_read")
-        results["new_chapters_read"] = getIntPref("new_chapters_read")
-        results["old_amount_read"] = getIntPref("old_amount_read")
-        results["new_amount_read"] = getIntPref("new_amount_read")
-        results["bible_amount_read"] = getIntPref("bible_amount_read")
-        results["total_chapters_read"] = getIntPref("total_chapters_read")
-        results["planSystem"] = getStringPref("planSystem")
-        results["pgh_system"] = getBoolPref("pgh_system")
-        results["mcheyne_system"] = getBoolPref("mcheyne_system")
-        results["hasCompletedOnboarding"] = getBoolPref("hasCompletedOnboarding")
+        results["listsDone"] = getIntPref(name="listsDone")
+        results["currentStreak"] = getIntPref(name="currentStreak")
+        results["dailyStreak"] = getIntPref(name="dailyStreak")
+        results["maxStreak"] = getIntPref(name="maxStreak")
+        results["notifications"] = getBoolPref(name="notifications")
+        results["psalms"] = getBoolPref(name="psalms")
+        results["holdPlan"] = getBoolPref(name="holdPlan")
+        results["graceTime"] = getIntPref(name="graceTime")
+        results["isGrace"] = getBoolPref(name="isGrace")
+        results["currentDayIndex"] = getIntPref(name="currentDayIndex")
+        results["mcheyneCurrentDayIndex"] = getIntPref(name="mcheyneCurrentDayIndex")
+        results["grantHorner"] = getBoolPref(name="grantHorner", defaultValue=true)
+        results["numericalDay"] = getBoolPref(name="numericalDay", defaultValue=false)
+        results["calendarDay"] = getBoolPref(name="calendarDay", defaultValue=false)
+        results["vacationMode"] = getBoolPref(name="vacationMode")
+        results["allowPartial"] = getBoolPref(name="allowPartial")
+        results["dailyNotif"] = getIntPref( name="dailyNotif")
+        results["remindNotif"] = getIntPref(name="remindNotif")
+        results["dateChecked"] = getStringPref( name="dateChecked")
+        results["versionNumber"] = getIntPref(name="versionNumber")
+        results["darkMode"] = getBoolPref(name="darkMode", defaultValue=true)
+        results["planType"] = getStringPref(name="planType", defaultValue="horner")
+        results["bibleVersion"] = getStringPref(name="bibleVersion", defaultValue="esv")
+        results["oldChaptersRead"] = getIntPref(name="oldChaptersRead")
+        results["newChaptersRead"] = getIntPref(name="newChaptersRead")
+        results["oldAmountRead"] = getIntPref(name="oldAmountRead")
+        results["newAmountRead"] = getIntPref(name="newAmountRead")
+        results["bibleAmountRead"] = getIntPref(name="bibleAmountRead")
+        results["totalChaptersRead"] = getIntPref(name="totalChaptersRead")
+        results["planSystem"] = getStringPref(name="planSystem")
+        results["pghSystem"] = getBoolPref(name="pghSystem")
+        results["mcheyneSystem"] = getBoolPref(name="mcheyneSystem")
+        results["hasCompletedOnboarding"] = getBoolPref(name="hasCompletedOnboarding")
         for(book in otBooks){
-            results["${book}_amount_read"] = getIntPref("${book}_amount_read")
-            results["${book}_chapters_read"] = getIntPref("${book}_chapters_read")
-            results["${book}_done_testament"] = getBoolPref("${book}_done_testament")
-            results["${book}_done_whole"] = getBoolPref("${book}_done_whole")
-            for(chapter in 1..bookChapters[book]!!){
-                results["${book}_${chapter}_read"] = getBoolPref("${book}_${chapter}_read")
-                results["${book}_${chapter}_amount_read"] = getIntPref("${book}_${chapter}_amount_read")
+            results["${book}AmountRead"] = getIntPref(name="${book}AmountRead")
+            results["${book}ChaptersRead"] = getIntPref(name="${book}ChaptersRead")
+            results["${book}DoneTestament"] = getBoolPref(name="${book}DoneTestament")
+            results["${book}DoneWhole"] = getBoolPref(name="${book}DoneWhole")
+            for(chapter in 1..(bookChapters[book] ?: error(""))){
+                results["${book}${chapter}Read"] = getBoolPref(name="${book}${chapter}Read")
+                results["${book}${chapter}AmountRead"] = getIntPref(name="${book}${chapter}AmountRead")
             }
         }
         for(book in ntBooks){
-            results["${book}_amount_read"] = getIntPref("${book}_amount_read")
-            results["${book}_chapters_read"] = getIntPref("${book}_chapters_read")
-            results["${book}_done_testament"] = getBoolPref("${book}_done_testament")
-            results["${book}_done_whole"] = getBoolPref("${book}_done_whole")
-            for(chapter in 1..bookChapters[book]!!){
-                results["${book}_${chapter}_read"] = getBoolPref("${book}_${chapter}_read")
-                results["${book}_${chapter}_amount_read"] = getIntPref("${book}_${chapter}_amount_read")
+            results["${book}AmountRead"] = getIntPref(name="${book}AmountRead")
+            results["${book}ChaptersRead"] = getIntPref(name="${book}ChaptersRead")
+            results["${book}DoneTestament"] = getBoolPref(name="${book}DoneTestament")
+            results["${book}DoneWhole"] = getBoolPref(name="${book}DoneWhole")
+            for(chapter in 1..(bookChapters[book] ?: error(""))){
+                results["${book}${chapter}Read"] = getBoolPref(name="${book}${chapter}Read")
+                results["${book}${chapter}AmountRead"] = getIntPref(name="${book}${chapter}AmountRead")
             }
         }
         db.collection("main").document(user2!!.uid).set(results)
                 .addOnSuccessListener { MainActivity.log("Data transferred to firestore") }
                 .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
     }
-    fun updateIntPref(data: MutableMap<String, Any>, key:String, secondKey: String=""){
+    private fun updateIntPref(data: MutableMap<String, Any>, key:String, secondKey: String=""){
         val prefKey = if(secondKey == ""){
             key
         }else{
@@ -156,7 +162,7 @@ object SharedPref {
             setIntPref(prefKey, (data[key] as Long).toInt())
         }
     }
-    fun updateBoolPref(data: MutableMap<String, Any>, key:String, secondKey:String = ""){
+    private fun updateBoolPref(data: MutableMap<String, Any>, key:String, secondKey:String = ""){
         val prefKey = if (secondKey == ""){
             key
         }else{
@@ -166,7 +172,7 @@ object SharedPref {
             setBoolPref(prefKey, data[key] as Boolean)
         }
     }
-    fun updateStringPref(data: MutableMap<String, Any>, key:String, secondKey:String=""){
+    private fun updateStringPref(data: MutableMap<String, Any>, key:String, secondKey:String=""){
         val prefKey = if(secondKey == ""){
             key
         }else{
@@ -181,73 +187,142 @@ object SharedPref {
         if(data != null) {
             MainActivity.log("User document exists")
             for (i in 1..10) {
-                updateIntPref(data, "list${i}")
-                updateIntPref(data, "list${i}Done")
-                updateIntPref(data, "list${i}DoneDaily")
+                updateIntPref(data, key="list${i}")
+                updateIntPref(data, key="list${i}Done")
+                updateIntPref(data, key="list${i}DoneDaily")
             }
             for (i in 1..4){
-                updateIntPref(data, "mcheyne_list$i")
-                updateIntPref(data, "mcheyne_list$i")
-                updateIntPref(data, "mcheyne_list$i")
+                updateIntPref(data, key="mcheyneList$i")
+                updateIntPref(data, key="mcheyneList${i}Done")
+                updateIntPref(data, key="mcheyneList${i}DoneDaily")
             }
-            updateIntPref(data, "dailyStreak")
-            updateIntPref(data, "currentStreak")
-            updateIntPref(data, "maxStreak")
-            updateBoolPref(data, "psalms")
-            updateBoolPref(data, "allowPartial", "allow_partial_switch")
-            updateBoolPref(data, "vacationMode", "vacation_mode")
-            updateBoolPref(data, "notifications", "notif_switch")
-            updateIntPref(data, "dailyNotif", "daily_time")
-            updateIntPref(data, "remindNotif", "remind_time")
-            updateStringPref(data, "dateChecked")
-            updateBoolPref(data, "holdPlan")
-            updateIntPref(data, "versionNumber")
-            updateBoolPref(data, "darkMode")
-            updateIntPref(data, "listsDone")
-            updateStringPref(data, "planType")
-            updateStringPref(data, "bibleVersion")
-            updateIntPref(data, "old_chapters_read")
-            updateIntPref(data, "new_chapters_read")
-            updateIntPref(data, "old_amount_read")
-            updateIntPref(data, "new_amount_read")
-            updateIntPref(data, "bible_amount_read")
-            updateIntPref(data, "total_chapters_read")
-            updateIntPref(data, "mcheyne_currentDayIndex")
-            updateIntPref(data, "currentDayIndex")
-            updateBoolPref(data, "grantHorner")
-            updateBoolPref(data, "numericalDay")
-            updateBoolPref(data, "calendarDay")
-            updateIntPref(data, "graceTime")
-            updateBoolPref(data, "isGrace")
-            updateStringPref(data, "planSystem")
-            updateBoolPref(data, "pgh_system")
-            updateBoolPref(data, "mcheyne_system")
-            updateBoolPref(data, "hasCompletedOnboarding")
+            updateIntPref(data, key="dailyStreak")
+            updateIntPref(data, key="currentStreak")
+            updateIntPref(data, key="maxStreak")
+            updateBoolPref(data, key="psalms")
+            updateBoolPref(data, key="allowPartial")
+            updateBoolPref(data, key="vacationMode")
+            updateBoolPref(data, key="notifications")
+            updateIntPref(data, key="dailyNotif")
+            updateIntPref(data, key="remindNotif")
+            updateStringPref(data, key="dateChecked")
+            updateBoolPref(data, key="holdPlan")
+            updateIntPref(data, key="versionNumber")
+            updateBoolPref(data, key="darkMode")
+            updateIntPref(data, key="listsDone")
+            updateStringPref(data, key="planType")
+            updateStringPref(data, key="bibleVersion")
+            updateIntPref(data, key="oldChaptersRead")
+            updateIntPref(data, key="newChaptersRead")
+            updateIntPref(data, key="oldAmountRead")
+            updateIntPref(data, key="newAmountRead")
+            updateIntPref(data, key="bibleAmountRead")
+            updateIntPref(data, key="totalChaptersRead")
+            updateIntPref(data, key="mcheyneCurrentDayIndex")
+            updateIntPref(data, key="currentDayIndex")
+            updateBoolPref(data, key="grantHorner")
+            updateBoolPref(data, key="numericalDay")
+            updateBoolPref(data, key="calendarDay")
+            updateIntPref(data, key="graceTime")
+            updateBoolPref(data, key="isGrace")
+            updateStringPref(data, key="planSystem")
+            updateBoolPref(data, key="pghSystem")
+            updateBoolPref(data, key="mcheyneSystem")
+            updateBoolPref(data, key="hasCompletedOnboarding")
             for(book in otBooks){
-                updateIntPref(data, "${book}_amount_read")
-                updateIntPref(data, "${book}_chapters_read")
-                updateBoolPref(data, "${book}_done_testament")
-                updateBoolPref(data, "${book}_done_whole")
-                for(chapter in 1..bookChapters[book]!!){
-                    updateBoolPref(data, "${book}_${chapter}_read")
-                    updateIntPref(data, "${book}_${chapter}_amount_read")
+                updateIntPref(data, key="${book}AmountRead")
+                updateIntPref(data, key="${book}ChaptersRead")
+                updateBoolPref(data, key="${book}DoneTestament")
+                updateBoolPref(data, key="${book}DoneWhole")
+                for(chapter in 1..(bookChapters[book] ?: error(""))){
+                    updateBoolPref(data, key="${book}${chapter}Read")
+                    updateIntPref(data, key="${book}${chapter}AmountRead")
                 }
             }
             for(book in ntBooks){
-                updateIntPref(data, "${book}_amount_read")
-                updateIntPref(data, "${book}_chapters_read")
-                updateBoolPref(data, "${book}_done_testament")
-                updateBoolPref(data, "${book}_done_whole")
-                for(chapter in 1..bookChapters[book]!!){
-                    updateBoolPref(data, "${book}_${chapter}_read")
-                    updateIntPref(data, "${book}_${chapter}_amount_read")
+                updateIntPref(data, key="${book}AmountRead")
+                updateIntPref(data, key="${book}ChaptersRead")
+                updateBoolPref(data, key="${book}DoneTestament")
+                updateBoolPref(data, key="${book}DoneWhole")
+                for(chapter in 1..(bookChapters[book] ?: error(""))){
+                    updateBoolPref(data, key="${book}${chapter}Read")
+                    updateIntPref(data, key="${book}${chapter}AmountRead")
                 }
             }
         }
     }
 
     fun listNumbersReset() { App.applicationContext().getSharedPreferences("listNumbers", Context.MODE_PRIVATE).edit().clear().apply() }
-
+    fun updatePrefNames(){
+        for(i in 1..4){
+            setIntPref(name="mcheyneList${i}", value=getIntPref(name="mcheyne_list${i}"))
+            setIntPref(name="mcheyneList${i}Done", value=getIntPref(name="mcheyne_list${i}Done"))
+            setIntPref(name="mcheyneList${i}DoneDaily", value=getIntPref(name="mcheyne_list${i}DoneDaily"))
+            deletePref(name="mcheyne_list${i}")
+            deletePref(name="mcheyne_list${i}Done")
+            deletePref(name="mcheyne_list${i}DoneDaily")
+        }
+        setIntPref(name="mcheyneCurrentDayIndex", value=getIntPref(name="mcheyne_currentDayIndex"))
+        setBoolPref(name="notifications", value= getBoolPref(name="notif_switch"))
+        setBoolPref(name="vacationMode", value= getBoolPref(name="vacation_mode"))
+        setBoolPref(name="allowPartial", value=getBoolPref(name="allow_partial_switch"))
+        setIntPref(name="dailyNotif", value=getIntPref(name="daily_time"))
+        setIntPref(name="remindNotif", value=getIntPref(name="remind_time"))
+        setIntPref(name="oldChaptersRead", value=getIntPref(name="old_chapters_read"))
+        setIntPref(name="newChaptersRead", value=getIntPref(name="new_chapters_read"))
+        setIntPref(name="oldAmountRead", value=getIntPref(name="old_amount_read"))
+        setIntPref(name="newAmountRead", value=getIntPref(name="new_amount_read"))
+        setIntPref(name="bibleAmountRead", value=getIntPref(name="bible_amount_read"))
+        setIntPref(name="totalChaptersRead", value=getIntPref(name="total_chapters_read"))
+        setBoolPref(name="pghSystem", value=getBoolPref(name="pgh_system"))
+        setBoolPref(name="mcheyneSystem", value=getBoolPref(name="mcheyne_system"))
+        deletePref(name="mcheyne_currentDayIndex")
+        deletePref(name="notif_switch")
+        deletePref(name="vacation_mode")
+        deletePref(name="allow_partial_switch")
+        deletePref(name="daily_time")
+        deletePref(name="remind_time")
+        deletePref(name="old_chapters_read")
+        deletePref(name="new_chapters_read")
+        deletePref(name="old_amount_read")
+        deletePref(name="new_amount_read")
+        deletePref(name="bible_amount_read")
+        deletePref(name="total_chapters_read")
+        deletePref(name="pgh_system")
+        deletePref(name="mcheyne_system")
+        for(book in otBooks){
+            setIntPref(name="${book}AmountRead", value=getIntPref(name="${book}_amount_read"))
+            setIntPref(name="${book}ChaptersRead", value=getIntPref(name="${book}_chapters_read"))
+            setBoolPref(name="${book}DoneTestament", value=getBoolPref(name="${book}_done_testament"))
+            setBoolPref(name="${book}DoneWhole", value= getBoolPref(name="${book}_done_whole"))
+            deletePref(name="${book}_amount_read")
+            deletePref(name="${book}_chapters_read")
+            deletePref(name="${book}_done_testament")
+            deletePref(name="${book}_done_whole")
+            for(chapter in 1..(bookChapters[book] ?: error(""))){
+                setBoolPref(name="${book}${chapter}Read", value=getBoolPref(name="${book}_${chapter}_read"))
+                setIntPref(name="${book}${chapter}AmountRead", value=getIntPref(name="${book}_${chapter}_amount_read"))
+                deletePref(name="${book}_${chapter}_read")
+                deletePref(name="${book}_${chapter}_amount_read")
+            }
+        }
+        for(book in ntBooks){
+            setIntPref(name="${book}AmountRead", value=getIntPref(name="${book}_amount_read"))
+            setIntPref(name="${book}ChaptersRead", value=getIntPref(name="${book}_chapters_read"))
+            setBoolPref(name="${book}DoneTestament", value=getBoolPref(name="${book}_done_testament"))
+            setBoolPref(name="${book}DoneWhole", value= getBoolPref(name="${book}_done_whole"))
+            deletePref(name="${book}_amount_read")
+            deletePref(name="${book}_chapters_read")
+            deletePref(name="${book}_done_testament")
+            deletePref(name="${book}_done_whole")
+            for(chapter in 1..(bookChapters[book] ?: error(""))){
+                setBoolPref(name="${book}${chapter}Read", value=getBoolPref(name="${book}_${chapter}_read"))
+                setIntPref(name="${book}${chapter}AmountRead", value=getIntPref(name="${book}_${chapter}_amount_read"))
+                deletePref(name="${book}_${chapter}_read")
+                deletePref(name="${book}_${chapter}_amount_read")
+            }
+        }
+    }
     fun mergePref(){
         val context = App.applicationContext()
         val pref = PreferenceManager.getDefaultSharedPreferences(context)

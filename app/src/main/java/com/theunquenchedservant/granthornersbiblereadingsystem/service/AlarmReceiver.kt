@@ -12,7 +12,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
 
 class AlarmReceiver : BroadcastReceiver() {
 
