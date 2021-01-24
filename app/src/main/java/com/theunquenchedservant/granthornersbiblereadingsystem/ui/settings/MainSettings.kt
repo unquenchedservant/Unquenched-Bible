@@ -143,24 +143,36 @@ class MainSettings : PreferenceFragmentCompat() {
                                 val builder = AlertDialog.Builder(context)
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
                                     firestoneToPreference(doc)
-                                    mainActivity.navController.navigate(R.id.navigation_home)
+                                    if(getStringPref("planSystem", "pgh") == "pgh") {
+                                        mainActivity.navController.navigate(R.id.navigation_home)
+                                    }else{
+                                        mainActivity.navController.navigate(R.id.navigation_home_mcheyne)
+                                    }
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
                                     preferenceToFireStone()
-                                    mainActivity.navController.navigate(R.id.navigation_home)
+                                    if(getStringPref("planSystem", "pgh") == "pgh") {
+                                        mainActivity.navController.navigate(R.id.navigation_home)
+                                    }else{
+                                        mainActivity.navController.navigate(R.id.navigation_home_mcheyne)
+                                    }
                                 }
                                 builder.setTitle("Account Found")
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
                                 builder.create().show()
                             } else {
                                 preferenceToFireStone()
-                                mainActivity.navController.navigate(R.id.navigation_settings)
+                                if(getStringPref("planSystem", "pgh") == "pgh") {
+                                    mainActivity.navController.navigate(R.id.navigation_home)
+                                }else{
+                                    mainActivity.navController.navigate(R.id.navigation_home_mcheyne)
+                                }
                             }
                         }
             }
         }
     }
-    private fun createSignIn(){
+    fun createSignIn(){
         val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
                 AuthUI.IdpConfig.GoogleBuilder().build()
@@ -170,10 +182,11 @@ class MainSettings : PreferenceFragmentCompat() {
                         .createSignInIntentBuilder()
                         .setLogo(R.drawable.logo2)
                         .setTheme(R.style.AppTheme)
+                        .setIsSmartLockEnabled(false)
                         .setAvailableProviders(providers)
                         .build(), _rcSignIn)
     }
-    private fun googleSignIn(){
+    fun googleSignIn(){
         val builder = AlertDialog.Builder(context)
         builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
@@ -188,7 +201,7 @@ class MainSettings : PreferenceFragmentCompat() {
         builder.setMessage(R.string.msg_google).setTitle(R.string.title_sign_in)
         builder.create().show()
     }
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val auth = FirebaseAuth.getInstance()
         val navControl = (activity as MainActivity).navController
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)

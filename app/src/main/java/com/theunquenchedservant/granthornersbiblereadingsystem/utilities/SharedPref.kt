@@ -109,6 +109,7 @@ object SharedPref {
         results["planSystem"] = getStringPref("planSystem")
         results["pgh_system"] = getBoolPref("pgh_system")
         results["mcheyne_system"] = getBoolPref("mcheyne_system")
+        results["hasCompletedOnboarding"] = getBoolPref("hasCompletedOnboarding")
         for(book in otBooks){
             results["${book}_amount_read"] = getIntPref("${book}_amount_read")
             results["${book}_chapters_read"] = getIntPref("${book}_chapters_read")
@@ -209,6 +210,7 @@ object SharedPref {
             updateStringPref(data, "planSystem")
             updateBoolPref(data, "pgh_system")
             updateBoolPref(data, "mcheyne_system")
+            updateBoolPref(data, "hasCompletedOnboarding")
             for(book in otBooks){
                 updateIntPref(data, "${book}_amount_read")
                 updateIntPref(data, "${book}_chapters_read")

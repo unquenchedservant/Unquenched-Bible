@@ -1,5 +1,8 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
+import android.app.Activity
+import android.app.AlertDialog
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
 import android.graphics.Color
@@ -8,6 +11,7 @@ import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
@@ -17,13 +21,25 @@ import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
+import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.IdpResponse
+import com.google.android.gms.auth.api.signin.GoogleSignIn
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
+import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
@@ -44,49 +60,69 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         WebView(applicationContext)
+        super.onCreate(savedInstanceState)
         val stateList = arrayOf(
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
         )
         val colorList: IntArray
         val toolbarColor: Int
-        if(getBoolPref("darkMode", true)){
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            colorList = intArrayOf(
-                    ContextCompat.getColor(this, R.color.unquenchedEmphDark),
-                    ContextCompat.getColor(this, R.color.unquenchedTextDark)
+        if(FirebaseAuth.getInstance().currentUser == null) {
+            setBoolPref("hasCompletedOnboarding", false)
+            val providers = arrayListOf(
+                    AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
+                    AuthUI.IdpConfig.GoogleBuilder().build()
             )
+            startActivityForResult(
+                    AuthUI.getInstance()
+                            .createSignInIntentBuilder()
+                            .setLogo(R.drawable.logo2)
+                            .setTheme(R.style.AppTheme)
+                            .setIsSmartLockEnabled(false)
+                            .setAvailableProviders(providers)
+                            .build(), _rcSignIn)
+        }else if(!getBoolPref("hasCompletedOnboarding", false)){
+            startActivity(Intent(this, OnboardingPagerActivity::class.java))
         }else{
-            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground)
-            colorList = intArrayOf(
-                    ContextCompat.getColor(this, R.color.unquenchedOrange),
-                    ContextCompat.getColor(this, R.color.unquenchedText)
-            )
+            log("THIS IS HAS COMPLETED ONBOARDING ${getBoolPref("hasCompletedOnboarding")}")
+            if (getBoolPref("darkMode", true)) {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+                toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                colorList = intArrayOf(
+                        ContextCompat.getColor(this, R.color.unquenchedEmphDark),
+                        ContextCompat.getColor(this, R.color.unquenchedTextDark)
+                )
+            } else {
+                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+                toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground)
+                colorList = intArrayOf(
+                        ContextCompat.getColor(this, R.color.unquenchedOrange),
+                        ContextCompat.getColor(this, R.color.unquenchedText)
+                )
+            }
+            val colorStateList = ColorStateList(stateList, colorList)
+
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            user = FirebaseAuth.getInstance().currentUser
+            setContentView(binding.root)
+            val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
+            toolbar.setBackgroundColor(toolbarColor)
+            setSupportActionBar(findViewById(R.id.my_toolbar))
+            supportActionBar?.title = getDate(0, true)
+            navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            navController = navHostFragment.navController
+            binding.bottomNav.setupWithNavController(navController)
+            binding.bottomNav.setBackgroundColor(toolbarColor)
+            binding.bottomNav.itemIconTintList = colorStateList
+            binding.bottomNav.itemTextColor = colorStateList
+            if (getStringPref("planSystem", "pgh") == "pgh") {
+                navController.navigate(R.id.navigation_home)
+            } else if (getStringPref("planSystem", "pgh") == "mcheyne") {
+                navController.navigate(R.id.navigation_home_mcheyne)
+            }
+            binding.translationSelector.isVisible = false
+            setupBottomNavigationBar()
         }
-        val colorStateList = ColorStateList(stateList, colorList)
-        super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
-        user = FirebaseAuth.getInstance().currentUser
-        setContentView(binding.root)
-        val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
-        toolbar.setBackgroundColor(toolbarColor)
-        setSupportActionBar(findViewById(R.id.my_toolbar))
-        supportActionBar?.title = getDate(0, true)
-        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-        navController = navHostFragment.navController
-        binding.bottomNav.setupWithNavController(navController)
-        binding.bottomNav.setBackgroundColor(toolbarColor)
-        binding.bottomNav.itemIconTintList = colorStateList
-        binding.bottomNav.itemTextColor = colorStateList
-        if(getStringPref("planSystem", "pgh") == "pgh") {
-            navController.navigate(R.id.navigation_home)
-        }else if(getStringPref("planSystem", "pgh") == "mcheyne"){
-            navController.navigate(R.id.navigation_home_mcheyne)
-        }
-        binding.translationSelector.isVisible = false
-        setupBottomNavigationBar()
     }
 
     private fun setupBottomNavigationBar() {
@@ -363,7 +399,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
-        if(navController.currentDestination?.id != R.id.navigation_home){
+        if(FirebaseAuth.getInstance().currentUser == null){
+            log("YES THIS WORKED AS EXPECTED")
+            finish()
+            val i = Intent(App.applicationContext(), MainActivity::class.java)
+            startActivity(i)
+        }else if(navController.currentDestination?.id != R.id.navigation_home){
             navController.popBackStack()
             supportActionBar?.setDisplayHomeAsUpEnabled(false)
             binding.bottomNav.isVisible = true
@@ -375,7 +416,96 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
 
-
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(requestCode == _rcSignIn){
+            val response = IdpResponse.fromResultIntent(data)
+            if(resultCode == Activity.RESULT_OK){
+                val user = FirebaseAuth.getInstance().currentUser
+                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
+                val db = FirebaseFirestore.getInstance()
+                db.collection("main").document(user!!.uid).get()
+                        .addOnSuccessListener { doc ->
+                            if (doc["list1"] != null) {
+                                val builder = AlertDialog.Builder(this)
+                                builder.setPositiveButton("Use Cloud Data") { _, _ ->
+                                    firestoneToPreference(doc)
+                                    val i = Intent(applicationContext, MainActivity::class.java)
+                                    log("WE GOT PAST THE FIRESTONE TO PREFERENCE")
+                                    finish()
+                                    startActivity(i)
+                                }
+                                builder.setNeutralButton("Overwrite with device") { _, _ ->
+                                    preferenceToFireStone()
+                                    val i = Intent(applicationContext, MainActivity::class.java)
+                                    finish()
+                                    startActivity(i)
+                                }
+                                builder.setTitle("Account Found")
+                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
+                                builder.create().show()
+                            } else {
+                                preferenceToFireStone()
+                                val i = Intent(applicationContext, MainActivity::class.java)
+                                finish()
+                                startActivity(i)
+                            }
+                        }
+            }else{
+                if(response == null){
+                    finish()
+                }
+            }
+        }
+    }
+    fun googleSignIn(){
+        val builder = AlertDialog.Builder(this)
+        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
+            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                    .requestIdToken(getString(R.string.default_web_client_id))
+                    .requestEmail()
+                    .build()
+            val mGoogleSignInClient = GoogleSignIn.getClient(this.applicationContext, gso)
+            val signInIntent = mGoogleSignInClient.signInIntent
+            startActivityForResult(signInIntent, _rcSignIn)
+        }
+        builder.setNeutralButton(R.string.no) { dialogInterface, _ -> dialogInterface.cancel() }
+        builder.setMessage(R.string.msg_google).setTitle(R.string.title_sign_in)
+        builder.create().show()
+    }
+    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
+        val auth = FirebaseAuth.getInstance()
+        val navControl = this.navController
+        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
+        auth.signInWithCredential(credential).addOnCompleteListener {
+            if (it.isSuccessful) {
+                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
+                val db = FirebaseFirestore.getInstance()
+                val user = FirebaseAuth.getInstance().currentUser
+                db.collection("main").document(user!!.uid).get()
+                        .addOnSuccessListener { doc ->
+                            if (doc != null) {
+                                val builder = AlertDialog.Builder(this)
+                                builder.setPositiveButton("Use Cloud Data") { _, _ ->
+                                    SharedPref.firestoneToPreference(doc)
+                                    navControl.navigate(R.id.navigation_home)
+                                }
+                                builder.setNeutralButton("Overwrite with device") { _, _ ->
+                                    SharedPref.preferenceToFireStone()
+                                    navControl.navigate(R.id.navigation_home)
+                                }
+                                builder.setTitle("Account Found")
+                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
+                                builder.create().show()
+                            } else {
+                                SharedPref.preferenceToFireStone()
+                            }
+                        }
+            } else {
+                Toast.makeText(App.applicationContext(), "Google Sign In Failed", Toast.LENGTH_LONG).show()
+            }
+        }
+    }
 
     companion object{
 
