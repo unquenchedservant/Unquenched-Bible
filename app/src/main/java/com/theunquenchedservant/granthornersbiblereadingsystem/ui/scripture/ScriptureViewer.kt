@@ -86,8 +86,7 @@ class ScriptureViewer : Fragment() {
                 if(version == "NASB2020"){
                     version = "NASB"
                 }
-                setStringPref("bibleVersion", version)
-                updateFS("bibleVersion", version)
+                setStringPref(name="bibleVersion", value=version, updateFS=true)
                 val bundle = bundleOf("chapter" to chapter, "psalms" to  psalms, "iteration" to iteration)
                 act.navController.navigate(R.id.navigation_scripture, bundle)
             }
@@ -146,11 +145,10 @@ class ScriptureViewer : Fragment() {
         val title : String
         var url: String
         val chapters = mutableListOf<String>()
-        if (getStringPref("bibleVersion", "ESV") == "NASB"){
-            setStringPref("bibleVersion", "NASB20")
-            updateFS("bibleVersion", "NASB20")
+        if (getStringPref(name="bibleVersion", defaultValue="ESV") == "NASB"){
+            setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
         }
-        val versionId: String? = when (getStringPref("bibleVersion", "ESV")){
+        val versionId: String? = when (getStringPref(name="bibleVersion", defaultValue="ESV")){
             "ESV" ->  bibleIDs["ESV"]
             "CSB" -> bibleIDs["CSB"]
             "AMP" -> bibleIDs["AMP"]
@@ -504,8 +502,7 @@ class ScriptureViewer : Fragment() {
         val realChapter: String
         val realBook: String
         if (getStringPref("bibleVersion", "ESV") == "NASB") {
-            setStringPref("bibleVersion", "NASB20")
-            updateFS("bibleVersion", "NASB20")
+            setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
         }
         if (getBoolPref("darkMode", true)) {
             binding.psalmsNext.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))

@@ -46,6 +46,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -191,15 +192,7 @@ class HomeFragment : Fragment() {
         setVisibilities(binding)
         allowResume = false
         if(savedInstanceState != null) {
-            when (getIntPref("firstRun")) {
-                0 -> {
-                    googleSignIn()
-                    setIntPref("firstRun", 1)
-                }
-                1 -> {
-                    createAlarms()
-                }
-            }
+            createAlarms()
         }
     }
 
@@ -321,8 +314,8 @@ class HomeFragment : Fragment() {
                 cardView.root.setOnLongClickListener {
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
-                        setIntPref(listDone, 0)
-                        setIntPref(listName, getIntPref(listName) + 1)
+                        setIntPref(name=listDone, value=0)
+                        increaseIntPref(name=listName, value=1)
                         val isLogged = FirebaseAuth.getInstance().currentUser
                         if (isLogged != null) {
                             val data = mutableMapOf<String, Any>()
@@ -349,94 +342,5 @@ class HomeFragment : Fragment() {
     }
 
 
-
-    private fun googleSignIn(){
-        val ctx = App.applicationContext()
-        val user = FirebaseAuth.getInstance().currentUser
-        if(user == null){
-            val builder = android.app.AlertDialog.Builder(context)
-            builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                        .requestIdToken(getString(R.string.default_web_client_id))
-                        .requestEmail()
-                        .build()
-                val mGoogleSignInClient = GoogleSignIn.getClient(ctx, gso)
-                val signInIntent = mGoogleSignInClient.signInIntent
-
-                setIntPref("needNotif", 1)
-                startActivityForResult(signInIntent, 96)
-            }
-            builder.setNeutralButton("No") { dialogInterface, _ -> setIntPref("firstRun", 1); dialogInterface.cancel() }
-            builder.setMessage(R.string.msg_google).setTitle(R.string.title_sign_in)
-            builder.create().show()
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if(requestCode == 96){
-            val task = GoogleSignIn.getSignedInAccountFromIntent(data)
-            try {
-                val account = task.getResult(ApiException::class.java)
-                firebaseAuthWithGoogle(account!!)
-            }catch(e: ApiException){
-                Toast.makeText(activity?.applicationContext, R.string.msg_google_failed, Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-    private fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val auth = FirebaseAuth.getInstance()
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Toast.makeText(context, R.string.msg_signed_in, Toast.LENGTH_LONG).show()
-                val db = FirebaseFirestore.getInstance()
-                val user = FirebaseAuth.getInstance().currentUser
-                db.collection("main").document(user!!.uid).get()
-                        .addOnSuccessListener { doc ->
-                            if (doc.get("Doc") != null) {
-                                val builder = AlertDialog.Builder(requireContext())
-                                builder.setPositiveButton(R.string.btn_use_cloud) { _,_ ->
-                                    SharedPref.firestoneToPreference(doc)
-                                    setIntPref("firstRun", 1)
-                                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
-                                }
-                                builder.setNeutralButton(R.string.btn_use_device) { _,_->
-                                    SharedPref.preferenceToFireStone()
-                                    setIntPref("firstRun", 1)
-                                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
-                                }
-                                builder.setTitle(R.string.title_account_found)
-                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from your account or OVERWRITE your account with this device?")
-                                builder.create().show()
-                            } else {
-                                setIntPref("firstRun", 1)
-                                SharedPref.preferenceToFireStone()
-                                (activity as MainActivity).navController.navigate(R.id.navigation_home)
-                            }
-                        }
-
-            } else {
-                setIntPref("firstRun", 1)
-                Toast.makeText(context, R.string.msg_google_failed, Toast.LENGTH_LONG).show()
-            }
-        }
-    }
-
-    private fun welcome4(){
-        val alert = AlertDialog.Builder(requireContext())
-        alert.setPositiveButton("Yes") { diag, _ ->
-            setIntPref("firstRun", 1)
-            diag.dismiss()
-        }
-        alert.setNeutralButton("No"){dialogInterface, _ ->
-            dialogInterface.dismiss()
-            setIntPref("firstRun", 1)
-            (activity as MainActivity).navController.navigate(R.id.navigation_home)
-        }
-        alert.setTitle("Notifications")
-        alert.setMessage("Would you like to change your notification settings now?")
-        alert.create().show()
-    }
 
 }

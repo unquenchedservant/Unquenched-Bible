@@ -63,55 +63,55 @@ class OnboardingFragmentThree : Fragment() {
         checkboxHorner.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setBoolPref("grantHorner", true)
-                setBoolPref("numericalDay", false)
-                setBoolPref("calendarDay", false)
-                setBoolPref("onboardingTwoDone", true)
-                setStringPref("planType", "horner")
+                setBoolPref(name="grantHorner", value=true)
+                setBoolPref(name="numericalDay", value=false)
+                setBoolPref(name="calendarDay", value=false)
+                setBoolPref(name="onboardingTwoDone", value=true)
+                setStringPref(name="planType", value="horner")
                 checkboxNumerical.isChecked = false
                 checkboxCalendar.isChecked = false
             }else{
-                setBoolPref("onboardingTwoDone", false)
-                setStringPref("planType", "")
-                setBoolPref("grantHorner", false)
+                setBoolPref(name="onboardingTwoDone", value=false)
+                setStringPref(name="planType", value="")
+                setBoolPref(name="grantHorner", value=false)
             }
         }
         checkboxNumerical.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setBoolPref("grantHorner", false)
-                setBoolPref("numericalDay", true)
-                setBoolPref("calendarDay", false)
-                setBoolPref("onboardingTwoDone", true)
-                setStringPref("planType", "numerical")
+                setBoolPref(name="grantHorner", value=false)
+                setBoolPref(name="numericalDay", value=true)
+                setBoolPref(name="calendarDay", value=false)
+                setBoolPref(name="onboardingTwoDone", value=true)
+                setStringPref(name="planType", value="numerical")
                 checkboxHorner.isChecked = false
                 checkboxCalendar.isChecked = false
             }else{
-                setBoolPref("onboardingTwoDone", false)
-                setStringPref("planType", "")
-                setBoolPref("numericalDay", false)
+                setBoolPref(name="onboardingTwoDone", value=false)
+                setStringPref(name="planType", value="")
+                setBoolPref(name="numericalDay", value=false)
             }
         }
         checkboxCalendar.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setBoolPref("grantHorner", false)
-                setBoolPref("numericalDay", false)
-                setBoolPref("calendarDay", true)
-                setBoolPref("onboardingTwoDone", true)
-                setStringPref("planType", "calendar")
+                setBoolPref(name="grantHorner", value=false)
+                setBoolPref(name="numericalDay", value=false)
+                setBoolPref(name="calendarDay", value=true)
+                setBoolPref(name="onboardingTwoDone", value=true)
+                setStringPref(name="planType", value="calendar")
                 checkboxNumerical.isChecked = false
                 checkboxHorner.isChecked = false
             }else{
-                setBoolPref("onboardingTwoDone", false)
-                setStringPref("planType", "")
-                setBoolPref("calendarDay", false)
+                setBoolPref(name="onboardingTwoDone", value=false)
+                setStringPref(name="planType", value="")
+                setBoolPref(name="calendarDay", value=false)
             }
         }
         return vieww
     }
     override fun onResume(){
-        val planSystem = getStringPref("planSystem", "")
+        val planSystem = getStringPref(name="planSystem", defaultValue="")
         if(planSystem == "pgh"){
             titleHorner.text = "Grant Horner (Recommended)"
             titleCalendar.text = "Calendar Day"

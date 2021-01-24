@@ -10,6 +10,8 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNamesCoded
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ntBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.otBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -24,7 +26,7 @@ import java.util.*
 
 object Marker {
     private val isLogged = FirebaseAuth.getInstance().currentUser
-    fun getListId(listName: String) : Int{
+    private fun getListId(listName: String) : Int{
         return when(listName){
             "list1"-> R.array.list_1
             "list2"-> R.array.list_2
@@ -36,25 +38,21 @@ object Marker {
             "list8"-> R.array.list_8
             "list9"-> R.array.list_9
             "list10"-> R.array.list_10
+            "mcheyne_list1"->R.array.mcheyne_list1
+            "mcheyne_list2"->R.array.mcheyne_list2
+            "mcheyne_list3"->R.array.mcheyne_list3
+            "mcheyne_list4"->R.array.mcheyne_list4
             else-> 0
         }
     }
-    fun get_testament(listName: String): String{
-        return when(listName){
-            "list1"->"new"
-            "list2"->"old"
-            "list3"->"new"
-            "list4"->"new"
-            "list5"->"old"
-            "list6"->"old"
-            "list7"->"old"
-            "list8"->"old"
-            "list9"->"old"
-            "list10"->"new"
-            else->"old"
-        }
+    private fun getTestament(book:String=""): String{
+       return when(book) {
+           in otBooks -> "old"
+           in ntBooks -> "new"
+           else -> "old"
+       }
     }
-    fun bibleAlertBuilder(type:String, name:String){
+    private fun bibleAlertBuilder(type:String, name:String){
         val alert = AlertDialog.Builder(App.applicationContext())
         alert.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
@@ -75,7 +73,7 @@ object Marker {
         alert.setMessage(message)
         alert.show()
     }
-    fun update_statistics(codedBook: String, bookChaps: Int, testament: String, testament_chapters: Int, chapter: Int){
+    private fun updateStatistics(codedBook: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int){
         val updateValues = mutableMapOf<String, Any>()
         val bookName = bookNames[codedBook]
         if (getIntPref("${codedBook}_chapters_read") == bookChaps){
@@ -90,7 +88,7 @@ object Marker {
             if(!getBoolPref("${codedBook}_done_testament")) {
                 updateValues["${codedBook}_done_testament"] = true
                 setBoolPref("${codedBook}_done_testament", true)
-                if (getIntPref("${testament}_chapters_read") == testament_chapters) {
+                if (getIntPref("${testament}_chapters_read") == testamentChapters) {
                     updateValues["${testament}_chapters_read"]
                     setIntPref("${testament}_chapters_read", 0)
                     for(item in bookNames){
@@ -124,13 +122,12 @@ object Marker {
             updateValues["${testament}_chapters_read"] = getIntPref("${testament}_chapters_read")
         }
         if(!getBoolPref("${codedBook}_done_whole")){
-            setIntPref("total_chapters_read", getIntPref("total_chapters_read") + 1)
-            updateValues["total_chapters_read"] = getIntPref("total_chapters_read")
+            updateValues["totalChaptersRead"] = increaseIntPref(name="total_chapters_read", value=1)
         }
         if (getIntPref("${codedBook}_chapters_read") == bookChaps){
             bibleAlertBuilder("book", bookName!!)
         }
-        if (getIntPref("${testament}_chapters_read") == testament_chapters){
+        if (getIntPref("${testament}_chapters_read") == testamentChapters){
             bibleAlertBuilder("testament", testament.capitalize(Locale.ROOT))
         }
         if (getIntPref("total_chapters_read") == 1189){
@@ -148,11 +145,10 @@ object Marker {
                     }
         }
     }
-    fun update_reading_statistic(listName: String, prefix: String =""): String{
+    private fun updateReadingStatistic(listName: String, prefix: String =""){
         val listId= getListId(listName)
-
         val list = App.applicationContext().resources.getStringArray(listId)
-        val list_index = when(getStringPref("planType", "horner")){
+        val listIndex = when(getStringPref("planType", "horner")){
             "horner"->getIntPref(listName)
             "numerical"->{
                 var index = getIntPref("${prefix}currentDayIndex")
@@ -175,36 +171,26 @@ object Marker {
             val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             if (day != 31) {
                 val bookChapters = 150
-                if(!getBoolPref("psalm_${day}_read") && !getBoolPref("psalm_${day+30}_read") && !getBoolPref("psalm_${day+60}_read") && getBoolPref("psalm_${day+90}_false") && getBoolPref("psalm_${day+120}_false")){
-                    update_statistics(codedBook, bookChapters, "old", 929, day)
-                    update_statistics(codedBook, bookChapters, "old", 929, day + 30)
-                    update_statistics(codedBook, bookChapters, "old", 929, day + 60)
-                    update_statistics(codedBook, bookChapters, "old", 929, day + 90)
-                    update_statistics(codedBook, bookChapters, "old", 929, day + 120)
-                }else {
-                    if (!getBoolPref("psalm_${day}_read")) update_statistics(codedBook, bookChapters, "old", 929, day)
-                    if (!getBoolPref("psalm_${day+30}_read")) update_statistics(codedBook, bookChapters, "old", 929, day + 30)
-                    if (!getBoolPref("psalm_${day+60}_read")) update_statistics(codedBook, bookChapters, "old", 929, day + 60)
-                    if (!getBoolPref("psalm_${day+90}_read")) update_statistics(codedBook, bookChapters, "old", 929, day + 90)
-                    if (!getBoolPref("psalm_${day+120}_read")) update_statistics(codedBook, bookChapters, "old", 929, day + 120)
-                }
+                if (!getBoolPref(name="psalm_${day}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day)
+                if (!getBoolPref(name="psalm_${day+30}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 30)
+                if (!getBoolPref(name="psalm_${day+60}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 60)
+                if (!getBoolPref(name="psalm_${day+90}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 90)
+                if (!getBoolPref(name="psalm_${day+120}_read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 120)
             }
         }else{
-            val reading = list[list_index]
+            val reading = list[listIndex]
             val readingArray = reading.split(" ")
             val bookArray = readingArray.subList(0, reading.split(" ").lastIndex)
             val book = bookArray.joinToString(" ")
             val codedBook = bookNamesCoded[book]
             val chapter = readingArray[readingArray.lastIndex]
             val bookChapters = bookChapters[codedBook]
-            val testament = get_testament(listName)
-            val testament_chapters = if(testament == "old") 929 else 260
-            update_statistics(codedBook!!, bookChapters!!, testament, testament_chapters, chapter.toInt())
+            val testament = getTestament(codedBook!!)
+            val testamentChapters = if(testament == "old") 929 else 260
+            updateStatistics(codedBook, bookChapters!!, testament, testamentChapters, chapter.toInt())
         }
-
-        return "Hi"
     }
-    fun makeStreakAlert(type:String) {
+    private fun makeStreakAlert(type:String) {
         val alert = AlertDialog.Builder(App.applicationContext())
         alert.setPositiveButton("OK") { dialog, _ ->
             dialog.dismiss()
@@ -233,11 +219,11 @@ object Marker {
             else->""
         }
         for (i in 1..doneMax) {
-            update_reading_statistic("${prefix}list${i}", prefix)
-            setIntPref("${prefix}list${i}Done", 1)
-            val doneDaily = getIntPref("${prefix}list${i}DoneDaily")
+            updateReadingStatistic(listName="${prefix}list${i}", prefix)
+            setIntPref(name="${prefix}list${i}Done", value=1)
+            val doneDaily = getIntPref(name="${prefix}list${i}DoneDaily")
             if(doneDaily == 0){
-                setIntPref("${prefix}list${i}DoneDaily", 1)
+                setIntPref(name="${prefix}list${i}DoneDaily", value=1)
             }
         }
         setIntPref("listsDone", doneMax)
@@ -318,7 +304,7 @@ object Marker {
         }
         log("Lists Done is ${getIntPref("listsDone")}")
         if (getIntPref(cardDone) != 1) {
-            update_reading_statistic(listName)
+            updateReadingStatistic(listName)
             setIntPref(cardDone, 1)
             setStringPref("dateChecked", getDate(0, false))
             if (allowPartial || listsDone == doneMax) {

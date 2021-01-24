@@ -40,10 +40,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.getDate
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
@@ -68,7 +65,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         val colorList: IntArray
         val toolbarColor: Int
         if(FirebaseAuth.getInstance().currentUser == null) {
-            setBoolPref("hasCompletedOnboarding", false)
             val providers = arrayListOf(
                     AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
                     AuthUI.IdpConfig.GoogleBuilder().build()
@@ -81,11 +77,10 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             .setIsSmartLockEnabled(false)
                             .setAvailableProviders(providers)
                             .build(), _rcSignIn)
-        }else if(!getBoolPref("hasCompletedOnboarding", false)){
+        }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             startActivity(Intent(this, OnboardingPagerActivity::class.java))
         }else{
-            log("THIS IS HAS COMPLETED ONBOARDING ${getBoolPref("hasCompletedOnboarding")}")
-            if (getBoolPref("darkMode", true)) {
+            if (getBoolPref(name="darkMode", defaultValue=true)) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
                 colorList = intArrayOf(
@@ -108,16 +103,16 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
             toolbar.setBackgroundColor(toolbarColor)
             setSupportActionBar(findViewById(R.id.my_toolbar))
-            supportActionBar?.title = getDate(0, true)
+            supportActionBar?.title = getDate(option=0, fullMonth=true)
             navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
             navController = navHostFragment.navController
             binding.bottomNav.setupWithNavController(navController)
             binding.bottomNav.setBackgroundColor(toolbarColor)
             binding.bottomNav.itemIconTintList = colorStateList
             binding.bottomNav.itemTextColor = colorStateList
-            if (getStringPref("planSystem", "pgh") == "pgh") {
+            if (getStringPref(name="planSystem", defaultValue="pgh") == "pgh") {
                 navController.navigate(R.id.navigation_home)
-            } else if (getStringPref("planSystem", "pgh") == "mcheyne") {
+            } else if (getStringPref(name="planSystem", defaultValue="pgh") == "mcheyne") {
                 navController.navigate(R.id.navigation_home_mcheyne)
             }
             binding.translationSelector.isVisible = false
@@ -126,13 +121,13 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     private fun setupBottomNavigationBar() {
-        switchEnabled("home")
+        switchEnabled(current="home")
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{
-                        if(getStringPref("planSystem", "pgh") == "pgh"){
+                        if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh"){
                             navController.navigate(R.id.navigation_home)
                         }else{
                             navController.navigate(R.id.navigation_home_mcheyne)
@@ -140,11 +135,10 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         binding.bottomNav.isVisible = true
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
-                    if (getStringPref("bibleVersion", "ESV") == "NASB"){
-                        setStringPref("bibleVersion", "NASB20")
-                        updateFS("bibleVersion", "NASB20")
+                    if (getStringPref(name="bibleVersion", defaultValue="ESV") == "NASB"){
+                        setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
                     }
-                    when (getStringPref("bibleVersion", "ESV")){
+                    when (getStringPref(name="bibleVersion", defaultValue="ESV")){
                         "AMP" -> binding.translationSelector.setSelection(1)
                         "CSB" -> binding.translationSelector.setSelection(2)
                         "ESV" -> binding.translationSelector.setSelection(3)
@@ -310,37 +304,37 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.title = "Delete Account"
                 }
                 R.id.navigation_home -> {
-                    switchEnabled("home")
-                    if(getBoolPref("darkMode", true)) {
+                    switchEnabled(current="home")
+                    if(getBoolPref(name="darkMode", defaultValue=true)) {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
                     }else {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
                     }
-                    supportActionBar?.title = getDate(0, true)
+                    supportActionBar?.title = getDate(option=0, fullMonth=true)
                     supportActionBar?.show()
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_home_mcheyne -> {
-                    switchEnabled("home")
-                    if(getBoolPref("darkMode", true)) {
+                    switchEnabled(current="home")
+                    if(getBoolPref(name="darkMode", defaultValue=true)) {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
                     }else {
                         binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
                     }
-                    supportActionBar?.title = getDate(0, true)
+                    supportActionBar?.title = getDate(option=0, fullMonth=true)
                     supportActionBar?.show()
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_stats -> {
-                    switchEnabled("stats")
+                    switchEnabled(current="stats")
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     supportActionBar?.title = destination.label
                     binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_settings -> {
-                    switchEnabled("settings")
+                    switchEnabled(current="settings")
                     supportActionBar?.title = destination.label
                     binding.translationSelector.isVisible = false
                 }
@@ -350,7 +344,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
-        val homeId = when(getStringPref("planSystem", "pgh")){
+        val homeId = when(getStringPref(name="planSystem", defaultValue="pgh")){
             "pgh"->R.id.navigation_home
             "mcheyne"->R.id.navigation_home_mcheyne
             else->R.id.navigation_home
@@ -358,19 +352,19 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
-                supportActionBar?.title = getDate(0, true)
-                switchEnabled("home")
+                supportActionBar?.title = getDate(option=0, fullMonth=true)
+                switchEnabled(current="home")
                 navControl.navigate(homeId)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{
                 supportActionBar?.title = "Statistics"
-                switchEnabled("stats")
+                switchEnabled(current="stats")
                 navControl.navigate(R.id.navigation_stats)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_settings -> {
-                switchEnabled("Settings")
+                switchEnabled(current="Settings")
                 navControl.navigate(R.id.navigation_settings)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
@@ -400,7 +394,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
     override fun onBackPressed() {
         if(FirebaseAuth.getInstance().currentUser == null){
-            log("YES THIS WORKED AS EXPECTED")
             finish()
             val i = Intent(App.applicationContext(), MainActivity::class.java)
             startActivity(i)
@@ -431,7 +424,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
                                     firestoneToPreference(doc)
                                     val i = Intent(applicationContext, MainActivity::class.java)
-                                    log("WE GOT PAST THE FIRESTONE TO PREFERENCE")
                                     finish()
                                     startActivity(i)
                                 }

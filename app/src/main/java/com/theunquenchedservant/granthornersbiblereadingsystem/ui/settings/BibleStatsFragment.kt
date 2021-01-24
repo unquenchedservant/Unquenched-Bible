@@ -36,8 +36,8 @@ class BibleStatsFragment : PreferenceFragmentCompat() {
         val new_amount_read = getIntPref("new_amount_read")
         val old_amount_read = getIntPref("old_amount_read")
         val bible_read = getIntPref("bible_amount_read")
-        oldTestament!!.summary = "$old_percent % | Times Read: $old_amount_read"
-        newTestament!!.summary = "$new_percent % | Times Read: $new_amount_read"
+        oldTestament.summary = "$old_percent % | Times Read: $old_amount_read"
+        newTestament.summary = "$new_percent % | Times Read: $new_amount_read"
         bibleRead!!.summary = "$bible_read"
         oldTestament.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val bundle = bundleOf("testament" to "old")

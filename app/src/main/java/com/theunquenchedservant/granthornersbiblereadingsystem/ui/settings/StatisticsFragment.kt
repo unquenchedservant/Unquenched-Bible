@@ -10,7 +10,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import kotlin.math.roundToInt
 
 class StatisticsFragment : PreferenceFragmentCompat() {
@@ -54,10 +53,8 @@ class StatisticsFragment : PreferenceFragmentCompat() {
         builder.setNeutralButton(R.string.no){diag, _ ->
             diag.cancel()
         }.setPositiveButton(R.string.yes){ _, _ ->
-            setIntPref("currentStreak", 0)
-            updateFS("currentStreak", 0)
-            setIntPref("maxStreak", 0)
-            updateFS("maxStreak", 0)
+            setIntPref("currentStreak", 0, true)
+            setIntPref("maxStreak", 0, true)
             findPreference<Preference>("currentStreak")?.summary = "0"
             findPreference<Preference>("maxStreak")?.summary = "0"
             (activity as MainActivity).navController.navigate(R.id.navigation_stats)

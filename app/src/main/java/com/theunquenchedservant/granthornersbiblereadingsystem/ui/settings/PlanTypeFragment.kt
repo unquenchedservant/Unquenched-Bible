@@ -35,27 +35,24 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
             }
         }
         hornerMethod!!.onPreferenceClickListener = Preference.OnPreferenceClickListener{
-            setStringPref("planType", "horner")
-            updateFS("planType", "horner")
-            setBoolPref("numericalDay", false)
-            setBoolPref("calendarDay", false)
+            setStringPref(name="planType", value="horner", updateFS=true)
+            setBoolPref(name="numericalDay", value=false)
+            setBoolPref(name="calendarDay", value=false)
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
         }
         numericalMethod!!.onPreferenceClickListener = Preference.OnPreferenceClickListener{
-            setStringPref("planType", "numerical")
-            updateFS("planType", "numerical")
-            setBoolPref("grantHorner", false)
-            setBoolPref("calendarDay", false)
+            setStringPref(name="planType", value="numerical", updateFS=true)
+            setBoolPref(name="grantHorner", value=false)
+            setBoolPref(name="calendarDay", value=false)
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
         }
         calendarMethod!!.onPreferenceClickListener = Preference.OnPreferenceClickListener{
-            setStringPref("planType", "calendar")
-            updateFS("planType", "calendar")
-            setBoolPref("numericalDay", false)
-            setBoolPref("grantHorner", false)
-            setBoolPref("holdPlan", false)
+            setStringPref(name="planType", value="calendar", updateFS=true)
+            setBoolPref(name="numericalDay", value=false)
+            setBoolPref(name="grantHorner", value=false)
+            setBoolPref(name="holdPlan", value=false, updateFS=true)
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
         }

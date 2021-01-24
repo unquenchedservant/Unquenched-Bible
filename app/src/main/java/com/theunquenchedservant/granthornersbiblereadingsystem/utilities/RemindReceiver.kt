@@ -17,15 +17,15 @@ class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
 
     override fun onReceive(context: Context, intent: Intent) {
-        when(getBoolPref("vacation_mode")) {
+        when(getBoolPref(name="vacation_mode")) {
             false -> {
                 log("Vacation mode off, preparing reminder notification")
-                if(getBoolPref("notif_switch")) {
-                    val check = getIntPref("listsDone")
+                if(getBoolPref(name="notif_switch")) {
+                    val check = getIntPref(name="listsDone")
                     log("lists done so far = $check")
-                    val allowPartial = getBoolPref("allow_partial_switch")
+                    val allowPartial = getBoolPref(name="allow_partial_switch")
                     log("Allow partial is $allowPartial")
-                    val doneMax = when(getStringPref("planSystem", "pgh")){
+                    val doneMax = when(getStringPref(name="planSystem", defaultValue="pgh")){
                         "pgh"->10
                         "mcheyne"->4
                         else->10

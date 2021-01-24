@@ -95,14 +95,11 @@ class ReadingListRepository {
             "horner" -> {
                 return when (index) {
                     list.size -> {
-                        if (fromFirebase) {
-                            updateFS(listName, 0)
-                        }
-                        setIntPref(listName, 0)
+                        setIntPref(name=listName, value=0, updateFS=true)
                         list[0]
                     }
                     else -> {
-                        setIntPref(listName, index)
+                        setIntPref(name=listName, value=index, updateFS=true)
                         list[index]
                     }
                 }

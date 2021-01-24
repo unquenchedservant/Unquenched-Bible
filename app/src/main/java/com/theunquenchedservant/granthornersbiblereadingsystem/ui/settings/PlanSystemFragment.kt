@@ -26,16 +26,15 @@ class PlanSystemFragment : PreferenceFragmentCompat() {
         }
 
         pgh!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            setStringPref("planSystem", "pgh")
-            updateFS("planSystem", "pgh")
-            setBoolPref("mcheyne_system", false)
+            setStringPref(name="planSystem", value="pgh", updateFS=true)
+            setBoolPref(name="mcheyne_system", value=false)
             mainActivity.navController.navigate(R.id.navigation_plan_system)
             true
         }
         mcheyne!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            setStringPref("planSystem", "mcheyne")
+            setStringPref(name="planSystem", value="mcheyne", updateFS=true)
             updateFS("planSystem", "mcheyne")
-            setBoolPref("pgh_system", false)
+            setBoolPref(name="pgh_system", value=false)
             mainActivity.navController.navigate(R.id.navigation_plan_system)
             true
         }

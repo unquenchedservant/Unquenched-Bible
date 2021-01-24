@@ -35,27 +35,39 @@ object SharedPref {
             db.collection("main").document(user.uid).update(name, value)
     }
 
-    fun setIntPref(name: String, value: Int){
+    fun setIntPref(name: String, value: Int, updateFS:Boolean=false){
         getPref().edit().putInt(name, value).apply()
+        if(updateFS) {
+            updateFS(name, value)
+        }
     }
-    fun increaseIntPref(name: String, value: Int): Int{
+    fun increaseIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
         val start = getIntPref(name)
         setIntPref(name, start+value)
+        if(updateFS) {
+            updateFS(name, start + value)
+        }
         return start+value
     }
     fun getIntPref(name: String, defaultValue: Int = 0): Int {
         return getPref().getInt(name, defaultValue)
     }
 
-    fun setStringPref(name:String, value: String) {
+    fun setStringPref(name:String, value: String, updateFS: Boolean = false) {
         getPref().edit().putString(name, value).apply()
+        if(updateFS) {
+            updateFS(name, value)
+        }
     }
     fun getStringPref(name:String, defaultValue: String = "itsdeadjim"): String{
         return getPref().getString(name, defaultValue)!!
     }
 
-    fun setBoolPref(name: String, value: Boolean){
+    fun setBoolPref(name: String, value: Boolean, updateFS:Boolean=false){
         getPref().edit().putBoolean(name, value).apply()
+        if(updateFS) {
+            updateFS(name, value)
+        }
     }
     fun getBoolPref(name: String, defaultValue: Boolean=false): Boolean{
         return getPref().getBoolean(name, defaultValue)

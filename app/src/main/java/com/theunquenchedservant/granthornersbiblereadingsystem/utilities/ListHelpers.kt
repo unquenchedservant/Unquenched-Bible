@@ -171,14 +171,11 @@ object ListHelpers {
         val list = App.applicationContext().resources.getStringArray(listId)
         return when(number){
             list.size -> {
-                if(fromFirebase){
-                    updateFS(listName, 0)
-                }
-                setIntPref(listName, 0)
+                setIntPref(listName, 0, true)
                 list[0]
             }
             else -> {
-                setIntPref(listName, number)
+                setIntPref(listName, number, true)
                 list[number]
             }
         }

@@ -18,6 +18,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 
@@ -30,7 +31,7 @@ class OnboardingFragmentFour : Fragment() {
     ): View {
 
         vieww = inflater.inflate(R.layout.fragment_onboarding_page_four, container, false)
-        val dark = getBoolPref("darkMode", true)
+        val dark = getBoolPref(name="darkMode", defaultValue=true)
         val title = vieww.findViewById<TextView>(R.id.title)
         val helper = vieww.findViewById<TextView>(R.id.helper)
         val doneBtn = vieww.findViewById<MaterialButton>(R.id.doneBtn)
@@ -49,14 +50,16 @@ class OnboardingFragmentFour : Fragment() {
             doneBtn.setTextColor(Color.parseColor("#121212"))
         }
         doneBtn.setOnClickListener {
-            setBoolPref("hasCompletedOnboarding", true)
+            setBoolPref(name="hasCompletedOnboarding", value=true, updateFS=true)
+            setStringPref(name="planSystem", value=getStringPref(name="planSystem", defaultValue="pgh"), updateFS=true)
+            setStringPref(name="planType", value=getStringPref(name="planType", defaultValue="horner"), updateFS=true)
             startActivity(Intent((activity as OnboardingPagerActivity), MainActivity::class.java))
         }
         return vieww
     }
     override fun onResume(){
-        val onboardOne = getBoolPref("onboardOneDone", false)
-        val onboardTwo = getBoolPref("onboardingTwoDone", false)
+        val onboardOne = getBoolPref(name="onboardOneDone", defaultValue=false)
+        val onboardTwo = getBoolPref(name="onboardingTwoDone", defaultValue=false)
         val title = vieww.findViewById<TextView>(R.id.title)!!
         val helper = vieww.findViewById<TextView>(R.id.helper)!!
         val doneBtn = vieww.findViewById<MaterialButton>(R.id.doneBtn)!!

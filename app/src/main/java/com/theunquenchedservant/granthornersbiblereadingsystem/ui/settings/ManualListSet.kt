@@ -18,7 +18,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class ManualListSet: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
@@ -514,23 +513,22 @@ class ManualListSet: Fragment() {
                     "The Gospels" -> {
                         val array = resources.getStringArray(R.array.list_1)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list1", num)
-                        updateFS( "list1", num)
+                        setIntPref(name = "list1", value = num, updateFS = true)
                     }
 
 
                     "The Pentateuch" -> {
                         val array = resources.getStringArray(R.array.list_2)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list2", num)
-                        updateFS("list2", num)}
+                        setIntPref(name = "list2", value = num, updateFS = true)
+                    }
 
 
                     "Epistles I" -> {
                         val array = resources.getStringArray(R.array.list_3)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list3", num)
-                        updateFS("list3", num)}
+                        setIntPref(name = "list3", value = num, updateFS = true)
+                    }
 
 
                     "Epistles II" -> {
@@ -540,54 +538,55 @@ class ManualListSet: Fragment() {
                         } else {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        setIntPref("list4", num)
-                        updateFS("list4", num)}
+                        setIntPref(name = "list4", value = num, updateFS = true)
+                    }
 
 
                     "Poetry" -> {
                         val array = resources.getStringArray(R.array.list_5)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list5", num)
-                        updateFS("list5", num)}
+                        setIntPref(name = "list5", value = num, updateFS = true)
+                    }
 
 
                     "Psalms" -> {
                         val array = resources.getStringArray(R.array.list_6)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list6", num)
-                        updateFS("list6", num)}
+                        setIntPref(name = "list6", value = num, updateFS = true)
+                    }
 
 
                     "Proverbs" -> {
                         val array = resources.getStringArray(R.array.list_7)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list7", num)
-                        updateFS( "list7", num)}
+                        setIntPref(name = "list7", value = num, updateFS = true)
+                    }
 
 
                     "History" -> {
                         val array = resources.getStringArray(R.array.list_8)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list8", num)
-                        updateFS( "list8", num)}
+                        setIntPref(name="list8", value=num, updateFS=true)
+                    }
 
 
                     "Prophets" -> {
                         val array = resources.getStringArray(R.array.list_9)
-                        val num = if(selectedBook == "Obadiah") {
+                        val num = if (selectedBook == "Obadiah") {
                             array.indexOf("$selectedBook")
-                        }else{
+                        } else {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        setIntPref("list9", num)
-                        updateFS("list9", num)}
+                        setIntPref(name="list9", value=num, updateFS=true)
+                    }
 
 
                     "Acts" -> {
                         val array = resources.getStringArray(R.array.list_10)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list10", num)
-                        updateFS( "list10", num)}}
+                        setIntPref(name="list10", value=num, updateFS=true)
+                    }
+                }
 
 
                 dialogInterface.dismiss()

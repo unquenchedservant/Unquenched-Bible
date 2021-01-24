@@ -64,29 +64,29 @@ class OnboardingFragmentTwo : Fragment() {
         checkboxPgh.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setStringPref("planSystem", "pgh")
-                setBoolPref("pgh_system", true)
-                setBoolPref("mcheyne_system", false)
-                setBoolPref("onboardOneDone", true)
+                setStringPref(name="planSystem", value="pgh")
+                setBoolPref(name="pgh_system", value=true)
+                setBoolPref(name="mcheyne_system", value=false)
+                setBoolPref(name="onboardOneDone", value=true)
                 checkboxMcheyne.isChecked = false
             }else{
-                setStringPref("planSystem", "")
-                setBoolPref("pgh_system", false)
-                setBoolPref("onboardOneDone", false)
+                setStringPref(name="planSystem", value="")
+                setBoolPref(name="pgh_system", value=false)
+                setBoolPref(name="onboardOneDone", value=false)
             }
         }
         checkboxMcheyne.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setStringPref("planSystem", "mcheyne")
-                setBoolPref("mcheyne_system", true)
-                setBoolPref("pgh_system", false)
-                setBoolPref("onboardOneDone", true)
+                setStringPref(name="planSystem", value="mcheyne")
+                setBoolPref(name="mcheyne_system", value=true)
+                setBoolPref(name="pgh_system", value=false)
+                setBoolPref(name="onboardOneDone", value=true)
                 checkboxPgh.isChecked = false
             }else{
-                setStringPref("planSystem", "")
-                setBoolPref("mcheyne_system", false)
-                setBoolPref("onboardOneDone", false)
+                setStringPref(name="planSystem", value="")
+                setBoolPref(name="mcheyne_system", value=false)
+                setBoolPref(name="onboardOneDone", value=false)
             }
         }
         return view

@@ -20,20 +20,18 @@ class NotificationsFragment : PreferenceFragmentCompat() {
         val dailyList: Preference? = findPreference("daily_time")
         val remindTime: Preference? = findPreference("remind_time")
 
-        val dailyMillis = getIntPref("daily_time")
+        val dailyMillis = getIntPref(name="daily_time")
         dailyList!!.summary = getSummary(dailyMillis)
 
-        val remindMillis = getIntPref("remind_time")
+        val remindMillis = getIntPref(name="remind_time")
         remindTime!!.summary = getSummary(remindMillis)
 
         remindTime.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            setIntPref("remind_time", o as Int)
-            updateFS("remindNotif", o)
+            setIntPref(name="remind_time", value=o as Int, updateFS=true)
             true
         }
         dailyList.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            setIntPref("daily_time", o as Int)
-            updateFS("dailyNotif", o)
+            setIntPref(name="daily_time", value=o as Int, updateFS=true)
             true
         }
 
@@ -56,7 +54,7 @@ class NotificationsFragment : PreferenceFragmentCompat() {
                 updateFS("vacationMode", o)
             }else{
                 updateFS("vacationMode", o)
-                setBoolPref("vacationOff", true)
+                setBoolPref(name="vacationOff", value=true, updateFS=true)
             }
             true
         }

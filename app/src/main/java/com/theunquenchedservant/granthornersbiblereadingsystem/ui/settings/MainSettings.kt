@@ -15,20 +15,17 @@ import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.GoogleAuthProvider
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class MainSettings : PreferenceFragmentCompat() {
 
@@ -82,17 +79,11 @@ class MainSettings : PreferenceFragmentCompat() {
         }
         darkMode.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(dark){
-                setBoolPref("darkMode", false)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("darkMode", false)
-                }
+                setBoolPref(name="darkMode", value=false, updateFS=true)
                 mainActivity.navController.navigate(R.id.navigation_home)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
             }else{
-                setBoolPref("darkMode", true)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("darkMode", true)
-                }
+                setBoolPref(name="darkMode", value=true, updateFS=true)
                 mainActivity.navController.navigate(R.id.navigation_home)
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
             }

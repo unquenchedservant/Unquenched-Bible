@@ -76,51 +76,32 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         }
         holdPlan.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(hold){
-                setBoolPref("holdPlan", false)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("holdPlan", false)
-                }
+                setBoolPref(name="holdPlan", value=false, updateFS=true)
             }else{
-                setBoolPref("holdPlan", true)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("holdPlan", true)
-                }
+                setBoolPref(name="holdPlan", value=true, updateFS=true)
             }
             true
         }
         psalms!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             if(ps){
-                setBoolPref("psalms", false)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("psalms", false)
-                }
+                setBoolPref(name="psalms", value=false, updateFS=true)
             }else{
-                setBoolPref("psalms", true)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("psalms", true)
-                }
+                setBoolPref(name="psalms", value=true, updateFS=true)
             }
             true
         }
 
         partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
             if(partial){
-                setBoolPref("allow_partial_switch", false)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("allowPartial", false)
-                }
+                setBoolPref(name="allow_partial_switch", value=false, updateFS=true)
             }else{
-                setBoolPref("allow_partial_switch", true)
-                if(FirebaseAuth.getInstance().currentUser != null){
-                    updateFS("allowPartial", true)
-                }
+                setBoolPref(name="allow_partial_switch", value=true, updateFS=true)
             }
             true
         }
         translation.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->
             translation.value = newValue as String
-            updateFS("bibleVersion", newValue)
-            setStringPref("bibleVersion", newValue)
+            setStringPref(name="bibleVersion", value=newValue, updateFS=true)
             false
         }
     }

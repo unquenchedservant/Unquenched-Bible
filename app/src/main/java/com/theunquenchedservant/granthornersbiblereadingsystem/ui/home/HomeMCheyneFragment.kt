@@ -47,6 +47,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import java.util.*
 
 class HomeMCheyneFragment : Fragment() {
@@ -88,7 +89,7 @@ class HomeMCheyneFragment : Fragment() {
         if(getIntPref("versionNumber") < 58){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 59)
+                setIntPref(name="versionNumber", value=59)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
@@ -104,7 +105,7 @@ class HomeMCheyneFragment : Fragment() {
         if(getIntPref("versionNumber") == 58){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something, _ ->
-                setIntPref("versionNumber", 59)
+                setIntPref(name="versionNumber", value=59)
                 something.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
@@ -167,7 +168,7 @@ class HomeMCheyneFragment : Fragment() {
             }
         }
         if(getStringPref("planType", "horner") == "calendar" && Calendar.getInstance().get(Calendar.MONTH) == Calendar.FEBRUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 29){
-            setIntPref("dailyStreak", 1)
+            setIntPref(name="dailyStreak", value=1, updateFS=true)
         }else{
             createButtonListener()
         }
@@ -299,8 +300,8 @@ class HomeMCheyneFragment : Fragment() {
                 cardView.root.setOnLongClickListener {
                     val builder = AlertDialog.Builder(requireContext())
                     builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
-                        setIntPref(listDone, 0)
-                        setIntPref(listName, getIntPref(listName) + 1)
+                        setIntPref(name=listDone, value=0)
+                        increaseIntPref(name=listName, value=1)
                         val isLogged = FirebaseAuth.getInstance().currentUser
                         if (isLogged != null) {
                             val data = mutableMapOf<String, Any>()

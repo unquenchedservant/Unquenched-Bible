@@ -21,7 +21,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class ManualListNumericalSet: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
@@ -64,8 +63,7 @@ class ManualListNumericalSet: Fragment() {
             alert.setTitle("Set Day?")
             alert.setMessage("Are you sure you want to set the current day of reading to ${dayPicker.value}")
             alert.setPositiveButton("Yes") { dialogInterface, _ ->
-                setIntPref("${prefix}currentDayIndex", dayPicker.value)
-                updateFS("${prefix}currentDayIndex", dayPicker.value)
+                setIntPref(name="${prefix}currentDayIndex", value=dayPicker.value, updateFS=true)
                 dialogInterface.dismiss()
                 Toast.makeText(context, "Changed current day of reading", Toast.LENGTH_LONG).show()
                 mainActivity.navController.navigate(homeId)
