@@ -1,0 +1,42 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/title"
+            style="?android:textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="All set to begin using the Unquenched Bible App" />
+
+        <TextView
+            android:id="@+id/helper"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="150dp"
+            android:text="Find more settings under the Settings tab, such as setting the times you want notifications to be sent, if at all, and enabling Weekend Mode (where you can take Saturdays and Sundays off). " />
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/doneBtn"
+            style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="50dp"
+            android:layout_gravity="center"
+            android:backgroundTint="#FFFFFF"
+            android:enabled="true"
+            android:backgroundTintMode="add"
+            android:text="Start Reading" />
+    </LinearLayout>
+</ScrollView>

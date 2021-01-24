@@ -1,0 +1,38 @@
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/content"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:orientation="vertical">
+        <TextView style="?android:textAppearanceLarge"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:gravity="center"
+            android:padding="16dp"
+            android:text="WELCOME TO"
+            android:id="@+id/title"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/image"
+            android:layout_gravity="center"
+            android:layout_marginTop="150dp"
+            app:srcCompat="@drawable/logo2"
+            tools:srcCompat="@drawable/logo2" />
+
+        <TextView
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="200dp"
+            android:layout_gravity="center"
+            android:id="@+id/helper"
+            android:text="Swipe left and right to go back and forth on the onboarding screen"/>
+    </LinearLayout>
+</ScrollView>
