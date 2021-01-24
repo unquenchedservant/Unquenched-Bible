@@ -6,6 +6,7 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
@@ -45,6 +46,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.listSwitcher
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
+import java.net.URI
 
 class HomeFragment : Fragment() {
 
@@ -82,33 +84,25 @@ class HomeFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") < 58){
+        if(getIntPref("versionNumber") < 60){
             val builder = AlertDialog.Builder(requireContext())
             builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 59)
+                setIntPref("versionNumber", 60)
                 something.dismiss()
+            }
+            builder.setNeutralButton("More Info"){diag, _->
+                setIntPref("versionNumber", 60)
+                val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
+                startActivity(i)
+                diag.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n"+
-                            "You can change the translation in the scripture window or under Plan Settings\n\n"+
-                            "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
-                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors. (Thank you Meinhard)\n\n" +
-                            "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
-            )
-            builder.create().show()
-        }
-        if(getIntPref("versionNumber") == 58){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton(R.string.ok) { something, _ ->
-                setIntPref("versionNumber", 59)
-                something.dismiss()
-            }
-            builder.setTitle(R.string.title_new_update)
-            builder.setMessage(
-                    "[FIXED] Acts and Revelation now work on AMP, CSB, KJV, and the NASBs\n\n" +
-                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors \n\n"+
-                            "Thank you Meinhard for bringing both of these to my attention."
+                    "Version 2.0 of the app is coming very very soon!\n\n"+
+                            "This update will contain a new name and logo for the app, so don't panic if you think the app 'disappears'.\n\n"+
+                            "The app will be known as 'Unquenched Bible' and will have a ton of new features, which you can find out more about by clicking 'More Info' below.\n\n" +
+                            "Your progress and settings will not be lost in the update, don't worry!\n\n" +
+                            "Thank you for using the app, and i'm looking forward to releasing Unquenched Bible in the next week or so!"
             )
             builder.create().show()
         }
