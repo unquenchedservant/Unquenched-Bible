@@ -32,6 +32,12 @@
         app:summary="@string/summary_partial"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
+    <SwitchPreference
+        app:key="weekendMode"
+        app:title="Weekend Mode"
+        app:summary="Take weekends off. You won't receive notifications on Saturdays or Sundays, and your streak won't be affected if you don't do the readings."
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <DropDownPreference
         app:key="bibleTranslation"
         app:title="@string/title_translation_selection"

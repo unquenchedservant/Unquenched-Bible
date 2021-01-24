@@ -1,10 +1,20 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import java.text.SimpleDateFormat
 import java.util.*
 
 object Dates {
+    fun isWeekend():Boolean{
+        val today = Calendar.getInstance()
+        return if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
+            log("this is weekend")
+            true
+        }else{
+            false
+        }
+    }
     fun checkDate(option: String, fullMonth: Boolean): Boolean{
         val date = getStringPref("dateChecked")
         return when(option){
