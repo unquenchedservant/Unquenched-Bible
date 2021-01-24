@@ -210,6 +210,7 @@ object SharedPref {
             updateStringPref(data, "planSystem")
             updateBoolPref(data, "pgh_system")
             updateBoolPref(data, "mcheyne_system")
+            updateBoolPref(data, "hasCompletedOnboarding")
             for(book in otBooks){
                 updateIntPref(data, "${book}_amount_read")
                 updateIntPref(data, "${book}_chapters_read")
