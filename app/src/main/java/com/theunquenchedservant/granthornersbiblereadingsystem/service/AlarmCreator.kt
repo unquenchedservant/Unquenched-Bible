@@ -54,11 +54,11 @@ object AlarmCreator {
         when(alarmType) {
             "daily" -> {
                 notifPendingIntent = dailyPending
-                timeInMinutes = getIntPref("${alarmType}_time")
+                timeInMinutes = getIntPref(name="${alarmType}Notif")
             }
             "remind" -> {
                 notifPendingIntent = remindPending
-                timeInMinutes = getIntPref("${alarmType}_time")
+                timeInMinutes = getIntPref(name="${alarmType}Notif")
             }
             else -> {
                 notifPendingIntent = checkPending
@@ -96,14 +96,14 @@ object AlarmCreator {
         val notifyUp = (PendingIntent.getBroadcast(ctx, 4, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null)
 
         if (!notifyUp) {
-            createAlarm("daily")
+            createAlarm(alarmType="daily")
         }
 
         val remindIntent = Intent(ctx, RemindReceiver::class.java)
         val remindUp = (PendingIntent.getBroadcast(ctx, 2, remindIntent, PendingIntent.FLAG_NO_CREATE) != null)
 
         if (!remindUp) {
-            createAlarm("remind")
+            createAlarm(alarmType="remind")
         }
     }
 }

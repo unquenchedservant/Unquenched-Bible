@@ -13,6 +13,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 
 class AlarmReceiver : BroadcastReceiver() {
 
@@ -24,8 +25,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val vacation = getBoolPref(name="vacationMode", defaultValue=false)
         when(vacation || (getBoolPref(name="weekendMode") && isWeekend())){
             false -> {
-                if(getBoolPref("notif_switch")) {
-                    log("Vacation mode off, sending notification")
+                if(getBoolPref(name="notifications")) {
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     deliverNotification(context)
                 }else{
