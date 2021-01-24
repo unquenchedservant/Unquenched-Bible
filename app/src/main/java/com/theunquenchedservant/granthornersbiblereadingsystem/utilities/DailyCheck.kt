@@ -12,6 +12,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 
 class DailyCheck : BroadcastReceiver() {
     private val isLogged = FirebaseAuth.getInstance().currentUser
@@ -38,7 +39,7 @@ class DailyCheck : BroadcastReceiver() {
                 resetStreak = true
             }
             0 -> {
-                when (vacation || getBoolPref(name="vacationOff")) {
+                when (vacation || getBoolPref(name="vacationOff") || (getBoolPref(name="weekendMode") && isWeekend())) {
                     false -> {
                         if(!checkDate(option="yesterday", fullMonth=false)){
                                 resetCurrent = true

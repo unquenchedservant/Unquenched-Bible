@@ -9,6 +9,7 @@ import androidx.core.app.NotificationCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -17,7 +18,7 @@ class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
 
     override fun onReceive(context: Context, intent: Intent) {
-        when(getBoolPref(name="vacationMode")) {
+        when(getBoolPref(name="vacationMode") || (getBoolPref(name="weekendMode") && isWeekend())) {
             false -> {
                 log("Vacation mode off, preparing reminder notification")
                 if(getBoolPref(name="notifications")) {

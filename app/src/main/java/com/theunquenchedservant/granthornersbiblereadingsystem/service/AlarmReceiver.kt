@@ -21,9 +21,8 @@ class AlarmReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
 
     override fun onReceive(context: Context, intent: Intent){
-        val vacation = PreferenceManager.getDefaultSharedPreferences(context).getBoolean("vacation_mode", false)
-        log("Vacation mode is $vacation")
-        when(vacation){
+        val vacation = getBoolPref(name="vacationMode", defaultValue=false)
+        when(vacation || (getBoolPref(name="weekendMode") && isWeekend())){
             false -> {
                 if(getBoolPref("notif_switch")) {
                     log("Vacation mode off, sending notification")
