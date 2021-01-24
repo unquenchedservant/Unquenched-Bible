@@ -26,10 +26,10 @@
     <PreferenceCategory
         app:title="">
         <Preference
-            app:key="reset_statistics"
+            app:key="resetStatistics"
             app:title="@string/summary_reset_stats"/>
         <Preference
-            app:key="reset_bible_menu"
+            app:key="resetBibleMenu"
             app:title="@string/title_reset_bible_menu"
             app:summary="@string/summary_reset_bible_menu"/>
     </PreferenceCategory>

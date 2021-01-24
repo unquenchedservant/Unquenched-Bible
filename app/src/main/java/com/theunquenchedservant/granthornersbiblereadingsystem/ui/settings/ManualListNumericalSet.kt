@@ -21,7 +21,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class ManualListNumericalSet: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
@@ -32,7 +31,7 @@ class ManualListNumericalSet: Fragment() {
         super.onResume()
         val root = requireView()
         val mainActivity = activity as MainActivity
-        val dark = SharedPref.getBoolPref("darkMode", true)
+        val dark = SharedPref.getBoolPref(name="darkMode", defaultValue=true)
         val dayPicker = root.findViewById<NumberPicker>(R.id.dayPickerSpinner)
         val selectButton = root.findViewById<Button>(R.id.set_button)
         if(dark){
@@ -48,24 +47,26 @@ class ManualListNumericalSet: Fragment() {
         }
         dayPicker.minValue = 1
         dayPicker.maxValue = 9999
-        val prefix = when(getStringPref("planSystem", "pgh")){
-            "pgh" ->""
-            "mcheyne"->"mcheyne_"
-            else->""
-        }
-        val homeId = when(getStringPref("planSystem", "pgh")){
+        val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
+        val homeId = when(planSystem){
             "pgh"->R.id.navigation_home
             "mcheyne"->R.id.navigation_home_mcheyne
             else->R.id.navigation_home
         }
-        dayPicker.value = getIntPref("${prefix}currentDayIndex", 0) + 1
+        val indexName:String
+        if(planSystem == "pgh") {
+            indexName = "currentDayIndex"
+            dayPicker.value = getIntPref(name="currentDayIndex", defaultValue=0) + 1
+        }else{
+            indexName = "mcheyneCurrentDayIndex"
+            dayPicker.value = getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0) + 1
+        }
         selectButton.setOnClickListener {
             val alert             = AlertDialog.Builder(requireContext())
             alert.setTitle("Set Day?")
             alert.setMessage("Are you sure you want to set the current day of reading to ${dayPicker.value}")
             alert.setPositiveButton("Yes") { dialogInterface, _ ->
-                setIntPref("${prefix}currentDayIndex", dayPicker.value)
-                updateFS("${prefix}currentDayIndex", dayPicker.value)
+                setIntPref(name=indexName, value=dayPicker.value, updateFS=true)
                 dialogInterface.dismiss()
                 Toast.makeText(context, "Changed current day of reading", Toast.LENGTH_LONG).show()
                 mainActivity.navController.navigate(homeId)

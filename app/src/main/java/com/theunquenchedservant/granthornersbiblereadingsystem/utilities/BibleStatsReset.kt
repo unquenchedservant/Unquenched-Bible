@@ -14,42 +14,31 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 object BibleStatsReset {
     private val isLogged = FirebaseAuth.getInstance().currentUser
 
-    fun resetBook(bookName: String, testament: String, hardReset: Boolean = false, internal: Boolean = false, updateValues: MutableMap<String, Any> = mutableMapOf<String, Any>()):MutableMap<String, Any>{
-        val chapters = bookChapters[bookName]!!
+    fun resetBook(bookName: String, testament: String, hardReset: Boolean = false, internal: Boolean = false, updateValues: MutableMap<String, Any> = mutableMapOf()):MutableMap<String, Any>{
+        val chapters = bookChapters[bookName] ?: error("")
         for(chapter in 1..chapters){
-            updateValues["${bookName}_${chapter}_read"] = false
-            setBoolPref("${bookName}_${chapter}_read", false)
+            updateValues["${bookName}${chapter}Read"] = setBoolPref(name="${bookName}${chapter}Read", value=false)
             if(hardReset) {
-                updateValues["${bookName}_${chapter}_amount_read"] = 0
-                setIntPref("${bookName}_${chapter}_amount_read", 0)
+                updateValues["${bookName}${chapter}AmountRead"] = setIntPref(name="${bookName}${chapter}AmountRead", value=0)
+
             }
         }
-        val testament_chapters_done = getIntPref("${testament}_chapters_read")
-        val whole_chapters_done = getIntPref("total_chapters_read")
-        val chapters_done = getIntPref("${bookName}_chapters_read")
-        if(!getBoolPref("${bookName}_done_testament")){
-            val new_testament_chapters_done = testament_chapters_done - chapters_done
-            setIntPref("${testament}_chapters_read", new_testament_chapters_done)
-            updateValues["${testament}_chapters_read"] = new_testament_chapters_done
+        val testamentChaptersDone = getIntPref(name="${testament}ChaptersRead")
+        val wholeChaptersDone = getIntPref(name="totalChaptersRead")
+        val chaptersDone = getIntPref(name="${bookName}ChaptersRead")
+        if(!getBoolPref(name="${bookName}DoneTestament")){
+            updateValues["${testament}ChaptersRead"] = setIntPref(name="${testament}ChaptersRead",  value=testamentChaptersDone - chaptersDone)
         }else{
-            val new_testament_chapters_done = testament_chapters_done - chapters
-            setIntPref("${testament}_chapters_read", new_testament_chapters_done)
-            updateValues["${testament}_chapters_read"] = new_testament_chapters_done
+            updateValues["${testament}ChaptersRead"] = setIntPref(name="${testament}ChaptersRead", value=testamentChaptersDone - chapters)
         }
-        if(!getBoolPref("${bookName}_done_whole")){
-            val new_whole_chapters_done = whole_chapters_done - chapters_done
-            setIntPref("total_chapters_read", new_whole_chapters_done)
-            updateValues["total_chapters_read"] = new_whole_chapters_done
+        if(!getBoolPref(name="${bookName}DoneWhole")){
+            updateValues["totalChaptersRead"] = setIntPref(name="totalChaptersRead", value=wholeChaptersDone - chaptersDone)
         }else{
-            val new_whole_chapters_done = whole_chapters_done - chapters
-            setIntPref("total_chapters_read", new_whole_chapters_done)
-            updateValues["total_chapters_read"] = new_whole_chapters_done
+            updateValues["totalChaptersRead"] = setIntPref(name="totalChaptersRead", value=wholeChaptersDone-chapters)
         }
-        setIntPref("${bookName}_chapters_read", 0)
-        updateValues["${bookName}_chapters_read"] = 0
+        updateValues["${bookName}ChaptersRead"] = setIntPref(name="${bookName}ChaptersRead", value=0)
         if (hardReset){
-            setIntPref("${bookName}_amount_read", 0)
-            updateValues["${bookName}_amount_read"] = 0
+            updateValues["${bookName}AmountRead"] = setIntPref(name="${bookName}AmountRead", value=0)
         }
         if (isLogged != null && !internal) {
             val db = FirebaseFirestore.getInstance()
@@ -68,21 +57,21 @@ object BibleStatsReset {
         return updateValues
     }
 
-    fun resetTestament(testament: String, hardReset: Boolean=false, internal: Boolean=false, updateValues: MutableMap<String, Any> = mutableMapOf<String, Any>()) :MutableMap<String, Any>{
+    fun resetTestament(testament: String, hardReset: Boolean=false, internal: Boolean=false, updateValues: MutableMap<String, Any> = mutableMapOf()) :MutableMap<String, Any>{
         val books = getBooks(testament)!!
-        var updateValue_updated = updateValues
+        var updateValueUpdated = updateValues
         for(book in books){
-            updateValue_updated = resetBook(book, testament, hardReset, true, updateValue_updated)
+            updateValueUpdated = resetBook(book, testament, hardReset, internal=true, updateValueUpdated)
         }
-        setIntPref("${testament}_chapters_read", 0)
-        updateValue_updated["${testament}_chapters_read"] = 0
+
+        updateValueUpdated["${testament}ChaptersRead"] = setIntPref(name="${testament}ChaptersRead", value=0)
         if(hardReset){
-            setIntPref("${testament}_amount_read", 0)
-            updateValue_updated["${testament}_amount_read"] = 0
+
+            updateValueUpdated["${testament}AmountRead"] = setIntPref(name="${testament}AmountRead", value=0)
         }
         if (isLogged != null && !internal) {
             val db = FirebaseFirestore.getInstance()
-            db.collection("main").document(isLogged.uid).update(updateValue_updated)
+            db.collection("main").document(isLogged.uid).update(updateValueUpdated)
                     .addOnSuccessListener {
                         MainActivity.log("Successful update")
                     }
@@ -91,19 +80,17 @@ object BibleStatsReset {
                         Log.w("PROFGRANT", "Failure writing to firestore", error)
                     }
         }
-        return updateValue_updated
+        return updateValueUpdated
     }
 
     fun resetBible(hardReset: Boolean=false){
         var updateValues = mutableMapOf<String, Any>()
-        updateValues = resetTestament("new", hardReset, true, updateValues)
-        updateValues = resetTestament("old", hardReset, true, updateValues)
+        updateValues = resetTestament(testament="new", hardReset, internal=true, updateValues)
+        updateValues = resetTestament(testament="old", hardReset, internal=true, updateValues)
         if(hardReset){
-            updateValues["bible_amount_read"] = 0
-            setIntPref("bible_amount_read", 0)
+            updateValues["bibleAmountRead"] = setIntPref(name="bibleAmountRead", value=0)
         }
-        setIntPref("total_chapters_read", 0)
-        updateValues["total_chapters_read"] = 0
+        updateValues["totalChaptersRead"] = setIntPref(name="totalChaptersRead", value=0)
         if (isLogged != null){
             val db = FirebaseFirestore.getInstance()
             db.collection("main").document(isLogged.uid).update(updateValues)

@@ -15,7 +15,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookCh
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import java.math.RoundingMode
 import java.text.DecimalFormat
 import java.util.*
@@ -34,9 +33,9 @@ class BibleStatsTestamentFragment : PreferenceFragmentCompat()  {
             val bookPref = Preference(App.applicationContext())
             bookPref.title = bookNames[book]
             bookPref.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-            val timesRead = getIntPref("${book}_amount_read")
-            val percentRead = if(getIntPref("${book}_chapters_read") != 0) {
-                val percentRead_1 = getIntPref("${book}_chapters_read").toDouble() / bookChapters[book]!!
+            val timesRead = getIntPref(name="${book}AmountRead")
+            val percentRead = if(getIntPref(name="${book}ChaptersRead") != 0) {
+                val percentRead_1 = getIntPref(name="${book}ChaptersRead").toDouble() / bookChapters[book]!!
                 (percentRead_1 * 100).roundToInt()
             }else{
                 0

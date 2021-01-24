@@ -52,7 +52,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         fullHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetBible(true)
+                resetBible(hardReset=true)
                 dialog.dismiss()
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
@@ -66,7 +66,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         fullSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetBible(false)
+                resetBible(hardReset=false)
                 dialog.dismiss()
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
@@ -80,7 +80,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         oldHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament("old", hardReset=true, internal=false)
+                resetTestament(testament="old", hardReset=true, internal=false)
                 dialog.dismiss()
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
@@ -94,7 +94,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         oldSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament("old", hardReset=false, internal=false)
+                resetTestament(testament="old", hardReset=false, internal=false)
                 dialog.dismiss()
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
@@ -108,7 +108,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         newHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament("new", hardReset=true, internal=false)
+                resetTestament(testament="new", hardReset=true, internal=false)
                 dialog.dismiss()
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
@@ -122,7 +122,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         newSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(this.context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament("new", hardReset=false, internal=false)
+                resetTestament(testament="new", hardReset=false, internal=false)
                 dialog.dismiss()
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->

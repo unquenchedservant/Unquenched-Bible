@@ -4,65 +4,63 @@ import android.graphics.Color
 import android.view.View
 import android.widget.Button
 import androidx.cardview.widget.CardView
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.content.ContextCompat.getColor
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 object ListHelpers {
     fun setVisibilities(binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne: Boolean=false){
         if(!isMcheyne) {
-            changeVisibility(binding!!.cardList1, false)
-            changeVisibility(binding.cardList2, false)
-            changeVisibility(binding.cardList3, false)
-            changeVisibility(binding.cardList4, false)
-            changeVisibility(binding.cardList5, false)
-            changeVisibility(binding.cardList6, false)
-            changeVisibility(binding.cardList7, false)
-            changeVisibility(binding.cardList8, false)
-            changeVisibility(binding.cardList9, false)
-            changeVisibility(binding.cardList10, false)
+            changeVisibility(binding!!.cardList1, isCardView=false)
+            changeVisibility(binding.cardList2, isCardView=false)
+            changeVisibility(binding.cardList3, isCardView=false)
+            changeVisibility(binding.cardList4, isCardView=false)
+            changeVisibility(binding.cardList5, isCardView=false)
+            changeVisibility(binding.cardList6, isCardView=false)
+            changeVisibility(binding.cardList7, isCardView=false)
+            changeVisibility(binding.cardList8, isCardView=false)
+            changeVisibility(binding.cardList9, isCardView=false)
+            changeVisibility(binding.cardList10, isCardView=false)
         }else{
-            changeVisibility(bindingMCheyne!!.cardList1, false)
-            changeVisibility(bindingMCheyne.cardList2, false)
-            changeVisibility(bindingMCheyne.cardList3, false)
-            changeVisibility(bindingMCheyne.cardList4, false)
+            changeVisibility(bindingMCheyne!!.cardList1, isCardView=false)
+            changeVisibility(bindingMCheyne.cardList2, isCardView=false)
+            changeVisibility(bindingMCheyne.cardList3, isCardView=false)
+            changeVisibility(bindingMCheyne.cardList4, isCardView=false)
         }
     }
 
     fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne:Boolean=false){
         if(!isMcheyne){
-            changeVisibility(binding!!.cardList1, cardList == binding.cardList1.root)
-            changeVisibility(binding.cardList2, cardList == binding.cardList2.root)
-            changeVisibility(binding.cardList3, cardList == binding.cardList3.root)
-            changeVisibility(binding.cardList4, cardList == binding.cardList4.root)
-            changeVisibility(binding.cardList5, cardList == binding.cardList5.root)
-            changeVisibility(binding.cardList6, cardList == binding.cardList6.root)
-            changeVisibility(binding.cardList7, cardList == binding.cardList7.root)
-            changeVisibility(binding.cardList8, cardList == binding.cardList8.root)
-            changeVisibility(binding.cardList9, cardList == binding.cardList9.root)
-            changeVisibility(binding.cardList10, cardList == binding.cardList10.root)
+            changeVisibility(binding!!.cardList1, isCardView=cardList == binding.cardList1.root)
+            changeVisibility(binding.cardList2, isCardView=cardList == binding.cardList2.root)
+            changeVisibility(binding.cardList3, isCardView=cardList == binding.cardList3.root)
+            changeVisibility(binding.cardList4, isCardView=cardList == binding.cardList4.root)
+            changeVisibility(binding.cardList5, isCardView=cardList == binding.cardList5.root)
+            changeVisibility(binding.cardList6, isCardView=cardList == binding.cardList6.root)
+            changeVisibility(binding.cardList7, isCardView=cardList == binding.cardList7.root)
+            changeVisibility(binding.cardList8, isCardView=cardList == binding.cardList8.root)
+            changeVisibility(binding.cardList9, isCardView=cardList == binding.cardList9.root)
+            changeVisibility(binding.cardList10, isCardView=cardList == binding.cardList10.root)
         }else{
-            changeVisibility(bindingMCheyne!!.cardList1, cardList == bindingMCheyne.cardList1.root)
-            changeVisibility(bindingMCheyne.cardList2, cardList == bindingMCheyne.cardList2.root)
-            changeVisibility(bindingMCheyne.cardList3, cardList == bindingMCheyne.cardList3.root)
-            changeVisibility(bindingMCheyne.cardList4, cardList == bindingMCheyne.cardList4.root)
+            changeVisibility(bindingMCheyne!!.cardList1, isCardView=cardList == bindingMCheyne.cardList1.root)
+            changeVisibility(bindingMCheyne.cardList2, isCardView=cardList == bindingMCheyne.cardList2.root)
+            changeVisibility(bindingMCheyne.cardList3, isCardView=cardList == bindingMCheyne.cardList3.root)
+            changeVisibility(bindingMCheyne.cardList4, isCardView=cardList == bindingMCheyne.cardList4.root)
         }
     }
 
     fun listSwitcher(cardList: View, listDone: Int, material_button: Button){
-        val enabled = if(SharedPref.getBoolPref("darkMode", true)){
+        val enabled = if(getBoolPref(name="darkMode", defaultValue=true)){
             getColor(App.applicationContext(), android.R.color.background_dark)
         }else{
             getColor(App.applicationContext(), android.R.color.background_light)
@@ -74,83 +72,90 @@ object ListHelpers {
             1-> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
         }
     }
-    fun resetDaily(planSystem:String = ""){
+    fun resetDaily(){
+        val planSystem  = getStringPref(name="planSystem", defaultValue="pgh")
         val doneMax = when(planSystem){
             "pgh"->10
             "mcheyne"->4
             else->10
         }
-        val prefix = when(planSystem){
-            "pgh"->""
-            "mcheyne"->"mcheyne_"
-            else->""
-        }
-        val planType = getStringPref("planType", "horner")
+        val planType = getStringPref(name="planType", defaultValue="horner")
         val isLogged = FirebaseAuth.getInstance().currentUser
         val db = FirebaseFirestore.getInstance()
+        val data = mutableMapOf<String, Any>()
         var resetStreak  = false
-        var resetCurrent = false
-        val vacation = SharedPref.getBoolPref("vacationMode")
-        when (getIntPref("dailyStreak")) {
+        val vacation = getBoolPref(name="vacationMode")
+        when (getIntPref(name="dailyStreak")) {
             1 -> {
+                data["dailyStreak"] = 0
                 resetStreak = true
             }
             0 -> {
                 when (vacation) {
                     false -> {
-                        if (!dates.checkDate("both", false))
-                            resetCurrent = true
+                        if (!Dates.checkDate(option="both", fullMonth=false))
+                            data["currentStreak"] = 0
                     }
                 }
             }
         }
         for(i in 1..doneMax){
             if(planType == "horner") {
-                when (getIntPref("${prefix}list${i}DoneDaily")) {
-                    1 -> {
-                        setIntPref("${prefix}list${i}DoneDaily", 0)
+                if(planSystem=="pgh"){
+                    when(getIntPref(name="list${i}DoneDaily")){
+                        1-> { setIntPref(name="list${i}DoneDaily", value=0); data["list${i}DoneDaily"]=0 }
                     }
-                }
-                when (getIntPref("${prefix}list${i}Done")) {
-                    1 -> {
-                        resetList("${prefix}list$i", "${prefix}list${i}Done")
+                    when(getIntPref(name="list${i}Done")){
+                        1-> resetList(listName="list${i}", listNameDone="list${i}Done")
+                    }
+                }else{
+                    when(getIntPref(name="mcheyneList${i}DoneDaily")){
+                        1-> { setIntPref(name="mcheyneList${i}DoneDaily", value=0); data["mcheyneList${i}DoneDaily"] = 0}
+                    }
+                    when(getIntPref(name="mcheyneList${i}Done")){
+                        1-> resetList(listName="mcheyneList${i}", listNameDone="mcheyneList${i}Done")
                     }
                 }
             }else if(planType == "numerical"){
-                setIntPref("${prefix}list${i}Done", 0)
+                if(planSystem=="pgh"){
+                    setIntPref(name="list${i}Done", value=0)
+                    data["list${i}Done"] = 0
+                }else{
+                    setIntPref(name="mcheyneList${i}Done", value=0)
+                    data["mcheyneList${i}Done"]
+                }
             }
         }
         if(planType== "numerical" && resetStreak) {
-            increaseIntPref("currentDayIndex", 1)
+            if(planSystem=="pgh") {
+                data["currentDayIndex"] = increaseIntPref(name="currentDayIndex", value=1)
+            }else{
+                data["mcheyneCurrentDayIndex"] = increaseIntPref(name="mcheyneCurrentDayIndex", value=1)
+            }
         }
-        setIntPref("listsDone", 0)
+        setIntPref(name="listsDone", value=0)
+        data["listsDone"] = 0
         if(isLogged != null) {
-            val data = mutableMapOf<String, Any>()
-            for (i in 1..10){
-                if(planType == "horner") {
-                    data["${prefix}list$i"] = getIntPref("${prefix}list$i")
+            for (i in 1..doneMax) {
+                if (planSystem == "pgh") {
+                    if (planType == "horner") {
+                        data["list$i"] = getIntPref(name="list$i")
+                    }
+                    data["list${i}Done"] = getIntPref(name="list${i}Done")
+                }else{
+                    if(planType == "horner"){
+                        data["mcheyneList${i}"] = getIntPref(name="mcheyneList${i}")
+                    }
+                    data["mcheyneList${i}Done"] = getIntPref(name="mcheyneList${i}Done")
                 }
-                data["${prefix}list${i}Done"] = getIntPref("${prefix}list${i}Done")
-            }
-            if (planType=="numerical" && resetStreak){
-                data["currentDayIndex"] = getIntPref("currentDayIndex")
-            }
-            data["listsDone"] = 0
-            if(resetCurrent) {
-                data["currentStreak"] = 0
-            }else if(resetStreak) {
-                data["dailyStreak"] = 0
             }
             db.collection("main").document(isLogged.uid).update(data)
         }
     }
 
     private fun resetList(listName: String, listNameDone: String){
-        MainActivity.log("$listName is now set to ${getIntPref(listName)}")
-        increaseIntPref(listName, 1)
-        MainActivity.log("$listName index is now ${getIntPref(listName)}")
-        setIntPref(listNameDone, 0)
-        MainActivity.log("$listNameDone set to 0")
+        increaseIntPref(listName, value=1)
+        setIntPref(listNameDone, value=0)
     }
 
     fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){
@@ -162,7 +167,7 @@ object ListHelpers {
             cardList.listReading.visibility = View.VISIBLE
         }
     }
-    fun getListNumber(result: Map<String, Any>?, listName: String, listId: Int, fromFirebase: Boolean): String{
+    fun getListNumber(result: Map<String, Any>?, listName: String, listId: Int): String{
         val number = if(result != null){
             (result[listName] as Long).toInt()
         }else{
@@ -171,14 +176,11 @@ object ListHelpers {
         val list = App.applicationContext().resources.getStringArray(listId)
         return when(number){
             list.size -> {
-                if(fromFirebase){
-                    updateFS(listName, 0)
-                }
-                setIntPref(listName, 0)
+                setIntPref(listName, value=0, updateFS=true)
                 list[0]
             }
             else -> {
-                setIntPref(listName, number)
+                setIntPref(listName, value=number, updateFS=true)
                 list[number]
             }
         }

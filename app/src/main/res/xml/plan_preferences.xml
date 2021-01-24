@@ -20,14 +20,14 @@
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
     <CheckBoxPreference
-        app:key="holdTilAll"
+        app:key="holdPlan"
         app:title="@string/title_hold_plan"
         app:summary="@string/summary_hold_plan"
         app:defaultValue="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
     <CheckBoxPreference
-        app:key="allow_partial_switch"
+        app:key="allowPartial"
         app:title="@string/title_partial"
         app:summary="@string/summary_partial"
         app:allowDividerAbove="true"

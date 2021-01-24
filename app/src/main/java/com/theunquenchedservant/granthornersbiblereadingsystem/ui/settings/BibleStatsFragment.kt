@@ -21,24 +21,24 @@ class BibleStatsFragment : PreferenceFragmentCompat() {
         val mainActivity = activity as MainActivity
         oldTestament!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
         newTestament!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-        val old_percent = if(getIntPref("old_chapters_read") != 0) {
-            val old_percent_1: Double = (getIntPref("old_chapters_read").toDouble() / 929)
-            (old_percent_1 * 100).roundToInt()
+        val oldPercent = if(getIntPref(name="oldChaptersRead") != 0) {
+            val oldPercent1: Double = (getIntPref(name="oldChaptersRead").toDouble() / 929)
+            (oldPercent1 * 100).roundToInt()
         }else{
             0
         }
-        val new_percent = if(getIntPref("new_chapters_read") != 0){
-            val new_percent_1 = getIntPref("new_chapters_read").toDouble() / 260
-            (new_percent_1 * 100).roundToInt()
+        val newPercent = if(getIntPref(name="newChaptersRead") != 0){
+            val newPercent1 = getIntPref(name="newChaptersRead").toDouble() / 260
+            (newPercent1 * 100).roundToInt()
         }else{
             0
         }
-        val new_amount_read = getIntPref("new_amount_read")
-        val old_amount_read = getIntPref("old_amount_read")
-        val bible_read = getIntPref("bible_amount_read")
-        oldTestament!!.summary = "$old_percent % | Times Read: $old_amount_read"
-        newTestament!!.summary = "$new_percent % | Times Read: $new_amount_read"
-        bibleRead!!.summary = "$bible_read"
+        val newAmountRead = getIntPref(name="newAmountRead")
+        val oldAmountRead = getIntPref(name="oldAmountRead")
+        val bibleReadInt = getIntPref(name="bibleAmountRead")
+        oldTestament.summary = "$oldPercent % | Times Read: $oldAmountRead"
+        newTestament.summary = "$newPercent % | Times Read: $newAmountRead"
+        bibleRead!!.summary = "$bibleReadInt"
         oldTestament.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val bundle = bundleOf("testament" to "old")
             mainActivity.navController.navigate(R.id.navigation_bible_testament_stats, bundle)

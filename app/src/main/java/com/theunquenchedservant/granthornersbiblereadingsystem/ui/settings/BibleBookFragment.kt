@@ -28,9 +28,9 @@ class BibleBookFragment : PreferenceFragmentCompat(){
         for(i in 1..chapters!!){
             val chapterPref = Preference(App.applicationContext())
             chapterPref.title = "$bookName $i"
-            val has_been_read = if(getBoolPref("${book}_${i}_read")) "Yes " else "No "
-            val amount_read = getIntPref("${book}_${i}_amount_read")
-            chapterPref.summary = "Read: $has_been_read| Times Read: $amount_read"
+            val hasBeenRead = if(getBoolPref(name="${book}${i}Read")) "Yes " else "No "
+            val amountRead = getIntPref(name="${book}${i}AmountRead")
+            chapterPref.summary = "Read: $hasBeenRead| Times Read: $amountRead"
             screen.addPreference(chapterPref)
         }
         preferenceScreen = screen

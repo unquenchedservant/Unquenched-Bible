@@ -123,7 +123,7 @@
         android:label="Account Settings"/>
     <fragment
         android:id="@+id/navigation_update_email"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.updateEmailFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UpdateEmailFragment"
         android:label="Update Email">
         <argument
             android:name="error"
@@ -134,7 +134,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_update_password"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.updatePasswordFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UpdatePasswordFragment"
         android:label="Update Password">
         <argument
             android:name="error"

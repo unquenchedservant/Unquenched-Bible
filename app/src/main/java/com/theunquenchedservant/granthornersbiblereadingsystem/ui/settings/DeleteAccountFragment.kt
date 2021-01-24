@@ -39,7 +39,7 @@ class DeleteAccountFragment: Fragment() {
 
     override fun onResume() {
         super.onResume()
-        val dark = SharedPref.getBoolPref("darkMode", true)
+        val dark = SharedPref.getBoolPref(name="darkMode", defaultValue=true)
         val b = arguments
         val errorMsg: String
         val root = requireView()
@@ -111,7 +111,7 @@ class DeleteAccountFragment: Fragment() {
                                         mainActivity.navController.navigate(R.id.navigation_settings)
                                         Toast.makeText(context, "Account deleted!", Toast.LENGTH_LONG).show()
                                     } else {
-                                        MainActivity.log("This is the reason the account deletion failed: ${task.exception}")
+                                        log("This is the reason the account deletion failed: ${task.exception}")
                                         val bundle = bundleOf("error" to "Unknown Error")
                                         mainActivity.navController.navigate(R.id.navigation_confirm_delete, bundle)
                                     }
@@ -121,7 +121,7 @@ class DeleteAccountFragment: Fragment() {
                             val bundle = bundleOf("error" to "Incorrect Password")
                             mainActivity.navController.navigate(R.id.navigation_confirm_delete, bundle)
                         } else {
-                            MainActivity.log("This is the reason the account authentication failed: ${it.exception}")
+                            log("This is the reason the account authentication failed: ${it.exception}")
                             val bundle = bundleOf("error" to "Unknown Error")
                             mainActivity.navController.navigate(R.id.navigation_confirm_delete, bundle)
                         }

@@ -4,7 +4,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import java.text.SimpleDateFormat
 import java.util.*
 
-object dates {
+object Dates {
     fun checkDate(option: String, fullMonth: Boolean): Boolean{
         val date = getStringPref("dateChecked")
         return when(option){

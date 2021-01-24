@@ -1,9 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
-import android.content.Context
 import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.PorterDuff
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -16,7 +14,6 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
-import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.EmailAuthProvider
 import com.google.firebase.auth.FirebaseAuth
@@ -28,14 +25,14 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 
-class updateEmailFragment: Fragment() {
+class UpdateEmailFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_update_email, container, false)
     }
     override fun onResume() {
         super.onResume()
-        val dark = getBoolPref("darkMode", true)
+        val dark = getBoolPref(name="darkMode", defaultValue=true)
         val b = arguments
         val curEmail: String
         val errorMsg: String
@@ -85,8 +82,8 @@ class updateEmailFragment: Fragment() {
         updateBtn.setOnClickListener {
             val credential = EmailAuthProvider.getCredential(user!!.email.toString(), userPass.text.toString())
             user.reauthenticate(credential)
-                    .addOnCompleteListener {
-                        if(it.isSuccessful){
+                    .addOnCompleteListener { task ->
+                        if(task.isSuccessful){
                             user.updateEmail(newEmail.text.toString())
                                     .addOnCompleteListener {
                                         if(it.isSuccessful){
@@ -105,11 +102,11 @@ class updateEmailFragment: Fragment() {
                                         }
                                     }
                         }else{
-                            if(it.exception is FirebaseAuthInvalidCredentialsException){
+                            if(task.exception is FirebaseAuthInvalidCredentialsException){
                                 val bundle = bundleOf("error" to "Incorrect Password", "email" to newEmail.text.toString())
                                 mainActivity.navController.navigate(R.id.navigation_update_email, bundle)
                             }else {
-                                log("This is the error ${it.exception}")
+                                log("This is the error ${task.exception}")
                                 val bundle = bundleOf("error" to "Unknown Error", "email" to newEmail.text.toString())
                                 mainActivity.navController.navigate(R.id.navigation_update_email, bundle)
                             }

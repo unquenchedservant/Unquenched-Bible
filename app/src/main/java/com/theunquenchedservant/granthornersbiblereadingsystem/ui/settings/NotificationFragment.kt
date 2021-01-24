@@ -16,36 +16,34 @@ import java.text.DecimalFormat
 class NotificationsFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.notification_preferences, rootKey)
-        val vacationToggle: Preference? = findPreference("vacation_mode")
-        val dailyList: Preference? = findPreference("daily_time")
-        val remindTime: Preference? = findPreference("remind_time")
+        val vacationToggle: Preference? = findPreference("vacationMode")
+        val dailyList: Preference? = findPreference("dailyNotif")
+        val remindTime: Preference? = findPreference("remindNotif")
 
-        val dailyMillis = getIntPref("daily_time")
+        val dailyMillis = getIntPref(name="dailyNotif")
         dailyList!!.summary = getSummary(dailyMillis)
 
-        val remindMillis = getIntPref("remind_time")
+        val remindMillis = getIntPref(name="remindNotif")
         remindTime!!.summary = getSummary(remindMillis)
 
         remindTime.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            setIntPref("remind_time", o as Int)
-            updateFS("remindNotif", o)
+            setIntPref(name="remindNotif", value=o as Int, updateFS=true)
             true
         }
         dailyList.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            setIntPref("daily_time", o as Int)
-            updateFS("dailyNotif", o)
+            setIntPref(name="dailyNotif", value=o as Int, updateFS=true)
             true
         }
 
-        val notifOn = findPreference<Preference>("notif_switch")
+        val notifOn = findPreference<Preference>("notifications")
         notifOn!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
             val isOn = o as Boolean
-            updateFS("notifications", isOn)
+            updateFS(name="notifications", isOn)
             if (isOn) {
-                createAlarm("daily"); createAlarm("remind")
+                createAlarm(alarmType="daily"); createAlarm(alarmType="remind")
                 true
             } else {
-                cancelAlarm("remind");cancelAlarm("daily")
+                cancelAlarm(alarmType="remind");cancelAlarm(alarmType="daily")
                 true
             }
         }
@@ -53,10 +51,10 @@ class NotificationsFragment : PreferenceFragmentCompat() {
         vacationToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
             o as Boolean
             if(o){
-                updateFS("vacationMode", o)
+                updateFS(name="vacationMode", o)
             }else{
-                updateFS("vacationMode", o)
-                setBoolPref("vacationOff", true)
+                updateFS(name="vacationMode", o)
+                setBoolPref(name="vacationOff", value=true, updateFS=true)
             }
             true
         }

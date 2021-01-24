@@ -27,7 +27,7 @@ class OnboardingFragmentTwo : Fragment() {
             savedInstanceState: Bundle?
     ): View {
        val view = inflater.inflate(R.layout.fragment_onboarding_page_two, container, false)
-        val dark = getBoolPref("darkMode", true)
+        val dark = getBoolPref(name="darkMode", defaultValue=true)
         val title = view.findViewById<TextView>(R.id.title)
         val titlePgh = view.findViewById<TextView>(R.id.title_pgh)
         val summaryPgh = view.findViewById<TextView>(R.id.summary_pgh)
@@ -64,29 +64,29 @@ class OnboardingFragmentTwo : Fragment() {
         checkboxPgh.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setStringPref("planSystem", "pgh")
-                setBoolPref("pgh_system", true)
-                setBoolPref("mcheyne_system", false)
-                setBoolPref("onboardOneDone", true)
+                setStringPref(name="planSystem", value="pgh")
+                setBoolPref(name="pghSystem", value=true)
+                setBoolPref(name="mcheyneSystem", value=false)
+                setBoolPref(name="onboardOneDone", value=true)
                 checkboxMcheyne.isChecked = false
             }else{
-                setStringPref("planSystem", "")
-                setBoolPref("pgh_system", false)
-                setBoolPref("onboardOneDone", false)
+                setStringPref(name="planSystem", value="")
+                setBoolPref(name="pghSystem", value=false)
+                setBoolPref(name="onboardOneDone", value=false)
             }
         }
         checkboxMcheyne.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setStringPref("planSystem", "mcheyne")
-                setBoolPref("mcheyne_system", true)
-                setBoolPref("pgh_system", false)
-                setBoolPref("onboardOneDone", true)
+                setStringPref(name="planSystem", value="mcheyne")
+                setBoolPref(name="mcheyneSystem", value=true)
+                setBoolPref(name="pghSystem", value=false)
+                setBoolPref(name="onboardOneDone", value=true)
                 checkboxPgh.isChecked = false
             }else{
-                setStringPref("planSystem", "")
-                setBoolPref("mcheyne_system", false)
-                setBoolPref("onboardOneDone", false)
+                setStringPref(name="planSystem", value="")
+                setBoolPref(name="mcheyneSystem", value=false)
+                setBoolPref(name="onboardOneDone", value=false)
             }
         }
         return view

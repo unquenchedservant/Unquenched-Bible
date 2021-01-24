@@ -8,12 +8,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 import java.util.*
 
 class ReadingListRepository {
@@ -31,11 +29,11 @@ class ReadingListRepository {
                             val reading: String
                             val resultObject: ReadingLists
                             if(it.result!!.data!![listName] != null) {
-                                reading = getReading((it.result!!.data!![listName] as Long).toInt(), listId, listName, true, psalmChecked)
+                                reading = getReading((it.result!!.data!![listName] as Long).toInt(), listId, listName, psalmChecked)
                                 resultObject = ReadingLists(listName, (it.result!!.data!!["${listName}Done"] as Long).toInt(), (it.result!!.data!![listName] as Long).toInt(), reading)
                             }else{
-                                reading = getReading(0, listId, listName, true, psalmChecked)
-                                resultObject = ReadingLists(listName, 0, 0, reading)
+                                reading = getReading(index=0, listId, listName, psalmChecked)
+                                resultObject = ReadingLists(listName, listDone=0, listIndex=0, reading)
                             }
                             data.value = resultObject
                         }else{
@@ -47,14 +45,14 @@ class ReadingListRepository {
                     }
         }else{
             val listId = getListId(listName)
-            val psalmChecked = getBoolPref("psalms")
-            val reading = getReading(getIntPref(listName), listId, listName, false, psalmChecked)
-            val resultObject: ReadingLists = ReadingLists(listName, getIntPref("${listName}Done"), getIntPref(listName), reading)
+            val psalmChecked = getBoolPref(name="psalms")
+            val reading = getReading(getIntPref(listName), listId, listName, psalmChecked)
+            val resultObject = ReadingLists(listName, getIntPref(name="${listName}Done"), getIntPref(listName), reading)
             data.value = resultObject
         }
         return data
     }
-    fun getListId(listName: String) : Int{
+    private fun getListId(listName: String) : Int{
         return when(listName){
             "list1"-> R.array.list_1
             "list2"-> R.array.list_2
@@ -73,14 +71,9 @@ class ReadingListRepository {
             else-> 0
         }
     }
-    fun getReading(index:Int, listId: Int, listName: String, fromFirebase: Boolean, psalmChecked: Boolean): String {
+    private fun getReading(index:Int, listId: Int, listName: String, psalmChecked: Boolean): String {
         val list = App.applicationContext().resources.getStringArray(listId)
         val planSystem = getStringPref("planSystem", "pgh")
-        val prefix = when(planSystem){
-            "pgh" -> ""
-            "mcheyne"->"mcheyne_"
-            else->""
-        }
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
         if (listName == "list6") {
             if (psalmChecked) {
@@ -95,20 +88,21 @@ class ReadingListRepository {
             "horner" -> {
                 return when (index) {
                     list.size -> {
-                        if (fromFirebase) {
-                            updateFS(listName, 0)
-                        }
-                        setIntPref(listName, 0)
+                        setIntPref(name=listName, value=0, updateFS=true)
                         list[0]
                     }
                     else -> {
-                        setIntPref(listName, index)
+                        setIntPref(name=listName, value=index, updateFS=true)
                         list[index]
                     }
                 }
             }
             "numerical" -> {
-                var newIndex = getIntPref("${prefix}currentDayIndex", 0)
+                var newIndex = if(planSystem == "pgh"){
+                    getIntPref(name="currentDayIndex", defaultValue=0)
+                }else{
+                    getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0)
+                }
                 if (newIndex >= list.size){
                     while(newIndex >= list.size){
                         newIndex -= list.size
