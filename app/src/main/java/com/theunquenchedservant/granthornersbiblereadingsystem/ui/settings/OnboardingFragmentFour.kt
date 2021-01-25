@@ -8,15 +8,12 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.CheckBox
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref

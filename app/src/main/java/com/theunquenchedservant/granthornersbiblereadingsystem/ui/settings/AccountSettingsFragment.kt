@@ -23,13 +23,13 @@ class AccountSettingsFragment: PreferenceFragmentCompat()  {
         val passwordUpdate: Preference? = findPreference("editPassword")
         emailUpdate!!.isVisible = false
         passwordUpdate!!.isVisible = false
-        deleteAccount!!.icon =  ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_delete_forever_24, mainActivity.theme)
+        deleteAccount!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_delete_forever_24, mainActivity.theme)
         deleteAccount.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val builder = AlertDialog.Builder(context)
-            builder.setPositiveButton(getString(R.string.yes)){_,_->
+            builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 mainActivity.navController.navigate(R.id.navigation_confirm_delete)
             }
-            builder.setNeutralButton(getString(R.string.no)){dialogInterface, _->
+            builder.setNeutralButton(getString(R.string.no)) { dialogInterface, _ ->
                 dialogInterface.cancel()
             }
             builder.setMessage(getString(R.string.msg_confirm_delete))
@@ -39,12 +39,12 @@ class AccountSettingsFragment: PreferenceFragmentCompat()  {
         }
         logOut!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val builder = AlertDialog.Builder(context)
-            builder.setPositiveButton(getString(R.string.yes)){_,_->
+            builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 FirebaseAuth.getInstance().signOut()
                 Toast.makeText(context, "Signed Out!", Toast.LENGTH_LONG).show()
                 mainActivity.navController.navigate(R.id.navigation_settings)
             }
-            builder.setNeutralButton(getString(R.string.no)){dialogInterface, _->
+            builder.setNeutralButton(getString(R.string.no)) { dialogInterface, _ ->
                 dialogInterface.cancel()
             }
             builder.setMessage(getString(R.string.msg_sign_out))
@@ -52,17 +52,19 @@ class AccountSettingsFragment: PreferenceFragmentCompat()  {
             builder.create().show()
             true
         }
-        if(provider == "password"){
-            emailUpdate.isVisible = true
-            passwordUpdate.isVisible = true
-            emailUpdate.onPreferenceClickListener = Preference.OnPreferenceClickListener{
-                mainActivity.navController.navigate(R.id.navigation_update_email)
-                true
-            }
-            emailUpdate.title = "Update Email Address"
-            passwordUpdate.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-                mainActivity.navController.navigate(R.id.navigation_update_password)
-                true
+        when (provider) {
+            "password" -> {
+                emailUpdate.isVisible = true
+                passwordUpdate.isVisible = true
+                emailUpdate.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    mainActivity.navController.navigate(R.id.navigation_update_email)
+                    true
+                }
+                emailUpdate.title = "Update Email Address"
+                passwordUpdate.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+                    mainActivity.navController.navigate(R.id.navigation_update_password)
+                    true
+                }
             }
         }
     }

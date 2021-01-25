@@ -7,9 +7,9 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCrea
 class ServiceStarted  : BroadcastReceiver() {
     override fun onReceive(context: Context?, intent: Intent?) {
         if (intent?.action == "android.intent.action.BOOT_COMPLETED" || intent?.action == "android.intent.action.MY_PACKAGE_REPLACED") {
-            createAlarm("dailyCheck")
-            createAlarm("daily")
-            createAlarm("remind")
+            createAlarm(alarmType="dailyCheck")
+            createAlarm(alarmType="daily")
+            createAlarm(alarmType="remind")
         }
     }
 }

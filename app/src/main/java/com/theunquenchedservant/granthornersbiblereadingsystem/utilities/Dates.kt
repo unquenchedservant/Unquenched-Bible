@@ -6,15 +6,30 @@ import java.text.SimpleDateFormat
 import java.util.*
 
 object Dates {
-    fun isWeekend():Boolean{
+
+    fun isLeapDay():Boolean{
         val today = Calendar.getInstance()
-        return if(today.get(Calendar.DAY_OF_WEEK) == Calendar.SATURDAY || today.get(Calendar.DAY_OF_WEEK) == Calendar.SUNDAY){
-            log("this is weekend")
-            true
-        }else{
-            false
+        val isFebruary = when(today.get(Calendar.MONTH)){
+            Calendar.FEBRUARY -> true
+            else -> false
+        }
+        val is29th = when(today.get(Calendar.DAY_OF_MONTH)){
+            29 -> true
+            else -> false
+        }
+        return when{
+            (isFebruary && is29th)->true
+            else->false
         }
     }
+    fun isWeekend():Boolean{
+        val today = Calendar.getInstance()
+        return when(today.get(Calendar.DAY_OF_WEEK)){
+            Calendar.SATURDAY, Calendar.SUNDAY -> true
+            else -> false
+        }
+    }
+
     fun checkDate(option: String, fullMonth: Boolean): Boolean{
         val date = getStringPref("dateChecked")
         return when(option){

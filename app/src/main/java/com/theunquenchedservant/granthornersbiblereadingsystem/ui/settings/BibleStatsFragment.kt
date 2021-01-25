@@ -8,8 +8,6 @@ import androidx.preference.PreferenceFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import java.math.RoundingMode
-import java.text.DecimalFormat
 import kotlin.math.roundToInt
 
 class BibleStatsFragment : PreferenceFragmentCompat() {

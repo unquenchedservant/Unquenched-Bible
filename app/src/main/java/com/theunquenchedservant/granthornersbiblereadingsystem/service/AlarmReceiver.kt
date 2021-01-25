@@ -25,21 +25,22 @@ class AlarmReceiver : BroadcastReceiver() {
         val vacation = getBoolPref(name="vacationMode", defaultValue=false)
         when(vacation || (getBoolPref(name="weekendMode") && isWeekend())){
             false -> {
-                if(getBoolPref(name="notifications")) {
-                    mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                    deliverNotification(context)
-                }else{
-                    log("Notification switch off, not sending notification")
+                when(getBoolPref(name="notifications")) {
+                    true-> {
+                        mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                        deliverNotification(context)
+                    }
+                    else->log(logString="Notification switch turned off, not sending notification")
                 }
             }
             true -> {
-                log("Vacation mode on, not sending notification")
+                log(logString="Vacation mode on, not sending notification")
             }
         }
     }
 
     private fun deliverNotification(context: Context) {
-        val today = getDate(0, false)
+        val today = getDate(option=0, fullMonth=false)
         val tapIntent = Intent(context, MainActivity::class.java)
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
         mNotificationManager.cancel(1)

@@ -1,6 +1,5 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
-import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -15,15 +14,11 @@ import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
-import com.google.android.gms.common.api.ApiException
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.*
-import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
@@ -74,7 +69,7 @@ class DeleteAccountFragment: Fragment() {
             }
             confirmBtn.setOnClickListener {
                 val credential = EmailAuthProvider.getCredential(user!!.email.toString(), userPass.text.toString())
-                DeleteAccount(credential, user, root)
+                deleteAccount(credential, user, root)
             }
         } else {
             cardHolder.visibility = View.GONE
@@ -85,12 +80,12 @@ class DeleteAccountFragment: Fragment() {
                     .build()
             GoogleSignIn.getClient(App.applicationContext(), gso).silentSignIn().addOnCompleteListener {
                 val credential = GoogleAuthProvider.getCredential(it.result?.idToken, null)
-                DeleteAccount(credential, user!!, root)
+                deleteAccount(credential, user!!, root)
             }
         }
     }
 
-    fun DeleteAccount(credential: AuthCredential, user: FirebaseUser, root: View) {
+    private fun deleteAccount(credential: AuthCredential, user: FirebaseUser, root: View) {
         val mainActivity = activity as MainActivity
         val db = FirebaseFirestore.getInstance()
         db.collection("main").document(user.uid).get()

@@ -2,7 +2,6 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.os.Build
 import android.util.Log
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseAuth
@@ -10,18 +9,16 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ntBooks
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.otBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ALL_BOOKS
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
-import java.io.File
 
 
 object SharedPref {
 
     fun setStreak(){
-        if(!checkDate("both", false)){
-            setIntPref("currentStreak", 0)
+        if(!checkDate(option="both", fullMonth=false)){
+            setIntPref(name="currentStreak", value=0)
         }
     }
     private fun getPref(): SharedPreferences{
@@ -46,12 +43,12 @@ object SharedPref {
         getPref().edit().remove(name).apply()
     }
     fun increaseIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
-        val start = getIntPref(name)
-        setIntPref(name, start+value)
+        val newValue = getIntPref(name) + value
+        setIntPref(name, value=newValue)
         if(updateFS) {
-            updateFS(name, start + value)
+            updateFS(name, value=newValue)
         }
-        return start+value
+        return newValue
     }
     fun getIntPref(name: String, defaultValue: Int = 0): Int {
         return getPref().getInt(name, defaultValue)
@@ -128,24 +125,14 @@ object SharedPref {
         results["pghSystem"] = getBoolPref(name="pghSystem")
         results["mcheyneSystem"] = getBoolPref(name="mcheyneSystem")
         results["hasCompletedOnboarding"] = getBoolPref(name="hasCompletedOnboarding")
-        for(book in otBooks){
-            results["${book}AmountRead"] = getIntPref(name="${book}AmountRead")
-            results["${book}ChaptersRead"] = getIntPref(name="${book}ChaptersRead")
-            results["${book}DoneTestament"] = getBoolPref(name="${book}DoneTestament")
-            results["${book}DoneWhole"] = getBoolPref(name="${book}DoneWhole")
-            for(chapter in 1..(bookChapters[book] ?: error(""))){
-                results["${book}${chapter}Read"] = getBoolPref(name="${book}${chapter}Read")
-                results["${book}${chapter}AmountRead"] = getIntPref(name="${book}${chapter}AmountRead")
-            }
-        }
-        for(book in ntBooks){
-            results["${book}AmountRead"] = getIntPref(name="${book}AmountRead")
-            results["${book}ChaptersRead"] = getIntPref(name="${book}ChaptersRead")
-            results["${book}DoneTestament"] = getBoolPref(name="${book}DoneTestament")
-            results["${book}DoneWhole"] = getBoolPref(name="${book}DoneWhole")
-            for(chapter in 1..(bookChapters[book] ?: error(""))){
-                results["${book}${chapter}Read"] = getBoolPref(name="${book}${chapter}Read")
-                results["${book}${chapter}AmountRead"] = getIntPref(name="${book}${chapter}AmountRead")
+        for(book in ALL_BOOKS) {
+            results["${book}AmountRead"] = getIntPref(name = "${book}AmountRead")
+            results["${book}ChaptersRead"] = getIntPref(name = "${book}ChaptersRead")
+            results["${book}DoneTestament"] = getBoolPref(name = "${book}DoneTestament")
+            results["${book}DoneWhole"] = getBoolPref(name = "${book}DoneWhole")
+            for (chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))) {
+                results["${book}${chapter}Read"] = getBoolPref(name = "${book}${chapter}Read")
+                results["${book}${chapter}AmountRead"] = getIntPref(name = "${book}${chapter}AmountRead")
             }
         }
         db.collection("main").document(user2!!.uid).set(results)
@@ -229,22 +216,12 @@ object SharedPref {
             updateBoolPref(data, key="pghSystem")
             updateBoolPref(data, key="mcheyneSystem")
             updateBoolPref(data, key="hasCompletedOnboarding")
-            for(book in otBooks){
+            for(book in ALL_BOOKS){
                 updateIntPref(data, key="${book}AmountRead")
                 updateIntPref(data, key="${book}ChaptersRead")
                 updateBoolPref(data, key="${book}DoneTestament")
                 updateBoolPref(data, key="${book}DoneWhole")
-                for(chapter in 1..(bookChapters[book] ?: error(""))){
-                    updateBoolPref(data, key="${book}${chapter}Read")
-                    updateIntPref(data, key="${book}${chapter}AmountRead")
-                }
-            }
-            for(book in ntBooks){
-                updateIntPref(data, key="${book}AmountRead")
-                updateIntPref(data, key="${book}ChaptersRead")
-                updateBoolPref(data, key="${book}DoneTestament")
-                updateBoolPref(data, key="${book}DoneWhole")
-                for(chapter in 1..(bookChapters[book] ?: error(""))){
+                for(chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))){
                     updateBoolPref(data, key="${book}${chapter}Read")
                     updateIntPref(data, key="${book}${chapter}AmountRead")
                 }
@@ -253,6 +230,7 @@ object SharedPref {
     }
 
     fun listNumbersReset() { App.applicationContext().getSharedPreferences("listNumbers", Context.MODE_PRIVATE).edit().clear().apply() }
+
     fun updatePrefNames(){
         for(i in 1..4){
             setIntPref(name="mcheyneList${i}", value=getIntPref(name="mcheyne_list${i}"))
@@ -290,7 +268,7 @@ object SharedPref {
         deletePref(name="total_chapters_read")
         deletePref(name="pgh_system")
         deletePref(name="mcheyne_system")
-        for(book in otBooks){
+        for(book in ALL_BOOKS){
             setIntPref(name="${book}AmountRead", value=getIntPref(name="${book}_amount_read"))
             setIntPref(name="${book}ChaptersRead", value=getIntPref(name="${book}_chapters_read"))
             setBoolPref(name="${book}DoneTestament", value=getBoolPref(name="${book}_done_testament"))
@@ -299,68 +277,13 @@ object SharedPref {
             deletePref(name="${book}_chapters_read")
             deletePref(name="${book}_done_testament")
             deletePref(name="${book}_done_whole")
-            for(chapter in 1..(bookChapters[book] ?: error(""))){
+            for(chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))){
                 setBoolPref(name="${book}${chapter}Read", value=getBoolPref(name="${book}_${chapter}_read"))
                 setIntPref(name="${book}${chapter}AmountRead", value=getIntPref(name="${book}_${chapter}_amount_read"))
                 deletePref(name="${book}_${chapter}_read")
                 deletePref(name="${book}_${chapter}_amount_read")
             }
         }
-        for(book in ntBooks){
-            setIntPref(name="${book}AmountRead", value=getIntPref(name="${book}_amount_read"))
-            setIntPref(name="${book}ChaptersRead", value=getIntPref(name="${book}_chapters_read"))
-            setBoolPref(name="${book}DoneTestament", value=getBoolPref(name="${book}_done_testament"))
-            setBoolPref(name="${book}DoneWhole", value= getBoolPref(name="${book}_done_whole"))
-            deletePref(name="${book}_amount_read")
-            deletePref(name="${book}_chapters_read")
-            deletePref(name="${book}_done_testament")
-            deletePref(name="${book}_done_whole")
-            for(chapter in 1..(bookChapters[book] ?: error(""))){
-                setBoolPref(name="${book}${chapter}Read", value=getBoolPref(name="${book}_${chapter}_read"))
-                setIntPref(name="${book}${chapter}AmountRead", value=getIntPref(name="${book}_${chapter}_amount_read"))
-                deletePref(name="${book}_${chapter}_read")
-                deletePref(name="${book}_${chapter}_amount_read")
-            }
-        }
-    }
-    fun mergePref(){
-        val context = App.applicationContext()
-        val pref = PreferenceManager.getDefaultSharedPreferences(context)
-        val listPref = context.getSharedPreferences("listNumbers", Context.MODE_PRIVATE)
-        val statPref = context.getSharedPreferences("statistics", Context.MODE_PRIVATE)
-        pref.edit().putInt("list1", listPref.getInt("List 1", 0)).apply()
-        pref.edit().putInt("list2", listPref.getInt("List 2", 0)).apply()
-        pref.edit().putInt("list3", listPref.getInt("List 3", 0)).apply()
-        pref.edit().putInt("list4", listPref.getInt("List 4", 0)).apply()
-        pref.edit().putInt("list5", listPref.getInt("List 5", 0)).apply()
-        pref.edit().putInt("list6", listPref.getInt("List 6", 0)).apply()
-        pref.edit().putInt("list7", listPref.getInt("List 7", 0)).apply()
-        pref.edit().putInt("list8", listPref.getInt("List 8", 0)).apply()
-        pref.edit().putInt("list9", listPref.getInt("List 9", 0)).apply()
-        pref.edit().putInt("list10", listPref.getInt("List 10", 0)).apply()
-        pref.edit().putInt("list1Done", listPref.getInt("list1Done", 0)).apply()
-        pref.edit().putInt("list2Done", listPref.getInt("list2Done", 0)).apply()
-        pref.edit().putInt("list3Done", listPref.getInt("list3Done", 0)).apply()
-        pref.edit().putInt("list4Done", listPref.getInt("list4Done", 0)).apply()
-        pref.edit().putInt("list5Done", listPref.getInt("list5Done", 0)).apply()
-        pref.edit().putInt("list6Done", listPref.getInt("list6Done", 0)).apply()
-        pref.edit().putInt("list7Done", listPref.getInt("list7Done", 0)).apply()
-        pref.edit().putInt("list8Done", listPref.getInt("list8Done", 0)).apply()
-        pref.edit().putInt("list9Done", listPref.getInt("list9Done", 0)).apply()
-        pref.edit().putInt("list10Done", listPref.getInt("list10Done", 0)).apply()
-        pref.edit().putInt("listsDone", listPref.getInt("listsDone", 0)).apply()
-        pref.edit().putInt("currentStreak", statPref.getInt("currentStreak", 0)).apply()
-        pref.edit().putInt("maxStreak", statPref.getInt("maxStreak", 0)).apply()
-        pref.edit().putInt("dailyStreak", statPref.getInt("dailyStreak", 0)).apply()
-        pref.edit().putString("dateChecked", listPref.getString("dateChecked", "Jan 01")).apply()
-        pref.edit().putBoolean("has_merged", true).apply()
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-            context.deleteSharedPreferences("statistics")
-            context.deleteSharedPreferences("listNumbers")
-        }else {
-            val dir = File(context.filesDir?.parent + "/shared_prefs/")
-            File(dir, "statistics.xml").delete()
-            File(dir, "listNumber.xml").delete()
-        }
+        setBoolPref(name="updatedValues", value=true, updateFS=true)
     }
 }

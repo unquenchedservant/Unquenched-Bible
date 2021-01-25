@@ -51,63 +51,66 @@ class ManualListSet: Fragment() {
         val listNames = ArrayList<String>()
         val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
         listNames.add("----")
-        if(planSystem == "pgh") {
-            listNames.add("The Gospels")
-            listNames.add("The Pentateuch")
-            listNames.add("Epistles I")
-            listNames.add("Epistles II")
-            listNames.add("Poetry")
-            listNames.add("Psalms")
-            listNames.add("Proverbs")
-            listNames.add("History")
-            listNames.add("Prophets")
-            listNames.add("Acts")
-            if(getIntPref(name="list1Done") == 1){
-                listNames.remove("The Gospels")
+        when(planSystem) {
+            "pgh" -> {
+                listNames.add("The Gospels")
+                listNames.add("The Pentateuch")
+                listNames.add("Epistles I")
+                listNames.add("Epistles II")
+                listNames.add("Poetry")
+                listNames.add("Psalms")
+                listNames.add("Proverbs")
+                listNames.add("History")
+                listNames.add("Prophets")
+                listNames.add("Acts")
+                when (getIntPref(name = "list1Done")) {
+                    1 -> listNames.remove("The Gospels")
+                }
+                when (getIntPref(name = "list2Done")) {
+                    1 -> listNames.remove("The Pentateuch")
+                }
+                when (getIntPref(name = "list3Done")) {
+                    1 -> listNames.remove("Epistles I")
+                }
+                when (getIntPref(name = "list4Done")) {
+                    1 -> listNames.remove("Epistles II")
+                }
+                when (getIntPref(name = "list5Done")) {
+                    1 -> listNames.remove("Poetry")
+                }
+                when (getIntPref(name = "list6Done")) {
+                    1 -> listNames.remove("Psalms")
+                }
+                when (getIntPref(name = "list7Done")) {
+                    1 -> listNames.remove("Proverbs")
+                }
+                when (getIntPref(name = "list8Done")) {
+                    1 -> listNames.remove("History")
+                }
+                when (getIntPref(name = "list9Done")) {
+                    1 -> listNames.remove("Prophets")
+                }
+                when (getIntPref(name = "list10Done")) {
+                    1 -> listNames.remove("Acts")
+                }
             }
-            if(getIntPref(name="list2Done") == 1){
-                listNames.remove("The Pentateuch")
-            }
-            if(getIntPref(name="list3Done") == 1){
-                listNames.remove("Epistles I")
-            }
-            if(getIntPref(name="list4Done") == 1){
-                listNames.remove("Epistles II")
-            }
-            if(getIntPref(name="list5Done") == 1){
-                listNames.remove("Poetry")
-            }
-            if(getIntPref(name="list6Done") == 1){
-                listNames.remove("Psalms")
-            }
-            if(getIntPref(name="list7Done") == 1){
-                listNames.remove("Proverbs")
-            }
-            if(getIntPref(name="list8Done") == 1){
-                listNames.remove("History")
-            }
-            if(getIntPref(name="list9Done") == 1){
-                listNames.remove("Prophets")
-            }
-            if(getIntPref(name="list10Done") == 1){
-                listNames.remove("Acts")
-            }
-        }else{
-            listNames.add("Family I")
-            listNames.add("Family II")
-            listNames.add("Secret I")
-            listNames.add("Secret II")
-            if(getIntPref(name="mcheyneList1Done") == 1){
-                listNames.remove("Family I")
-            }
-            if(getIntPref(name="mcheyneList2Done") == 1){
-                listNames.remove("Family II")
-            }
-            if(getIntPref(name="mcheyneList3Done") == 1){
-                listNames.remove("Secret I")
-            }
-            if(getIntPref(name="mcheyneList4Done") == 1){
-                listNames.remove("Secret II")
+            "mcheyne" -> {
+                listNames.add("Family I")
+                listNames.add("Family II")
+                listNames.add("Secret I")
+                listNames.add("Secret II")
+                when (getIntPref(name = "mcheyneList1Done")) {
+                    1 -> listNames.remove("Family I")
+                }
+                when (getIntPref(name = "mcheyneList2Done")) {
+                    1 -> listNames.remove("Family II")
+                }
+                when (getIntPref(name = "mcheyneList3Done")) {
+                    1 -> listNames.remove("Secret I")
+                }
+                when (getIntPref(name = "mcheyneList4Done")) {
+                    1 -> listNames.remove("Secret II")
+                }
             }
         }
 
@@ -119,17 +122,15 @@ class ManualListSet: Fragment() {
         listSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val buttonColor: Int
-                if(dark){
-                    buttonColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                val buttonColor: Int = if(dark){
+                    getColor(App.applicationContext(), R.color.buttonBackgroundDark)
                 }else{
-                    buttonColor = getColor(App.applicationContext(), R.color.buttonBackground)
+                    getColor(App.applicationContext(), R.color.buttonBackground)
                 }
 
                 val selectedItem      = parent?.getItemAtPosition(position).toString()
                 val list              = root.findViewById<Spinner>(R.id.listSpinner1)
                 val verseSelector     = root.findViewById<LinearLayout>(R.id.verseSelector)
-                val button            = root.findViewById<Button>(R.id.set_button)
                 verseSelector.visibility     = View.INVISIBLE
                 when(selectedItem){
                     "----"             -> {
@@ -606,7 +607,7 @@ class ManualListSet: Fragment() {
                     }
                     "Family II"   -> {
                         val array = resources.getStringArray(R.array.mcheyne_list2)
-                        val num = array.indexOf("${selectedBook}")
+                        val num = array.indexOf("$selectedBook")
                         setIntPref(name="mcheyneList2", value=num, updateFS=true)
                     }
                     "Secret I"    -> {

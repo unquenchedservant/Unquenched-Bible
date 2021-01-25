@@ -6,10 +6,6 @@ import android.os.Bundle
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.App.Companion.applicationContext
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 
 class InformationFragment : PreferenceFragmentCompat() {

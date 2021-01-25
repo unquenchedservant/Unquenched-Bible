@@ -28,6 +28,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.Fragm
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createNotificationChannel
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isLeapDay
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
@@ -76,63 +77,54 @@ class HomeMCheyneFragment : Fragment() {
     }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref(name="versionNumber") < 58){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref(name="versionNumber", value=59, updateFS=true)
-                something.dismiss()
+        when (getIntPref(name = "versionNumber")) {
+            in 0..58 -> {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setPositiveButton(R.string.ok) { something, _ ->
+                    setIntPref(name = "versionNumber", value = 59)
+                    something.dismiss()
+                }
+                builder.setTitle(R.string.title_new_update)
+                builder.setMessage(
+                        "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n" +
+                                "You can change the translation in the scripture window or under Plan Settings\n\n" +
+                                "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
+                                "[FIXED] Song of Solomon in ESV dark mode now is in the right colors. (Thank you Meinhard)\n\n" +
+                                "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
+                )
+                builder.create().show()
             }
-            builder.setTitle(R.string.title_new_update)
-            builder.setMessage(
-                    "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n"+
-                            "You can change the translation in the scripture window or under Plan Settings\n\n"+
-                            "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
-                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors. (Thank you Meinhard)\n\n" +
-                            "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
-            )
-            builder.create().show()
         }
-        if(getIntPref(name="versionNumber") == 58){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton(R.string.ok) { something, _ ->
-                setIntPref(name="versionNumber", value=59, updateFS=true)
-                something.dismiss()
-            }
-            builder.setTitle(R.string.title_new_update)
-            builder.setMessage(
-                    "[FIXED] Acts and Revelation now work on AMP, CSB, KJV, and the NASBs\n\n" +
-                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors \n\n"+
-                            "Thank you Meinhard for bringing both of these to my attention."
-            )
-            builder.create().show()
+        viewModel.list1.observe(viewLifecycleOwner){ readingList ->
+            createCard(binding.cardList1, readingList, R.string.title_mcheyne_list1, listName="mcheyne_list1", R.array.mcheyne_list1)
         }
-        viewModel.list1.observe(viewLifecycleOwner){
-            createCard(binding.cardList1, it, R.string.title_mcheyne_list1, listName="mcheyne_list1", R.array.mcheyne_list1)
+        viewModel.list2.observe(viewLifecycleOwner){ readingList ->
+            createCard(binding.cardList2, readingList, R.string.title_mcheyne_list2, listName="mcheyne_list2", R.array.mcheyne_list2)
         }
-        viewModel.list2.observe(viewLifecycleOwner){
-            createCard(binding.cardList2, it, R.string.title_mcheyne_list2, listName="mcheyne_list2", R.array.mcheyne_list2)
+        viewModel.list3.observe(viewLifecycleOwner){ readingList ->
+            createCard(binding.cardList3, readingList, R.string.title_mcheyne_list3, listName="mcheyne_list3", R.array.mcheyne_list3)
         }
-        viewModel.list3.observe(viewLifecycleOwner){
-            createCard(binding.cardList3, it, R.string.title_mcheyne_list3, listName="mcheyne_list3", R.array.mcheyne_list3)
+        viewModel.list4.observe(viewLifecycleOwner){ readingList ->
+            createCard(binding.cardList4, readingList, R.string.title_mcheyne_list4, listName="mcheyne_list4", R.array.mcheyne_list4)
         }
-        viewModel.list4.observe(viewLifecycleOwner){
-            createCard(binding.cardList4, it, R.string.title_mcheyne_list4, listName="mcheyne_list4", R.array.mcheyne_list4)
-        }
-        viewModel.listsDone.observe(viewLifecycleOwner){
+        viewModel.listsDone.observe(viewLifecycleOwner){ listsDone ->
             val backgroundColor: String
             val allDoneBackgroundColor: String
-            if(getBoolPref(name="darkMode", defaultValue=true)){
-                val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
-                backgroundColor = getString(R.string.btn_background_color_dark)
-                allDoneBackgroundColor = getString(R.string.done_btn_background_color_dark)
-                binding.materialButton.setTextColor(color)
-            }else{
-                val color = getColor(App.applicationContext(), R.color.unquenchedText)
-                backgroundColor = getString(R.string.btn_background_color)
-                allDoneBackgroundColor = getString(R.string.done_btn_background_color)
-                binding.materialButton.setTextColor(color)
+            when(getBoolPref(name="darkMode", defaultValue=true)){
+                true-> {
+                    val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
+                    backgroundColor = getString(R.string.btn_background_color_dark)
+                    allDoneBackgroundColor = getString(R.string.done_btn_background_color_dark)
+                    binding.materialButton.setTextColor(color)
+                }
+                false->{
+                    val color = getColor(App.applicationContext(), R.color.unquenchedText)
+                    backgroundColor = getString(R.string.btn_background_color)
+                    allDoneBackgroundColor = getString(R.string.done_btn_background_color)
+                    binding.materialButton.setTextColor(color)
+                }
             }
-            when(it.listsDone){
+            when(listsDone.listsDone){
                 4 -> {
                     binding.materialButton.setText(R.string.done)
                     binding.materialButton.isEnabled = true
@@ -147,27 +139,25 @@ class HomeMCheyneFragment : Fragment() {
                 in 1..3 -> {
                     binding.materialButton.setText(R.string.btn_mark_remaining)
                     binding.materialButton.isEnabled = true
-                    val opacity = if (it.listsDone < 5){
-                        100 - (it.listsDone * 5)
-                    }else{
-                        100 - ((it.listsDone * 5) - 5)
+                    val opacity = when (listsDone.listsDone){
+                        in 0..2 -> 100 - (listsDone.listsDone * 5)
+                        else -> 100 - ((listsDone.listsDone * 5) - 5)
                     }
                     binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
                     binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
             }
         }
-        if(getStringPref(name="planType", defaultValue="horner") == "calendar" && Calendar.getInstance().get(Calendar.MONTH) == Calendar.FEBRUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 29){
-            setIntPref(name="dailyStreak", value=1, updateFS=true)
-        }else{
-            createButtonListener()
+        when(getStringPref(name="planType", defaultValue="horner") == "calendar" && isLeapDay()){
+            true-> setIntPref(name="dailyStreak", value=1, updateFS=true)
+            else -> createButtonListener()
         }
         createNotificationChannel()
         createAlarm(alarmType="dailyCheck")
         setVisibilities(binding=null, binding, isMcheyne=true)
         allowResume = false
-        if(savedInstanceState != null) {
-            createAlarms()
+        when(savedInstanceState != null) {
+            true->createAlarms()
         }
     }
 
@@ -175,12 +165,15 @@ class HomeMCheyneFragment : Fragment() {
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
-        if(getBoolPref(name="darkMode", defaultValue=true)){
-            enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
-        }else{
-            enabled = getColor(App.applicationContext(), R.color.buttonBackground)
-            lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+        when(getBoolPref(name="darkMode", defaultValue=true)) {
+            true -> {
+                enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+            }
+            false -> {
+                enabled = getColor(App.applicationContext(), R.color.buttonBackground)
+                lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+            }
         }
         val disabled = Color.parseColor("#00383838")
         when(readingLists.listDone){
@@ -200,15 +193,19 @@ class HomeMCheyneFragment : Fragment() {
         cardList.listRead.setTextColor(lineColor)
         cardList.buttonSeparator.setBackgroundColor(lineColor)
         cardList.lineSeparator.setBackgroundColor(lineColor)
-        if(getStringPref(name="planType", defaultValue="horner") == "calendar" && Calendar.getInstance().get(Calendar.MONTH) == Calendar.FEBRUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 29){
-            cardList.listReading.text = "DAY OFF"
-            cardList.listTitle.text = resources.getString(readingString)
-        }else{
-            cardList.listReading.text = readingLists.listReading
-            cardList.listTitle.text = resources.getString(readingString)
-            createCardListener(cardList, listArray,listDone="${listName}Done", listName)
+        when(getStringPref(name="planType", defaultValue="horner") == "calendar" && isLeapDay()) {
+            true -> {
+                cardList.listReading.text = "DAY OFF"
+                cardList.listTitle.text = resources.getString(readingString)
+            }
+            false -> {
+                cardList.listReading.text = readingLists.listReading
+                cardList.listTitle.text = resources.getString(readingString)
+                createCardListener(cardList, listArray, listDone = "${listName}Done", listName)
+            }
         }
     }
+
     private fun createButtonListener() {
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {
@@ -219,21 +216,25 @@ class HomeMCheyneFragment : Fragment() {
             mNotificationManager.cancel(2)
             (activity as MainActivity).navController.navigate(R.id.navigation_home)
         }
-        if (getIntPref(name="listsDone") == 4) {
-            if (getStringPref(name="planType", defaultValue="horner") != "calendar") {
-                binding.materialButton.setOnLongClickListener {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        resetDaily()
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+        when (getIntPref(name="listsDone")) {
+            4 -> {
+                when (getStringPref(name = "planType", defaultValue = "horner") != "calendar") {
+                    true -> {
+                        binding.materialButton.setOnLongClickListener {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                resetDaily()
+                                (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                            }
+                            builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
+                                diag.dismiss()
+                            }
+                            builder.setMessage(getString(R.string.msg_reset_all))
+                            builder.setTitle(getString(R.string.title_reset_lists))
+                            builder.show()
+                            true
+                        }
                     }
-                    builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
-                        diag.dismiss()
-                    }
-                    builder.setMessage(getString(R.string.msg_reset_all))
-                    builder.setTitle(getString(R.string.title_reset_lists))
-                    builder.show()
-                    true
                 }
             }
         }
@@ -241,76 +242,84 @@ class HomeMCheyneFragment : Fragment() {
 
     private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, listDone: String, listName: String){
         val list = resources.getStringArray(arrayId)
-        if (getIntPref(listDone) == 0){
-            cardView.root.setOnClickListener {
-                if (cardView.listButtons.isVisible) {
-                    listSwitcher(it, getIntPref(listDone), binding.materialButton)
-                } else {
-                    hideOthers(cardView.root, binding=null, binding, isMcheyne=true)
-                    cardView.listDone.setOnClickListener {
-                        changeVisibility(cardView, false)
-                        markSingle(listDone)
-                        cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
-                    }
-                    cardView.listRead.setOnClickListener {
-                        lateinit var bundle: Bundle
-                        val chapter: String = when (getStringPref(name="planType", defaultValue="horner")) {
-                            "horner" -> list[getIntPref(listName)]
-                            "numerical" -> {
-                                var index = getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0)
-                                while (index >= list.size) {
-                                    index -= list.size
-                                }
-                                list[index]
+        when(getIntPref(listDone)) {
+            0 -> {
+                cardView.root.setOnClickListener { cView ->
+                    when (cardView.listButtons.isVisible) {
+                        true -> listSwitcher(cView, getIntPref(listDone), binding.materialButton)
+                        false -> {
+                            hideOthers(cardView.root, binding = null, binding, isMcheyne = true)
+                            cardView.listDone.setOnClickListener {
+                                changeVisibility(cardView, isCardView = false)
+                                markSingle(listDone)
+                                cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                                (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
                             }
-                            "calendar" -> {
-                                var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                                while (index >= list.size) {
-                                    index -= list.size
+                            cardView.listRead.setOnClickListener {
+                                lateinit var bundle: Bundle
+                                val chapter: String = when (getStringPref(name = "planType", defaultValue = "horner")) {
+                                    "horner" -> list[getIntPref(listName)]
+                                    "numerical" -> {
+                                        var index = getIntPref(name = "mcheyneCurrentDayIndex", defaultValue = 0)
+                                        while (index >= list.size) {
+                                            index -= list.size
+                                        }
+                                        list[index]
+                                    }
+                                    "calendar" -> {
+                                        var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                                        while (index >= list.size) {
+                                            index -= list.size
+                                        }
+                                        list[index]
+                                    }
+                                    else -> list[getIntPref(listName)]
                                 }
-                                list[index]
-                            }
-                            else -> list[getIntPref(listName)]
-                        }
-                        bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
+                                bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
 
-                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                                (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                            }
+
+                        }
                     }
                 }
             }
-        }else {
-            if (getStringPref(name="planType", defaultValue="horner") == "horner") {
-                val enabled: Int = if (getBoolPref(name="darkMode", defaultValue=true)) {
-                    getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-                } else {
-                    getColor(App.applicationContext(), R.color.buttonBackground)
-                }
-                cardView.root.setOnLongClickListener {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
-                        setIntPref(name=listDone, value=0)
-                        increaseIntPref(name=listName, value=1)
-                        val isLogged = FirebaseAuth.getInstance().currentUser
-                        if (isLogged != null) {
-                            val data = mutableMapOf<String, Any>()
-                            data[listDone] = 0
-                            data[listName] = getIntPref(listName)
-                            db.collection("main").document(isLogged.uid).update(data)
+            else -> {
+                when (getStringPref(name = "planType", defaultValue = "horner")){
+                    "horner" -> {
+                        val enabled: Int = when (getBoolPref(name = "darkMode", defaultValue = true)) {
+                            true->getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                            false->getColor(App.applicationContext(), R.color.buttonBackground)
                         }
-                        cardView.root.isEnabled = true
-                        cardView.root.setCardBackgroundColor(enabled)
-                        cardView.listButtons.setBackgroundColor(enabled)
-                        diag.dismiss()
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                        cardView.root.setOnLongClickListener {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
+                                setIntPref(name = listDone, value = 0)
+                                increaseIntPref(name = listName, value = 1)
+                                val isLogged = FirebaseAuth.getInstance().currentUser
+                                when(isLogged != null) {
+                                    true -> {
+                                        val data = mutableMapOf<String, Any>()
+                                        data[listDone] = 0
+                                        data[listName] = getIntPref(listName)
+                                        db.collection("main").document(isLogged.uid).update(data)
+                                    }
+                                }
+                                cardView.root.isEnabled = true
+                                cardView.root.setCardBackgroundColor(enabled)
+                                cardView.listButtons.setBackgroundColor(enabled)
+                                diag.dismiss()
+                                (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                            }
+                            builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
+                                diag.dismiss()
+                            }
+                            builder.setMessage(R.string.msg_reset_one)
+                            builder.setTitle(R.string.title_reset_list)
+                            builder.show()
+                            true
+                        }
                     }
-                    builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
-                        diag.dismiss()
-                    }
-                    builder.setMessage(R.string.msg_reset_one)
-                    builder.setTitle(R.string.title_reset_list)
-                    builder.show()
-                    true
                 }
             }
         }

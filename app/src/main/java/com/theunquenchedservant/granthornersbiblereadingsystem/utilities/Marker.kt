@@ -7,11 +7,11 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNames
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNamesCoded
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ntBooks
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.otBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES_CODED
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.NT_BOOKS
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.OT_BOOKS
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -47,8 +47,8 @@ object Marker {
     }
     private fun getTestament(book:String=""): String{
        return when(book) {
-           in otBooks -> "old"
-           in ntBooks -> "new"
+           in OT_BOOKS -> "old"
+           in NT_BOOKS -> "new"
            else -> "old"
        }
     }
@@ -75,7 +75,7 @@ object Marker {
     }
     private fun updateStatistics(book: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int){
         val updateValues = mutableMapOf<String, Any>()
-        val bookName = bookNames[book]
+        val bookName = BOOK_NAMES[book]
         if (getIntPref(name="${book}ChaptersRead") == bookChaps){
             updateValues["${book}ChaptersRead"] = setIntPref(name="${book}ChaptersRead", value=0)
             updateValues["${book}AmountRead"] = increaseIntPref(name="${book}AmountRead",value=1)
@@ -86,7 +86,7 @@ object Marker {
                 updateValues["${book}DoneTestament"] = setBoolPref(name="${book}DoneTestament", value=true)
                 if (getIntPref(name="${testament}ChaptersRead") == testamentChapters) {
                     updateValues["${testament}ChaptersRead"] = setIntPref(name="${testament}ChaptersRead", value=0)
-                    for(item in bookNames){
+                    for(item in BOOK_NAMES){
                         updateValues["${item}DoneTestament"] = setBoolPref(name="${item}DoneTestament", value=false)
                     }
                     updateValues["${testament}AmountRead"] = increaseIntPref(name="${testament}AmountRead",  value=1)
@@ -96,7 +96,7 @@ object Marker {
                 updateValues["${book}DoneWhole"] = setBoolPref(name="${book}DoneWhole", value=true)
                 if(getIntPref(name="totalChaptersRead") == 1189){
                     updateValues["totalChaptersRead"] = setIntPref(name="totalChaptersRead", value=0)
-                    for(item in bookNames){
+                    for(item in BOOK_NAMES){
                         updateValues["${item}DoneWhole"] = setBoolPref(name="${item}DoneWhole", value=false)
                     }
                     updateValues["bibleAmountRead"] = increaseIntPref(name="bibleAmountRead", value=1)
@@ -106,31 +106,33 @@ object Marker {
         updateValues["${book}ChaptersRead"] = increaseIntPref(name="${book}ChaptersRead",value=1)
         updateValues["${book}${chapter}Read"] = setBoolPref(name="${book}${chapter}Read", value=true)
         updateValues["${book}${chapter}AmountRead"] = increaseIntPref(name="${book}${chapter}AmountRead", value=1)
-        if(!getBoolPref(name="${book}DoneTestament")){
-            updateValues["${testament}ChaptersRead"] = increaseIntPref(name="${testament}ChaptersRead", value=1)
+        when(getBoolPref(name="${book}DoneTestament")){
+            false->updateValues["${testament}ChaptersRead"] = increaseIntPref(name="${testament}ChaptersRead", value=1)
         }
-        if(!getBoolPref("${book}DoneWhole")){
-            updateValues["totalChaptersRead"] = increaseIntPref(name="totalChaptersRead", value=1)
+        when(getBoolPref("${book}DoneWhole")){
+            false->updateValues["totalChaptersRead"] = increaseIntPref(name="totalChaptersRead", value=1)
         }
-        if (getIntPref("${book}ChaptersRead") == bookChaps){
-            bibleAlertBuilder("book", bookName!!)
+        when(getIntPref("${book}ChaptersRead")){
+            bookChaps->bibleAlertBuilder("book", bookName!!)
         }
-        if (getIntPref("${testament}ChaptersRead") == testamentChapters){
-            bibleAlertBuilder("testament", testament.capitalize(Locale.ROOT))
+        when(getIntPref("${testament}ChaptersRead")){
+            testamentChapters->bibleAlertBuilder("testament", testament.capitalize(Locale.ROOT))
         }
-        if (getIntPref("totalChaptersRead") == 1189){
-            bibleAlertBuilder("bible", "bible")
+        when (getIntPref("totalChaptersRead")){
+            1189->bibleAlertBuilder("bible", "bible")
         }
-        if (isLogged != null) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection("main").document(isLogged.uid).update(updateValues)
-                    .addOnSuccessListener {
-                        log("Successful update")
-                    }
-                    .addOnFailureListener {
-                        val error = it
-                        Log.w("PROFGRANT", "Failure writing to firestore", error)
-                    }
+        when (isLogged != null) {
+            true -> {
+                val db = FirebaseFirestore.getInstance()
+                db.collection("main").document(isLogged.uid).update(updateValues)
+                        .addOnSuccessListener {
+                            log("Successful update")
+                        }
+                        .addOnFailureListener {
+                            val error = it
+                            Log.w("PROFGRANT", "Failure writing to firestore", error)
+                        }
+            }
         }
     }
     private fun updateReadingStatistic(listName: String){
@@ -170,9 +172,9 @@ object Marker {
             val readingArray = reading.split(" ")
             val bookArray = readingArray.subList(0, reading.split(" ").lastIndex)
             val book = bookArray.joinToString(" ")
-            val codedBook = bookNamesCoded[book]
+            val codedBook = BOOK_NAMES_CODED[book]
             val chapter = readingArray[readingArray.lastIndex]
-            val bookChapters = bookChapters[codedBook]
+            val bookChapters = BOOK_CHAPTERS[codedBook]
             val testament = getTestament(codedBook!!)
             val testamentChapters = if(testament == "old") 929 else 260
             updateStatistics(codedBook, bookChapters!!, testament, testamentChapters, chapter.toInt())

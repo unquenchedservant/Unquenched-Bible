@@ -13,18 +13,19 @@ class ListsDoneRepository {
 
     fun getListsDone(): LiveData<ListsDone> {
         val data = MutableLiveData<ListsDone>()
-        if (user != null) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection("main").document(user.uid).get()
-                    .addOnSuccessListener {
-                        val listsDone = ListsDone((it.data!!["listsDone"] as Long).toInt())
-                        data.value = listsDone
-                    }
-                    .addOnFailureListener {
-                        log("Failed to get data. Error: $it")
-                    }
-        }else{
-            data.value = ListsDone(getIntPref("listsDone"))
+        when (user != null) {
+            true -> {
+                val db = FirebaseFirestore.getInstance()
+                db.collection("main").document(user.uid).get()
+                        .addOnSuccessListener { docSnap ->
+                            val listsDone = ListsDone((docSnap.data!!["listsDone"] as Long).toInt())
+                            data.value = listsDone
+                        }
+                        .addOnFailureListener { exception ->
+                            log(logString = "Failed to get data. Error: $exception")
+                        }
+            }
+            else -> data.value = ListsDone(getIntPref(name = "listsDone"))
         }
         return data
     }

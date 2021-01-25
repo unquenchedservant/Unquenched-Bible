@@ -11,7 +11,6 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.firebase.ui.auth.AuthUI
-import com.firebase.ui.auth.IdpResponse
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
@@ -123,7 +122,6 @@ class MainSettings : PreferenceFragmentCompat() {
         super.onActivityResult(requestCode, resultCode, data)
         val mainActivity = activity as MainActivity
         if(requestCode == _rcSignIn){
-            val response = IdpResponse.fromResultIntent(data)
             if(resultCode == Activity.RESULT_OK){
                 val user = FirebaseAuth.getInstance().currentUser
                 Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
@@ -163,7 +161,7 @@ class MainSettings : PreferenceFragmentCompat() {
             }
         }
     }
-    fun createSignIn(){
+    private fun createSignIn(){
         val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
                 AuthUI.IdpConfig.GoogleBuilder().build()

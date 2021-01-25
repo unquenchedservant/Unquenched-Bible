@@ -7,7 +7,7 @@ import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookNames
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset.resetBook
 
 class BookResetMenuFragment : PreferenceFragmentCompat() {
@@ -17,7 +17,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
         val b = arguments
         val book = b?.getString("book")
         val testament = b?.getString("testament")
-        val bookName = bookNames[book]
+        val bookName = BOOK_NAMES[book]
         val mainActivity = activity as MainActivity
         mainActivity.supportActionBar?.title = "Reset $bookName Stats"
         val hardReset = Preference(ctx)

@@ -19,36 +19,43 @@ class ReadingListRepository {
 
     fun getList(listName:String): LiveData<ReadingLists> {
         val data = MutableLiveData<ReadingLists>()
-        if (user != null) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection("main").document(user.uid).get()
-                    .addOnCompleteListener {
-                        if (it.result != null) {
-                            val psalmChecked = it.result!!.data!!["psalms"] as Boolean
-                            val listId = getListId(listName)
-                            val reading: String
-                            val resultObject: ReadingLists
-                            if(it.result!!.data!![listName] != null) {
-                                reading = getReading((it.result!!.data!![listName] as Long).toInt(), listId, listName, psalmChecked)
-                                resultObject = ReadingLists(listName, (it.result!!.data!!["${listName}Done"] as Long).toInt(), (it.result!!.data!![listName] as Long).toInt(), reading)
-                            }else{
-                                reading = getReading(index=0, listId, listName, psalmChecked)
-                                resultObject = ReadingLists(listName, listDone=0, listIndex=0, reading)
+        when (user != null) {
+            true -> {
+                val db = FirebaseFirestore.getInstance()
+                db.collection("main").document(user.uid).get()
+                        .addOnCompleteListener { task ->
+                            when (task.result != null) {
+                                true -> {
+                                    val psalmChecked = task.result!!.data!!["psalms"] as Boolean
+                                    val listId = getListId(listName)
+                                    val reading: String
+                                    val resultObject: ReadingLists
+                                    when (task.result!!.data!![listName] != null) {
+                                        true -> {
+                                            reading = getReading((task.result!!.data!![listName] as Long).toInt(), listId, listName, psalmChecked)
+                                            resultObject = ReadingLists(listName, (task.result!!.data!!["${listName}Done"] as Long).toInt(), (task.result!!.data!![listName] as Long).toInt(), reading)
+                                        }
+                                        else -> {
+                                            reading = getReading(index = 0, listId, listName, psalmChecked)
+                                            resultObject = ReadingLists(listName, listDone = 0, listIndex = 0, reading)
+                                        }
+                                    }
+                                    data.value = resultObject
+                                }
+                                else -> log(logString = "RESULT WAS NULL")
                             }
-                            data.value = resultObject
-                        }else{
-                            log("RESULT WAS NULL")
                         }
-                    }
-                    .addOnFailureListener {
-                        log("Failed to get data. Error: $it")
-                    }
-        }else{
-            val listId = getListId(listName)
-            val psalmChecked = getBoolPref(name="psalms")
-            val reading = getReading(getIntPref(listName), listId, listName, psalmChecked)
-            val resultObject = ReadingLists(listName, getIntPref(name="${listName}Done"), getIntPref(listName), reading)
-            data.value = resultObject
+                        .addOnFailureListener { exception ->
+                            log(logString = "Failed to get data. Error: $exception")
+                        }
+            }
+            else -> {
+                val listId = getListId(listName)
+                val psalmChecked = getBoolPref(name = "psalms")
+                val reading = getReading(getIntPref(listName), listId, listName, psalmChecked)
+                val resultObject = ReadingLists(listName, getIntPref(name = "${listName}Done"), getIntPref(listName), reading)
+                data.value = resultObject
+            }
         }
         return data
     }
@@ -73,18 +80,21 @@ class ReadingListRepository {
     }
     private fun getReading(index:Int, listId: Int, listName: String, psalmChecked: Boolean): String {
         val list = App.applicationContext().resources.getStringArray(listId)
-        val planSystem = getStringPref("planSystem", "pgh")
+        val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        if (listName == "list6") {
-            if (psalmChecked) {
-                return if (day != 31) {
-                    "$day, ${day + 30}, ${day + 60}, ${day + 90}, ${day + 120}"
-                } else {
-                    "Day Off"
+        when (listName) {
+            "list6" -> {
+                when (psalmChecked) {
+                    true-> {
+                        return when(day){
+                            in 1..30-> "$day, ${day + 30}, ${day + 60}, ${day + 90}, ${day + 120}"
+                            else-> "Day Off"
+                        }
+                    }
                 }
             }
         }
-        when (getStringPref("planType", "horner")) {
+        when (getStringPref(name="planType", defaultValue="horner")) {
             "horner" -> {
                 return when (index) {
                     list.size -> {
@@ -98,23 +108,26 @@ class ReadingListRepository {
                 }
             }
             "numerical" -> {
-                var newIndex = if(planSystem == "pgh"){
-                    getIntPref(name="currentDayIndex", defaultValue=0)
-                }else{
-                    getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0)
+                var newIndex = when(planSystem){
+                    "pgh"->getIntPref(name="currentDayIndex", defaultValue=0)
+                    else->getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0)
                 }
-                if (newIndex >= list.size){
-                    while(newIndex >= list.size){
-                        newIndex -= list.size
+                when (newIndex){
+                    in 0 .. list.size ->{
+                        while(newIndex>=list.size){
+                            newIndex -= list.size
+                        }
                     }
                 }
                 return list[newIndex]
             }
             "calendar" -> {
                 var newIndex = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1
-                if (newIndex >= list.size){
-                    while(newIndex >= list.size){
-                        newIndex -= list.size
+                when (newIndex){
+                    in 0 .. list.size -> {
+                        while (newIndex >= list.size) {
+                            newIndex -= list.size
+                        }
                     }
                 }
                 return list[newIndex]

@@ -48,7 +48,7 @@ class HomeFragment : Fragment() {
     private var skipped = false
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeView by viewModels(
-            factoryProducer =  { SavedStateViewModelFactory((activity as MainActivity).application, this) }
+            factoryProducer = { SavedStateViewModelFactory((activity as MainActivity).application, this) }
     )
 
     override fun onCreateView(
@@ -56,107 +56,101 @@ class HomeFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-        binding = FragmentHomeBinding.inflate(inflater,  container, false)
+        binding = FragmentHomeBinding.inflate(inflater, container, false)
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
-        if(allowResume){
-            (activity as MainActivity).navController.navigate(R.id.navigation_home)
-            allowResume = false
+        when (allowResume) {
+            true -> {
+                (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                allowResume = false
+            }
         }
     }
 
     override fun onPause() {
         super.onPause()
-        if(!allowResume){
-            allowResume = true
+        when (allowResume) {
+            false -> allowResume = true
         }
     }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if(getIntPref(name="versionNumber") < 58){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref(name="versionNumber", value=59)
-                something.dismiss()
+        when (getIntPref(name = "versionNumber")) {
+            in 0..58 -> {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setPositiveButton(R.string.ok) { something, _ ->
+                    setIntPref(name = "versionNumber", value = 59)
+                    something.dismiss()
+                }
+                builder.setTitle(R.string.title_new_update)
+                builder.setMessage(
+                        "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n" +
+                                "You can change the translation in the scripture window or under Plan Settings\n\n" +
+                                "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
+                                "[FIXED] Song of Solomon in ESV dark mode now is in the right colors. (Thank you Meinhard)\n\n" +
+                                "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
+                )
+                builder.create().show()
             }
-            builder.setTitle(R.string.title_new_update)
-            builder.setMessage(
-                    "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n"+
-                            "You can change the translation in the scripture window or under Plan Settings\n\n"+
-                            "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
-                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors. (Thank you Meinhard)\n\n" +
-                            "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
-            )
-            builder.create().show()
         }
-        if(getIntPref(name="versionNumber") == 58){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton(R.string.ok) { something, _ ->
-                setIntPref(name="versionNumber", value=59)
-                something.dismiss()
-            }
-            builder.setTitle(R.string.title_new_update)
-            builder.setMessage(
-                    "[FIXED] Acts and Revelation now work on AMP, CSB, KJV, and the NASBs\n\n" +
-                            "[FIXED] Song of Solomon in ESV dark mode now is in the right colors \n\n"+
-                            "Thank you Meinhard for bringing both of these to my attention."
-            )
-            builder.create().show()
+        viewModel.list1.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList1, readingList, R.string.title_pgh_list1, listName = "list1", R.array.list_1, psalms = false)
         }
-        viewModel.list1.observe(viewLifecycleOwner){
-            createCard(binding.cardList1, it, R.string.title_pgh_list1, listName="list1", R.array.list_1, psalms=false)
+        viewModel.list2.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList2, readingList, R.string.title_pgh_list2, listName = "list2", R.array.list_2, psalms = false)
         }
-        viewModel.list2.observe(viewLifecycleOwner){
-            createCard(binding.cardList2, it, R.string.title_pgh_list2, listName="list2", R.array.list_2, psalms=false)
+        viewModel.list3.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList3, readingList, R.string.title_pgh_list3, listName = "list3", R.array.list_3, psalms = false)
         }
-        viewModel.list3.observe(viewLifecycleOwner){
-            createCard(binding.cardList3, it, R.string.title_pgh_list3, listName="list3", R.array.list_3, psalms=false)
+        viewModel.list4.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList4, readingList, R.string.title_pgh_list4, listName = "list4", R.array.list_4, psalms = false)
         }
-        viewModel.list4.observe(viewLifecycleOwner){
-            createCard(binding.cardList4, it, R.string.title_pgh_list4, listName="list4", R.array.list_4, psalms=false)
+        viewModel.list5.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList5, readingList, R.string.title_pgh_list5, listName = "list5", R.array.list_5, psalms = false)
         }
-        viewModel.list5.observe(viewLifecycleOwner){
-            createCard(binding.cardList5, it, R.string.title_pgh_list5, listName="list5", R.array.list_5, psalms=false)
+        viewModel.list6.observe(viewLifecycleOwner) { readingList ->
+            val psalms = getBoolPref(name = "psalms")
+            createCard(binding.cardList6, readingList, R.string.title_pgh_list6, listName = "list6", R.array.list_6, psalms = psalms)
         }
-        viewModel.list6.observe(viewLifecycleOwner){
-            val psalms = getBoolPref(name="psalms")
-            createCard(binding.cardList6, it, R.string.title_pgh_list6, listName="list6", R.array.list_6, psalms=psalms)
+        viewModel.list7.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList7, readingList, R.string.title_pgh_list7, listName = "list7", R.array.list_7, psalms = false)
         }
-        viewModel.list7.observe(viewLifecycleOwner){
-            createCard(binding.cardList7, it, R.string.title_pgh_list7, listName="list7", R.array.list_7, psalms=false)
+        viewModel.list8.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList8, readingList, R.string.title_pgh_list8, listName = "list8", R.array.list_8, psalms = false)
         }
-        viewModel.list8.observe(viewLifecycleOwner){
-            createCard(binding.cardList8, it, R.string.title_pgh_list8, listName="list8", R.array.list_8, psalms=false)
+        viewModel.list9.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList9, readingList, R.string.title_pgh_list9, listName = "list9", R.array.list_9, psalms = false)
         }
-        viewModel.list9.observe(viewLifecycleOwner){
-            createCard(binding.cardList9, it, R.string.title_pgh_list9, listName="list9", R.array.list_9, psalms=false)
+        viewModel.list10.observe(viewLifecycleOwner) { readingList ->
+            createCard(binding.cardList10, readingList, R.string.title_pgh_list10, listName = "list10", R.array.list_10, psalms = false)
         }
-        viewModel.list10.observe(viewLifecycleOwner){
-            createCard(binding.cardList10, it, R.string.title_pgh_list10, listName="list10", R.array.list_10, psalms=false)
-        }
-        viewModel.listsDone.observe(viewLifecycleOwner){
+        viewModel.listsDone.observe(viewLifecycleOwner) { listsDone ->
             val backgroundColor: String
             val allDoneBackgroundColor: String
-            if(getBoolPref(name="darkMode", defaultValue=true)){
-                val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
-                backgroundColor = getString(R.string.btn_background_color_dark)
-                allDoneBackgroundColor = getString(R.string.done_btn_background_color_dark)
-                binding.materialButton.setTextColor(color)
-            }else{
-                val color = getColor(App.applicationContext(), R.color.unquenchedText)
-                backgroundColor = getString(R.string.btn_background_color)
-                allDoneBackgroundColor = getString(R.string.done_btn_background_color)
-                binding.materialButton.setTextColor(color)
+            when (getBoolPref(name = "darkMode", defaultValue = true)) {
+                true -> {
+                    val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
+                    backgroundColor = getString(R.string.btn_background_color_dark)
+                    allDoneBackgroundColor = getString(R.string.done_btn_background_color_dark)
+                    binding.materialButton.setTextColor(color)
+                }
+                false -> {
+                    val color = getColor(App.applicationContext(), R.color.unquenchedText)
+                    backgroundColor = getString(R.string.btn_background_color)
+                    allDoneBackgroundColor = getString(R.string.done_btn_background_color)
+                    binding.materialButton.setTextColor(color)
+                }
             }
-            when(it.listsDone){
+            when (listsDone.listsDone) {
                 10 -> {
                     binding.materialButton.setText(R.string.done)
                     binding.materialButton.isEnabled = true
                     binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$allDoneBackgroundColor"))
-                    binding.materialButton.backgroundTintMode= PorterDuff.Mode.ADD
+                    binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
                 0 -> {
                     binding.materialButton.setText(R.string.not_done)
@@ -166,10 +160,10 @@ class HomeFragment : Fragment() {
                 in 1..9 -> {
                     binding.materialButton.setText(R.string.btn_mark_remaining)
                     binding.materialButton.isEnabled = true
-                    val opacity = if (it.listsDone < 5){
-                        100 - (it.listsDone * 5)
-                    }else{
-                        100 - ((it.listsDone * 5) - 5)
+                    val opacity = if (listsDone.listsDone < 5) {
+                        100 - (listsDone.listsDone * 5)
+                    } else {
+                        100 - ((listsDone.listsDone * 5) - 5)
                     }
                     binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
                     binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
@@ -179,33 +173,36 @@ class HomeFragment : Fragment() {
 
         createButtonListener()
         createNotificationChannel()
-        createAlarm(alarmType="dailyCheck")
+        createAlarm(alarmType = "dailyCheck")
         setVisibilities(binding)
         allowResume = false
-        if(savedInstanceState != null) {
-            createAlarms()
+        when (savedInstanceState != null) {
+            true -> createAlarms()
         }
     }
 
-    private fun createCard(cardList: CardviewsBinding, readingLists: ReadingLists, readingString: Int, listName: String, listArray: Int, psalms:Boolean){
+    private fun createCard(cardList: CardviewsBinding, readingLists: ReadingLists, readingString: Int, listName: String, listArray: Int, psalms: Boolean) {
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
-        if(getBoolPref(name="darkMode", defaultValue=true)){
-            enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
-        }else{
-            enabled = getColor(App.applicationContext(), R.color.buttonBackground)
-            lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+        when (getBoolPref(name = "darkMode", defaultValue = true)) {
+            true -> {
+                enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+            }
+            false -> {
+                enabled = getColor(App.applicationContext(), R.color.buttonBackground)
+                lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+            }
         }
         val disabled = Color.parseColor("#00383838")
-        when(readingLists.listDone){
+        when (readingLists.listDone) {
             0 -> {
                 cardListRoot.isEnabled = true
                 cardListRoot.setCardBackgroundColor(enabled)
                 cardList.listButtons.setBackgroundColor(enabled)
             }
-            1-> {
+            1 -> {
                 cardListRoot.isEnabled = true
                 cardListRoot.setCardBackgroundColor(disabled)
                 cardList.listButtons.setBackgroundColor(disabled)
@@ -218,119 +215,126 @@ class HomeFragment : Fragment() {
         cardList.lineSeparator.setBackgroundColor(lineColor)
         cardList.listReading.text = readingLists.listReading
         cardList.listTitle.text = resources.getString(readingString)
-        createCardListener(cardList, listArray, psalms, "${listName}Done", listName)
+        createCardListener(cardList, listArray, psalms, listDone = "${listName}Done", listName)
     }
+
     private fun createButtonListener() {
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {
-            hideOthers(cardList=null, binding)
+            hideOthers(cardList = null, binding)
             markAll()
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
             (activity as MainActivity).navController.navigate(R.id.navigation_home)
         }
-        if (getIntPref(name="listsDone") == 10) {
-            if (getStringPref(name="planType", defaultValue="horner") != "calendar") {
-                binding.materialButton.setOnLongClickListener {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                        resetDaily()
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
-                    }
-                    builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
-                        diag.dismiss()
-                    }
-                    builder.setMessage(getString(R.string.msg_reset_all))
-                    builder.setTitle(getString(R.string.title_reset_lists))
-                    builder.show()
-                    true
-                }
-            }
-        }
-    }
-
-    private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, psalms: Boolean, listDone: String, listName: String){
-        val list = resources.getStringArray(arrayId)
-        if (getIntPref(listDone) == 0){
-            cardView.root.setOnClickListener {
-                if (cardView.listButtons.isVisible) {
-                    listSwitcher(it, getIntPref(listDone), binding.materialButton)
-                } else {
-                    hideOthers(cardView.root, binding)
-                    cardView.listDone.setOnClickListener {
-                        changeVisibility(cardView, isCardView=false)
-                        markSingle(listDone)
-                        cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
-                    }
-                    cardView.listRead.setOnClickListener {
-                        lateinit var bundle: Bundle
-                        if (cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms) {
-                            val chapter: String = when (getStringPref(name="planType", defaultValue="horner")) {
-                                "horner" -> list[getIntPref(listName)]
-                                "numerical" -> {
-                                    var index = getIntPref(name="currentDayIndex", defaultValue=0)
-                                    while (index >= list.size) {
-                                        index -= list.size
-                                    }
-                                    list[index]
-                                }
-                                "calendar" -> {
-                                    var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                                    while (index >= list.size) {
-                                        index -= list.size
-                                    }
-                                    list[index]
-                                }
-                                else -> list[getIntPref(listName)]
+        when (getIntPref(name = "listsDone")) {
+            10 -> {
+                when (getStringPref(name = "planType", defaultValue = "horner")) {
+                    "horner", "numerical" -> {
+                        binding.materialButton.setOnLongClickListener {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                                resetDaily()
+                                (activity as MainActivity).navController.navigate(R.id.navigation_home)
                             }
-                            bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
-
-                        } else if (cardView.root == binding.cardList6.root && psalms) {
-                            bundle = bundleOf("chapter" to "no", "psalms" to true, "iteration" to 1)
+                            builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
+                                diag.dismiss()
+                            }
+                            builder.setMessage(getString(R.string.msg_reset_all))
+                            builder.setTitle(getString(R.string.title_reset_lists))
+                            builder.show()
+                            true
                         }
-                        (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
                     }
-                }
-            }
-        }else {
-            if (getStringPref(name="planType", defaultValue="horner") == "horner") {
-                val enabled: Int = if (getBoolPref(name="darkMode", defaultValue=true)) {
-                    getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-                } else {
-                    getColor(App.applicationContext(), R.color.buttonBackground)
-                }
-                cardView.root.setOnLongClickListener {
-                    val builder = AlertDialog.Builder(requireContext())
-                    builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
-                        setIntPref(name=listDone, value=0)
-                        increaseIntPref(name=listName, value=1)
-                        val isLogged = FirebaseAuth.getInstance().currentUser
-                        if (isLogged != null) {
-                            val data = mutableMapOf<String, Any>()
-                            data[listDone] = 0
-                            data[listName] = getIntPref(listName)
-                            db.collection("main").document(isLogged.uid).update(data)
-                        }
-                        cardView.root.isEnabled = true
-                        cardView.root.setCardBackgroundColor(enabled)
-                        cardView.listButtons.setBackgroundColor(enabled)
-                        diag.dismiss()
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
-                    }
-                    builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
-                        diag.dismiss()
-                    }
-                    builder.setMessage(R.string.msg_reset_one)
-                    builder.setTitle(R.string.title_reset_list)
-                    builder.show()
-                    true
                 }
             }
         }
     }
 
-
-
+    private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, psalms: Boolean, listDone: String, listName: String) {
+        val list = resources.getStringArray(arrayId)
+        when (getIntPref(listDone)) {
+            0 -> {
+                cardView.root.setOnClickListener { view ->
+                    when {
+                        cardView.listButtons.isVisible -> listSwitcher(view, getIntPref(listDone), binding.materialButton)
+                        else -> {
+                            hideOthers(cardView.root, binding)
+                            cardView.listDone.setOnClickListener {
+                                changeVisibility(cardView, isCardView = false)
+                                markSingle(listDone)
+                                cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                                (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                            }
+                            cardView.listRead.setOnClickListener { listReadView ->
+                                lateinit var bundle: Bundle
+                                when {
+                                    (cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms) -> {
+                                        val chapter: String = when (getStringPref(name = "planType", defaultValue = "horner")) {
+                                            "horner" -> list[getIntPref(listName)]
+                                            "numerical" -> {
+                                                var index = getIntPref(name = "currentDayIndex", defaultValue = 0)
+                                                while (index >= list.size) {
+                                                    index -= list.size
+                                                }
+                                                list[index]
+                                            }
+                                            "calendar" -> {
+                                                var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                                                while (index >= list.size) {
+                                                    index -= list.size
+                                                }
+                                                list[index]
+                                            }
+                                            else -> list[getIntPref(listName)]
+                                        }
+                                        bundle = bundleOf("chapter" to chapter, "psalms" to false, "iteration" to 0)
+                                    }
+                                    (cardView.root == binding.cardList6.root && psalms) -> bundle = bundleOf("chapter" to "no", "psalms" to true, "iteration" to 1)
+                                }
+                                (activity as MainActivity).navController.navigate(R.id.navigation_scripture, bundle)
+                            }
+                        }
+                    }
+                }
+            }
+            else -> {
+                when (getStringPref(name = "planType", defaultValue = "horner")) {
+                    "horner" -> {
+                        val enabled: Int = when (getBoolPref("darkMode", defaultValue = true)) {
+                            true -> getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                            false -> getColor(App.applicationContext(), R.color.buttonBackground)
+                        }
+                        cardView.root.setOnLongClickListener {
+                            val builder = AlertDialog.Builder(requireContext())
+                            builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
+                                setIntPref(name = listDone, value = 0)
+                                increaseIntPref(name = listName, value = 1)
+                                val isLogged = FirebaseAuth.getInstance().currentUser
+                                if (isLogged != null) {
+                                    val data = mutableMapOf<String, Any>()
+                                    data[listDone] = 0
+                                    data[listName] = getIntPref(listName)
+                                    db.collection("main").document(isLogged.uid).update(data)
+                                }
+                                cardView.root.isEnabled = true
+                                cardView.root.setCardBackgroundColor(enabled)
+                                cardView.listButtons.setBackgroundColor(enabled)
+                                diag.dismiss()
+                                (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                            }
+                            builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
+                                diag.dismiss()
+                            }
+                            builder.setMessage(R.string.msg_reset_one)
+                            builder.setTitle(R.string.title_reset_list)
+                            builder.show()
+                            true
+                        }
+                    }
+                }
+            }
+        }
+    }
 }

@@ -1,7 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.data
 
 object Books {
-    val bookChapters : Map<String, Int> = mapOf(
+    val BOOK_CHAPTERS : Map<String, Int> = mapOf(
             "genesis" to 50, "exodus" to 40, "leviticus" to 27, "numbers" to 36,
             "deuteronomy" to 34, "joshua" to 24, "judges" to 21, "ruth" to 4,
             "samuel1" to 31, "samuel2" to 24, "kings1" to 22, "kings2" to 25,
@@ -20,7 +20,7 @@ object Books {
             "peter2" to 3, "john1" to 5, "john2" to 1, "john3" to 1,
             "jude" to 1, "revelation" to 22
     )
-    val bookNames : Map<String, String> = mapOf(
+    val BOOK_NAMES : Map<String, String> = mapOf(
             "genesis" to "Genesis", "exodus" to "Exodus", "leviticus" to "Leviticus", "numbers" to "Numbers",
             "deuteronomy" to "Deuteronomy", "joshua" to "Joshua", "judges" to "Judges", "ruth" to "Ruth",
             "samuel1" to "1 Samuel", "samuel2" to "2 Samuel", "kings1" to "1 Kings", "kings2" to "2 Kings",
@@ -39,7 +39,7 @@ object Books {
             "peter2" to "2 Peter", "john1" to "1 John",  "john2" to "2 John", "john3" to "3 John",
             "jude" to "Jude", "revelation" to "Revelation"
     )
-    val bookNamesCoded : Map<String, String> = mapOf(
+    val BOOK_NAMES_CODED : Map<String, String> = mapOf(
             "Genesis" to "genesis", "Exodus" to "exodus", "Leviticus" to "leviticus", "Numbers" to "numbers",
             "Deuteronomy" to "deuteronomy", "Joshua" to "joshua", "Judges" to "judges", "Ruth" to "ruth",
             "1 Samuel" to "samuel1", "2 Samuel" to "samuel2", "1 Kings" to "kings1", "2 Kings" to "kings2",
@@ -58,21 +58,32 @@ object Books {
             "2 Peter" to "peter2", "1 John" to "john1",  "2 John" to "john2", "3 John" to "john3",
             "Jude" to "jude", "Revelation" to "revelation"
     )
-    val otBooks = arrayOf("genesis", "exodus", "leviticus", "numbers", "deuteronomy",
+    val OT_BOOKS = arrayOf("genesis", "exodus", "leviticus", "numbers", "deuteronomy",
             "joshua", "judges", "ruth", "samuel1", "samuel2", "kings1", "kings2",
             "chronicles1", "chronicles2", "ezra", "nehemiah", "esther", "job",
             "psalm", "proverbs", "ecclesiastes", "song", "isaiah", "jeremiah",
             "lamentations", "ezekiel", "daniel", "hosea", "joel", "amos", "obadiah",
             "jonah", "micah", "nahum", "habakkuk", "zephaniah", "haggai", "zechariah", "malachi")
-    val ntBooks = arrayOf("matthew", "mark", "luke", "john", "acts", "romans", "corinthians1",
+    val NT_BOOKS = arrayOf("matthew", "mark", "luke", "john", "acts", "romans", "corinthians1",
             "corinthians2", "galatians", "ephesians", "philippians", "colossians", "thessalonians1",
             "thessalonians2", "timothy1", "timothy2", "titus", "philemon", "hebrews", "james",
-            "peter2", "peter2", "john1", "john2", "john3", "jude", "revelation")
+            "peter1", "peter2", "john1", "john2", "john3", "jude", "revelation")
+    val ALL_BOOKS = arrayOf("genesis", "exodus", "leviticus", "numbers", "deuteronomy",
+            "joshua", "judges", "ruth", "samuel1", "samuel2", "kings1", "kings2",
+            "chronicles1", "chronicles2", "ezra", "nehemiah", "esther", "job",
+            "psalm", "proverbs", "ecclesiastes", "song", "isaiah", "jeremiah",
+            "lamentations", "ezekiel", "daniel", "hosea", "joel", "amos", "obadiah",
+            "jonah", "micah", "nahum", "habakkuk", "zephaniah", "haggai", "zechariah", "malachi",
+            "matthew", "mark", "luke", "john", "acts", "romans", "corinthians1",
+            "corinthians2", "galatians", "ephesians", "philippians", "colossians", "thessalonians1",
+            "thessalonians2", "timothy1", "timothy2", "titus", "philemon", "hebrews", "james",
+            "peter1", "peter2", "john1", "john2", "john3", "jude", "revelation")
 
     fun getBooks(testament: String) : Array<String>?{
         return when(testament){
-            "old"-> otBooks
-            "new"-> ntBooks
+            "old"-> OT_BOOKS
+            "new"-> NT_BOOKS
+            "all"-> ALL_BOOKS
             else-> null
         }
     }
