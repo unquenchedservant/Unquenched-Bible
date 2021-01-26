@@ -61,15 +61,15 @@ class OnboardingFragmentFour : Fragment() {
         val helper = vieww.findViewById<TextView>(R.id.helper)!!
         val doneBtn = vieww.findViewById<MaterialButton>(R.id.doneBtn)!!
         if(onboardOne && onboardTwo){
-            title.text = "All set to begin using the Unquenched Bible App"
+            title.text = resources.getString(R.string.onboarding_p4_title_a)
             helper.isVisible = true
             doneBtn.isVisible = true
         }else if(!onboardOne){
-            title.text = "Please select the reading system you would like to use"
+            title.text = resources.getString(R.string.onboarding_p4_title_b)
             helper.isVisible = false
             doneBtn.isVisible = false
         }else if(!onboardTwo){
-            title.text = "Please select the reading method you would like to use"
+            title.text = resources.getString(R.string.onboarding_p4_title_c)
             helper.isVisible = false
             doneBtn.isVisible = false
         }

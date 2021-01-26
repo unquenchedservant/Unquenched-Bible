@@ -1,7 +1,7 @@
 <resources>
-    <string name="app_name">Grant Horners Bible Reading System</string>
+    <string name="app_name">Unquenched Bible</string>
 
-    <string name="title_new_update">Changelog for Version 1.6.2</string>
+    <string name="title_new_update">Changelog for Version 2.0 Beta</string>
 
     <string name="title_home">Reading</string>
     <string name="title_stats">Statistics</string>
@@ -28,7 +28,7 @@
     <string name="title_licenses">Licenses</string>
     <string name="title_information">Information</string>
     <string name="title_support">Support</string>
-    <string name="title_version">App Version 1.6.2</string>
+    <string name="title_version">App Version 2.0 Beta</string>
     <string name="title_contact">Question/Comments</string>
     <string name="title_twitter">Follow Dev On Twitter</string>
     <string name="title_mailchimp">Sign Up for the Mailing List</string>
@@ -36,6 +36,7 @@
     <string name="title_daily_list">Daily List Time</string>
     <string name="title_reminder_time">Reminder Time</string>
     <string name="title_partial">Allow Partial for Streak</string>
+    <string name="title_weekend">Weekend Mode</string>
     <string name="title_hold_plan">Hold Plan Until All Done</string>
     <string name="title_dark_mode">Dark Mode</string>
     <string name="title_discord">Join the Discord Server!</string>
@@ -54,6 +55,12 @@
     <string name="title_account_settings">Account Settings</string>
     <string name="title_confirm_delete">WARNING! PERMANENT!</string>
     <string name="title_plan_type">Change Reading Plan</string>
+    <string name="title_current_account">Current Account</string>
+    <string name="title_update_email">Update Email</string>
+    <string name="title_change_password">Change Password</string>
+    <string name="title_log_out">Log Out</string>
+    <string name="title_kenny_loggins">DANGER ZONE</string>
+    <string name="title_delete_account">Delete Account</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -65,9 +72,8 @@
     <string name="summary_overrides_reset">Forgot to mark lists as done? Mark them now and reset the lists</string>
     <string name="summary_psalms">Instead of 1 Psalm, 5 Psalms per day based on day of the week</string>
     <string name="summary_account_loggedout">Have your progress stored in the cloud so you never have to worry about losing it!</string>
-    <string name="summary_account_loggedin"></string>
     <string name="summary_reset_stats">Reset Streak Stats</string>
-    <string name="summary_version">Click here for changelog</string>
+    <string name="summary_version">Click here for changelog and the github repo</string>
     <string name="summary_contact">Email the Dev</string>
     <string name="summary_twitter">Follow @unquenchedbible on twitter for updates and support</string>
     <string name="summary_mailchimp">Get emails with updates about the upcoming major overhaul to the app!</string>
@@ -82,10 +88,15 @@
     <string name="summary_numerical_method">All lists are connected, partial completion is possible, but all lists will advance at once.</string>
     <string name="summary_calendar_method">All lists are connected, and will advance whether you complete all the readings or not. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system.</string>
     <string name="summary_plan_type">Select The Reading Plan system you want to use!</string>
+    <string name="summary_weekend">Take weekends off. You won\t receive notifications on Saturdays or Sundays, and your streak won\'t be affected if you don\'t do the readings.</string>
+    <string name="summary_log_out">Log out of your current account</string>
+    <string name="summary_delete_account">Deletes your account from the Unquenched Bible System. All your local data remains.</string>
+
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>
     <string name="scripture_done">Done</string>
     <string name="scripture_home">Home</string>
+
 
     <string name="msg_sign_out">Are you sure you want to sign out?</string>
     <string name="msg_reset">Are you sure you want to reset all the lists to 0? This is irreversible</string>
@@ -99,13 +110,61 @@
     <string name="msg_reset_one">Are you sure you want to advance this list?</string>
     <string name="msg_confirm_delete">Deleting your account is permanent and cannot be undone! ARE YOU SURE YOU WANT TO CONTINUE</string>
 
+    <string name="onboarding_p1_title">WELCOME TO</string>
+    <string name="onboarding_p1_summary">Swipe left and right ot go back and forth on the onboarding screen</string>
+    <string name="onboarding_p2_title">Choose Your Plan System</string>
+    <string name="onboarding_p2_pgh_title">Professor Grant Horner\'s System</string>
+    <string name="onboarding_p2_pgh_summary">The 10 list system made by Professor Grant Horner.</string>
+    <string name="onboarding_p2_mcheyne_title">Robert M\'Cheyne Reading System</string>
+    <string name="onboarding_p2_mcheyne_summary">The 4 list calendar-based system made by Robert Murray M\'Cheyne.</string>
+    <string name="onboarding_p3_title">Choose Your Plan Method</string>
+    <string name="onboarding_p3_horner_a">Grant Horner</string>
+    <string name="onboarding_p3_horner_b">Grant Horner (Recommended)</string>
+    <string name="onboarding_p3_horner_summary">Each list is independent of the other, and will go at your own pace. This is the traditional Grant Horner system.</string>
+    <string name="onboarding_p3_numerical">Numerical Day</string>
+    <string name="onboarding_p3_numerical_summary">All lists are connected, partial completion is possible, but all lists will advance at once.</string>
+    <string name="onboarding_p3_calendar_a">Calendar Day</string>
+    <string name="onboarding_p3_calendar_b">Calendar Day (Recommended)</string>
+    <string name="onboarding_p3_calendar_summary">All lists are connected, and will advance whether you complete all the readings or not. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system.</string>
+    <string name="onboarding_p4_title_a">All set to begin using the Unquenched Bible App</string>
+    <string name="onboarding_p4_title_b">Please select the reading system you would like to use</string>
+    <string name="onboarding_p4_title_c">Please select the reading method you would like to use</string>
+    <string name="onboarding_p4_summary">Find more settings under the Settings tab, such as setting the times you want notifications to be sent, if at all, and enabling Weekend Mode (where you can take Saturdays and Sundays off).</string>
+    <string name="onboarding_p4_button">Start Reading</string>
+
     <string name="notification_channel_name">Daily Reading</string>
     <string name="notification_channel_description">The daily reading comes in this channel</string>
 
+    <string name="update_email_current_email">Current Email</string>
+    <string name="update_email_new_email">New Email</string>
+    <string name="update_email_password">Password</string>
+
+    <string name="update_password_current_password">Current Password</string>
+    <string name="update_password_new_password">New Password</string>
+    <string name="update_password_confirm_password">Confirm Password</string>
+
+    <string name="delete_account_confirm_password">Enter your current password to delete your account.</string>
+    <string name="manual_numerical_help">Select the day you want to set your reading to</string>
+
+    <string name="manual_select_list">Select List</string>
+    <string name="manual_select_tooltip">Select the list you want to change</string>
+    <string name="manual_select_verse">Select Verse</string>
+
+    <string name="plan_system_pgh_title">Grant Horner System</string>
+    <string name="plan_system_pgh_summary">The 10 list system made by Professor Grant Horner.</string>
+    <string name="plan_system_mcheyne_title">M\'Cheyne System</string>
+    <string name="plan_system_mcheyne_summary">The 4 list system made by Robert Murray M\'Cheyne.</string>
+    <string name="plan_system_more_title">More Information On These System</string>
+    <string name="plan_system_more_summary">Click here for more information on both of these systems</string>
 
     <string name="yes">Yes</string>
     <string name="no">Cancel</string>
     <string name="ok">Ok</string>
+    <string name="moreInfo">More Info</string>
+    <string name="update">Update</string>
+    <string name="setList">Set List</string>
+    <string name="deleteAccount">DELETE ACCOUNT</string>
+    <string name="dayOff">DAY OFF</string>
 
     <string name="hint_email">Email Address</string>
     <string name="hint_password">Password</string>

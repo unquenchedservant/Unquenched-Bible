@@ -13,7 +13,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:text="Choose Your Plan Method"/>
+            android:text="@string/onboarding_p3_title"/>
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -25,7 +25,7 @@
                 android:lineSpacingMultiplier="1.2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Grant Horner"/>
+                android:text="@string/onboarding_p3_horner_a"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -37,7 +37,7 @@
                     android:layout_marginEnd="50dp"
                     android:layout_width="300dp"
                     android:layout_height="wrap_content"
-                    android:text="Each list is independent of the other, and will go at your own pace. This is the traditional Grant Horner system."/>
+                    android:text="@string/onboarding_p3_horner_summary"/>
 
                 <CheckBox
                     android:layout_width="match_parent"
@@ -51,7 +51,7 @@
                 android:lineSpacingMultiplier="1.2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Numerical Day"/>
+                android:text="@string/onboarding_p3_numerical"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -63,7 +63,7 @@
                     android:lineSpacingMultiplier="1.2"
                     android:layout_marginEnd="50dp"
                     android:layout_height="wrap_content"
-                    android:text="All lists are connected, partial completion is possible, but all lists will advance at once."/>
+                    android:text="@string/onboarding_p3_numerical_summary"/>
 
                 <CheckBox
                     android:layout_width="match_parent"
@@ -76,7 +76,7 @@
                 android:lineSpacingMultiplier="1.2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Calendar Day"/>
+                android:text="@string/onboarding_p3_calendar_a"/>
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -88,7 +88,7 @@
                     android:lineSpacingMultiplier="1.2"
                     android:layout_marginEnd="50dp"
                     android:layout_height="wrap_content"
-                    android:text="All lists are connected, and will advance whether you complete all the readings or not. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system."/>
+                    android:text="@string/onboarding_p3_calendar_summary"/>
 
                 <CheckBox
                     android:layout_width="match_parent"

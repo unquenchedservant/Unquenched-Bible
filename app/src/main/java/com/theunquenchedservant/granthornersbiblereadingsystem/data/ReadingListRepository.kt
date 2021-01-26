@@ -71,10 +71,10 @@ class ReadingListRepository {
             "list8"-> R.array.list_8
             "list9"-> R.array.list_9
             "list10"-> R.array.list_10
-            "mcheyne_list1"->R.array.mcheyne_list1
-            "mcheyne_list2"->R.array.mcheyne_list2
-            "mcheyne_list3"->R.array.mcheyne_list3
-            "mcheyne_list4"->R.array.mcheyne_list4
+            "mcheyneList1"->R.array.mcheyne_list1
+            "mcheyneList2"->R.array.mcheyne_list2
+            "mcheyneList3"->R.array.mcheyne_list3
+            "mcheyneList4"->R.array.mcheyne_list4
             else-> 0
         }
     }

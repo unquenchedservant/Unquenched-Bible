@@ -9,6 +9,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ALL_BOOKS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
@@ -232,58 +233,26 @@ object SharedPref {
     fun listNumbersReset() { App.applicationContext().getSharedPreferences("listNumbers", Context.MODE_PRIVATE).edit().clear().apply() }
 
     fun updatePrefNames(){
-        for(i in 1..4){
-            setIntPref(name="mcheyneList${i}", value=getIntPref(name="mcheyne_list${i}"))
-            setIntPref(name="mcheyneList${i}Done", value=getIntPref(name="mcheyne_list${i}Done"))
-            setIntPref(name="mcheyneList${i}DoneDaily", value=getIntPref(name="mcheyne_list${i}DoneDaily"))
-            deletePref(name="mcheyne_list${i}")
-            deletePref(name="mcheyne_list${i}Done")
-            deletePref(name="mcheyne_list${i}DoneDaily")
+        if (getPref().contains("notif_switch")) {
+            setBoolPref(name="notifications", value=getBoolPref(name="notif_switch"))
+            deletePref(name="notif_switch")
         }
-        setIntPref(name="mcheyneCurrentDayIndex", value=getIntPref(name="mcheyne_currentDayIndex"))
-        setBoolPref(name="notifications", value= getBoolPref(name="notif_switch"))
-        setBoolPref(name="vacationMode", value= getBoolPref(name="vacation_mode"))
-        setBoolPref(name="allowPartial", value=getBoolPref(name="allow_partial_switch"))
-        setIntPref(name="dailyNotif", value=getIntPref(name="daily_time"))
-        setIntPref(name="remindNotif", value=getIntPref(name="remind_time"))
-        setIntPref(name="oldChaptersRead", value=getIntPref(name="old_chapters_read"))
-        setIntPref(name="newChaptersRead", value=getIntPref(name="new_chapters_read"))
-        setIntPref(name="oldAmountRead", value=getIntPref(name="old_amount_read"))
-        setIntPref(name="newAmountRead", value=getIntPref(name="new_amount_read"))
-        setIntPref(name="bibleAmountRead", value=getIntPref(name="bible_amount_read"))
-        setIntPref(name="totalChaptersRead", value=getIntPref(name="total_chapters_read"))
-        setBoolPref(name="pghSystem", value=getBoolPref(name="pgh_system"))
-        setBoolPref(name="mcheyneSystem", value=getBoolPref(name="mcheyne_system"))
-        deletePref(name="mcheyne_currentDayIndex")
-        deletePref(name="notif_switch")
-        deletePref(name="vacation_mode")
-        deletePref(name="allow_partial_switch")
-        deletePref(name="daily_time")
-        deletePref(name="remind_time")
-        deletePref(name="old_chapters_read")
-        deletePref(name="new_chapters_read")
-        deletePref(name="old_amount_read")
-        deletePref(name="new_amount_read")
-        deletePref(name="bible_amount_read")
-        deletePref(name="total_chapters_read")
-        deletePref(name="pgh_system")
-        deletePref(name="mcheyne_system")
-        for(book in ALL_BOOKS){
-            setIntPref(name="${book}AmountRead", value=getIntPref(name="${book}_amount_read"))
-            setIntPref(name="${book}ChaptersRead", value=getIntPref(name="${book}_chapters_read"))
-            setBoolPref(name="${book}DoneTestament", value=getBoolPref(name="${book}_done_testament"))
-            setBoolPref(name="${book}DoneWhole", value= getBoolPref(name="${book}_done_whole"))
-            deletePref(name="${book}_amount_read")
-            deletePref(name="${book}_chapters_read")
-            deletePref(name="${book}_done_testament")
-            deletePref(name="${book}_done_whole")
-            for(chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))){
-                setBoolPref(name="${book}${chapter}Read", value=getBoolPref(name="${book}_${chapter}_read"))
-                setIntPref(name="${book}${chapter}AmountRead", value=getIntPref(name="${book}_${chapter}_amount_read"))
-                deletePref(name="${book}_${chapter}_read")
-                deletePref(name="${book}_${chapter}_amount_read")
-            }
+        if (getPref().contains("vacation_mode")){
+            setBoolPref(name="vacationMode", value= getBoolPref(name="vacation_mode"))
+            deletePref(name="vacation_mode")
         }
-        setBoolPref(name="updatedValues", value=true, updateFS=true)
+        if(getPref().contains("allow_partial_switch")) {
+            setBoolPref(name = "allowPartial", value = getBoolPref(name = "allow_partial_switch"))
+            deletePref(name="allow_partial_switch")
+        }
+        if(getPref().contains("daily_time")) {
+            setIntPref(name = "dailyNotif", value = getIntPref(name = "daily_time"))
+            deletePref(name="daily_time")
+        }
+        if(getPref().contains("remind_time")) {
+            setIntPref(name = "remindNotif", value = getIntPref(name = "remind_time"))
+            deletePref(name="remind_time")
+        }
+        setBoolPref(name="updatedPref", value=true)
     }
 }

@@ -29,7 +29,7 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:textColor="#FF0000"
-                    android:text="Enter your current password to delete your account" />
+                    android:text="@string/delete_account_confirm_password" />
 
             </LinearLayout>
             <LinearLayout
@@ -44,7 +44,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Password"/>
+                    android:text="@string/update_email_password"/>
 
                 <EditText
                     android:id="@+id/userPass"
@@ -80,7 +80,7 @@
             android:background="#383838"
             android:clickable="true"
             android:focusable="true"
-            android:text="DELETE ACCOUNT"
+            android:text="@string/deleteAccount"
             android:textAlignment="center"
             android:textColor="#FF0000"
             android:textIsSelectable="false"

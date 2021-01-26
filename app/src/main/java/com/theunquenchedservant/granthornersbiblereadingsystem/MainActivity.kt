@@ -41,6 +41,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -63,9 +64,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         )
         val colorList: IntArray
         val toolbarColor: Int
-        if(!getBoolPref("updatedValues", false)){
-            updatePrefNames()
-        }
+        if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
         if(FirebaseAuth.getInstance().currentUser == null) {
             val providers = arrayListOf(
                     AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),

@@ -161,7 +161,26 @@ class ManualListSet: Fragment() {
 
                     "Family I"         ->{
                         val cInfo                   = getCurrentInfo(1, "mcheyne") as String
-                        verseSelector.visibility    = View.INVISIBLE
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
+
+                        button.isEnabled            = true
+                        button.isVisible            = true
+                        button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
+
+
+                        ArrayAdapter.createFromResource(
+                                context!!,
+                                R.array.mcheyne_list1,
+                                android.R.layout.simple_spinner_item).also{
+                                    it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                    list.adapter = it
+                                    list.setSelection(it.getPosition(cInfo)) }
+                    }
+                    "Family II"         ->{
+                        val cInfo                   = getCurrentInfo(2, "mcheyne") as String
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
 
                         button.isEnabled            = true
                         button.isVisible            = true
@@ -171,13 +190,14 @@ class ManualListSet: Fragment() {
                                 context!!,
                                 R.array.mcheyne_list2,
                                 android.R.layout.simple_spinner_item).also{
-                                    it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                                    list.adapter = it
-                                    list.setSelection(it.getPosition(cInfo)) }
+                            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            list.adapter = it
+                            list.setSelection(it.getPosition(cInfo)) }
                     }
-                    "Family II"         ->{
-                        val cInfo                   = getCurrentInfo(2, "mcheyne") as String
-                        verseSelector.visibility    = View.INVISIBLE
+                    "Secret I"         ->{
+                        val cInfo                   = getCurrentInfo(3, "mcheyne") as String
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
 
                         button.isEnabled            = true
                         button.isVisible            = true
@@ -191,25 +211,10 @@ class ManualListSet: Fragment() {
                             list.adapter = it
                             list.setSelection(it.getPosition(cInfo)) }
                     }
-                    "Secret I"         ->{
-                        val cInfo                   = getCurrentInfo(3, "mcheyne") as String
-                        verseSelector.visibility    = View.INVISIBLE
-
-                        button.isEnabled            = true
-                        button.isVisible            = true
-                        button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
-
-                        ArrayAdapter.createFromResource(
-                                context!!,
-                                R.array.mcheyne_list1,
-                                android.R.layout.simple_spinner_item).also{
-                            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-                            list.adapter = it
-                            list.setSelection(it.getPosition(cInfo)) }
-                    }
                     "Secret II"         ->{
                         val cInfo                   = getCurrentInfo(4, "mcheyne") as String
-                        verseSelector.visibility    = View.INVISIBLE
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
 
                         button.isEnabled            = true
                         button.isVisible            = true

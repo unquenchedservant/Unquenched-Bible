@@ -8,21 +8,19 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 
 class OnboardingFragmentThree : Fragment() {
-    lateinit var checkboxHorner: CheckBox
-    lateinit var checkboxCalendar: CheckBox
-    lateinit var checkboxNumerical: CheckBox
-    lateinit var titleHorner: TextView
-    lateinit var titleCalendar: TextView
-    lateinit var vieww: View
+    private lateinit var checkboxHorner: CheckBox
+    private lateinit var checkboxCalendar: CheckBox
+    private lateinit var checkboxNumerical: CheckBox
+    private lateinit var titleHorner: TextView
+    private lateinit var titleCalendar: TextView
+    private lateinit var vieww: View
     override fun onCreateView(
             inflater: LayoutInflater,
             container: ViewGroup?,
@@ -113,11 +111,11 @@ class OnboardingFragmentThree : Fragment() {
     override fun onResume(){
         val planSystem = getStringPref(name="planSystem", defaultValue="")
         if(planSystem == "pgh"){
-            titleHorner.text = "Grant Horner (Recommended)"
-            titleCalendar.text = "Calendar Day"
+            titleHorner.text = resources.getString(R.string.onboarding_p3_horner_b)
+            titleCalendar.text = resources.getString(R.string.onboarding_p3_calendar_a)
         }else if(planSystem == "mcheyne"){
-            titleHorner.text = "Grant Horner"
-            titleCalendar.text = "Calendar Day (Recommended)"
+            titleHorner.text = resources.getString(R.string.onboarding_p3_horner_a)
+            titleCalendar.text = resources.getString(R.string.onboarding_p3_calendar_b)
         }
         super.onResume()
     }

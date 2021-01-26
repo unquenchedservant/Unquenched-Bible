@@ -4,7 +4,7 @@ import android.util.Log
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.bookChapters
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
@@ -15,7 +15,7 @@ object BibleStatsReset {
     private val isLogged = FirebaseAuth.getInstance().currentUser
 
     fun resetBook(bookName: String, testament: String, hardReset: Boolean = false, internal: Boolean = false, updateValues: MutableMap<String, Any> = mutableMapOf()):MutableMap<String, Any>{
-        val chapters = bookChapters[bookName] ?: error("")
+        val chapters = BOOK_CHAPTERS[bookName] ?: error("")
         for(chapter in 1..chapters){
             updateValues["${bookName}${chapter}Read"] = setBoolPref(name="${bookName}${chapter}Read", value=false)
             if(hardReset) {

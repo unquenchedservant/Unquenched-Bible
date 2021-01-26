@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <Preference
         app:key="planType"
@@ -34,8 +34,8 @@
         app:allowDividerBelow="true"/>
     <SwitchPreference
         app:key="weekendMode"
-        app:title="Weekend Mode"
-        app:summary="Take weekends off. You won't receive notifications on Saturdays or Sundays, and your streak won't be affected if you don't do the readings."
+        app:title="@string/title_weekend"
+        app:summary="@string/summary_weekend"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
     <DropDownPreference

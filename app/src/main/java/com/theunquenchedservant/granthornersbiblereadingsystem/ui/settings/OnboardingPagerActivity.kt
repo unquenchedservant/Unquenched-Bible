@@ -3,7 +3,6 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentActivity
-import androidx.fragment.app.FragmentStatePagerAdapter
 import androidx.viewpager2.adapter.FragmentStateAdapter
 import androidx.viewpager2.widget.ViewPager2
 import com.theunquenchedservant.granthornersbiblereadingsystem.R

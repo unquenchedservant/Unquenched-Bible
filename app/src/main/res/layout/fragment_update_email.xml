@@ -28,7 +28,7 @@
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Current Email" />
+                    android:text="@string/update_email_current_email" />
 
                 <com.google.android.material.textview.MaterialTextView
                     android:id="@+id/currentEmail"
@@ -50,8 +50,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
+                    android:labelFor="@id/updatedEmail"
                     android:layout_marginEnd="8dp"
-                    android:text="New Email"/>
+                    android:text="@string/update_email_new_email"/>
 
                 <EditText
                     android:id="@+id/updatedEmail"
@@ -60,7 +61,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:inputType="textEmailAddress"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:autofillHints="jdoe@example.com" />
             </LinearLayout>
             <LinearLayout
                 android:layout_width="match_parent"
@@ -71,10 +73,11 @@
                     android:id="@+id/passwordLabel"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:labelFor="@id/userPass"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
-                    android:text="Password"/>
+                    android:text="@string/update_email_password"/>
 
                 <EditText
                     android:id="@+id/userPass"
@@ -83,7 +86,8 @@
                     android:layout_marginTop="8dp"
                     android:layout_marginEnd="8dp"
                     android:inputType="textPassword"
-                    android:textSize="14sp" />
+                    android:textSize="14sp"
+                    android:autofillHints="Enter Password" />
             </LinearLayout>
             <com.google.android.material.textview.MaterialTextView
                 android:id="@+id/errorLabel"
@@ -110,7 +114,7 @@
             android:background="#383838"
             android:clickable="true"
             android:focusable="true"
-            android:text="Update"
+            android:text="@string/update"
             android:textAlignment="center"
             android:textColor="@color/colorPrimaryDark"
             android:textIsSelectable="false"

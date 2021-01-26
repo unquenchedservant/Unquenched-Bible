@@ -267,7 +267,7 @@ class HomeFragment : Fragment() {
                                 cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
                                 (activity as MainActivity).navController.navigate(R.id.navigation_home)
                             }
-                            cardView.listRead.setOnClickListener { listReadView ->
+                            cardView.listRead.setOnClickListener {
                                 lateinit var bundle: Bundle
                                 when {
                                     (cardView.root != binding.cardList6.root || cardView.root == binding.cardList6.root && !psalms) -> {

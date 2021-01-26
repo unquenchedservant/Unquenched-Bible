@@ -16,9 +16,7 @@ android {
     ndkVersion "22.0.7026061"
     buildFeatures {
         viewBinding true
-    }
-    dataBinding {
-        enabled true
+        dataBinding true
     }
     compileOptions{
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -31,8 +29,8 @@ android {
         applicationId "com.theunquenchedservant.granthornersbiblereadingsystem"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 62
-        versionName "1.6.2"
+        versionCode 64
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {

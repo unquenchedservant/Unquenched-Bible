@@ -15,7 +15,7 @@
             android:layout_height="match_parent"
             android:gravity="center"
             android:padding="16dp"
-            android:text="WELCOME TO"
+            android:text="@string/onboarding_p1_title"
             android:id="@+id/title"/>
 
         <ImageView
@@ -33,6 +33,6 @@
             android:layout_marginTop="200dp"
             android:layout_gravity="center"
             android:id="@+id/helper"
-            android:text="Swipe left and right to go back and forth on the onboarding screen"/>
+            android:text="@string/onboarding_p1_summary"/>
     </LinearLayout>
 </ScrollView>

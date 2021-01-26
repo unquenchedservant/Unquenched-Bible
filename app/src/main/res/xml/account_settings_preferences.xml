@@ -5,25 +5,25 @@
         android:selectable="false"
         app:allowDividerBelow="true"
         app:key="currentAccount"
-        app:title="Current Account" />
+        app:title="@string/title_current_account" />
     <Preference
         app:key="editEmail"
-        app:title="Update Email"
+        app:title="@string/title_update_email"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
     <Preference
         app:key="editPassword"
-        app:title="Change Password"
+        app:title="@string/title_change_password"
         app:allowDividerAbove="true" />
     <Preference
         app:key="logOut"
-        app:title="Log Out"
-        app:summary="Log out of your current account"/>
+        app:title="@string/title_log_out"
+        app:summary="@string/summary_log_out"/>
     <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
-        app:title="DANGER ZONE">
+        app:title="@string/title_kenny_loggins">
         <Preference
             app:key="deleteAccount"
-            app:title="Delete Account"
-            app:summary="Deletes your account from the Unquenched Bible System. All your local data remains."/>
+            app:title="@string/title_delete_account"
+            app:summary="@string/summary_delete_account"/>
     </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 </PreferenceScreen>
