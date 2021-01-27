@@ -75,12 +75,9 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
         }
-        holdPlan.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if(hold){
-                setBoolPref(name="holdPlan", value=false, updateFS=true)
-            }else{
-                setBoolPref(name="holdPlan", value=true, updateFS=true)
-            }
+        holdPlan.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, value ->
+            val boolVal = value as Boolean
+            setBoolPref(name="holdPlan", value=boolVal, updateFS=true)
             true
         }
         weekendMode!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, value ->
@@ -88,21 +85,15 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
             setBoolPref(name="weekendMode", value=boolValue, updateFS=true)
             false
         }
-        psalms!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if(ps){
-                setBoolPref(name="psalms", value=false, updateFS=true)
-            }else{
-                setBoolPref(name="psalms", value=true, updateFS=true)
-            }
+        psalms!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, value->
+            val boolVal = value as Boolean
+            setBoolPref(name="psalms", value=boolVal, updateFS=true)
             true
         }
 
-        partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, _ ->
-            if(partial){
-                setBoolPref(name="allowPartial", value=false, updateFS=true)
-            }else{
-                setBoolPref(name="allowPartial", value=true, updateFS=true)
-            }
+        partialStreakAllow!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, value ->
+            val boolVal = value as Boolean
+            setBoolPref(name="allowPartial", value=boolVal, updateFS=true)
             true
         }
         translation.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, newValue ->

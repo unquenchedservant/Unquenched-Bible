@@ -12,21 +12,21 @@
         app:summary="@string/summary_reading_type"
         app:allowDividerBelow="true"
         app:allowDividerAbove="true"/>
-    <CheckBoxPreference
+    <SwitchPreference
         app:key="psalms"
         app:title="@string/title_psalms"
         app:summary="@string/summary_psalms"
         app:defaultValue="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
-    <CheckBoxPreference
+    <SwitchPreference
         app:key="holdPlan"
         app:title="@string/title_hold_plan"
         app:summary="@string/summary_hold_plan"
         app:defaultValue="false"
         app:allowDividerAbove="true"
         app:allowDividerBelow="true"/>
-    <CheckBoxPreference
+    <SwitchPreference
         app:key="allowPartial"
         app:title="@string/title_partial"
         app:summary="@string/summary_partial"

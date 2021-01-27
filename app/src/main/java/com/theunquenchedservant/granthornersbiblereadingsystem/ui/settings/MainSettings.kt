@@ -76,16 +76,11 @@ class MainSettings : PreferenceFragmentCompat() {
                 false
             }
         }
-        darkMode.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            if(dark){
-                setBoolPref(name="darkMode", value=false, updateFS=true)
-                mainActivity.navController.navigate(R.id.navigation_home)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-            }else{
-                setBoolPref(name="darkMode", value=true, updateFS=true)
-                mainActivity.navController.navigate(R.id.navigation_home)
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-            }
+        darkMode.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, value ->
+            val boolVal = value as Boolean
+            setBoolPref(name="darkMode", value=boolVal, updateFS=true)
+            if(boolVal) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            mainActivity.navController.navigate(R.id.navigation_home)
             false
         }
         plan.onPreferenceClickListener = Preference.OnPreferenceClickListener {
