@@ -44,7 +44,7 @@ object Books {
             "Deuteronomy" to "deuteronomy", "Joshua" to "joshua", "Judges" to "judges", "Ruth" to "ruth",
             "1 Samuel" to "samuel1", "2 Samuel" to "samuel2", "1 Kings" to "kings1", "2 Kings" to "kings2",
             "1 Chronicles" to "chronicles1", "2 Chronicles" to "chronicles2", "Ezra" to "ezra", "Nehemiah" to "nehemiah",
-            "Esther" to "esther", "Job" to "job", "Psalm" to "psalm", "Proverbs" to "proverbs",
+            "Esther" to "esther", "Job" to "job", "Psalm" to "psalm", "Psalms" to "psalm", "Proverbs" to "proverbs",
             "Ecclesiastes" to "ecclesiastes", "Song of Solomon" to "song", "Isaiah" to "isaiah", "Jeremiah" to "jeremiah",
             "Lamentations" to "lamentations", "Ezekiel" to "ezekiel", "Daniel" to "daniel", "Hosea" to "hosea",
             "Joel" to "joel", "Amos" to "amos", "Obadiah" to "obadiah", "Jonah" to "jonah",

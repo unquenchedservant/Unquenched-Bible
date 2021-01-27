@@ -136,6 +136,7 @@ object Marker {
         }
     }
     private fun updateReadingStatistic(listName: String){
+        log(listName)
         val listId= getListId(listName)
         val list = App.applicationContext().resources.getStringArray(listId)
         val listIndex = when(getStringPref(name="planType", defaultValue="horner")){
@@ -172,9 +173,11 @@ object Marker {
             val readingArray = reading.split(" ")
             val bookArray = readingArray.subList(0, reading.split(" ").lastIndex)
             val book = bookArray.joinToString(" ")
+            log(book)
             val codedBook = BOOK_NAMES_CODED[book]
             val chapter = readingArray[readingArray.lastIndex]
             val bookChapters = BOOK_CHAPTERS[codedBook]
+            log(codedBook!!)
             val testament = getTestament(codedBook!!)
             val testamentChapters = if(testament == "old") 929 else 260
             updateStatistics(codedBook, bookChapters!!, testament, testamentChapters, chapter.toInt())
@@ -198,6 +201,7 @@ object Marker {
     }
 
     fun markAll(planType: String = "") {
+        log(planType)
         val doneMax = when (planType){
             "pgh"->10
             "mcheyne"->4

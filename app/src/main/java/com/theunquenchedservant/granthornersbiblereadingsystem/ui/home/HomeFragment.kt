@@ -2,9 +2,11 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 
 import android.app.NotificationManager
 import android.content.Context
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AlertDialog
@@ -80,19 +82,28 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         when (getIntPref(name = "versionNumber")) {
-            in 0..58 -> {
+            in 0..60 -> {
                 val builder = AlertDialog.Builder(requireContext())
-                builder.setPositiveButton(R.string.ok) { something, _ ->
-                    setIntPref(name = "versionNumber", value = 59)
-                    something.dismiss()
+                builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                    setIntPref(name = "versionNumber", value = 61)
+                    dialog.dismiss()
+                }
+                builder.setNeutralButton(resources.getString(R.string.moreInfo)){ dialog, _ ->
+                    setIntPref(name = "versionNumber", value = 61)
+                    val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
+                    startActivity(i)
+                    dialog.dismiss()
                 }
                 builder.setTitle(R.string.title_new_update)
                 builder.setMessage(
-                        "[ADDED] New Bible Versions (AMP, CSB, KJV, NASB95, and the NASB20)\n\n" +
-                                "You can change the translation in the scripture window or under Plan Settings\n\n" +
-                                "[UPDATED] You can no longer manually set a list you currently have marked as done.\n\n" +
-                                "[FIXED] Song of Solomon in ESV dark mode now is in the right colors. (Thank you Meinhard)\n\n" +
-                                "[Potentially FIXED] Issue where the home screen was updating when you opened the app after the lists should have moved forward"
+                        "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
+                                "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
+                                "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
+                                "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n"+
+                                "[ADDED] New Statistics for amount of the Bible read\n\n" +
+                                "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n"+
+                                "[UPDATED] New sign in screen with the option to log in with your email and password\n\n"+
+                                "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
                 )
                 builder.create().show()
             }
@@ -222,7 +233,7 @@ class HomeFragment : Fragment() {
         val ctx = App.applicationContext()
         binding.materialButton.setOnClickListener {
             hideOthers(cardList = null, binding)
-            markAll()
+            markAll("pgh")
             val mNotificationManager = ctx.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
