@@ -24,7 +24,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 
 class DeleteAccountFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
@@ -91,7 +91,7 @@ class DeleteAccountFragment: Fragment() {
         db.collection("main").document(user.uid).get()
                 .addOnSuccessListener { doc ->
                     if (doc != null) {
-                        firestoneToPreference(doc)
+                        firestoreToPreference(doc)
                     }
                 }
 

@@ -20,10 +20,10 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 
 class MainSettings : PreferenceFragmentCompat() {
@@ -126,7 +126,7 @@ class MainSettings : PreferenceFragmentCompat() {
                             if (doc["list1"] != null) {
                                 val builder = AlertDialog.Builder(context)
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
-                                    firestoneToPreference(doc)
+                                    firestoreToPreference(doc)
                                     if(getStringPref("planSystem", "pgh") == "pgh") {
                                         mainActivity.navController.navigate(R.id.navigation_home)
                                     }else{
@@ -134,7 +134,7 @@ class MainSettings : PreferenceFragmentCompat() {
                                     }
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
-                                    preferenceToFireStone()
+                                    preferenceToFirestore()
                                     if(getStringPref("planSystem", "pgh") == "pgh") {
                                         mainActivity.navController.navigate(R.id.navigation_home)
                                     }else{
@@ -145,7 +145,7 @@ class MainSettings : PreferenceFragmentCompat() {
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
                                 builder.create().show()
                             } else {
-                                preferenceToFireStone()
+                                preferenceToFirestore()
                                 if(getStringPref("planSystem", "pgh") == "pgh") {
                                     mainActivity.navController.navigate(R.id.navigation_home)
                                 }else{
@@ -199,18 +199,18 @@ class MainSettings : PreferenceFragmentCompat() {
                             if (doc != null) {
                                 val builder = AlertDialog.Builder(context)
                                 builder.setPositiveButton("Use Cloud Data") { _, _ ->
-                                    firestoneToPreference(doc)
+                                    firestoreToPreference(doc)
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setNeutralButton("Overwrite with device") { _, _ ->
-                                    preferenceToFireStone()
+                                    preferenceToFirestore()
                                     navControl.navigate(R.id.navigation_home)
                                 }
                                 builder.setTitle("Account Found")
                                 builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
                                 builder.create().show()
                             } else {
-                                preferenceToFireStone()
+                                preferenceToFirestore()
                             }
                         }
             } else {

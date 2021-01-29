@@ -79,7 +79,7 @@ object SharedPref {
 
     private val user = FirebaseAuth.getInstance().currentUser
 
-    fun preferenceToFireStone(){
+    fun preferenceToFirestore(){
         val db = FirebaseFirestore.getInstance()
         val user2 = FirebaseAuth.getInstance().currentUser
         val results = mutableMapOf<String?, Any?>()
@@ -170,10 +170,10 @@ object SharedPref {
             setStringPref(prefKey, data[key] as String)
         }
     }
-    fun firestoneToPreference(database: DocumentSnapshot){
+    fun firestoreToPreference(database: DocumentSnapshot){
         val data = database.data
         if(data != null) {
-            MainActivity.log("User document exists")
+            log("User document exists")
             for (i in 1..10) {
                 updateIntPref(data, key="list${i}")
                 updateIntPref(data, key="list${i}Done")
@@ -214,8 +214,13 @@ object SharedPref {
             updateIntPref(data, key="graceTime")
             updateBoolPref(data, key="isGrace")
             updateStringPref(data, key="planSystem")
-            updateBoolPref(data, key="pghSystem")
-            updateBoolPref(data, key="mcheyneSystem")
+            if(getStringPref("planSystem") == "pgh"){
+                setBoolPref("mcheyneSystem", false)
+                setBoolPref("pghSystem", true)
+            }else{
+                setBoolPref("mcheyneSystem", true)
+                setBoolPref("pghSystem", false)
+            }
             updateBoolPref(data, key="hasCompletedOnboarding")
             for(book in ALL_BOOKS){
                 updateIntPref(data, key="${book}AmountRead")
