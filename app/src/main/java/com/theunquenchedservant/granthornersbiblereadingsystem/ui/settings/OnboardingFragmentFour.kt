@@ -18,6 +18,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class OnboardingFragmentFour : Fragment() {
     lateinit var vieww: View
@@ -28,9 +29,11 @@ class OnboardingFragmentFour : Fragment() {
     ): View {
 
         vieww = inflater.inflate(R.layout.fragment_onboarding_page_four, container, false)
+        val mainActivity = activity as OnboardingPagerActivity
         val dark = getBoolPref(name="darkMode", defaultValue=true)
         val title = vieww.findViewById<TextView>(R.id.title)
         val helper = vieww.findViewById<TextView>(R.id.helper)
+        val backBtn = vieww.findViewById<MaterialButton>(R.id.back_button)
         val doneBtn = vieww.findViewById<MaterialButton>(R.id.doneBtn)
         if(dark){
             vieww.setBackgroundColor(Color.parseColor("#121212"))
@@ -39,18 +42,26 @@ class OnboardingFragmentFour : Fragment() {
             doneBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
             doneBtn.backgroundTintMode = PorterDuff.Mode.ADD
             doneBtn.setTextColor(Color.parseColor("#9cb9d3"))
+            backBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
+            backBtn.backgroundTintMode = PorterDuff.Mode.ADD
+            backBtn.setTextColor(Color.parseColor("#9cb9d3"))
         }else{
             vieww.setBackgroundColor(Color.parseColor("#e1e2e6"))
             title.setTextColor(Color.parseColor("#b36c38"))
             helper.setTextColor(Color.parseColor("#121212"))
             doneBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
             doneBtn.setTextColor(Color.parseColor("#121212"))
+            backBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
+            backBtn.setTextColor(Color.parseColor("#121212"))
+        }
+        backBtn.setOnClickListener {
+            mainActivity.viewPager.currentItem -= 1
         }
         doneBtn.setOnClickListener {
             setBoolPref(name="hasCompletedOnboarding", value=true, updateFS=true)
-            setStringPref(name="planSystem", value=getStringPref(name="planSystem", defaultValue="pgh"), updateFS=true)
-            setStringPref(name="planType", value=getStringPref(name="planType", defaultValue="horner"), updateFS=true)
-            startActivity(Intent((activity as OnboardingPagerActivity), MainActivity::class.java))
+            updateFS(name="planSystem", value=getStringPref(name="planSystem", defaultValue="pgh"))
+            updateFS(name="planType", value=getStringPref(name="planType", defaultValue="horner"))
+            startActivity(Intent(mainActivity, MainActivity::class.java))
         }
         return vieww
     }

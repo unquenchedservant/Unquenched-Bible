@@ -10,14 +10,15 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 private const val NUM_PAGES = 4
 
 class OnboardingPagerActivity : FragmentActivity() {
-    private lateinit var viewPager: ViewPager2
+    lateinit var viewPager: ViewPager2
     override fun onCreate(savedInstanceState: Bundle?){
         setTheme(R.style.AppTheme)
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_onboarding_slider)
-        viewPager = findViewById(R.id.pager)
+        viewPager = this.findViewById(R.id.pager)
         val pagerAdapter = ScreenSlidePagerAdapter(this)
         viewPager.adapter = pagerAdapter
+        viewPager.isUserInputEnabled  = false
     }
 
     override fun onBackPressed() {
@@ -32,18 +33,10 @@ class OnboardingPagerActivity : FragmentActivity() {
         override fun getItemCount(): Int = NUM_PAGES
         override fun createFragment(position: Int): Fragment {
             return when(position){
-                0-> {
-                    OnboardingFragmentOne()
-                }
-                1->{
-                    OnboardingFragmentTwo()
-                }
-                2-> {
-                    OnboardingFragmentThree()
-                }
-                3->{
-                    OnboardingFragmentFour()
-                }
+                0-> OnboardingFragmentOne()
+                1-> OnboardingFragmentTwo()
+                2-> OnboardingFragmentThree()
+                3-> OnboardingFragmentFour()
                 else->{
                     OnboardingFragmentOne()
                 }
