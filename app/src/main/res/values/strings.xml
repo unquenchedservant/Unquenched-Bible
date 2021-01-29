@@ -165,6 +165,7 @@
     <string name="setList">Set List</string>
     <string name="deleteAccount">DELETE ACCOUNT</string>
     <string name="dayOff">DAY OFF</string>
+    <string name="loading">Loading…</string>
 
     <string name="hint_email">Email Address</string>
     <string name="hint_password">Password</string>
