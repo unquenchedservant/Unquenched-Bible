@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
 import android.app.Activity
-import android.app.AlertDialog
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.content.res.Configuration
@@ -23,25 +22,22 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
-import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.auth.GoogleAuthProvider
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.google.firebase.firestore.FirebaseFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoneToPreference
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFireStone
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
+
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -52,6 +48,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
+    var darkMode: Boolean = false
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -62,8 +59,21 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
         )
+        if(FirebaseAuth.getInstance().currentUser != null){
+            FirebaseFirestore.getInstance().collection("main").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
+                    .addOnCompleteListener {
+                        if(it.isSuccessful){
+                            firestoreToPreference(it.result!!)
+                        }else{
+                            FirebaseCrashlytics.getInstance().log("Error getting user info")
+                            FirebaseCrashlytics.getInstance().recordException(it.exception?.cause!!)
+                            FirebaseCrashlytics.getInstance().setCustomKey("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
+                        }
+                    }
+        }
         val colorList: IntArray
         val toolbarColor: Int
+        darkMode = getBoolPref(name="darkMode", defaultValue=true)
         if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
         if(FirebaseAuth.getInstance().currentUser == null) {
             val providers = arrayListOf(
@@ -81,7 +91,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             startActivity(Intent(this, OnboardingPagerActivity::class.java))
         }else{
-            if (getBoolPref(name="darkMode", defaultValue=true)) {
+            if (darkMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
                 colorList = intArrayOf(
@@ -111,10 +121,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             binding.bottomNav.setBackgroundColor(toolbarColor)
             binding.bottomNav.itemIconTintList = colorStateList
             binding.bottomNav.itemTextColor = colorStateList
-            if (getStringPref(name="planSystem", defaultValue="pgh") == "pgh") {
-                navController.navigate(R.id.navigation_home)
-            } else if (getStringPref(name="planSystem", defaultValue="pgh") == "mcheyne") {
-                navController.navigate(R.id.navigation_home_mcheyne)
+            when(getStringPref(name="planSystem", defaultValue="pgh")){
+                "pgh"-> navController.navigate(R.id.navigation_home)
+                "mcheyne"->navController.navigate(R.id.navigation_home_mcheyne)
             }
             binding.translationSelector.isVisible = false
             setupBottomNavigationBar()
@@ -125,10 +134,11 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         switchEnabled(current="home")
         binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
+            val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{
-                        if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh"){
+                        if(planSystem == "pgh"){
                             navController.navigate(R.id.navigation_home)
                         }else{
                             navController.navigate(R.id.navigation_home_mcheyne)
@@ -137,7 +147,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
                     if (getStringPref(name="bibleVersion", defaultValue="ESV") == "NASB"){
-                        setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
+                        updateFS(name="bibleVersion", value="NASB20")
                     }
                     when (getStringPref(name="bibleVersion", defaultValue="ESV")){
                         "AMP" -> binding.translationSelector.setSelection(1)
@@ -306,10 +316,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 }
                 R.id.navigation_home -> {
                     switchEnabled(current="home")
-                    if(getBoolPref(name="darkMode", defaultValue=true)) {
-                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-                    }else {
-                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    when(darkMode){
+                        true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
+                        false->binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
                     }
                     supportActionBar?.title = getDate(option=0, fullMonth=true)
                     supportActionBar?.show()
@@ -318,10 +327,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 }
                 R.id.navigation_home_mcheyne -> {
                     switchEnabled(current="home")
-                    if(getBoolPref(name="darkMode", defaultValue=true)) {
-                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-                    }else {
-                        binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
+                    when(darkMode){
+                        true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
+                        false->binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
                     }
                     supportActionBar?.title = getDate(option=0, fullMonth=true)
                     supportActionBar?.show()
@@ -425,24 +433,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
                             if (doc["list1"] != null) {
-                                val builder = AlertDialog.Builder(this)
-                                builder.setPositiveButton("Use Cloud Data") { _, _ ->
-                                    firestoneToPreference(doc)
-                                    val i = Intent(applicationContext, MainActivity::class.java)
-                                    finish()
-                                    startActivity(i)
-                                }
-                                builder.setNeutralButton("Overwrite with device") { _, _ ->
-                                    preferenceToFireStone()
-                                    val i = Intent(applicationContext, MainActivity::class.java)
-                                    finish()
-                                    startActivity(i)
-                                }
-                                builder.setTitle("Account Found")
-                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
-                                builder.create().show()
+                                firestoreToPreference(doc)
                             } else {
-                                preferenceToFireStone()
+                                preferenceToFirestore()
                                 val i = Intent(applicationContext, MainActivity::class.java)
                                 finish()
                                 startActivity(i)
@@ -452,54 +445,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 if(response == null){
                     finish()
                 }
-            }
-        }
-    }
-    fun googleSignIn(){
-        val builder = AlertDialog.Builder(this)
-        builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-            val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build()
-            val mGoogleSignInClient = GoogleSignIn.getClient(this.applicationContext, gso)
-            val signInIntent = mGoogleSignInClient.signInIntent
-            startActivityForResult(signInIntent, _rcSignIn)
-        }
-        builder.setNeutralButton(R.string.no) { dialogInterface, _ -> dialogInterface.cancel() }
-        builder.setMessage(R.string.msg_google).setTitle(R.string.title_sign_in)
-        builder.create().show()
-    }
-    fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
-        val auth = FirebaseAuth.getInstance()
-        val navControl = this.navController
-        val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
-        auth.signInWithCredential(credential).addOnCompleteListener {
-            if (it.isSuccessful) {
-                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
-                val db = FirebaseFirestore.getInstance()
-                val user = FirebaseAuth.getInstance().currentUser
-                db.collection("main").document(user!!.uid).get()
-                        .addOnSuccessListener { doc ->
-                            if (doc != null) {
-                                val builder = AlertDialog.Builder(this)
-                                builder.setPositiveButton("Use Cloud Data") { _, _ ->
-                                    firestoneToPreference(doc)
-                                    navControl.navigate(R.id.navigation_home)
-                                }
-                                builder.setNeutralButton("Overwrite with device") { _, _ ->
-                                    preferenceToFireStone()
-                                    navControl.navigate(R.id.navigation_home)
-                                }
-                                builder.setTitle("Account Found")
-                                builder.setMessage("Found ${FirebaseAuth.getInstance().currentUser?.email}. Would you like to TRANSFER from the cloud or OVERWRITE the cloud with current device data?")
-                                builder.create().show()
-                            } else {
-                                preferenceToFireStone()
-                            }
-                        }
-            } else {
-                Toast.makeText(App.applicationContext(), "Google Sign In Failed", Toast.LENGTH_LONG).show()
             }
         }
     }
