@@ -83,16 +83,16 @@ class HomeMCheyneFragment : Fragment() {
         binding.cardList2.root.isClickable = false
         binding.cardList3.root.isClickable = false
         binding.cardList4.root.isClickable = false
-        binding.cardList1.root.setBackgroundColor(backgroundColor)
+        binding.cardList1.root.setCardBackgroundColor(backgroundColor)
         binding.cardList1.listReading.setTextColor(emphColor)
         binding.cardList1.lineSeparator.setBackgroundColor(emphColor)
-        binding.cardList2.root.setBackgroundColor(backgroundColor)
+        binding.cardList2.root.setCardBackgroundColor(backgroundColor)
         binding.cardList2.listReading.setTextColor(emphColor)
         binding.cardList2.lineSeparator.setBackgroundColor(emphColor)
-        binding.cardList3.root.setBackgroundColor(backgroundColor)
+        binding.cardList3.root.setCardBackgroundColor(backgroundColor)
         binding.cardList3.listReading.setTextColor(emphColor)
         binding.cardList3.lineSeparator.setBackgroundColor(emphColor)
-        binding.cardList4.root.setBackgroundColor(backgroundColor)
+        binding.cardList4.root.setCardBackgroundColor(backgroundColor)
         binding.cardList4.listReading.setTextColor(emphColor)
         binding.cardList4.lineSeparator.setBackgroundColor(emphColor)
         return binding.root
