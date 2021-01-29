@@ -48,6 +48,7 @@ class HomeFragment : Fragment() {
     private var user: FirebaseUser? = null
     private var allowResume = true
     private var skipped = false
+    private var darkMode = false
     private lateinit var binding: FragmentHomeBinding
     private val viewModel: HomeView by viewModels(
             factoryProducer = { SavedStateViewModelFactory((activity as MainActivity).application, this) }
@@ -59,6 +60,77 @@ class HomeFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
+        darkMode = getBoolPref(name = "darkMode", defaultValue = true)
+        val backgroundColor: Int
+        val emphColor: Int
+        binding.cardList1.listTitle.text = resources.getString(R.string.title_pgh_list1)
+        binding.cardList2.listTitle.text = resources.getString(R.string.title_pgh_list2)
+        binding.cardList3.listTitle.text = resources.getString(R.string.title_pgh_list3)
+        binding.cardList4.listTitle.text = resources.getString(R.string.title_pgh_list4)
+        binding.cardList5.listTitle.text = resources.getString(R.string.title_pgh_list5)
+        binding.cardList6.listTitle.text = resources.getString(R.string.title_pgh_list6)
+        binding.cardList7.listTitle.text = resources.getString(R.string.title_pgh_list7)
+        binding.cardList8.listTitle.text = resources.getString(R.string.title_pgh_list8)
+        binding.cardList9.listTitle.text = resources.getString(R.string.title_pgh_list9)
+        binding.cardList10.listTitle.text = resources.getString(R.string.title_pgh_list10)
+        binding.cardList1.listReading.text = resources.getString(R.string.loading)
+        binding.cardList2.listReading.text = resources.getString(R.string.loading)
+        binding.cardList3.listReading.text = resources.getString(R.string.loading)
+        binding.cardList4.listReading.text = resources.getString(R.string.loading)
+        binding.cardList5.listReading.text = resources.getString(R.string.loading)
+        binding.cardList6.listReading.text = resources.getString(R.string.loading)
+        binding.cardList7.listReading.text = resources.getString(R.string.loading)
+        binding.cardList8.listReading.text = resources.getString(R.string.loading)
+        binding.cardList9.listReading.text = resources.getString(R.string.loading)
+        binding.cardList10.listReading.text = resources.getString(R.string.loading)
+        if(darkMode){
+            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+            emphColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+        }else{
+            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+            emphColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+        }
+        binding.cardList1.root.isClickable=false
+        binding.cardList2.root.isClickable=false
+        binding.cardList3.root.isClickable=false
+        binding.cardList4.root.isClickable=false
+        binding.cardList5.root.isClickable=false
+        binding.cardList6.root.isClickable=false
+        binding.cardList7.root.isClickable=false
+        binding.cardList8.root.isClickable=false
+        binding.cardList9.root.isClickable=false
+        binding.cardList10.root.isClickable=false
+        binding.cardList1.root.setBackgroundColor(backgroundColor)
+        binding.cardList1.listReading.setTextColor(emphColor)
+        binding.cardList1.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList2.root.setBackgroundColor(backgroundColor)
+        binding.cardList2.listReading.setTextColor(emphColor)
+        binding.cardList2.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList3.root.setBackgroundColor(backgroundColor)
+        binding.cardList3.listReading.setTextColor(emphColor)
+        binding.cardList3.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList4.root.setBackgroundColor(backgroundColor)
+        binding.cardList4.listReading.setTextColor(emphColor)
+        binding.cardList4.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList5.root.setBackgroundColor(backgroundColor)
+        binding.cardList5.listReading.setTextColor(emphColor)
+        binding.cardList5.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList6.root.setBackgroundColor(backgroundColor)
+        binding.cardList6.listReading.setTextColor(emphColor)
+        binding.cardList6.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList7.root.setBackgroundColor(backgroundColor)
+        binding.cardList7.listReading.setTextColor(emphColor)
+        binding.cardList7.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList8.root.setBackgroundColor(backgroundColor)
+        binding.cardList8.listReading.setTextColor(emphColor)
+        binding.cardList8.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList9.root.setBackgroundColor(backgroundColor)
+        binding.cardList9.listReading.setTextColor(emphColor)
+        binding.cardList9.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList10.root.setBackgroundColor(backgroundColor)
+        binding.cardList10.listReading.setTextColor(emphColor)
+        binding.cardList10.lineSeparator.setBackgroundColor(emphColor)
+        binding.materialButton.setBackgroundColor(backgroundColor)
         return binding.root
     }
 
@@ -81,32 +153,31 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        when (getIntPref(name = "versionNumber")) {
-            in 0..60 -> {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                    setIntPref(name = "versionNumber", value = 61)
-                    dialog.dismiss()
-                }
-                builder.setNeutralButton(resources.getString(R.string.moreInfo)){ dialog, _ ->
-                    setIntPref(name = "versionNumber", value = 61)
-                    val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
-                    startActivity(i)
-                    dialog.dismiss()
-                }
-                builder.setTitle(R.string.title_new_update)
-                builder.setMessage(
-                        "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
-                                "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
-                                "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
-                                "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n"+
-                                "[ADDED] New Statistics for amount of the Bible read\n\n" +
-                                "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n"+
-                                "[UPDATED] New sign in screen with the option to log in with your email and password\n\n"+
-                                "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
-                )
-                builder.create().show()
+
+        if(getIntPref(name="versionNumber") < 61) {
+            val builder = AlertDialog.Builder(requireContext())
+            builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = 61, updateFS=true)
+                dialog.dismiss()
             }
+            builder.setNeutralButton(resources.getString(R.string.moreInfo)) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = 61, updateFS=true)
+                val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
+                startActivity(i)
+                dialog.dismiss()
+            }
+            builder.setTitle(R.string.title_new_update)
+            builder.setMessage(
+                    "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
+                            "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
+                            "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
+                            "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n" +
+                            "[ADDED] New Statistics for amount of the Bible read\n\n" +
+                            "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n" +
+                            "[UPDATED] New sign in screen with the option to log in with your email and password\n\n" +
+                            "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
+            )
+            builder.create().show()
         }
         viewModel.list1.observe(viewLifecycleOwner) { readingList ->
             createCard(binding.cardList1, readingList, R.string.title_pgh_list1, listName = "list1", R.array.list_1, psalms = false)
@@ -196,6 +267,7 @@ class HomeFragment : Fragment() {
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
+        cardListRoot.isClickable = true
         when (getBoolPref(name = "darkMode", defaultValue = true)) {
             true -> {
                 enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)

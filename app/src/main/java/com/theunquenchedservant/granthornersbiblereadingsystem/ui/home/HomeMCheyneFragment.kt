@@ -50,6 +50,7 @@ class HomeMCheyneFragment : Fragment() {
     private var allowResume = true
     private var skipped = false
     private lateinit var binding: FragmentHomeMcheyneBinding
+    private var darkMode = false
     private val viewModel: HomeMCheyneView by viewModels(
             factoryProducer =  { SavedStateViewModelFactory((activity as MainActivity).application, this) }
     )
@@ -60,6 +61,40 @@ class HomeMCheyneFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View {
         binding = FragmentHomeMcheyneBinding.inflate(inflater,  container, false)
+        darkMode = getBoolPref(name="darkMode", defaultValue = true)
+        val backgroundColor: Int
+        val emphColor: Int
+        binding.cardList1.listTitle.text = resources.getString(R.string.title_mcheyne_list1)
+        binding.cardList2.listTitle.text = resources.getString(R.string.title_mcheyne_list2)
+        binding.cardList3.listTitle.text = resources.getString(R.string.title_mcheyne_list3)
+        binding.cardList4.listTitle.text = resources.getString(R.string.title_mcheyne_list4)
+        binding.cardList1.listReading.text = resources.getString(R.string.loading)
+        binding.cardList2.listReading.text = resources.getString(R.string.loading)
+        binding.cardList3.listReading.text = resources.getString(R.string.loading)
+        binding.cardList4.listReading.text = resources.getString(R.string.loading)
+        if(darkMode){
+            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+            emphColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+        }else{
+            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackground)
+            emphColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+        }
+        binding.cardList1.root.isClickable = false
+        binding.cardList2.root.isClickable = false
+        binding.cardList3.root.isClickable = false
+        binding.cardList4.root.isClickable = false
+        binding.cardList1.root.setBackgroundColor(backgroundColor)
+        binding.cardList1.listReading.setTextColor(emphColor)
+        binding.cardList1.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList2.root.setBackgroundColor(backgroundColor)
+        binding.cardList2.listReading.setTextColor(emphColor)
+        binding.cardList2.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList3.root.setBackgroundColor(backgroundColor)
+        binding.cardList3.listReading.setTextColor(emphColor)
+        binding.cardList3.lineSeparator.setBackgroundColor(emphColor)
+        binding.cardList4.root.setBackgroundColor(backgroundColor)
+        binding.cardList4.listReading.setTextColor(emphColor)
+        binding.cardList4.lineSeparator.setBackgroundColor(emphColor)
         return binding.root
     }
 
@@ -176,6 +211,7 @@ class HomeMCheyneFragment : Fragment() {
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
+        cardListRoot.isClickable = true
         when(getBoolPref(name="darkMode", defaultValue=true)) {
             true -> {
                 enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
