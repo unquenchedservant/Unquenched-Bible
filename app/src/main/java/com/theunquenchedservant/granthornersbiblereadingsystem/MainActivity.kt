@@ -39,7 +39,10 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -88,6 +91,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 firestoreToPreference(it.result!!)
+                                checkReadingDate()
                             } else {
                                 Firebase.crashlytics.log("Error getting user info")
                                 Firebase.crashlytics.recordException(it.exception?.cause!!)
@@ -127,10 +131,8 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 binding.bottomNav.itemTextColor = colorStateList
 
                 when (getStringPref(name = "planSystem", defaultValue = "pgh")) {
-                    //"pgh"->navController.navigate(R.id.navigation_home)
                     "mcheyne" -> navController.navigate(R.id.navigation_home_mcheyne)
                 }
-
                 binding.translationSelector.isVisible = false
                 setupBottomNavigationBar()
             }
@@ -140,7 +142,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         switchEnabled(current="home")
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
-            log("THIS IS THE NEW DESTINATION $destination")
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -153,7 +154,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         supportActionBar?.setDisplayHomeAsUpEnabled(false)
                     }
                     if (getStringPref(name="bibleVersion", defaultValue="ESV") == "NASB"){
-                        updateFS(name="bibleVersion", value="NASB20")
+                        setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
                     }
                     when (getStringPref(name="bibleVersion", defaultValue="ESV")){
                         "AMP" -> binding.translationSelector.setSelection(1)
@@ -386,6 +387,59 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             }
         }
         return true
+    }
+
+    private fun checkReadingDate(){
+        if(!checkDate("current", false)){
+            val data:MutableMap<String, Any> = mutableMapOf()
+            val allowPartial = getBoolPref(name="allowPartial")
+            val planType = getStringPref("planType", "horner")
+            var pghDone = 0
+            var mcheyneDone = 0
+            for(i in 1..10){
+                if(getIntPref("list${i}Done") == 1){
+                    pghDone += 1
+                    if(planType=="horner") data["list$i"] = increaseIntPref("list$i", 1)
+                    data["list${i}Done"] = setIntPref("list${i}Done", 0)
+                    data["list${i}DoneDaily"] = setIntPref("list${i}DoneDaily", 0)
+                }
+            }
+            for(i in 1..4){
+                if(getIntPref("mcheyneList${i}Done") == 1){
+                    mcheyneDone += 1
+                    if(planType=="horner") data["mcheyneList${i}"] = increaseIntPref("list$i", 1)
+                    data["mcheyneList${i}Done"] = setIntPref("mcheyneList${i}Done", 0)
+                    data["mcheyneList${i}DoneDaily"] = setIntPref("mcheyneList${i}DoneDaily", 0)
+                }
+            }
+            if(planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)){
+                data["currentDayIndex"] = increaseIntPref("currentDayIndex", 1)
+            }
+            if(planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)){
+                data["mcheyneCurrentDayIndex"] = increaseIntPref("mcheyneCurrentDayIndex", 1)
+            }
+            if((pghDone == 10 || (allowPartial && pghDone > 0)) || (mcheyneDone == 4 || (allowPartial && mcheyneDone > 0))){
+                data["currentStreak"] = increaseIntPref("currentStreak", 1)
+                if(getIntPref("currentStreak") > getIntPref("maxStreak")){
+                    data["maxStreak"] = setIntPref("maxStreak", getIntPref("currentStreak"))
+                }
+            }
+            if(pghDone == 0 && mcheyneDone == 0 && !getBoolPref("vacationMode")){
+                if(checkDate("yesterday", false)){
+                    data["isGrace"] = setBoolPref("isGrace", true)
+                    data["graceTime"] = setIntPref("graceTime", 0)
+                    data["holdStreak"] = getIntPref("currentStreak")
+                }else{
+                    data["graceTime"] = setIntPref("graceTime", 0)
+                    data["isGrace"] = setBoolPref("isGrace", false)
+                    data["holdStreak"] = setIntPref("holdStreak",0)
+                }
+                data["currentStreak"] = setIntPref("currentStreak", 0)
+            }
+            if(Firebase.auth.currentUser != null){
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
+            }
+        }
     }
 
     private fun switchEnabled(current: String){
