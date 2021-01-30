@@ -30,7 +30,7 @@
     <string name="title_support">Support</string>
     <string name="title_version">App Version 2.0 Beta</string>
     <string name="title_contact">Question/Comments</string>
-    <string name="title_twitter">Follow Dev On Twitter</string>
+    <string name="title_twitter">Check out the Github Repo</string>
     <string name="title_mailchimp">Sign Up for the Mailing List</string>
     <string name="title_vacation_mode">Vacation Mode</string>
     <string name="title_daily_list">Daily List Time</string>
@@ -73,9 +73,9 @@
     <string name="summary_psalms">Instead of 1 Psalm, 5 Psalms per day based on day of the week</string>
     <string name="summary_account_loggedout">Have your progress stored in the cloud so you never have to worry about losing it!</string>
     <string name="summary_reset_stats">Reset Streak Stats</string>
-    <string name="summary_version">Click here for changelog and the github repo</string>
+    <string name="summary_version">Click here for changelog</string>
     <string name="summary_contact">Email the Dev</string>
-    <string name="summary_twitter">Follow @unquenchedbible on twitter for updates and support</string>
+    <string name="summary_twitter">Unquenched Bible is open source!</string>
     <string name="summary_mailchimp">Get emails with updates about the upcoming major overhaul to the app!</string>
     <string name="summary_vacation_mode">Notifications are paused, streaks are unaffected if you miss a day.</string>
     <string name="summary_hold_plan">Makes it so the lists don\'t advance until you complete all 10.</string>

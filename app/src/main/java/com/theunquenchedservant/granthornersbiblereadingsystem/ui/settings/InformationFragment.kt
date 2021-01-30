@@ -47,7 +47,7 @@ class InformationFragment : PreferenceFragmentCompat() {
         }
         currentVersion?.title = resources.getString(R.string.title_version)
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://github.com/unquenchedservant/BRP_android/releases"))
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://headwayapp.co/unquenched-bible-changelog"))
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
@@ -56,7 +56,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             false
         }
         twitter!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://twitter.com/unquenchedbible"))
+            val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://github.com/unquenchedservant/Unquenched-Bible"))
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
