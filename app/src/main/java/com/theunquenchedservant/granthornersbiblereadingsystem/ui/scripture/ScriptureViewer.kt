@@ -71,6 +71,9 @@ class ScriptureViewer : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(savedInstanceState == null) {
+            log("THIS IS SCRIPTURE")
+        }
         val b = arguments
         chapter = b?.getString("chapter")!!
         psalms = b.getBoolean("psalms")
@@ -78,20 +81,26 @@ class ScriptureViewer : Fragment() {
         view.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
         val act = activity as MainActivity
         act.supportActionBar?.title = chapter
-        act.binding.translationSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+        val translation = getStringPref("bibleVersion", defaultValue="ESV")
+
+        act.binding.translationSelector.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 var version = parent?.getItemAtPosition(position).toString()
-                version = when (version) {
+                version = when(version){
                     "NASB2020" -> "NASB20"
+                    "---"->"ESV"
                     else -> version
                 }
-                setStringPref(name = "bibleVersion", value = version, updateFS = true)
-                val bundle = bundleOf("chapter" to chapter, "psalms" to psalms, "iteration" to iteration)
-                act.navController.navigate(R.id.navigation_scripture, bundle)
+                if(version != translation) {
+                    setStringPref(name = "bibleVersion", value = version, updateFS = true)
+                    val bundle = bundleOf("chapter" to chapter, "psalms" to psalms, "iteration" to iteration)
+                    act.navController.navigate(R.id.navigation_scripture, bundle)
+                }
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+
         val url = when (getStringPref(name = "bibleVersion", defaultValue = "ESV")) {
             "ESV" -> {
                 val returnURL = when (getStringPref(name = "planSystem", defaultValue = "pgh")) {
