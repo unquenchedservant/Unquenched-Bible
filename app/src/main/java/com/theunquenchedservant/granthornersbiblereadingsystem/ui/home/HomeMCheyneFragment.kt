@@ -95,52 +95,6 @@ class HomeMCheyneFragment : Fragment() {
         binding.cardList4.root.setCardBackgroundColor(backgroundColor)
         binding.cardList4.listReading.setTextColor(emphColor)
         binding.cardList4.lineSeparator.setBackgroundColor(emphColor)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(allowResume){
-            (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
-            allowResume = false
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if(!allowResume){
-            allowResume = true
-        }
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        when (getIntPref(name = "versionNumber")) {
-            in 0..60 -> {
-                val builder = AlertDialog.Builder(requireContext())
-                builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                    setIntPref(name = "versionNumber", value = 61)
-                    dialog.dismiss()
-                }
-                builder.setNeutralButton(resources.getString(R.string.moreInfo)){ dialog, _ ->
-                    setIntPref(name = "versionNumber", value = 61)
-                    val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
-                    startActivity(i)
-                    dialog.dismiss()
-                }
-                builder.setTitle(R.string.title_new_update)
-                builder.setMessage(
-                        "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
-                                "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
-                                "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
-                                "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n"+
-                                "[ADDED] New Statistics for amount of the Bible read\n\n" +
-                                "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n"+
-                                "[UPDATED] New sign in screen with the option to log in with your email and password\n\n"+
-                                "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
-                )
-                builder.create().show()
-            }
-        }
         viewModel.list1.observe(viewLifecycleOwner){ readingList ->
             createCard(binding.cardList1, readingList, R.string.title_mcheyne_list1, listName="mcheyneList1", R.array.mcheyne_list1)
         }
@@ -194,6 +148,53 @@ class HomeMCheyneFragment : Fragment() {
                 }
             }
         }
+        return binding.root
+    }
+
+    override fun onResume() {
+        super.onResume()
+        if(allowResume){
+            (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+            allowResume = false
+        }
+    }
+
+    override fun onPause() {
+        super.onPause()
+        if(!allowResume){
+            allowResume = true
+        }
+    }
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        when (getIntPref(name = "versionNumber")) {
+            in 0..60 -> {
+                val builder = AlertDialog.Builder(requireContext())
+                builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                    setIntPref(name = "versionNumber", value = 61)
+                    dialog.dismiss()
+                }
+                builder.setNeutralButton(resources.getString(R.string.moreInfo)){ dialog, _ ->
+                    setIntPref(name = "versionNumber", value = 61)
+                    val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
+                    startActivity(i)
+                    dialog.dismiss()
+                }
+                builder.setTitle(R.string.title_new_update)
+                builder.setMessage(
+                        "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
+                                "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
+                                "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
+                                "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n"+
+                                "[ADDED] New Statistics for amount of the Bible read\n\n" +
+                                "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n"+
+                                "[UPDATED] New sign in screen with the option to log in with your email and password\n\n"+
+                                "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
+                )
+                builder.create().show()
+            }
+        }
+
         when(getStringPref(name="planType", defaultValue="horner") == "calendar" && isLeapDay()){
             true-> setIntPref(name="dailyStreak", value=1, updateFS=true)
             else -> createButtonListener()
