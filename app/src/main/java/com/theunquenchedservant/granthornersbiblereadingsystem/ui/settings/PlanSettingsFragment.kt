@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
-import android.widget.Switch
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.DropDownPreference
 import androidx.preference.Preference

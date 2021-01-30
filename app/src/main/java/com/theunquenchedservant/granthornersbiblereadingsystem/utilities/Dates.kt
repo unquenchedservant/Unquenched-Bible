@@ -1,6 +1,5 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import java.text.SimpleDateFormat
 import java.util.*

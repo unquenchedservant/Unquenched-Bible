@@ -2,7 +2,6 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.app.AlertDialog
 import android.os.Bundle
-import android.view.ContextThemeWrapper
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat

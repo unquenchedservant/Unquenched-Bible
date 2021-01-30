@@ -11,7 +11,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import android.widget.TextView
 import android.widget.Toast
 import androidx.core.view.isVisible
@@ -40,8 +39,6 @@ class OnboardingFragmentTwo : Fragment() {
         val summaryMcheyne = view.findViewById<TextView>(R.id.summary_mcheyne)
         val checkboxMcheyne = view.findViewById<CheckBox>(R.id.checkbox_mcheyne)
         val moreInfoBtn = view.findViewById<MaterialButton>(R.id.moreInfoBtn)
-       // val pghArea = view.findViewById<LinearLayout>(R.id.pgh_option)
-        //val mcheyneArea = view.findViewById<LinearLayout>(R.id.mcheyne_option)
         val nextBtn = view.findViewById<MaterialButton>(R.id.next_button)
         val backBtn = view.findViewById<MaterialButton>(R.id.back_button)
         nextBtn.isVisible = false
@@ -93,40 +90,6 @@ class OnboardingFragmentTwo : Fragment() {
         backBtn.setOnClickListener {
             mainActivity.viewPager.currentItem -= 1
         }
-       /* pghArea.setOnClickListener {
-            if(getBoolPref("pghSystem")){
-                setStringPref(name="planSystem", value="")
-                setBoolPref(name="pghSystem", value=false)
-                setBoolPref(name="onboardOneDone", value=false)
-                checkboxPgh.isChecked = false
-                nextBtn.isVisible = false
-            }else{
-                setStringPref(name="planSystem", value="pgh")
-                setBoolPref(name="pghSystem", value=true)
-                setBoolPref(name="mcheyneSystem", value=false)
-                setBoolPref(name="onboardOneDone", value=true)
-                checkboxPgh.isChecked = true
-                checkboxMcheyne.isChecked = false
-                nextBtn.isVisible = true
-            }
-        }
-        mcheyneArea.setOnClickListener {
-            if(getBoolPref(name="mcheyneSystem")){
-                setStringPref(name="planSystem", value="")
-                setBoolPref(name="mcheyneSystem", value=false)
-                setBoolPref(name="onboardOneDone", value=false)
-                checkboxMcheyne.isChecked = false
-                nextBtn.isVisible = false
-            }else{
-                setStringPref(name="planSystem", value="mcheyne")
-                setBoolPref(name="pghSystem", value=false)
-                setBoolPref(name="mcheyneSystem", value=true)
-                setBoolPref(name="onboardOneDone", value=true)
-                checkboxPgh.isChecked = false
-                nextBtn.isVisible = true
-                checkboxMcheyne.isChecked = true
-            }
-        }*/
         checkboxPgh.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
