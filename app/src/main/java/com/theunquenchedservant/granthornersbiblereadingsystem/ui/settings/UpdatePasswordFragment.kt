@@ -16,9 +16,10 @@ import androidx.fragment.app.Fragment
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.textview.MaterialTextView
 import com.google.firebase.auth.EmailAuthProvider
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException
 import com.google.firebase.auth.FirebaseAuthWeakPasswordException
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
@@ -37,7 +38,7 @@ class UpdatePasswordFragment: Fragment() {
             val errorMsg: String
             val root = requireView()
             val mainActivity = activity as MainActivity
-            val user = FirebaseAuth.getInstance().currentUser
+            val user = Firebase.auth.currentUser
             val errorHolder = root.findViewById<MaterialTextView>(R.id.errorLabel)
             val cardHolder = root.findViewById<MaterialCardView>(R.id.cardHolder)
             val currentPasswordLabel = root.findViewById<MaterialTextView>(R.id.currentPasswordLabel)

@@ -3,8 +3,9 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -15,7 +16,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.c
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 
 class DailyCheck : BroadcastReceiver() {
-    private val isLogged = FirebaseAuth.getInstance().currentUser
+    private val isLogged = Firebase.auth.currentUser
 
     override fun onReceive(context: Context, intent: Intent) {
         val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
@@ -26,7 +27,7 @@ class DailyCheck : BroadcastReceiver() {
             else->10
         }
         val planType = getStringPref(name="planType", defaultValue="horner")
-        val db = FirebaseFirestore.getInstance()
+        val db = Firebase.firestore
         var resetStreak  = false
         var resetCurrent = false
         val vacation = getBoolPref(name="vacationMode")

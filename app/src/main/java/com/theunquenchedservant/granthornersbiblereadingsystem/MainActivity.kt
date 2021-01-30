@@ -18,25 +18,26 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
-import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.crashlytics.FirebaseCrashlytics
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.crashlytics.ktx.crashlytics
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
-
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
@@ -65,7 +66,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         val toolbarColor: Int
         darkMode = getBoolPref(name="darkMode", defaultValue=true)
         if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
-        if(FirebaseAuth.getInstance().currentUser == null) {
+        if(Firebase.auth.currentUser == null) {
             val providers = arrayListOf(
                     AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
                     AuthUI.IdpConfig.GoogleBuilder().build()
@@ -81,18 +82,20 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             startActivity(Intent(this, OnboardingPagerActivity::class.java))
         }else {
-            if (FirebaseAuth.getInstance().currentUser != null) {
-                FirebaseFirestore.getInstance().collection("main").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
+            Firebase.auth.currentUser
+            if (Firebase.auth.currentUser != null) {
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
                                 firestoreToPreference(it.result!!)
                             } else {
-                                FirebaseCrashlytics.getInstance().log("Error getting user info")
-                                FirebaseCrashlytics.getInstance().recordException(it.exception?.cause!!)
-                                FirebaseCrashlytics.getInstance().setCustomKey("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
+                                Firebase.crashlytics.log("Error getting user info")
+                                Firebase.crashlytics.recordException(it.exception?.cause!!)
+                                Firebase.crashlytics.setCustomKey("userId", Firebase.auth.currentUser?.uid!!)
                             }
                         }
             }
+
             if (darkMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
@@ -110,7 +113,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             }
             val colorStateList = ColorStateList(stateList, colorList)
             binding = ActivityMainBinding.inflate(layoutInflater)
-            user = FirebaseAuth.getInstance().currentUser
+            user = Firebase.auth.currentUser
             setContentView(binding.root)
             val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
             toolbar.setBackgroundColor(toolbarColor)
@@ -407,7 +410,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
     override fun onBackPressed() {
         when {
-            FirebaseAuth.getInstance().currentUser == null -> {
+            Firebase.auth.currentUser == null -> {
                 finish()
                 val i = Intent(App.applicationContext(), MainActivity::class.java)
                 startActivity(i)
@@ -431,9 +434,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         if(requestCode == _rcSignIn){
             val response = IdpResponse.fromResultIntent(data)
             if(resultCode == Activity.RESULT_OK){
-                val user = FirebaseAuth.getInstance().currentUser
+                val user = Firebase.auth.currentUser
                 Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
-                val db = FirebaseFirestore.getInstance()
+                val db = Firebase.firestore
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
                             if (doc["list1"] != null) {

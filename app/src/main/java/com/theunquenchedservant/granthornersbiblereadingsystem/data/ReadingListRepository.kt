@@ -2,9 +2,10 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
@@ -15,13 +16,13 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import java.util.*
 
 class ReadingListRepository {
-    private val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    private val user: FirebaseUser? = Firebase.auth.currentUser
 
     fun getList(listName:String): LiveData<ReadingLists> {
         val data = MutableLiveData<ReadingLists>()
         when (user != null) {
             true -> {
-                val db = FirebaseFirestore.getInstance()
+                val db = Firebase.firestore
                 db.collection("main").document(user.uid).get()
                         .addOnCompleteListener { task ->
                             when (task.result != null) {

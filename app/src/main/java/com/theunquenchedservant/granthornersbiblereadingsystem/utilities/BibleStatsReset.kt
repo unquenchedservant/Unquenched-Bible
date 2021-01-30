@@ -1,8 +1,9 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
@@ -12,7 +13,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 
 object BibleStatsReset {
-    private val isLogged = FirebaseAuth.getInstance().currentUser
+    private val isLogged = Firebase.auth.currentUser
 
     fun resetBook(bookName: String, testament: String, hardReset: Boolean = false, internal: Boolean = false, updateValues: MutableMap<String, Any> = mutableMapOf()):MutableMap<String, Any>{
         val chapters = BOOK_CHAPTERS[bookName] ?: error("")
@@ -41,7 +42,7 @@ object BibleStatsReset {
             updateValues["${bookName}AmountRead"] = setIntPref(name="${bookName}AmountRead", value=0)
         }
         if (isLogged != null && !internal) {
-            val db = FirebaseFirestore.getInstance()
+            val db = Firebase.firestore
             db.collection("main").document(isLogged.uid).update(updateValues)
                     .addOnSuccessListener {
                         MainActivity.log("Successful update")
@@ -70,7 +71,7 @@ object BibleStatsReset {
             updateValueUpdated["${testament}AmountRead"] = setIntPref(name="${testament}AmountRead", value=0)
         }
         if (isLogged != null && !internal) {
-            val db = FirebaseFirestore.getInstance()
+            val db = Firebase.firestore
             db.collection("main").document(isLogged.uid).update(updateValueUpdated)
                     .addOnSuccessListener {
                         MainActivity.log("Successful update")
@@ -92,7 +93,7 @@ object BibleStatsReset {
         }
         updateValues["totalChaptersRead"] = setIntPref(name="totalChaptersRead", value=0)
         if (isLogged != null){
-            val db = FirebaseFirestore.getInstance()
+            val db = Firebase.firestore
             db.collection("main").document(isLogged.uid).update(updateValues)
                     .addOnSuccessListener {
                         MainActivity.log("Successful update")

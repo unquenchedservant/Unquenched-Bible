@@ -5,8 +5,9 @@ import android.view.View
 import android.widget.Button
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getColor
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
@@ -80,8 +81,8 @@ object ListHelpers {
             else->10
         }
         val planType = getStringPref(name="planType", defaultValue="horner")
-        val isLogged = FirebaseAuth.getInstance().currentUser
-        val db = FirebaseFirestore.getInstance()
+        val isLogged = Firebase.auth.currentUser
+        val db = Firebase.firestore
         val data = mutableMapOf<String, Any>()
         var resetStreak  = false
         val vacation = getBoolPref(name="vacationMode")

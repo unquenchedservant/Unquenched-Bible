@@ -4,9 +4,10 @@ import android.content.Context
 import android.content.SharedPreferences
 import android.util.Log
 import androidx.preference.PreferenceManager
-import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
@@ -27,8 +28,8 @@ object SharedPref {
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
     fun updateFS(name: String, value: Any) {
-        val db = FirebaseFirestore.getInstance()
-        val user = FirebaseAuth.getInstance().currentUser
+        val db = Firebase.firestore
+        val user = Firebase.auth.currentUser
         if (user != null)
             db.collection("main").document(user.uid).update(name, value)
     }
@@ -77,11 +78,11 @@ object SharedPref {
         return getPref().getBoolean(name, defaultValue)
     }
 
-    private val user = FirebaseAuth.getInstance().currentUser
+    private val user = Firebase.auth.currentUser
 
     fun preferenceToFirestore(){
-        val db = FirebaseFirestore.getInstance()
-        val user2 = FirebaseAuth.getInstance().currentUser
+        val db = Firebase.firestore
+        val user2 = Firebase.auth.currentUser
         val results = mutableMapOf<String?, Any?>()
         for(i in 1..10){
             results["list$i"] = getIntPref(name="list$i")

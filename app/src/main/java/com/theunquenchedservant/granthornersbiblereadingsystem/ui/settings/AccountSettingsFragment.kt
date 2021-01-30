@@ -5,7 +5,8 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.*
-import com.google.firebase.auth.*
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 
@@ -13,10 +14,10 @@ class AccountSettingsFragment: PreferenceFragmentCompat()  {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.account_settings_preferences, rootKey)
         val mainActivity = activity as MainActivity
-        val providers = FirebaseAuth.getInstance().currentUser?.providerData
+        val providers = Firebase.auth.currentUser?.providerData
         val provider = providers!![1].providerId
         val currentUser: Preference? = findPreference("currentAccount")
-        currentUser!!.summary = "${FirebaseAuth.getInstance().currentUser?.email}"
+        currentUser!!.summary = "${Firebase.auth.currentUser?.email}"
         val deleteAccount: Preference? = findPreference("deleteAccount")
         val logOut: Preference? = findPreference("logOut")
         val emailUpdate: Preference? = findPreference("editEmail")
@@ -40,7 +41,7 @@ class AccountSettingsFragment: PreferenceFragmentCompat()  {
         logOut!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                FirebaseAuth.getInstance().signOut()
+                Firebase.auth.signOut()
                 Toast.makeText(context, "Signed Out!", Toast.LENGTH_LONG).show()
                 mainActivity.navController.navigate(R.id.navigation_settings)
             }

@@ -2,8 +2,8 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.app.AlertDialog
 import android.util.Log
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
@@ -25,7 +25,7 @@ import java.util.*
 
 
 object Marker {
-    private val isLogged = FirebaseAuth.getInstance().currentUser
+    private val isLogged = Firebase.auth.currentUser
     private fun getListId(listName: String) : Int{
         return when(listName){
             "list1"-> R.array.list_1
@@ -123,7 +123,7 @@ object Marker {
         }
         when (isLogged != null) {
             true -> {
-                val db = FirebaseFirestore.getInstance()
+                val db = Firebase.firestore
                 db.collection("main").document(isLogged.uid).update(updateValues)
                         .addOnSuccessListener {
                             log("Successful update")
@@ -177,7 +177,6 @@ object Marker {
             val codedBook = BOOK_NAMES_CODED[book]
             val chapter = readingArray[readingArray.lastIndex]
             val bookChapters = BOOK_CHAPTERS[codedBook]
-            log(codedBook!!)
             val testament = getTestament(codedBook!!)
             val testamentChapters = if(testament == "old") 929 else 260
             updateStatistics(codedBook, bookChapters!!, testament, testamentChapters, chapter.toInt())
@@ -256,7 +255,7 @@ object Marker {
         }
 
         if (isLogged != null) {
-            val db = FirebaseFirestore.getInstance()
+            val db = Firebase.firestore
             val updateValues = mutableMapOf<String, Any>()
             for (i in 1..doneMax) {
                 if(planType == "pgh"){
@@ -303,7 +302,7 @@ object Marker {
         }
         val cardDoneDaily = "${cardDone}Daily"
         val listName = cardDone.replace("Done", "")
-        val db = FirebaseFirestore.getInstance()
+        val db = Firebase.firestore
         val allowPartial = getBoolPref("allowPartial")
         val listDoneDaily = getIntPref(cardDoneDaily)
         val listsDone = if (listDoneDaily == 0){

@@ -9,6 +9,7 @@ import android.graphics.PorterDuff
 import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
@@ -16,9 +17,9 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateViewModelFactory
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
@@ -45,8 +46,6 @@ import java.util.*
 
 class HomeMCheyneFragment : Fragment() {
 
-    private val db = FirebaseFirestore.getInstance()
-    private var user: FirebaseUser? = null
     private var allowResume = true
     private var skipped = false
     private lateinit var binding: FragmentHomeMcheyneBinding
@@ -344,7 +343,8 @@ class HomeMCheyneFragment : Fragment() {
                             builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
                                 setIntPref(name = listDone, value = 0)
                                 increaseIntPref(name = listName, value = 1)
-                                val isLogged = FirebaseAuth.getInstance().currentUser
+                                val isLogged = Firebase.auth.currentUser
+                                val db = Firebase.firestore
                                 when(isLogged != null) {
                                     true -> {
                                         val data = mutableMapOf<String, Any>()
