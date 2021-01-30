@@ -50,7 +50,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         oldCategory.title = "Old Testament"
         newCategory.title = "New Testament"
         fullHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetBible(hardReset=true)
                 dialog.dismiss()
@@ -64,7 +64,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
             true
         }
         fullSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetBible(hardReset=false)
                 dialog.dismiss()
@@ -78,7 +78,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
             true
         }
         oldHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetTestament(testament="old", hardReset=true, internal=false)
                 dialog.dismiss()
@@ -92,7 +92,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
             true
         }
         oldSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetTestament(testament="old", hardReset=false, internal=false)
                 dialog.dismiss()
@@ -106,7 +106,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
             true
         }
         newHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetTestament(testament="new", hardReset=true, internal=false)
                 dialog.dismiss()
@@ -120,7 +120,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
             true
         }
         newSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetTestament(testament="new", hardReset=false, internal=false)
                 dialog.dismiss()

@@ -27,7 +27,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
         softReset.title = "Soft Reset"
         softReset.summary = "Reset the percentage of $bookName read to 0%, but keep the amount of times read."
         hardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetBook(book!!, testament!!, hardReset = true)
                 dialog.dismiss()
@@ -41,7 +41,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
             true
         }
         softReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val alertDialog = AlertDialog.Builder(this.context)
+            val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 resetBook(book!!, testament!!, false)
                 dialog.dismiss()
