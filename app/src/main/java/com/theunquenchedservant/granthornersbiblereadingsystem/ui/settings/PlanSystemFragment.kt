@@ -1,13 +1,15 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
@@ -41,7 +43,11 @@ class PlanSystemFragment : PreferenceFragmentCompat() {
         }
         moreInfo!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/the-reading-plans/"))
-            startActivity(i)
+            try {
+                startActivity(i)
+            }catch(e: ActivityNotFoundException){
+                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+            }
             false
         }
     }

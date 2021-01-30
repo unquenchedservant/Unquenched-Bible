@@ -1,6 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 
 import android.app.NotificationManager
+import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -176,7 +177,11 @@ class HomeMCheyneFragment : Fragment() {
                 builder.setNeutralButton(resources.getString(R.string.moreInfo)){ dialog, _ ->
                     setIntPref(name = "versionNumber", value = 61)
                     val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
-                    startActivity(i)
+                    try {
+                        startActivity(i)
+                    }catch(e: ActivityNotFoundException){
+                        Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                    }
                     dialog.dismiss()
                 }
                 builder.setTitle(R.string.title_new_update)

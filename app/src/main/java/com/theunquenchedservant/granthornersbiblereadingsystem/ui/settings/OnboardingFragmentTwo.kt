@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -12,9 +13,11 @@ import android.view.ViewGroup
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.TextView
+import android.widget.Toast
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
@@ -78,7 +81,11 @@ class OnboardingFragmentTwo : Fragment() {
         checkboxMcheyne.buttonTintList = ColorStateList.valueOf(colorTwo)
         moreInfoBtn.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/the-reading-plans/"))
-            startActivity(i)
+            try {
+                startActivity(i)
+            }catch(e: ActivityNotFoundException){
+                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+            }
         }
         nextBtn.setOnClickListener {
             mainActivity.viewPager.currentItem += 1

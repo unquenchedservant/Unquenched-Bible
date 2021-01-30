@@ -2,6 +2,7 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.app.Activity
 import android.app.AlertDialog
+import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
@@ -109,7 +110,11 @@ class MainSettings : PreferenceFragmentCompat() {
         }
         discord!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://discord.gg/AKrefXRyuA"))
-            startActivity(i)
+            try {
+                startActivity(i)
+            }catch(e: ActivityNotFoundException){
+                Toast.makeText(App.applicationContext(), "No browser or Discord installed", Toast.LENGTH_LONG).show()
+            }
             false
         }
     }
