@@ -163,18 +163,18 @@ class HomeFragment : Fragment() {
             createCard(binding.cardList10, readingList, R.string.title_pgh_list10, listName = "list10", R.array.list_10, psalms = false)
         }
         viewModel.listsDone.observe(viewLifecycleOwner) { listsDone ->
-            val backgroundColor: String
+            val bckgrndColor: String
             val allDoneBackgroundColor: String
             when (getBoolPref(name = "darkMode", defaultValue = true)) {
                 true -> {
                     val color = getColor(App.applicationContext(), R.color.unquenchedTextDark)
-                    backgroundColor = getString(R.string.btn_background_color_dark)
+                    bckgrndColor = getString(R.string.btn_background_color_dark)
                     allDoneBackgroundColor = getString(R.string.done_btn_background_color_dark)
                     binding.materialButton.setTextColor(color)
                 }
                 false -> {
                     val color = getColor(App.applicationContext(), R.color.unquenchedText)
-                    backgroundColor = getString(R.string.btn_background_color)
+                    bckgrndColor = getString(R.string.btn_background_color)
                     allDoneBackgroundColor = getString(R.string.done_btn_background_color)
                     binding.materialButton.setTextColor(color)
                 }
@@ -189,7 +189,7 @@ class HomeFragment : Fragment() {
                 0 -> {
                     binding.materialButton.setText(R.string.not_done)
                     binding.materialButton.isEnabled = true
-                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
+                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$bckgrndColor"))
                 }
                 in 1..9 -> {
                     binding.materialButton.setText(R.string.btn_mark_remaining)
@@ -199,7 +199,7 @@ class HomeFragment : Fragment() {
                     } else {
                         100 - ((listsDone.listsDone * 5) - 5)
                     }
-                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
+                    binding.materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$bckgrndColor"))
                     binding.materialButton.backgroundTintMode = PorterDuff.Mode.ADD
                 }
             }
