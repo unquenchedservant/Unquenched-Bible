@@ -45,103 +45,47 @@ class OnboardingFragmentThree : Fragment() {
         titleCalendar = vieww.findViewById(R.id.title_calendar)
         val summaryCalendar = vieww.findViewById<TextView>(R.id.summary_calendar)
         checkboxCalendar = vieww.findViewById(R.id.checkbox_calendar)
-        val hornerArea = vieww.findViewById<LinearLayout>(R.id.horner_method)
-        val numericalArea = vieww.findViewById<LinearLayout>(R.id.numerical_method)
-        val calendarArea = vieww.findViewById<LinearLayout>(R.id.calendar_method)
         val nextBtn = vieww.findViewById<MaterialButton>(R.id.next_button)
         val backBtn = vieww.findViewById<MaterialButton>(R.id.back_button)
         nextBtn.isVisible = false
+        val colorOne: Int
+        val colorTwo: Int
+        val colorThree: Int
+        val colorFour: Int
         if(dark){
-            vieww.setBackgroundColor(Color.parseColor("#121212"))
-            title.setTextColor(Color.parseColor("#9cb9d3"))
-            titleHorner.setTextColor(Color.parseColor("#9cb9d3"))
-            titleNumerical.setTextColor(Color.parseColor("#9cb9d3"))
-            titleCalendar.setTextColor(Color.parseColor("#9cb9d3"))
-            summaryHorner.setTextColor(Color.parseColor("#e1e2e6"))
-            summaryNumerical.setTextColor(Color.parseColor("#e1e2e6"))
-            summaryCalendar.setTextColor(Color.parseColor("#e1e2e6"))
-            backBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
-            backBtn.backgroundTintMode = PorterDuff.Mode.ADD
-            backBtn.setTextColor(Color.parseColor("#9cb9d3"))
-            nextBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
-            nextBtn.backgroundTintMode = PorterDuff.Mode.ADD
-            nextBtn.setTextColor(Color.parseColor("#9cb9d3"))
+            colorOne = Color.parseColor("#121212")
+            colorTwo = Color.parseColor("#9cb9d3")
+            colorThree = Color.parseColor("#e1e2e6")
+            colorFour = Color.parseColor("#383838")
+
         }else{
-            vieww.setBackgroundColor(Color.parseColor("#e1e2e6"))
-            title.setTextColor(Color.parseColor("#b36c38"))
-            titleHorner.setTextColor(Color.parseColor("#b36c38"))
-            titleNumerical.setTextColor(Color.parseColor("#b36c38"))
-            titleCalendar.setTextColor(Color.parseColor("#b36c38"))
-            summaryHorner.setTextColor(Color.parseColor("#121212"))
-            summaryNumerical.setTextColor(Color.parseColor("#121212"))
-            summaryCalendar.setTextColor(Color.parseColor("#121212"))
-            nextBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
-            nextBtn.setTextColor(Color.parseColor("#121212"))
-            backBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
-            backBtn.setTextColor(Color.parseColor("#121212"))
+            colorOne = Color.parseColor("#e1e2e6")
+            colorTwo = Color.parseColor("#b36c38")
+            colorThree = Color.parseColor("#121212")
+            colorFour = Color.parseColor("#e1e2e6")
         }
+        vieww.setBackgroundColor(colorOne)
+        title.setTextColor(colorTwo)
+        titleHorner.setTextColor(colorTwo)
+        titleNumerical.setTextColor(colorTwo)
+        titleCalendar.setTextColor(colorTwo)
+        summaryHorner.setTextColor(colorThree)
+        summaryNumerical.setTextColor(colorThree)
+        summaryCalendar.setTextColor(colorThree)
+        backBtn.backgroundTintList = ColorStateList.valueOf(colorFour)
+        backBtn.backgroundTintMode = PorterDuff.Mode.ADD
+        backBtn.setTextColor(colorTwo)
+        nextBtn.backgroundTintList = ColorStateList.valueOf(colorFour)
+        nextBtn.backgroundTintMode = PorterDuff.Mode.ADD
+        nextBtn.setTextColor(colorTwo)
+        checkboxHorner.buttonTintList = ColorStateList.valueOf(colorTwo)
+        checkboxCalendar.buttonTintList = ColorStateList.valueOf(colorTwo)
+        checkboxNumerical.buttonTintList = ColorStateList.valueOf(colorTwo)
         nextBtn.setOnClickListener {
             mainActivity.viewPager.currentItem += 1
         }
         backBtn.setOnClickListener {
             mainActivity.viewPager.currentItem -= 1
-        }
-        hornerArea.setOnClickListener {
-            if(checkboxHorner.isChecked){
-                setBoolPref(name="grantHorner", value=false)
-                setStringPref(name="planType", value="")
-                setBoolPref(name="onboardingTwoDone", value=false)
-                nextBtn.isVisible = false
-                checkboxHorner.isChecked = false
-            }else{
-                setBoolPref(name="grantHorner", value=true)
-                setStringPref(name="planType", value="horner")
-                setBoolPref(name="numericalDay", value=false)
-                setBoolPref(name="calendarDay", value=false)
-                setBoolPref(name="onboardingTwoDone", value=true)
-                checkboxHorner.isChecked = true
-                checkboxCalendar.isChecked = false
-                checkboxNumerical.isChecked = false
-                nextBtn.isVisible = true
-            }
-        }
-        numericalArea.setOnClickListener {
-            if(checkboxNumerical.isChecked){
-                setBoolPref(name="numericalDay", value=false)
-                setStringPref(name="planType", value="")
-                setBoolPref(name="onboardingTwoDone", value=false)
-                nextBtn.isVisible = false
-                checkboxNumerical.isChecked = false
-            }else{
-                setBoolPref(name="grantHorner", value=false)
-                setStringPref(name="planType", value="numerical")
-                setBoolPref(name="numericalDay", value=true)
-                setBoolPref(name="calendarDay", value=false)
-                setBoolPref(name="onboardingTwoDone", value=true)
-                checkboxHorner.isChecked = false
-                checkboxCalendar.isChecked = false
-                checkboxNumerical.isChecked = true
-                nextBtn.isVisible = true
-            }
-        }
-        calendarArea.setOnClickListener {
-            if(checkboxCalendar.isChecked){
-                setBoolPref(name="calendarDay", value=false)
-                setStringPref(name="planType", value="")
-                setBoolPref(name="onboardingTwoDone", value=false)
-                nextBtn.isVisible = false
-                checkboxCalendar.isChecked = false
-            }else{
-                setBoolPref(name="grantHorner", value=false)
-                setStringPref(name="planType", value="calendar")
-                setBoolPref(name="numericalDay", value=false)
-                setBoolPref(name="calendarDay", value=true)
-                setBoolPref(name="onboardingTwoDone", value=true)
-                checkboxHorner.isChecked = false
-                checkboxCalendar.isChecked = true
-                checkboxNumerical.isChecked = false
-                nextBtn.isVisible = true
-            }
         }
         checkboxHorner.setOnClickListener {
             val check = it as CheckBox

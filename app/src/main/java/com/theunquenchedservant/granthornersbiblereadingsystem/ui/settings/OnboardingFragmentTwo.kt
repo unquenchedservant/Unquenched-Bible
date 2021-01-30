@@ -37,42 +37,45 @@ class OnboardingFragmentTwo : Fragment() {
         val summaryMcheyne = view.findViewById<TextView>(R.id.summary_mcheyne)
         val checkboxMcheyne = view.findViewById<CheckBox>(R.id.checkbox_mcheyne)
         val moreInfoBtn = view.findViewById<MaterialButton>(R.id.moreInfoBtn)
-        val pghArea = view.findViewById<LinearLayout>(R.id.pgh_option)
-        val mcheyneArea = view.findViewById<LinearLayout>(R.id.mcheyne_option)
+       // val pghArea = view.findViewById<LinearLayout>(R.id.pgh_option)
+        //val mcheyneArea = view.findViewById<LinearLayout>(R.id.mcheyne_option)
         val nextBtn = view.findViewById<MaterialButton>(R.id.next_button)
         val backBtn = view.findViewById<MaterialButton>(R.id.back_button)
         nextBtn.isVisible = false
         moreInfoBtn.isEnabled = true
+        val colorOne: Int
+        val colorTwo: Int
+        val colorThree: Int
+        val colorFour: Int
         if(dark){
-            view.setBackgroundColor(Color.parseColor("#121212"))
-            title.setTextColor(Color.parseColor("#9cb9d3"))
-            titlePgh.setTextColor(Color.parseColor("#9cb9d3"))
-            summaryPgh.setTextColor(Color.parseColor("#e1e2e6"))
-            titleMcheyne.setTextColor(Color.parseColor("#9cb9d3"))
-            summaryMcheyne.setTextColor(Color.parseColor("#e1e2e6"))
-            moreInfoBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
-            moreInfoBtn.backgroundTintMode = PorterDuff.Mode.ADD
-            moreInfoBtn.setTextColor(Color.parseColor("#9cb9d3"))
-            backBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
-            backBtn.backgroundTintMode = PorterDuff.Mode.ADD
-            backBtn.setTextColor(Color.parseColor("#9cb9d3"))
-            nextBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
-            nextBtn.backgroundTintMode = PorterDuff.Mode.ADD
-            nextBtn.setTextColor(Color.parseColor("#9cb9d3"))
+            colorOne = Color.parseColor("#121212")
+            colorTwo = Color.parseColor("#9cb9d3")
+            colorThree = Color.parseColor("#e1e2e6")
+            colorFour = Color.parseColor("#383838")
+
         }else{
-            view.setBackgroundColor(Color.parseColor("#e1e2e6"))
-            title.setTextColor(Color.parseColor("#b36c38"))
-            titlePgh.setTextColor(Color.parseColor("#b36c38"))
-            summaryPgh.setTextColor(Color.parseColor("#121212"))
-            titleMcheyne.setTextColor(Color.parseColor("#b36c38"))
-            summaryMcheyne.setTextColor(Color.parseColor("#121212"))
-            moreInfoBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
-            moreInfoBtn.setTextColor(Color.parseColor("#121212"))
-            nextBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
-            nextBtn.setTextColor(Color.parseColor("#121212"))
-            backBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
-            backBtn.setTextColor(Color.parseColor("#121212"))
+            colorOne = Color.parseColor("#e1e2e6")
+            colorTwo = Color.parseColor("#b36c38")
+            colorThree = Color.parseColor("#121212")
+            colorFour = Color.parseColor("#e1e2e6")
         }
+        view.setBackgroundColor(colorOne)
+        title.setTextColor(colorTwo)
+        titlePgh.setTextColor(colorTwo)
+        summaryPgh.setTextColor(colorThree)
+        titleMcheyne.setTextColor(colorTwo)
+        summaryMcheyne.setTextColor(colorThree)
+        moreInfoBtn.backgroundTintList = ColorStateList.valueOf(colorFour)
+        moreInfoBtn.backgroundTintMode = PorterDuff.Mode.ADD
+        moreInfoBtn.setTextColor(colorTwo)
+        backBtn.backgroundTintList = ColorStateList.valueOf(colorFour)
+        backBtn.backgroundTintMode = PorterDuff.Mode.ADD
+        backBtn.setTextColor(colorTwo)
+        nextBtn.backgroundTintList = ColorStateList.valueOf(colorFour)
+        nextBtn.backgroundTintMode = PorterDuff.Mode.ADD
+        nextBtn.setTextColor(colorTwo)
+        checkboxPgh.buttonTintList = ColorStateList.valueOf(colorTwo)
+        checkboxMcheyne.buttonTintList = ColorStateList.valueOf(colorTwo)
         moreInfoBtn.setOnClickListener {
             val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/the-reading-plans/"))
             startActivity(i)
@@ -83,7 +86,7 @@ class OnboardingFragmentTwo : Fragment() {
         backBtn.setOnClickListener {
             mainActivity.viewPager.currentItem -= 1
         }
-        pghArea.setOnClickListener {
+       /* pghArea.setOnClickListener {
             if(getBoolPref("pghSystem")){
                 setStringPref(name="planSystem", value="")
                 setBoolPref(name="pghSystem", value=false)
@@ -116,7 +119,7 @@ class OnboardingFragmentTwo : Fragment() {
                 nextBtn.isVisible = true
                 checkboxMcheyne.isChecked = true
             }
-        }
+        }*/
         checkboxPgh.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){

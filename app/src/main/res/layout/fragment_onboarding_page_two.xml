@@ -9,8 +9,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/linearLayout2"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp">
+        android:layout_height="wrap_content">
 
         <TextView
             android:id="@+id/title"
@@ -18,91 +17,92 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:padding="16dp"
+            android:padding="30dp"
             android:text="@string/onboarding_p2_title"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/title_pgh"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintBottom_toTopOf="@id/pgh_option"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <LinearLayout
-            android:id="@+id/pgh_option"
+
+        <TextView
+            android:id="@+id/title_pgh"
+            style="?android:textAppearanceMedium"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:orientation="vertical"
-            app:layout_constraintBottom_toTopOf="@id/mcheyne_option"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="10dp"
+            android:text="@string/onboarding_p2_pgh_title"
+            app:layout_constraintBottom_toTopOf="@+id/summary_pgh"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/title">
-
-            <TextView
-                android:id="@+id/title_pgh"
-                style="?android:textAppearanceMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lineSpacingMultiplier="1.2"
-                android:padding="16dp"
-                android:text="@string/onboarding_p2_pgh_title" />
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/summary_pgh"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingMultiplier="1.2"
-                    android:padding="16dp"
-                    android:text="@string/onboarding_p2_pgh_summary" />
-
-                <CheckBox
-                    android:id="@+id/checkbox_pgh"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
+            app:layout_constraintTop_toBottomOf="@+id/title" />
 
 
-        </LinearLayout>
-
-        <LinearLayout
+        <TextView
+            android:id="@+id/summary_pgh"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            app:layout_constraintTop_toBottomOf="@id/pgh_option"
-            app:layout_constraintBottom_toTopOf="@id/moreInfoBtn"
+            android:layout_marginEnd="50dp"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="10dp"
+            android:text="@string/onboarding_p2_pgh_summary"
+            app:layout_constraintBottom_toTopOf="@+id/title_mcheyne"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_pgh"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_weight=".6"
             app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_pgh"
+            app:layout_constraintVertical_bias=".5" />
+
+        <CheckBox
+            android:id="@+id/checkbox_pgh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/summary_pgh"
+            app:layout_constraintStart_toEndOf="@id/summary_pgh"
+            tools:layout_editor_absoluteY="229dp" />
+
+        <TextView
+            android:id="@+id/title_mcheyne"
+            style="?android:textAppearanceMedium"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="10dp"
+            android:text="@string/onboarding_p2_mcheyne_title"
+            app:layout_constraintBottom_toTopOf="@+id/summary_mcheyne"
             app:layout_constraintEnd_toEndOf="parent"
-            android:id="@+id/mcheyne_option"
-            android:orientation="vertical">
-            <TextView
-                android:id="@+id/title_mcheyne"
-                style="?android:textAppearanceMedium"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:lineSpacingMultiplier="1.2"
-                android:padding="16dp"
-                android:text="@string/onboarding_p2_mcheyne_title" />
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/summary_pgh"
+            app:layout_constraintVertical_bias=".5" />
 
-                <TextView
-                    android:id="@+id/summary_mcheyne"
-                    android:layout_width="300dp"
-                    android:layout_height="wrap_content"
-                    android:lineSpacingMultiplier="1.2"
-                    android:padding="16dp"
-                    android:text="@string/onboarding_p2_mcheyne_summary" />
 
-            <CheckBox
-                    android:id="@+id/checkbox_mcheyne"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-            </LinearLayout>
-        </LinearLayout>
+        <TextView
+            android:id="@+id/summary_mcheyne"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="50dp"
+            android:lineSpacingMultiplier="1.2"
+            android:padding="10dp"
+            android:text="@string/onboarding_p2_mcheyne_summary"
+            app:layout_constraintBottom_toTopOf="@+id/moreInfoBtn"
+            app:layout_constraintEnd_toStartOf="@id/checkbox_mcheyne"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/title_mcheyne"
+            app:layout_constraintVertical_bias=".5" />
+
+        <CheckBox
+            android:id="@+id/checkbox_mcheyne"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintTop_toTopOf="@id/summary_mcheyne"
+            app:layout_constraintStart_toEndOf="@id/summary_mcheyne"
+            tools:layout_editor_absoluteY="422dp" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -110,14 +110,15 @@
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="40dp"
             android:backgroundTint="#FFFFFF"
             android:backgroundTintMode="add"
             android:enabled="true"
             android:text="@string/moreInfo"
+            app:layout_constraintBottom_toTopOf="@id/back_button"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/mcheyne_option" />
+            app:layout_constraintTop_toBottomOf="@+id/summary_mcheyne" />
 
 
         <com.google.android.material.button.MaterialButton
@@ -126,19 +127,22 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="20dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/psalms_back"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
+
         <com.google.android.material.button.MaterialButton
             android:id="@+id/next_button"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginEnd="20dp"
-            android:layout_marginBottom="50dp"
+            android:layout_marginBottom="20dp"
             android:text="@string/psalms_next"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
