@@ -13,7 +13,7 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.plan_type_menu, rootKey)
         val mainActivity = activity as MainActivity
-        val hornerMethod: Preference? = findPreference("grantHorner")
+        val hornerMethod: Preference? = findPreference("horner")
         val numericalMethod: Preference? = findPreference("numericalDay")
         val calendarMethod: Preference? = findPreference("calendarDay")
         when(getStringPref("planType", "horner")){

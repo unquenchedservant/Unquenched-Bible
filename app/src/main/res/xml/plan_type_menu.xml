@@ -2,7 +2,7 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <CheckBoxPreference
-        app:key="grantHorner"
+        app:key="horner"
         app:title="@string/title_horner_method"
         app:summary="@string/summary_horner_method"
         app:allowDividerBelow="true"/>

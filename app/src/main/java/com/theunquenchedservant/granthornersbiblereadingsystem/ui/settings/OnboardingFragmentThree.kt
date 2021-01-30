@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.CheckBox
-import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -90,7 +89,7 @@ class OnboardingFragmentThree : Fragment() {
         checkboxHorner.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setBoolPref(name="grantHorner", value=true)
+                setBoolPref(name="horner", value=true)
                 setBoolPref(name="numericalDay", value=false)
                 setBoolPref(name="calendarDay", value=false)
                 setBoolPref(name="onboardingTwoDone", value=true)
@@ -101,14 +100,14 @@ class OnboardingFragmentThree : Fragment() {
             }else{
                 setBoolPref(name="onboardingTwoDone", value=false)
                 setStringPref(name="planType", value="")
-                setBoolPref(name="grantHorner", value=false)
+                setBoolPref(name="horner", value=false)
                 nextBtn.isVisible = false
             }
         }
         checkboxNumerical.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setBoolPref(name="grantHorner", value=false)
+                setBoolPref(name="horner", value=false)
                 setBoolPref(name="numericalDay", value=true)
                 setBoolPref(name="calendarDay", value=false)
                 setBoolPref(name="onboardingTwoDone", value=true)
@@ -126,7 +125,7 @@ class OnboardingFragmentThree : Fragment() {
         checkboxCalendar.setOnClickListener {
             val check = it as CheckBox
             if(check.isChecked){
-                setBoolPref(name="grantHorner", value=false)
+                setBoolPref(name="horner", value=false)
                 setBoolPref(name="numericalDay", value=false)
                 setBoolPref(name="calendarDay", value=true)
                 setBoolPref(name="onboardingTwoDone", value=true)
