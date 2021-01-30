@@ -1,22 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@+id/navigation_home">
+    app:startDestination="@id/navigation_home">
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment"
         android:label="@string/title_home">
-        <action
-            android:id="@+id/action_navigation_home_to_scripture"
-            app:destination="@id/navigation_scripture"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_home_mcheyne"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeMCheyneFragment"
         android:label="@string/title_home">
-        <action
-            android:id="@+id/action_navigation_home_to_scripture"
-            app:destination="@id/navigation_scripture"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_scripture"

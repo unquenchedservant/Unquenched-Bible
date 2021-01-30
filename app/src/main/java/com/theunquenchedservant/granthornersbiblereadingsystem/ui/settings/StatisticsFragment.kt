@@ -49,7 +49,7 @@ class StatisticsFragment : PreferenceFragmentCompat() {
 
     }
     private fun resetCheck(){
-        val builder = AlertDialog.Builder(ContextThemeWrapper(context, R.style.unquenchedAlert))
+        val builder = AlertDialog.Builder(context)
         builder.setNeutralButton(R.string.no){diag, _ ->
             diag.cancel()
         }.setPositiveButton(R.string.yes){ _, _ ->

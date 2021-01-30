@@ -125,7 +125,7 @@
     <string name="onboarding_p3_numerical_summary">All lists are connected, partial completion is possible, but all lists will advance at once.</string>
     <string name="onboarding_p3_calendar_a">Calendar Day</string>
     <string name="onboarding_p3_calendar_b">Calendar Day (Recommended)</string>
-    <string name="onboarding_p3_calendar_summary">All lists are connected, and will advance whether you complete all the readings or not. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system.</string>
+    <string name="onboarding_p3_calendar_summary">All lists will advance each day. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system.</string>
     <string name="onboarding_p4_title_a">All set to begin using the Unquenched Bible App</string>
     <string name="onboarding_p4_title_b">Please select the reading system you would like to use</string>
     <string name="onboarding_p4_title_c">Please select the reading method you would like to use</string>
