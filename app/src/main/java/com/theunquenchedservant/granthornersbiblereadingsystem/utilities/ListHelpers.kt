@@ -83,7 +83,7 @@ object ListHelpers {
         val planType = getStringPref(name="planType", defaultValue="horner")
         val isLogged = Firebase.auth.currentUser
         val db = Firebase.firestore
-        val data = mutableMapOf<String, Any>()
+        var data = mutableMapOf<String, Any>()
         var resetStreak  = false
         val vacation = getBoolPref(name="vacationMode")
         when (getIntPref(name="dailyStreak")) {
@@ -107,23 +107,21 @@ object ListHelpers {
                         1-> { setIntPref(name="list${i}DoneDaily", value=0); data["list${i}DoneDaily"]=0 }
                     }
                     when(getIntPref(name="list${i}Done")){
-                        1-> resetList(listName="list${i}", listNameDone="list${i}Done")
+                        1-> data = resetList(listName="list${i}", listNameDone="list${i}Done", data)
                     }
                 }else{
                     when(getIntPref(name="mcheyneList${i}DoneDaily")){
                         1-> { setIntPref(name="mcheyneList${i}DoneDaily", value=0); data["mcheyneList${i}DoneDaily"] = 0}
                     }
                     when(getIntPref(name="mcheyneList${i}Done")){
-                        1-> resetList(listName="mcheyneList${i}", listNameDone="mcheyneList${i}Done")
+                        1-> data = resetList(listName="mcheyneList${i}", listNameDone="mcheyneList${i}Done", data)
                     }
                 }
             }else if(planType == "numerical"){
                 if(planSystem=="pgh"){
-                    setIntPref(name="list${i}Done", value=0)
-                    data["list${i}Done"] = 0
+                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
                 }else{
-                    setIntPref(name="mcheyneList${i}Done", value=0)
-                    data["mcheyneList${i}Done"]
+                    data["mcheyneList${i}Done"] = setIntPref(name="mcheyneList${i}Done", value=0)
                 }
             }
         }
@@ -134,29 +132,16 @@ object ListHelpers {
                 data["mcheyneCurrentDayIndex"] = increaseIntPref(name="mcheyneCurrentDayIndex", value=1)
             }
         }
-        setIntPref(name="listsDone", value=0)
-        data["listsDone"] = 0
+        data["listsDone"] = setIntPref(name="listsDone", value=0)
         if(isLogged != null) {
-            for (i in 1..doneMax) {
-                if (planSystem == "pgh") {
-                    if (planType == "horner") {
-                        data["list$i"] = getIntPref(name="list$i")
-                    }
-                    data["list${i}Done"] = getIntPref(name="list${i}Done")
-                }else{
-                    if(planType == "horner"){
-                        data["mcheyneList${i}"] = getIntPref(name="mcheyneList${i}")
-                    }
-                    data["mcheyneList${i}Done"] = getIntPref(name="mcheyneList${i}Done")
-                }
-            }
             db.collection("main").document(isLogged.uid).update(data)
         }
     }
 
-    private fun resetList(listName: String, listNameDone: String){
-        increaseIntPref(listName, value=1)
-        setIntPref(listNameDone, value=0)
+    private fun resetList(listName: String, listNameDone: String, data:MutableMap<String, Any>): MutableMap<String, Any>{
+        data[listName] = increaseIntPref(listName, value=1)
+        data[listNameDone] = setIntPref(listNameDone, value=0)
+        return data
     }
 
     fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){

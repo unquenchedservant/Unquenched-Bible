@@ -20,7 +20,7 @@ class DailyCheck : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent) {
         val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
-        val data = mutableMapOf<String, Any>()
+        var data = mutableMapOf<String, Any>()
         val doneMax = when(planSystem){
             "pgh"->10
             "mcheyne"->4
@@ -29,39 +29,30 @@ class DailyCheck : BroadcastReceiver() {
         val planType = getStringPref(name="planType", defaultValue="horner")
         val db = Firebase.firestore
         var resetStreak  = false
-        var resetCurrent = false
         val vacation = getBoolPref(name="vacationMode")
         when (getIntPref(name="dailyStreak")) {
             1 -> {
-                setIntPref(name="dailyStreak", value=0)
-                data["dailyStreak"] = 0
-                setIntPref(name="graceTime", value=0)
-                data["graceTime"] = 0
+                data["dailyStreak"] = setIntPref(name="dailyStreak", value=0)
+                data["graceTime"] = setIntPref(name="graceTime", value=0)
                 resetStreak = true
             }
             0 -> {
                 when (vacation || getBoolPref(name="vacationOff") || (getBoolPref(name="weekendMode") && isWeekend())) {
                     false -> {
                         if(!checkDate(option="yesterday", fullMonth=false)){
-                                resetCurrent = true
                                 if(!getBoolPref(name="isGrace")){
-                                    setIntPref(name="holdStreak", getIntPref(name="currentStreak"))
-                                    data["holdStreak"] = getIntPref(name="currentStreak")
-                                    setBoolPref(name="isGrace", value=true)
-                                    data["isGrace"] = true
+                                    data["holdStreak"] = setIntPref(name="holdStreak", getIntPref(name="currentStreak"))
+                                    data["isGrace"] = setBoolPref(name="isGrace", value=true)
                                 }else{
-                                    setBoolPref(name="isGrace", value=false)
-                                    data["isGrace"] = false
-                                    setIntPref(name="holdStreak", value=0)
-                                    data["holdStreak"] = 0
+                                    data["isGrace"] = setBoolPref(name="isGrace", value=false)
+                                    data["holdStreak"] = setIntPref(name="holdStreak", value=0)
                                 }
-                                setIntPref(name="currentStreak", value=0)
-                                data["currentStreak"] = 0
+                            data["currentStreak"] = setIntPref(name="currentStreak", value=0)
                         }
                     }
                     true -> {
                         if(getBoolPref(name="vacationOff")){
-                            setBoolPref(name="vacationOff", value=false)
+                            data["vacationOff"] = setBoolPref(name="vacationOff", value=false)
                         }
                     }
                 }
@@ -71,26 +62,24 @@ class DailyCheck : BroadcastReceiver() {
             if(planType == "horner") {
                 if(planSystem == "pgh"){
                     when(getIntPref(name="list${i}DoneDaily")){
-                        1-> {setIntPref(name="list${i}DoneDaily", value=0); data["list${i}DoneDaily"] = 0}
+                        1-> {data["lists${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=0)}
                     }
                     when(getIntPref(name="list${i}Done")){
-                        1->{resetList(listName="list${i}", listNameDone="list${i}Done", doneMax)}
+                        1->{data = resetList(listName="list${i}", listNameDone="list${i}Done", doneMax, data)}
                     }
                 }else{
                     when(getIntPref(name="mcheyneList${i}DoneDaily")){
-                        1-> { setIntPref(name="mcheyneList${i}DoneDaily", value=0); data["mcheyneList${i}DoneDaily"] = 0}
+                        1-> {data["mcheyneList${i}DoneDaily"] = setIntPref(name="mcheyneList${i}DoneDaily", value=0)}
                     }
                     when(getIntPref(name="mcheyneList${i}Done")){
-                        1-> resetList(listName="mcheyneList${i}", listNameDone="mcheyneList${i}Done", doneMax)
+                        1-> data = resetList(listName="mcheyneList${i}", listNameDone="mcheyneList${i}Done", doneMax, data)
                     }
                 }
             }else{
                 if(planSystem == "pgh"){
-                    setIntPref(name="list${i}Done", value=0)
-                    data["list${i}Done"] = 0
+                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
                 }else{
-                    setIntPref(name="mcheyneList${i}Done", value=0)
-                    data["mcheyneList${i}Done"] = 0
+                    data["mcheyneList${i}Done"] = setIntPref(name="mcheyneList${i}Done", value=0)
                 }
             }
         }
@@ -103,43 +92,21 @@ class DailyCheck : BroadcastReceiver() {
             }
         }
         if(!getBoolPref(name="holdPlan") || getIntPref(name="listsDone") == doneMax) {
-            setIntPref(name="listsDone", value=0)
-            data["listsDone"] = 0
+            data["listsDone"] = setIntPref(name="listsDone", value=0)
         }
 
         if(isLogged != null) {
-            for (i in 1..doneMax) {
-                if (planType == "horner") {
-                    if (planSystem == "pgh") {
-                        data["list${i}"] = getIntPref(name = "list$i")
-                    } else {
-                        data["mcheyneList$i"] = getIntPref(name = "mcheyneList$i")
-                    }
-                }
-                if (planSystem == "pgh") {
-                    data["list${i}Done"] = getIntPref(name="list${i}Done")
-                    data["list${i}DoneDaily"] = getIntPref(name="list${i}DoneDaily")
-                }else{
-                    data["mcheyneList${i}Done"] = getIntPref(name="mcheyneList${i}Done")
-                    data["mcheyneList${i}DoneDaily"] = getIntPref(name="mcheyneList${i}DoneDaily")
-                }
-            }
-            data["listsDone"] = getIntPref(name="listsDone")
-            if(resetCurrent) {
-                data["graceTime"] = 0
-            }else if(resetStreak) {
-                data["isGrace"] = getBoolPref("isGrace")
-            }
             db.collection("main").document(isLogged.uid).update(data)
         }
     }
-    private fun resetList(listName: String, listNameDone: String, maxDone:Int){
+    private fun resetList(listName: String, listNameDone: String, maxDone:Int, data:MutableMap<String, Any>): MutableMap<String, Any>{
         if(!getBoolPref(name="holdPlan") || getIntPref(name="listsDone") == maxDone) {
             if(listName != "list6" || (listName == "list6" && !getBoolPref(name="psalms"))) {
-                increaseIntPref(listName, value=1)
+                data[listName] = increaseIntPref(listName, value=1)
             }
-            setIntPref(name="${listNameDone}Daily", value=0)
-            setIntPref(listNameDone, value=0)
+            data["${listNameDone}Daily"] = setIntPref(name="${listNameDone}Daily", value=0)
+            data[listNameDone] = setIntPref(listNameDone, value=0)
         }
+        return data
     }
 }

@@ -4,6 +4,7 @@ import android.app.AlertDialog
 import android.util.Log
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
@@ -200,7 +201,7 @@ object Marker {
     }
 
     fun markAll(planType: String = "") {
-        log(planType)
+        val updateValues = mutableMapOf<String, Any>()
         val doneMax = when (planType){
             "pgh"->10
             "mcheyne"->4
@@ -209,33 +210,34 @@ object Marker {
         for (i in 1..doneMax) {
             if(planType == "pgh"){
                 updateReadingStatistic(listName="list${i}")
-                setIntPref(name="list${i}Done", value=1)
+                updateValues["list${i}Done"] = setIntPref(name="list${i}Done", value=1)
                 val doneDaily = getIntPref(name="list${i}DoneDaily")
                 if(doneDaily == 0){
-                    setIntPref(name="list${i}DoneDaily", value=1)
+                    updateValues["list${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=1)
                 }
             }else{
                 updateReadingStatistic(listName="mcheyneList${i}")
-                setIntPref(name="mcheyneList${i}Done", value=1)
+                updateValues["mcheyneList${i}Done"] = setIntPref(name="mcheyneList${i}Done", value=1)
                 val doneDaily = getIntPref("mcheyneList${i}DoneDaily")
                 if(doneDaily == 0){
-                    setIntPref(name="mcheyneList${i}DoneDaily", value=1)
+                    updateValues["mcheyneList${i}DoneDaily"] = setIntPref(name="mcheyneList${i}DoneDaily", value=1)
                 }
             }
         }
-        setIntPref("listsDone", doneMax)
+        updateValues["listsDone"] = setIntPref("listsDone", doneMax)
         if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
             if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){
-                setIntPref("graceTime", 1)
+                updateValues["graceTime"] = setIntPref("graceTime", 1)
             }
             if(getBoolPref("isGrace") && getIntPref("graceTime") == 1){
-                setIntPref("graceTime", 2)
-                setBoolPref("isGrace", false)
-                setIntPref("currentStreak", getIntPref("holdStreak") + 1)
-                setIntPref("holdStreak",0)
+                updateValues["graceTime"] = setIntPref("graceTime", 2)
+                updateValues["isGrace"] = setBoolPref("isGrace", false)
+                updateValues["currentStreak"] = setIntPref("currentStreak", getIntPref("holdStreak") + 1)
+                updateValues["holdStreak"] = setIntPref("holdStreak",0)
             }
             if(!checkDate("current", false)){
                 val currentStreak = increaseIntPref("currentStreak", 1)
+                updateValues["currentStreak"] = currentStreak
                 val streak = if(currentStreak > 365){
                     currentStreak - 365
                 }else{
@@ -247,43 +249,15 @@ object Marker {
                     90->makeStreakAlert("3month")
                     365->makeStreakAlert("1year")
                 }
-                setStringPref("dateChecked", getDate(0,false))
+                updateValues["dateChecked"] = setStringPref("dateChecked", getDate(0,false))
                 if(currentStreak > getIntPref("maxStreak"))
-                    setIntPref("maxStreak", currentStreak)
+                    updateValues["maxStreak"] = setIntPref("maxStreak", currentStreak)
             }
-            setIntPref("dailyStreak", 1)
+            updateValues["dailyStreak"] = setIntPref("dailyStreak", 1)
         }
 
         if (isLogged != null) {
             val db = Firebase.firestore
-            val updateValues = mutableMapOf<String, Any>()
-            for (i in 1..doneMax) {
-                if(planType == "pgh"){
-                    updateValues["list${i}Done"] = 1
-                }else{
-                    updateValues["mcheyneList${i}Done"] = 1
-                }
-                val doneDaily = if(planType == "pgh"){
-                    getIntPref("list${i}DoneDaily")
-                }else{
-                    getIntPref("mcheyneList${i}DoneDaily")
-                }
-                if(doneDaily == 0){
-                    if(planType == "pgh"){
-                        setIntPref("list${i}DoneDaily", 1)
-                    }else{
-                        setIntPref("mcheyneList${i}DoneDaily", 1)
-                    }
-                }
-            }
-            updateValues["graceTime"] = getIntPref("graceTime")
-            updateValues["isGrace"] = getBoolPref("isGrace")
-            updateValues["listsDone"] = doneMax
-            updateValues["holdStreak"] = getIntPref("holdStreak")
-            updateValues["dateChecked"] = getDate(0,false)
-            updateValues["dailyStreak"] = getIntPref("dailyStreak")
-            updateValues["currentStreak"] = getIntPref("currentStreak")
-            updateValues["maxStreak"] = getIntPref("maxStreak")
             db.collection("main").document(isLogged.uid).update(updateValues)
                     .addOnSuccessListener {
                         log("Successful update")
@@ -295,6 +269,7 @@ object Marker {
         }
     }
     fun markSingle(cardDone: String, planSystem: String="") {
+        val updateValues = mutableMapOf<String, Any>()
         val doneMax = when(planSystem){
             "pgh"->10
             "mcheyne"->4
@@ -306,50 +281,36 @@ object Marker {
         val allowPartial = getBoolPref("allowPartial")
         val listDoneDaily = getIntPref(cardDoneDaily)
         val listsDone = if (listDoneDaily == 0){
-            setIntPref(cardDoneDaily, 1)
+            updateValues[cardDoneDaily] = setIntPref(cardDoneDaily, 1)
             increaseIntPref("listsDone", 1)
         }else{
             getIntPref("listsDone")
         }
-        log("Lists Done is ${getIntPref("listsDone")}")
+        updateValues["listsDone"] = listsDone
         if (getIntPref(cardDone) != 1) {
             updateReadingStatistic(listName)
-            setIntPref(cardDone, 1)
-            setStringPref("dateChecked", getDate(0, false))
+            updateValues[cardDone] = setIntPref(cardDone, 1)
+            updateValues["dateChecked"] = setStringPref("dateChecked", getDate(0, false))
             if (allowPartial || listsDone == doneMax) {
                 if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
                     if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){
-                        setIntPref("graceTime", 1)
+                        updateValues["graceTime"] = setIntPref("graceTime", 1)
                     }
                     if(getBoolPref("isGrace") && getIntPref("graceTime") == 1){
-                        setIntPref("graceTime", 2)
-                        setIntPref("currentStreak", getIntPref("holdStreak"))
-                        setIntPref("holdStreak", 0)
-                        setBoolPref("isGrace", false)
+                        updateValues["graceTime"] = setIntPref("graceTime", 2)
+                        updateValues["currentStreak"] = setIntPref("currentStreak", getIntPref("holdStreak"))
+                        updateValues["holdStreak"] = setIntPref("holdStreak", 0)
+                        updateValues["isGrace"] = setBoolPref("isGrace", false)
                     }
                     val currentStreak = increaseIntPref("currentStreak", 1)
+                    updateValues["currentStreak"] = currentStreak
                     if (currentStreak > getIntPref("maxStreak")) {
-                        setIntPref("maxStreak", currentStreak)
+                        updateValues["maxStreak"] = setIntPref("maxStreak", currentStreak)
                     }
-                    setIntPref("dailyStreak", 1)
+                    updateValues["dailyStreak"] = setIntPref("dailyStreak", 1)
                 }
             }
-            if (isLogged != null) {
-                val data = mutableMapOf<String, Any>()
-                data["maxStreak"] = getIntPref("maxStreak")
-                data["currentStreak"] = getIntPref("currentStreak")
-                data["isGrace"] = getBoolPref("isGrace")
-                data["graceTime"] = getIntPref("graceTime")
-                data["holdStreak"] = getIntPref("holdStreak")
-                data["dailyStreak"] = 1
-                data["listsDone"] = listsDone
-                data["dateChecked"] = getDate(0, false)
-                data[cardDone] = 1
-                if(listDoneDaily == 0) {
-                    data[cardDoneDaily] = 1
-                }
-                db.collection("main").document(isLogged.uid).update(data)
-            }
+            if (isLogged != null) db.collection("main").document(isLogged.uid).update(updateValues)
         }
     }
 }
