@@ -18,6 +18,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
+import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
@@ -59,18 +60,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
         )
-        if(FirebaseAuth.getInstance().currentUser != null){
-            FirebaseFirestore.getInstance().collection("main").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
-                    .addOnCompleteListener {
-                        if(it.isSuccessful){
-                            firestoreToPreference(it.result!!)
-                        }else{
-                            FirebaseCrashlytics.getInstance().log("Error getting user info")
-                            FirebaseCrashlytics.getInstance().recordException(it.exception?.cause!!)
-                            FirebaseCrashlytics.getInstance().setCustomKey("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
-                        }
-                    }
-        }
+
         val colorList: IntArray
         val toolbarColor: Int
         darkMode = getBoolPref(name="darkMode", defaultValue=true)
@@ -90,7 +80,19 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             .build(), _rcSignIn)
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             startActivity(Intent(this, OnboardingPagerActivity::class.java))
-        }else{
+        }else {
+            if (FirebaseAuth.getInstance().currentUser != null) {
+                FirebaseFirestore.getInstance().collection("main").document(FirebaseAuth.getInstance().currentUser!!.uid).get()
+                        .addOnCompleteListener {
+                            if (it.isSuccessful) {
+                                firestoreToPreference(it.result!!)
+                            } else {
+                                FirebaseCrashlytics.getInstance().log("Error getting user info")
+                                FirebaseCrashlytics.getInstance().recordException(it.exception?.cause!!)
+                                FirebaseCrashlytics.getInstance().setCustomKey("userId", FirebaseAuth.getInstance().currentUser?.uid!!)
+                            }
+                        }
+            }
             if (darkMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
                 toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
@@ -107,34 +109,35 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 )
             }
             val colorStateList = ColorStateList(stateList, colorList)
-
             binding = ActivityMainBinding.inflate(layoutInflater)
             user = FirebaseAuth.getInstance().currentUser
             setContentView(binding.root)
             val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
             toolbar.setBackgroundColor(toolbarColor)
             setSupportActionBar(findViewById(R.id.my_toolbar))
-            supportActionBar?.title = getDate(option=0, fullMonth=true)
-            navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            navController = navHostFragment.navController
-            binding.bottomNav.setupWithNavController(navController)
-            binding.bottomNav.setBackgroundColor(toolbarColor)
-            binding.bottomNav.itemIconTintList = colorStateList
-            binding.bottomNav.itemTextColor = colorStateList
-            when(getStringPref(name="planSystem", defaultValue="pgh")){
-                "pgh"-> navController.navigate(R.id.navigation_home)
-                "mcheyne"->navController.navigate(R.id.navigation_home_mcheyne)
+            supportActionBar?.title = getDate(option = 0, fullMonth = true)
+                navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+                navController = navHostFragment.navController
+                binding.bottomNav.setupWithNavController(navController)
+                binding.bottomNav.setBackgroundColor(toolbarColor)
+                binding.bottomNav.itemIconTintList = colorStateList
+                binding.bottomNav.itemTextColor = colorStateList
+
+                when (getStringPref(name = "planSystem", defaultValue = "pgh")) {
+                    //"pgh"->navController.navigate(R.id.navigation_home)
+                    "mcheyne" -> navController.navigate(R.id.navigation_home_mcheyne)
+                }
+
+                binding.translationSelector.isVisible = false
+                setupBottomNavigationBar()
             }
-            binding.translationSelector.isVisible = false
-            setupBottomNavigationBar()
-        }
     }
 
     private fun setupBottomNavigationBar() {
         switchEnabled(current="home")
-        binding.bottomNav.setOnNavigationItemSelectedListener(this)
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
+            log("THIS IS THE NEW DESTINATION $destination")
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -361,6 +364,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
+                log("THIS IS A TEST FROM HOME FRAGMENT ONNAVSELECTED")
                 supportActionBar?.title = getDate(option=0, fullMonth=true)
                 switchEnabled(current="home")
                 navControl.navigate(homeId)
