@@ -251,7 +251,7 @@ class HomeFragment : Fragment() {
                 builder.create().show()
             }
 
-
+        createButtonListener()
         createNotificationChannel()
         createAlarm(alarmType = "dailyCheck")
         setVisibilities(binding)
