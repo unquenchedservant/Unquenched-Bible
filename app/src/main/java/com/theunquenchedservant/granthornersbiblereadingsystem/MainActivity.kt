@@ -137,22 +137,23 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 setupBottomNavigationBar()
             }
     }
-
+    fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
+        binding.myToolbar.setNavigationOnClickListener {
+            navController.navigate(navId)
+            binding.bottomNav.isVisible = bottomNavVisible
+            supportActionBar?.setDisplayHomeAsUpEnabled(displayHome1)
+        }
+        binding.translationSelector.isVisible = translationVisible
+        supportActionBar?.setDisplayHomeAsUpEnabled(displayHome2)
+    }
     private fun setupBottomNavigationBar() {
         switchEnabled(current="home")
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
+            val homeId = if (planSystem == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
             when (destination.id) {
                 R.id.navigation_scripture ->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        if(planSystem == "pgh"){
-                            navController.navigate(R.id.navigation_home)
-                        }else{
-                            navController.navigate(R.id.navigation_home_mcheyne)
-                        }
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
+                    setupNavigation(homeId, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = true)
                     if (getStringPref(name="bibleVersion", defaultValue="ESV") == "NASB"){
                         setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
                     }
@@ -164,34 +165,16 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         "NASB95" -> binding.translationSelector.setSelection(5)
                         "NASB20" -> binding.translationSelector.setSelection(6)
                     }
-                    binding.translationSelector.isVisible = true
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_plan_settings ->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
+                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = false, translationVisible = false)
                 }
                 R.id.navigation_bible_stats_main ->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_stats)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
+                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title = "Bible Statistics"
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_bible_testament_stats ->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_bible_stats_main)
-                        binding.bottomNav.isVisible = true
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setupNavigation(R.id.navigation_bible_stats_main, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
                 }
                 R.id.navigation_book_stats->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -202,13 +185,8 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_bible_reset_menu->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_stats)
-                        binding.bottomNav.isVisible = true
-                    }
+                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title = "Reset Bible Stats"
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_books_reset_menu->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -239,89 +217,43 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_notifications->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
+                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                 }
                 R.id.navigation_overrides->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.navigate(R.id.navigation_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
+                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title="Overrides"
                 }
                 R.id.navigation_manual->{
-                    binding.myToolbar.setNavigationOnClickListener {
-                        navController.navigate(R.id.navigation_overrides)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    }
-                    binding.translationSelector.isVisible = false
+                    setupNavigation(R.id.navigation_overrides, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title="Manual Override"
                 }
                 R.id.navigation_manual_numerical->{
-                    binding.myToolbar.setNavigationOnClickListener {
-                        navController.navigate(R.id.navigation_overrides)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                    }
-                    binding.translationSelector.isVisible = false
+                    setupNavigation(R.id.navigation_overrides, bottomNavVisible = true, displayHome1 = true, displayHome2 =true, translationVisible = false)
                     supportActionBar?.title="Manual Override"
                 }
                 R.id.navigation_information->{
-                    binding.myToolbar.setNavigationOnClickListener {
-                        navController.navigate(R.id.navigation_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
+                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                 }
                 R.id.navigation_account_settings->{
-                    binding.myToolbar.setNavigationOnClickListener {
-                        navController.navigate(R.id.navigation_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title = "Account Settings"
                 }
                 R.id.navigation_update_email->{
-                    binding.myToolbar.setNavigationOnClickListener {
-                        navController.navigate(R.id.navigation_account_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title = "Update Email"
                 }
                 R.id.navigation_update_password->{
-                    binding.myToolbar.setNavigationOnClickListener {
-                        navController.navigate(R.id.navigation_account_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title = "Update Password"
                 }
                 R.id.navigation_confirm_delete->{
-                    binding.myToolbar.setNavigationOnClickListener {
-                        navController.navigate(R.id.navigation_account_settings)
-                        binding.bottomNav.isVisible = true
-                        supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                     supportActionBar?.title = "Delete Account"
                 }
                 R.id.navigation_home -> {
+                    if(planSystem == "mcheyne"){
+                        navController.navigate(R.id.navigation_home_mcheyne)
+                    }
                     switchEnabled(current="home")
                     when(darkMode){
                         true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
@@ -368,7 +300,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
-                log("THIS IS A TEST FROM HOME FRAGMENT ONNAVSELECTED")
                 supportActionBar?.title = getDate(option=0, fullMonth=true)
                 switchEnabled(current="home")
                 navControl.navigate(homeId)

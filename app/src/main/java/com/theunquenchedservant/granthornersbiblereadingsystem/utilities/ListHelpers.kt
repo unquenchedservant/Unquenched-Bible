@@ -1,10 +1,20 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
+import android.content.ActivityNotFoundException
+import android.content.Context
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.graphics.PorterDuff
+import android.net.Uri
+import android.provider.Settings.Global.getString
 import android.view.View
 import android.widget.Button
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat.startActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
@@ -13,13 +23,47 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isLeapDay
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
+import java.util.*
 
 object ListHelpers {
+
+    fun createUpdateAlert(context: Context){
+        if (getIntPref(name = "versionNumber") < 61) {
+            val builder = AlertDialog.Builder(context)
+            builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = 61, updateFS = true)
+                dialog.dismiss()
+            }
+            builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = 61, updateFS = true)
+                val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
+                try {
+                    startActivity(context, i, null)
+                }catch(e: ActivityNotFoundException){
+                    Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                }
+                dialog.dismiss()
+            }
+            builder.setTitle(R.string.title_new_update)
+            builder.setMessage(
+                    "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
+                            "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
+                            "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
+                            "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n" +
+                            "[ADDED] New Statistics for amount of the Bible read\n\n" +
+                            "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n" +
+                            "[UPDATED] New sign in screen with the option to log in with your email and password\n\n" +
+                            "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
+            )
+            builder.create().show()
+        }
+    }
     fun setVisibilities(binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne: Boolean=false){
         if(!isMcheyne) {
             changeVisibility(binding!!.cardList1, isCardView=false)
@@ -39,7 +83,58 @@ object ListHelpers {
             changeVisibility(bindingMCheyne.cardList4, isCardView=false)
         }
     }
-
+    fun initList(cardList: CardviewsBinding, listTitle:String){
+        val backgroundColor: Int
+        val emphColor:Int
+        if(getBoolPref("darkMode")){
+            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+            emphColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+        }else{
+            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+            emphColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+        }
+        cardList.listTitle.text = listTitle
+        cardList.listReading.text = App.applicationContext().resources.getText(R.string.loading)
+        cardList.root.isClickable=false
+        cardList.root.setCardBackgroundColor(backgroundColor)
+        cardList.listReading.setTextColor(emphColor)
+        cardList.lineSeparator.setBackgroundColor(emphColor)
+    }
+    fun updateButton(listsDone:Int, materialButton:Button, maxDone: Int, limitNumber:Int){
+        val allDoneBackgroundColor: String
+        val backgroundColor:String
+        if (getBoolPref(name = "darkMode", defaultValue = true)) {
+            allDoneBackgroundColor = App.applicationContext().resources.getString(R.string.done_btn_background_color_dark)
+            backgroundColor = App.applicationContext().resources.getString(R.string.btn_background_color_dark)
+        }else{
+            allDoneBackgroundColor = App.applicationContext().resources.getString(R.string.done_btn_background_color)
+            backgroundColor = App.applicationContext().resources.getString(R.string.btn_background_color)
+        }
+        when (listsDone) {
+            maxDone -> {
+                materialButton.setText(R.string.done)
+                materialButton.isEnabled = true
+                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$allDoneBackgroundColor"))
+                materialButton.backgroundTintMode = PorterDuff.Mode.ADD
+            }
+            0 -> {
+                materialButton.setText(R.string.not_done)
+                materialButton.isEnabled = true
+                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
+            }
+            in 1..limitNumber -> {
+                materialButton.setText(R.string.btn_mark_remaining)
+                materialButton.isEnabled = true
+                val opacity = if (listsDone < 5) {
+                    100 - (listsDone * 5)
+                } else {
+                    100 - ((listsDone * 5) - 5)
+                }
+                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
+                materialButton.backgroundTintMode = PorterDuff.Mode.ADD
+            }
+        }
+    }
     fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne:Boolean=false){
         if(!isMcheyne){
             changeVisibility(binding!!.cardList1, isCardView=cardList == binding.cardList1.root)
@@ -81,6 +176,7 @@ object ListHelpers {
             else->10
         }
         val planType = getStringPref(name="planType", defaultValue="horner")
+        val listStart = if(planSystem=="pgh") "list" else "mcheyneList"
         val isLogged = Firebase.auth.currentUser
         val db = Firebase.firestore
         var data = mutableMapOf<String, Any>()
@@ -102,27 +198,14 @@ object ListHelpers {
         }
         for(i in 1..doneMax){
             if(planType == "horner") {
-                if(planSystem=="pgh"){
-                    when(getIntPref(name="list${i}DoneDaily")){
-                        1-> { setIntPref(name="list${i}DoneDaily", value=0); data["list${i}DoneDaily"]=0 }
-                    }
-                    when(getIntPref(name="list${i}Done")){
-                        1-> data = resetList(listName="list${i}", listNameDone="list${i}Done", data)
-                    }
-                }else{
-                    when(getIntPref(name="mcheyneList${i}DoneDaily")){
-                        1-> { setIntPref(name="mcheyneList${i}DoneDaily", value=0); data["mcheyneList${i}DoneDaily"] = 0}
-                    }
-                    when(getIntPref(name="mcheyneList${i}Done")){
-                        1-> data = resetList(listName="mcheyneList${i}", listNameDone="mcheyneList${i}Done", data)
-                    }
+                when (getIntPref(name = "${listStart}${i}DoneDaily")) {
+                    1 -> data["${listStart}${i}DoneDaily"] = setIntPref(name = "${listStart}${i}DoneDaily", value = 0)
+                }
+                when (getIntPref(name = "$listStart${i}Done")) {
+                    1 -> data = resetList(listName = "$listStart${i}", listNameDone = "$listStart${i}Done", data)
                 }
             }else if(planType == "numerical"){
-                if(planSystem=="pgh"){
-                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
-                }else{
-                    data["mcheyneList${i}Done"] = setIntPref(name="mcheyneList${i}Done", value=0)
-                }
+                data["${listStart}${i}Done"] = setIntPref(name="${listStart}${i}Done", value=0)
             }
         }
         if(planType== "numerical" && resetStreak) {
@@ -132,12 +215,49 @@ object ListHelpers {
                 data["mcheyneCurrentDayIndex"] = increaseIntPref(name="mcheyneCurrentDayIndex", value=1)
             }
         }
-        data["listsDone"] = setIntPref(name="listsDone", value=0)
+        data["${listStart}sDone"] = setIntPref(name="${listStart}sDone", value=0)
         if(isLogged != null) {
             db.collection("main").document(isLogged.uid).update(data)
         }
     }
+    fun isAdvanceable(maxDone:Int):Boolean{
+        val planType = getStringPref(name="planType", defaultValue="horner")
+        val listsDone = if(getStringPref("planSystem") == "pgh") "listsDone" else "mcheyneListsDone"
+        return getIntPref(listsDone) == maxDone && (planType == "horner" || planType == "numerical")
+    }
+    fun isHorner():Boolean{
+        return getStringPref(name="planType", defaultValue = "horner") == "horner"
+    }
 
+    fun isLoggedIn():Boolean{
+        return Firebase.auth.currentUser != null
+    }
+    fun isPsalm(cardView: CardviewsBinding, binding:FragmentHomeBinding, psalms:Boolean):Boolean{
+        return cardView.root == binding.cardList6.root && psalms
+    }
+    fun isDayOff():Boolean{
+        return getStringPref(name="planType", defaultValue="horner") == "calendar" && isLeapDay()
+    }
+    fun getChapter(list:Array<String>, listName:String):String{
+        return when (getStringPref(name = "planType", defaultValue = "horner")) {
+            "horner" -> list[getIntPref(listName)]
+            "numerical" -> {
+                var index = getIntPref(name = "currentDayIndex", defaultValue = 0)
+                while (index >= list.size) {
+                    index -= list.size
+                }
+                list[index]
+            }
+            "calendar" -> {
+                var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                while (index >= list.size) {
+                    index -= list.size
+                }
+                list[index]
+            }
+            else -> list[getIntPref(listName)]
+        }
+    }
     private fun resetList(listName: String, listNameDone: String, data:MutableMap<String, Any>): MutableMap<String, Any>{
         data[listName] = increaseIntPref(listName, value=1)
         data[listNameDone] = setIntPref(listNameDone, value=0)
