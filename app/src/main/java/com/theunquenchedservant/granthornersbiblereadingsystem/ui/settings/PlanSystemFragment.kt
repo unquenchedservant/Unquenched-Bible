@@ -10,6 +10,7 @@ import androidx.preference.PreferenceFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
@@ -31,13 +32,14 @@ class PlanSystemFragment : PreferenceFragmentCompat() {
         pgh!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             setStringPref(name="planSystem", value="pgh", updateFS=true)
             setBoolPref(name="mcheyneSystem", value=false)
+            setBoolPref(name="psalms", value= getBoolPref("psalmsHold"), updateFS=true)
             mainActivity.navController.navigate(R.id.navigation_plan_system)
             true
         }
         mcheyne!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             setStringPref(name="planSystem", value="mcheyne", updateFS=true)
-            updateFS("planSystem", "mcheyne")
             setBoolPref(name="pghSystem", value=false)
+            setBoolPref(name="psalmsHold", value= getBoolPref("psalms"))
             mainActivity.navController.navigate(R.id.navigation_plan_system)
             true
         }

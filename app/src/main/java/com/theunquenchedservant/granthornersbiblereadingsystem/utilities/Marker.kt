@@ -39,10 +39,10 @@ object Marker {
             "list8"-> R.array.list_8
             "list9"-> R.array.list_9
             "list10"-> R.array.list_10
-            "mcheynelist1"->R.array.mcheyne_list1
-            "mcheynelist2"->R.array.mcheyne_list2
-            "mcheynelist3"->R.array.mcheyne_list3
-            "mcheynelist4"->R.array.mcheyne_list4
+            "mcheyneList1"->R.array.mcheyne_list1
+            "mcheyneList2"->R.array.mcheyne_list2
+            "mcheyneList3"->R.array.mcheyne_list3
+            "mcheyneList4"->R.array.mcheyne_list4
             else-> 0
         }
     }
@@ -207,24 +207,18 @@ object Marker {
             "mcheyne"->4
             else->10
         }
+        val listStart = if(planType=="pgh") "list" else "mcheyneList"
+        val listsDone = "${listStart}sDone"
         for (i in 1..doneMax) {
-            if(planType == "pgh"){
-                updateReadingStatistic(listName="list${i}")
-                updateValues["list${i}Done"] = setIntPref(name="list${i}Done", value=1)
-                val doneDaily = getIntPref(name="list${i}DoneDaily")
-                if(doneDaily == 0){
-                    updateValues["list${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=1)
-                }
-            }else{
-                updateReadingStatistic(listName="mcheyneList${i}")
-                updateValues["mcheyneList${i}Done"] = setIntPref(name="mcheyneList${i}Done", value=1)
-                val doneDaily = getIntPref("mcheyneList${i}DoneDaily")
-                if(doneDaily == 0){
-                    updateValues["mcheyneList${i}DoneDaily"] = setIntPref(name="mcheyneList${i}DoneDaily", value=1)
-                }
+            updateReadingStatistic(listName = "${listStart}${i}")
+            updateValues["${listStart}${i}Done"] = setIntPref(name = "${listStart}${i}Done", value = 1)
+            val doneDaily = getIntPref(name = "${listStart}${i}DoneDaily")
+            if (doneDaily == 0) {
+                updateValues["${listStart}${i}DoneDaily"] = setIntPref(name = "${listStart}${i}DoneDaily", value = 1)
             }
         }
-        updateValues["listsDone"] = setIntPref("listsDone", doneMax)
+
+        updateValues[listsDone] = setIntPref(listsDone, doneMax)
         if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
             if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){
                 updateValues["graceTime"] = setIntPref("graceTime", 1)
@@ -275,6 +269,8 @@ object Marker {
             "mcheyne"->4
             else->10
         }
+        val listStart = if(planSystem=="pgh") "list" else "mcheyneList"
+        val listsDoneString = "${listStart}sDone"
         val cardDoneDaily = "${cardDone}Daily"
         val listName = cardDone.replace("Done", "")
         val db = Firebase.firestore
@@ -282,11 +278,11 @@ object Marker {
         val listDoneDaily = getIntPref(cardDoneDaily)
         val listsDone = if (listDoneDaily == 0){
             updateValues[cardDoneDaily] = setIntPref(cardDoneDaily, 1)
-            increaseIntPref("listsDone", 1)
+            increaseIntPref(listsDoneString, 1)
         }else{
-            getIntPref("listsDone")
+            getIntPref(listsDoneString)
         }
-        updateValues["listsDone"] = listsDone
+        updateValues[listsDoneString] = listsDone
         if (getIntPref(cardDone) != 1) {
             updateReadingStatistic(listName)
             updateValues[cardDone] = setIntPref(cardDone, 1)

@@ -26,6 +26,7 @@ class DailyCheck : BroadcastReceiver() {
             "mcheyne"->4
             else->10
         }
+        val listStart = if(planSystem == "pgh") "list" else "mcheyneLists"
         val planType = getStringPref(name="planType", defaultValue="horner")
         val db = Firebase.firestore
         var resetStreak  = false
@@ -60,28 +61,17 @@ class DailyCheck : BroadcastReceiver() {
         }
         for(i in 1..doneMax){
             if(planType == "horner") {
-                if(planSystem == "pgh"){
-                    when(getIntPref(name="list${i}DoneDaily")){
-                        1-> {data["lists${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=0)}
-                    }
-                    when(getIntPref(name="list${i}Done")){
-                        1->{data = resetList(listName="list${i}", listNameDone="list${i}Done", doneMax, data)}
-                    }
-                }else{
-                    when(getIntPref(name="mcheyneList${i}DoneDaily")){
-                        1-> {data["mcheyneList${i}DoneDaily"] = setIntPref(name="mcheyneList${i}DoneDaily", value=0)}
-                    }
-                    when(getIntPref(name="mcheyneList${i}Done")){
-                        1-> data = resetList(listName="mcheyneList${i}", listNameDone="mcheyneList${i}Done", doneMax, data)
+                when (getIntPref(name = "${listStart}${i}DoneDaily")) {
+                    1 -> {
+                        data["${listStart}${i}DoneDaily"] = setIntPref(name = "${listStart}${i}DoneDaily", value = 0)
                     }
                 }
-            }else{
-                if(planSystem == "pgh"){
-                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
-                }else{
-                    data["mcheyneList${i}Done"] = setIntPref(name="mcheyneList${i}Done", value=0)
+                when (getIntPref(name = "${listStart}${i}Done")) {
+                    1 -> {
+                        data = resetList(listName = "${listStart}${i}", listNameDone = "${listStart}${i}Done", doneMax, data, listStart)
+                    }
                 }
-            }
+            }else data["${listStart}${i}Done"] = setIntPref(name="${listStart}${i}Done", value=0)
         }
 
         if(planType== "numerical" && resetStreak) {
@@ -91,16 +81,16 @@ class DailyCheck : BroadcastReceiver() {
                 data["mcheyneCurrentDayIndex"] = increaseIntPref(name="mcheyneCurrentDayIndex", value=1)
             }
         }
-        if(!getBoolPref(name="holdPlan") || getIntPref(name="listsDone") == doneMax) {
-            data["listsDone"] = setIntPref(name="listsDone", value=0)
+        if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}Done") == doneMax) {
+            data["${listStart}sDone"] = setIntPref(name="${listStart}Done", value=0)
         }
 
         if(isLogged != null) {
             db.collection("main").document(isLogged.uid).update(data)
         }
     }
-    private fun resetList(listName: String, listNameDone: String, maxDone:Int, data:MutableMap<String, Any>): MutableMap<String, Any>{
-        if(!getBoolPref(name="holdPlan") || getIntPref(name="listsDone") == maxDone) {
+    private fun resetList(listName: String, listNameDone: String, maxDone:Int, data:MutableMap<String, Any>, listStart:String): MutableMap<String, Any>{
+        if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}sDone") == maxDone) {
             if(listName != "list6" || (listName == "list6" && !getBoolPref(name="psalms"))) {
                 data[listName] = increaseIntPref(listName, value=1)
             }

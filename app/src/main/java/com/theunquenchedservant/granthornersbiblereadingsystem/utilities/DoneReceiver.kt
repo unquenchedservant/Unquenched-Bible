@@ -16,10 +16,11 @@ class DoneReceiver : BroadcastReceiver() {
             "mcheyne"->4
             else->10
         }
-        when(getIntPref(name="listsDone")) {
+        val listsDone = if(getStringPref("planSystem", defaultValue = "pgh") =="pgh") "listsDone" else "mcheyneListsDone"
+        when(getIntPref(name=listsDone)) {
             in 0 until doneMax -> {
                 if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh") {
-                    markAll()
+                    markAll(planType="pgh")
                 }else{
                     markAll(planType="mcheyne")
                 }

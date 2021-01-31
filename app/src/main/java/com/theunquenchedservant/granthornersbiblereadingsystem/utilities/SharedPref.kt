@@ -95,6 +95,7 @@ object SharedPref {
             results["mcheyneList${i}DoneDaily"] = getIntPref(name="mcheyneList${i}DoneDaily")
         }
         results["listsDone"] = getIntPref(name="listsDone")
+        results["mcheyneListsDone"] = getIntPref(name="mcheyneListsDone")
         results["currentStreak"] = getIntPref(name="currentStreak")
         results["dailyStreak"] = getIntPref(name="dailyStreak")
         results["maxStreak"] = getIntPref(name="maxStreak")
@@ -199,6 +200,7 @@ object SharedPref {
             updateIntPref(data, key="versionNumber")
             updateBoolPref(data, key="darkMode")
             updateIntPref(data, key="listsDone")
+            updateIntPref(data, key="mcheyneListsDone")
             updateStringPref(data, key="planType")
             updateStringPref(data, key="bibleVersion")
             updateIntPref(data, key="oldChaptersRead")
