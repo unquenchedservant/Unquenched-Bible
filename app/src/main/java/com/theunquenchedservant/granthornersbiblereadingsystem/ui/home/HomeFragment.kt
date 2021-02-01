@@ -48,14 +48,10 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.listSwitcher
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
-<<<<<<< HEAD
-import java.net.URI
-=======
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import java.util.*
->>>>>>> dev
 
 class HomeFragment : Fragment() {
 
@@ -73,56 +69,12 @@ class HomeFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
-<<<<<<< HEAD
-        binding = FragmentHomeBinding.inflate(inflater,  container, false)
-        return binding.root
-    }
-
-    override fun onResume() {
-        super.onResume()
-        if(allowResume){
-            (activity as MainActivity).navController.navigate(R.id.navigation_home)
-            allowResume = false
-        }
-    }
-
-    override fun onPause() {
-        super.onPause()
-        if(!allowResume){
-            allowResume = true
-        }
-    }
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-        if(getIntPref("versionNumber") < 60){
-            val builder = AlertDialog.Builder(requireContext())
-            builder.setPositiveButton(R.string.ok) { something ,_ ->
-                setIntPref("versionNumber", 60)
-                something.dismiss()
-            }
-            builder.setNeutralButton("More Info"){diag, _->
-                setIntPref("versionNumber", 60)
-                val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
-                startActivity(i)
-                diag.dismiss()
-            }
-            builder.setTitle(R.string.title_new_update)
-            builder.setMessage(
-                    "Version 2.0 of the app is coming very very soon!\n\n"+
-                            "This update will contain a new name and logo for the app, so don't panic if you think the app 'disappears'.\n\n"+
-                            "The app will be known as 'Unquenched Bible' and will have a ton of new features, which you can find out more about by clicking 'More Info' below.\n\n" +
-                            "Your progress and settings will not be lost in the update, don't worry!\n\n" +
-                            "Thank you for using the app, and i'm looking forward to releasing Unquenched Bible in the next week or so!"
-            )
-            builder.create().show()
-=======
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         darkMode = getBoolPref(name = "darkMode", defaultValue = true)
         if(darkMode){
             binding.materialButton.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
         }else{
             binding.materialButton.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
->>>>>>> dev
         }
         initList(binding.cardList1, resources.getString(R.string.title_pgh_list1))
         initList(binding.cardList2, resources.getString(R.string.title_pgh_list2))
