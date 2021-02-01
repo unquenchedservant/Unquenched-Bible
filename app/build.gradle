@@ -29,8 +29,8 @@ android {
         applicationId "com.theunquenchedservant.granthornersbiblereadingsystem"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 69
-        versionName "2.0.13"
+        versionCode 70
+        versionName "2.0"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
