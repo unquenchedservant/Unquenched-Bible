@@ -24,14 +24,6 @@ class InformationFragment : PreferenceFragmentCompat() {
         val discord: Preference? = findPreference("discordLink")
         val mailchimp: Preference? = findPreference("mailchimp")
         appHelp!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-<<<<<<< HEAD
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/"))
-            false
-        }
-        systemInfo!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            val i = Intent(Intent.ACTION_VIEW).setData(Uri.parse("https://www.unquenched.bible/the-reading-plans/"))
-            startActivity(i)
-=======
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible"))
             try {
                 startActivity(i)
@@ -47,7 +39,6 @@ class InformationFragment : PreferenceFragmentCompat() {
             }catch(e:ActivityNotFoundException){
                 Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
             }
->>>>>>> dev
             false
         }
         license!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
