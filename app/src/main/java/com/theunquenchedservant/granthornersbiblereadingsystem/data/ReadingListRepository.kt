@@ -27,20 +27,14 @@ class ReadingListRepository {
                         .addOnCompleteListener { task ->
                             when (task.result != null) {
                                 true -> {
-                                    val psalmChecked = task.result!!.data!!["psalms"] as Boolean
+                                    val psalmChecked = if(task.result!!.data!!["psalms"] != null) task.result!!.data!!["psalms"] as Boolean else false
                                     val listId = getListId(listName)
                                     val reading: String
                                     val resultObject: ReadingLists
-                                    when (task.result!!.data!![listName] != null) {
-                                        true -> {
-                                            reading = getReading((task.result!!.data!![listName] as Long).toInt(), listId, listName, psalmChecked)
-                                            resultObject = ReadingLists(listName, (task.result!!.data!!["${listName}Done"] as Long).toInt(), (task.result!!.data!![listName] as Long).toInt(), reading)
-                                        }
-                                        else -> {
-                                            reading = getReading(index = 0, listId, listName, psalmChecked)
-                                            resultObject = ReadingLists(listName, listDone = 0, listIndex = 0, reading)
-                                        }
-                                    }
+                                    val listIndex = if(task.result!!.data!![listName] != null) (task.result!!.data!![listName] as Long).toInt() else 0
+                                    val listDone = if(task.result!!.data!!["${listName}Done"] != null) (task.result!!.data!!["${listName}Done"] as Long).toInt() else 0
+                                    reading = getReading(listIndex, listId, listName, psalmChecked)
+                                    resultObject = ReadingLists(listName, listDone, listIndex, reading)
                                     data.value = resultObject
                                 }
                                 else -> log(logString = "RESULT WAS NULL")

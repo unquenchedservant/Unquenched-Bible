@@ -189,7 +189,14 @@ class HomeFragment : Fragment() {
         cardList.lineSeparator.setBackgroundColor(lineColor)
         cardList.listReading.text = readingLists.listReading
         cardList.listTitle.text = resources.getString(readingString)
-        createCardListener(cardList, listArray, psalms, listDone = "${listName}Done", listName)
+        if(readingLists.listReading == "Day Off"){
+            cardListRoot.isEnabled = false
+            cardListRoot.setCardBackgroundColor(disabled)
+            cardList.listButtons.setBackgroundColor(disabled)
+            setIntPref("listsDone", 1)
+        }else {
+            createCardListener(cardList, listArray, psalms, listDone = "${listName}Done", listName)
+        }
     }
 
     private fun createButtonListener() {

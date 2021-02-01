@@ -34,14 +34,14 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if (getIntPref(name = "versionNumber") < 61) {
+        if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 61, updateFS = true)
+                setIntPref(name = "versionNumber", value = 70, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 61, updateFS = true)
+                setIntPref(name = "versionNumber", value = 70, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
                 try {
                     startActivity(context, i, null)

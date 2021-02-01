@@ -139,100 +139,112 @@ object SharedPref {
             }
         }
         db.collection("main").document(user2!!.uid).set(results)
-                .addOnSuccessListener { MainActivity.log("Data transferred to firestore") }
+                .addOnSuccessListener {log("Data transferred to firestore") }
                 .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
     }
-    private fun updateIntPref(data: MutableMap<String, Any>, key:String, secondKey: String=""){
+    private fun updateIntPref(data: MutableMap<String, Any>?, key:String, secondKey: String=""):MutableMap<String, Any>{
         val prefKey = if(secondKey == ""){
             key
         }else{
             secondKey
         }
-        if(data[key] != null){
-            setIntPref(prefKey, (data[key] as Long).toInt())
+        return if(data!![key] != null){
+            if(data[key] is Integer) {
+                setIntPref(prefKey, data[key] as Int)
+            }else{
+                setIntPref(prefKey, (data[key] as Long).toInt())
+            }
+            data
+        }else{
+            data[key] = setIntPref(prefKey, 0)
+            data
         }
     }
-    private fun updateBoolPref(data: MutableMap<String, Any>, key:String, secondKey:String = ""){
+    private fun updateBoolPref(data: MutableMap<String, Any>?, key:String, secondKey:String = ""){
         val prefKey = if (secondKey == ""){
             key
         }else{
             secondKey
         }
-        if(data[key] != null){
+        if(data!![key] != null){
             setBoolPref(prefKey, data[key] as Boolean)
+        }else{
+            data[key] = setBoolPref(prefKey, false)
         }
     }
-    private fun updateStringPref(data: MutableMap<String, Any>, key:String, secondKey:String=""){
+    private fun updateStringPref(data: MutableMap<String, Any>?, key:String, secondKey:String=""){
         val prefKey = if(secondKey == ""){
             key
         }else{
             secondKey
         }
-        if(data[key] != null){
+        if(data!![key] != null){
             setStringPref(prefKey, data[key] as String)
+        }else{
+            data[key] = setStringPref(prefKey, "itsdeadjim")
         }
     }
     fun firestoreToPreference(database: DocumentSnapshot){
-        val data = database.data
+        var data = database.data
         if(data != null) {
             log("User document exists")
             for (i in 1..10) {
-                updateIntPref(data, key="list${i}")
-                updateIntPref(data, key="list${i}Done")
-                updateIntPref(data, key="list${i}DoneDaily")
+                updateIntPref(data, key = "list${i}")
+                updateIntPref(data, key = "list${i}Done")
+                updateIntPref(data, key = "list${i}DoneDaily")
             }
-            for (i in 1..4){
-                updateIntPref(data, key="mcheyneList$i")
-                updateIntPref(data, key="mcheyneList${i}Done")
-                updateIntPref(data, key="mcheyneList${i}DoneDaily")
+            for (i in 1..4) {
+                updateIntPref(data, key = "mcheyneList$i")
+                updateIntPref(data, key = "mcheyneList${i}Done")
+                updateIntPref(data, key = "mcheyneList${i}DoneDaily")
             }
-            updateIntPref(data, key="dailyStreak")
-            updateIntPref(data, key="currentStreak")
-            updateIntPref(data, key="maxStreak")
-            updateBoolPref(data, key="psalms")
-            updateBoolPref(data, key="allowPartial")
-            updateBoolPref(data, key="vacationMode")
-            updateBoolPref(data, key="notifications")
-            updateIntPref(data, key="dailyNotif")
-            updateIntPref(data, key="remindNotif")
-            updateStringPref(data, key="dateChecked")
-            updateBoolPref(data, key="holdPlan")
-            updateIntPref(data, key="versionNumber")
-            updateBoolPref(data, key="darkMode")
-            updateIntPref(data, key="listsDone")
-            updateIntPref(data, key="mcheyneListsDone")
-            updateStringPref(data, key="planType")
-            updateStringPref(data, key="bibleVersion")
-            updateIntPref(data, key="oldChaptersRead")
-            updateIntPref(data, key="newChaptersRead")
-            updateIntPref(data, key="oldAmountRead")
-            updateIntPref(data, key="newAmountRead")
-            updateIntPref(data, key="bibleAmountRead")
-            updateIntPref(data, key="totalChaptersRead")
-            updateIntPref(data, key="mcheyneCurrentDayIndex")
-            updateIntPref(data, key="currentDayIndex")
-            updateBoolPref(data, key="horner")
-            updateBoolPref(data, key="numericalDay")
-            updateBoolPref(data, key="calendarDay")
-            updateIntPref(data, key="graceTime")
-            updateBoolPref(data, key="isGrace")
-            updateStringPref(data, key="planSystem")
-            if(getStringPref("planSystem") == "pgh"){
+            updateIntPref(data, key = "dailyStreak")
+            updateIntPref(data, key = "currentStreak")
+            updateIntPref(data, key = "maxStreak")
+            updateBoolPref(data, key = "psalms")
+            updateBoolPref(data, key = "allowPartial")
+            updateBoolPref(data, key = "vacationMode")
+            updateBoolPref(data, key = "notifications")
+            updateIntPref(data, key = "dailyNotif")
+            updateIntPref(data, key = "remindNotif")
+            updateStringPref(data, key = "dateChecked")
+            updateBoolPref(data, key = "holdPlan")
+            updateIntPref(data, key = "versionNumber")
+            updateBoolPref(data, key = "darkMode")
+            updateIntPref(data, key = "listsDone")
+            updateIntPref(data, key = "mcheyneListsDone")
+            updateStringPref(data, key = "planType")
+            updateStringPref(data, key = "bibleVersion")
+            updateIntPref(data, key = "oldChaptersRead")
+            updateIntPref(data, key = "newChaptersRead")
+            updateIntPref(data, key = "oldAmountRead")
+            updateIntPref(data, key = "newAmountRead")
+            updateIntPref(data, key = "bibleAmountRead")
+            updateIntPref(data, key = "totalChaptersRead")
+            updateIntPref(data, key = "mcheyneCurrentDayIndex")
+            updateIntPref(data, key = "currentDayIndex")
+            updateBoolPref(data, key = "horner")
+            updateBoolPref(data, key = "numericalDay")
+            updateBoolPref(data, key = "calendarDay")
+            updateIntPref(data, key = "graceTime")
+            updateBoolPref(data, key = "isGrace")
+            updateStringPref(data, key = "planSystem")
+            if (getStringPref("planSystem") == "pgh") {
                 setBoolPref("mcheyneSystem", false)
                 setBoolPref("pghSystem", true)
-            }else{
+            } else {
                 setBoolPref("mcheyneSystem", true)
                 setBoolPref("pghSystem", false)
             }
-            updateBoolPref(data, key="hasCompletedOnboarding")
-            for(book in ALL_BOOKS){
-                updateIntPref(data, key="${book}AmountRead")
-                updateIntPref(data, key="${book}ChaptersRead")
-                updateBoolPref(data, key="${book}DoneTestament")
-                updateBoolPref(data, key="${book}DoneWhole")
-                for(chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))){
-                    updateBoolPref(data, key="${book}${chapter}Read")
-                    updateIntPref(data, key="${book}${chapter}AmountRead")
+            updateBoolPref(data, key = "hasCompletedOnboarding")
+            for (book in ALL_BOOKS) {
+                updateIntPref(data, key = "${book}AmountRead")
+                updateIntPref(data, key = "${book}ChaptersRead")
+                updateBoolPref(data, key = "${book}DoneTestament")
+                updateBoolPref(data, key = "${book}DoneWhole")
+                for (chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))) {
+                    updateBoolPref(data, key = "${book}${chapter}Read")
+                    updateIntPref(data, key = "${book}${chapter}AmountRead")
                 }
             }
         }
