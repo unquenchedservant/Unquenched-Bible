@@ -9,32 +9,39 @@ import androidx.core.app.NotificationCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
 class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
 
     override fun onReceive(context: Context, intent: Intent) {
-        when(getBoolPref("vacation_mode")) {
+        when(getBoolPref(name="vacationMode") || (getBoolPref(name="weekendMode") && isWeekend())) {
             false -> {
                 log("Vacation mode off, preparing reminder notification")
-                if(getBoolPref("notif_switch")) {
-                    val check = getIntPref("listsDone")
+                if(getBoolPref(name="notifications")) {
+                    val check = getIntPref(name="listsDone")
                     log("lists done so far = $check")
-                    val allowPartial = getBoolPref("allow_partial_switch")
+                    val allowPartial = getBoolPref(name="allowPartial")
                     log("Allow partial is $allowPartial")
+                    val doneMax = when(getStringPref(name="planSystem", defaultValue="pgh")){
+                        "pgh"->10
+                        "mcheyne"->4
+                        else->10
+                    }
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     when (check) {
                         0 -> {
                             deliverNotification(context, false)
                         }
-                        in 0..9 -> {
+                         in 1 until doneMax -> {
                             mNotificationManager?.cancel(1)
                             mNotificationManager?.cancel(2)
                             deliverNotification(context, true)
                         }
-                        10 ->{
+                        doneMax ->{
                             log("All lists done, not sending notification")
                         }
                     }

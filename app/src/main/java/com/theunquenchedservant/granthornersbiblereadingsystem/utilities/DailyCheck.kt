@@ -3,82 +3,100 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.dates.checkDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 
 class DailyCheck : BroadcastReceiver() {
-    private val isLogged = FirebaseAuth.getInstance().currentUser
+    private val isLogged = Firebase.auth.currentUser
+
     override fun onReceive(context: Context, intent: Intent) {
-        val db = FirebaseFirestore.getInstance()
+        val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
+        var data = mutableMapOf<String, Any>()
+        val doneMax = when(planSystem){
+            "pgh"->10
+            "mcheyne"->4
+            else->10
+        }
+        val listStart = if(planSystem == "pgh") "list" else "mcheyneLists"
+        val planType = getStringPref(name="planType", defaultValue="horner")
+        val db = Firebase.firestore
         var resetStreak  = false
-        var resetCurrent = false
-        val vacation = getBoolPref("vacation_mode")
-        when (getIntPref("dailyStreak")) {
+        val vacation = getBoolPref(name="vacationMode")
+        when (getIntPref(name="dailyStreak")) {
             1 -> {
-                setIntPref("dailyStreak", 0)
-                log("DAILY CHECK - daily streak set to 0")
+                data["dailyStreak"] = setIntPref(name="dailyStreak", value=0)
+                data["graceTime"] = setIntPref(name="graceTime", value=0)
                 resetStreak = true
             }
             0 -> {
-                when (vacation || getBoolPref("vacationOff")) {
+                when (vacation || getBoolPref(name="vacationOff") || (getBoolPref(name="weekendMode") && isWeekend())) {
                     false -> {
-                        if(!checkDate("yesterday", false)){
-                                resetCurrent = true
-                                log("DAILY CHECK - currentStreak set to 0")
-                                setIntPref("currentStreak", 0)
+                        if(!checkDate(option="yesterday", fullMonth=false)){
+                                if(!getBoolPref(name="isGrace")){
+                                    data["holdStreak"] = setIntPref(name="holdStreak", getIntPref(name="currentStreak"))
+                                    data["isGrace"] = setBoolPref(name="isGrace", value=true)
+                                }else{
+                                    data["isGrace"] = setBoolPref(name="isGrace", value=false)
+                                    data["holdStreak"] = setIntPref(name="holdStreak", value=0)
+                                }
+                            data["currentStreak"] = setIntPref(name="currentStreak", value=0)
                         }
                     }
                     true -> {
-                        if(getBoolPref("vacationOff")){
-                            setBoolPref("vacationOff", false)
+                        if(getBoolPref(name="vacationOff")){
+                            data["vacationOff"] = setBoolPref(name="vacationOff", value=false)
                         }
                     }
                 }
             }
         }
-        for(i in 1..10){
-            when(getIntPref("list${i}Done")){
-                1 -> {
-                    resetList("list$i", "list${i}Done")
+        for(i in 1..doneMax){
+            if(planType == "horner") {
+                when (getIntPref(name = "${listStart}${i}DoneDaily")) {
+                    1 -> {
+                        data["${listStart}${i}DoneDaily"] = setIntPref(name = "${listStart}${i}DoneDaily", value = 0)
+                    }
                 }
+                when (getIntPref(name = "${listStart}${i}Done")) {
+                    1 -> {
+                        data = resetList(listName = "${listStart}${i}", listNameDone = "${listStart}${i}Done", doneMax, data, listStart)
+                    }
+                }
+            }else data["${listStart}${i}Done"] = setIntPref(name="${listStart}${i}Done", value=0)
+        }
+
+        if(planType== "numerical" && resetStreak) {
+            if(planSystem == "pgh"){
+                data["currentDayIndex"] = increaseIntPref(name="currentDayIndex", value=1)
+            }else{
+                data["mcheyneCurrentDayIndex"] = increaseIntPref(name="mcheyneCurrentDayIndex", value=1)
             }
         }
-        if(!getBoolPref("holdPlan") || getIntPref("listsDone") == 10) {
-            setIntPref("listsDone", 0)
+        if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}Done") == doneMax) {
+            data["${listStart}sDone"] = setIntPref(name="${listStart}Done", value=0)
         }
+
         if(isLogged != null) {
-            val data = mutableMapOf<String, Any>()
-            for (i in 1..10){
-                data["list$i"] = getIntPref("list$i")
-                data["list${i}Done"] = getIntPref("list${i}Done")
-                data["list${i}DoneDaily"] = getIntPref("list${i}DoneDaily")
-            }
-            data["listsDone"] = getIntPref("listsDone")
-            if(resetCurrent) {
-                data["currentStreak"] = 0
-            }else if(resetStreak) {
-                data["dailyStreak"] = 0
-            }
             db.collection("main").document(isLogged.uid).update(data)
         }
     }
-    private fun resetList(listName: String, listNameDone: String){
-        log("$listName is now set to ${getIntPref(listName)}")
-        if(!getBoolPref("holdPlan") || getIntPref("listsDone") == 10) {
-            if(listName != "list6" || (listName == "list6" && !getBoolPref("psalms"))) {
-                increaseIntPref(listName, 1)
-                log("$listName index is now ${getIntPref(listName)}")
+    private fun resetList(listName: String, listNameDone: String, maxDone:Int, data:MutableMap<String, Any>, listStart:String): MutableMap<String, Any>{
+        if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}sDone") == maxDone) {
+            if(listName != "list6" || (listName == "list6" && !getBoolPref(name="psalms"))) {
+                data[listName] = increaseIntPref(listName, value=1)
             }
-            setIntPref("${listNameDone}Daily", 0)
-            setIntPref(listNameDone, 0)
-            log("$listNameDone set to 0")
+            data["${listNameDone}Daily"] = setIntPref(name="${listNameDone}Daily", value=0)
+            data[listNameDone] = setIntPref(listNameDone, value=0)
         }
+        return data
     }
 }

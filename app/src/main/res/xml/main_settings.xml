@@ -4,31 +4,43 @@
     <Preference
         app:key="planSettings"
         app:title="@string/title_planSettings"
-        app:summary="@string/summary_planSettings"/>
+        app:summary="@string/summary_planSettings"
+        app:allowDividerAbove="true" />
     <Preference
         app:key="notifications"
         app:title="@string/title_notifications"
         app:summary="@string/summary_notications"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"
         />
-    <CheckBoxPreference
+    <SwitchPreference
         app:key="darkMode"
         app:defaultValue="true"
-        app:title="@string/title_dark_mode"/>
+        app:title="@string/title_dark_mode"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <Preference
         app:key="overrides"
         app:title="@string/title_overrides"
-        app:summary="@string/summary_overrides"/>
+        app:summary="@string/summary_overrides"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <Preference
         app:key="infoSupport"
         app:title="@string/title_infoSupport"
-        app:summary="@string/summary_infoSupport"/>
+        app:summary="@string/summary_infoSupport"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <Preference
         app:key="googleSignIn"
         app:title="@string/title_account_loggedout"
-        app:summary="@string/title_account_loggedout"/>
+        app:summary="@string/title_account_loggedout"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <Preference
         app:key="discordLink"
         app:title="@string/title_discord"
-        app:summary="@string/summary_discord"/>
+        app:summary="@string/summary_discord"
+        app:allowDividerAbove="true" />
 
 </PreferenceScreen>

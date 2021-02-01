@@ -7,7 +7,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Comp
 class MyFirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        log("Refreshed token: $token")
+        log(logString="Refreshed token: $token")
         sendRegistrationToServer(token)
     }
     private fun sendRegistrationToServer(token:String){
@@ -15,7 +15,7 @@ class MyFirebaseMessagingService: FirebaseMessagingService() {
     }
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        log("Message: $message")
+        log(logString="Message: $message")
     }
 
 }

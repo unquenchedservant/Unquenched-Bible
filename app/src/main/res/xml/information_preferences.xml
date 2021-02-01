@@ -5,17 +5,24 @@
         app:title="@string/title_information">
         <Preference
             app:key="appInfo"
-            app:title="@string/title_about_app"/>
+            app:title="@string/title_about_app"
+            app:allowDividerBelow="true"/>
         <Preference
             app:key="systemInfo"
-            app:title="@string/title_about_system"/>
+            app:title="@string/title_about_system"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
         <Preference
             app:key="licenses"
-            app:title="@string/title_licenses">
+            app:title="@string/title_licenses"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true">
         </Preference>
         <Preference
             app:key="privacy"
-            app:title="@string/title_privacy">
+            app:title="@string/title_privacy"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="false">
             <intent
                 android:action="android.intent.action.VIEW"
                 android:data="https://www.iubenda.com/privacy-policy/56351106"/>
@@ -27,23 +34,31 @@
             app:key="currentVersion"
             app:title="@string/title_version"
             app:summary="@string/summary_version"
+            app:allowDividerBelow="true"
             />
         <Preference
             app:key="contact"
             app:title="@string/title_contact"
-            app:summary="@string/summary_contact"/>
+            app:summary="@string/summary_contact"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
         <Preference
             app:key="twitter"
             app:title="@string/title_twitter"
-            app:summary="@string/summary_twitter"/>
+            app:summary="@string/summary_twitter"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
         <Preference
             app:key="discordLink"
             app:title="@string/title_discord"
-            app:summary="@string/summary_discord"/>
+            app:summary="@string/summary_discord"
+            app:allowDividerAbove="true"
+            app:allowDividerBelow="true"/>
         <Preference
             app:key="mailchimp"
             app:title="@string/title_mailchimp"
-            app:summary="@string/summary_mailchimp"/>
+            app:summary="@string/summary_mailchimp"
+            app:allowDividerAbove="true" />
     </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
 
 

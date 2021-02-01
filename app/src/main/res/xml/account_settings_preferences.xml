@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <Preference
+        android:selectable="false"
+        app:allowDividerBelow="true"
+        app:key="currentAccount"
+        app:title="@string/title_current_account" />
+    <Preference
+        app:key="editEmail"
+        app:title="@string/title_update_email"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <Preference
+        app:key="editPassword"
+        app:title="@string/title_change_password"
+        app:allowDividerAbove="true" />
+    <Preference
+        app:key="logOut"
+        app:title="@string/title_log_out"
+        app:summary="@string/summary_log_out"/>
+    <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory
+        app:title="@string/title_kenny_loggins">
+        <Preference
+            app:key="deleteAccount"
+            app:title="@string/title_delete_account"
+            app:summary="@string/summary_delete_account"/>
+    </com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UnquenchedPreferenceCategory>
+</PreferenceScreen>

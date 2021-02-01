@@ -1,24 +1,48 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+<PreferenceScreen
     xmlns:app="http://schemas.android.com/apk/res-auto">
-    <CheckBoxPreference
+    <Preference
+        app:key="planType"
+        app:title="@string/title_plan_type"
+        app:summary="@string/summary_plan_type"
+        app:allowDividerBelow="true"/>
+    <Preference
+        app:key="planMethod"
+        app:title="@string/title_reading_type"
+        app:summary="@string/summary_reading_type"
+        app:allowDividerBelow="true"
+        app:allowDividerAbove="true"/>
+    <SwitchPreference
         app:key="psalms"
         app:title="@string/title_psalms"
         app:summary="@string/summary_psalms"
-        app:defaultValue="false"/>
-    <CheckBoxPreference
-        app:key="holdTilAll"
+        app:defaultValue="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <SwitchPreference
+        app:key="holdPlan"
         app:title="@string/title_hold_plan"
         app:summary="@string/summary_hold_plan"
-        app:defaultValue="false"/>
-    <CheckBoxPreference
-        app:key="allow_partial_switch"
+        app:defaultValue="false"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <SwitchPreference
+        app:key="allowPartial"
         app:title="@string/title_partial"
-        app:summary="@string/summary_partial"/>
+        app:summary="@string/summary_partial"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <SwitchPreference
+        app:key="weekendMode"
+        app:title="@string/title_weekend"
+        app:summary="@string/summary_weekend"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
     <DropDownPreference
         app:key="bibleTranslation"
         app:title="@string/title_translation_selection"
         app:summary="@string/summary_translation_selection"
         app:useSimpleSummaryProvider="true"
+        app:allowDividerAbove="true"
         />
 </PreferenceScreen>

@@ -16,9 +16,7 @@ android {
     ndkVersion "22.0.7026061"
     buildFeatures {
         viewBinding true
-    }
-    dataBinding {
-        enabled true
+        dataBinding true
     }
     compileOptions{
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -31,8 +29,13 @@ android {
         applicationId "com.theunquenchedservant.granthornersbiblereadingsystem"
         minSdkVersion 24
         targetSdkVersion 30
+<<<<<<< HEAD
         versionCode 62
         versionName "1.6.3"
+=======
+        versionCode 70
+        versionName "2.0"
+>>>>>>> dev
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
     buildTypes {
@@ -48,13 +51,23 @@ dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
     implementation platform('com.google.firebase:firebase-bom:26.1.0')
     implementation 'androidx.annotation:annotation:1.1.0'
+    implementation 'com.firebaseui:firebase-ui-auth:6.4.0'
     implementation 'com.google.android.gms:play-services-auth:19.0.0'
+<<<<<<< HEAD
     implementation 'com.google.firebase:firebase-firestore:22.0.1'
     implementation 'com.google.firebase:firebase-analytics:18.0.1'
     implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
     implementation 'com.google.firebase:firebase-messaging-ktx'
     implementation 'com.google.firebase:firebase-analytics-ktx'
     implementation 'com.google.firebase:firebase-auth:20.0.2'
+=======
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-firestore-ktx'
+    implementation 'com.google.firebase:firebase-crashlytics:17.3.0'
+    implementation 'com.google.firebase:firebase-messaging-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+    implementation 'com.google.firebase:firebase-auth-ktx'
+>>>>>>> dev
     implementation 'androidx.navigation:navigation-fragment-ktx:2.3.2'
     implementation 'androidx.navigation:navigation-ui-ktx:2.3.2'
     implementation 'androidx.legacy:legacy-support-v4:1.0.0'

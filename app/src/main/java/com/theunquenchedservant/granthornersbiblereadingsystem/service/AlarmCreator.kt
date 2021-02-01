@@ -12,6 +12,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.RemindReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import java.util.*
 
 object AlarmCreator {
@@ -54,11 +55,19 @@ object AlarmCreator {
         when(alarmType) {
             "daily" -> {
                 notifPendingIntent = dailyPending
+<<<<<<< HEAD
                 timeInMinutes = getIntPref(name="${alarmType}_time")
             }
             "remind" -> {
                 notifPendingIntent = remindPending
                 timeInMinutes = getIntPref(name="${alarmType}_time")
+=======
+                timeInMinutes = getIntPref(name="${alarmType}Notif")
+            }
+            "remind" -> {
+                notifPendingIntent = remindPending
+                timeInMinutes = getIntPref(name="${alarmType}Notif")
+>>>>>>> dev
             }
             else -> {
                 notifPendingIntent = checkPending
@@ -67,43 +76,50 @@ object AlarmCreator {
         }
         val hour: Int
         val minute: Int
-        if(timeInMinutes == 0){
-            hour = 0
-            minute = 0
-        }else {
-            hour = timeInMinutes / 60
-            minute = timeInMinutes % 60
+        when(timeInMinutes){
+            0-> {hour = 0; minute = 0 }
+            else-> {hour = timeInMinutes / 60; minute = timeInMinutes % 60}
         }
         val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
-        if (calendar.before(Calendar.getInstance())) {
-            if((alarmType == "daily" && getIntPref("listsDone") == 10) || alarmType != "daily") {
-                calendar.add(Calendar.DATE, 1)
-            }
+        val maxDone = when(getStringPref(name="planSystem", defaultValue="pgh")){
+            "pgh"-> 10
+            "mcheyne"->4
+            else->10
         }
-        if(alarmType == "dailyCheck"){
-            alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, notifPendingIntent)
-        }else{
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, notifPendingIntent)
+        when (calendar.before(Calendar.getInstance()) && ((alarmType=="daily" && getIntPref(name="listsDone") == maxDone) || alarmType != "daily")) {
+                true->calendar.add(Calendar.DATE, 1)
+        }
+        when(alarmType){
+            "dailyCheck"-> alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, notifPendingIntent)
+            else -> alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, notifPendingIntent)
         }
     }
 
     fun createAlarms() {
         val ctx = App.applicationContext()
         val notifyIntent = Intent(ctx, AlarmReceiver::class.java)
-        val notifyUp = (PendingIntent.getBroadcast(ctx, 4, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null)
 
+<<<<<<< HEAD
         if (!notifyUp) {
             createAlarm(alarmType="daily")
+=======
+        when ((PendingIntent.getBroadcast(ctx, 4, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null)) {
+            false->createAlarm(alarmType="daily")
+>>>>>>> dev
         }
 
         val remindIntent = Intent(ctx, RemindReceiver::class.java)
-        val remindUp = (PendingIntent.getBroadcast(ctx, 2, remindIntent, PendingIntent.FLAG_NO_CREATE) != null)
 
+<<<<<<< HEAD
         if (!remindUp) {
             createAlarm(alarmType="remind")
+=======
+        when ((PendingIntent.getBroadcast(ctx, 2, remindIntent, PendingIntent.FLAG_NO_CREATE) != null)) {
+            false->createAlarm(alarmType="remind")
+>>>>>>> dev
         }
     }
 }

@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.annotation.SuppressLint
-import android.os.Build
 import android.os.Bundle
 import android.text.format.DateFormat
 import android.view.View
@@ -57,11 +56,11 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
             val minutesAfterMidnight : Int = hours * 60 + minutes
             if (preference is TimePreference && preference.callChangeListener(minutesAfterMidnight)) {
                 if (preference.dialogTitle=="Daily List Time") {
-                    cancelAlarm("daily")
-                    createAlarm("daily")
+                    cancelAlarm(alarmType="daily")
+                    createAlarm(alarmType="daily")
                 } else if(preference.dialogTitle=="Reminder Time") {
-                    cancelAlarm("remind")
-                    createAlarm("remind")
+                    cancelAlarm(alarmType="remind")
+                    createAlarm(alarmType="remind")
                 }
                 when(hours) {
                     0 -> { hours = 12; ampm = "AM" }

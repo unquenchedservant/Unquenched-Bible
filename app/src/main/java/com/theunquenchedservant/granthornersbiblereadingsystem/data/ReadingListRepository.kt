@@ -2,50 +2,59 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import java.util.*
 
 class ReadingListRepository {
-    private val user: FirebaseUser? = FirebaseAuth.getInstance().currentUser
+    private val user: FirebaseUser? = Firebase.auth.currentUser
 
     fun getList(listName:String): LiveData<ReadingLists> {
         val data = MutableLiveData<ReadingLists>()
-        if (user != null) {
-            val db = FirebaseFirestore.getInstance()
-            db.collection("main").document(user.uid).get()
-                    .addOnCompleteListener {
-                        if (it.result != null) {
-                            val psalmChecked = it.result!!.data!!["psalms"] as Boolean
-                            val listId = getListId(listName)
-                            val reading = getReading((it.result!!.data!![listName] as Long).toInt(), listId, listName, true, psalmChecked)
-                            val resultObject = ReadingLists(listName, (it.result!!.data!!["${listName}Done"] as Long).toInt(), (it.result!!.data!![listName] as Long).toInt(), reading)
-                            data.value = resultObject
-                        }else{
-                            log("RESULT WAS NULL")
+        when (user != null) {
+            true -> {
+                val db = Firebase.firestore
+                db.collection("main").document(user.uid).get()
+                        .addOnCompleteListener { task ->
+                            when (task.result != null) {
+                                true -> {
+                                    val psalmChecked = if(task.result!!.data!!["psalms"] != null) task.result!!.data!!["psalms"] as Boolean else false
+                                    val listId = getListId(listName)
+                                    val reading: String
+                                    val resultObject: ReadingLists
+                                    val listIndex = if(task.result!!.data!![listName] != null) (task.result!!.data!![listName] as Long).toInt() else 0
+                                    val listDone = if(task.result!!.data!!["${listName}Done"] != null) (task.result!!.data!!["${listName}Done"] as Long).toInt() else 0
+                                    reading = getReading(listIndex, listId, listName, psalmChecked)
+                                    resultObject = ReadingLists(listName, listDone, listIndex, reading)
+                                    data.value = resultObject
+                                }
+                                else -> log(logString = "RESULT WAS NULL")
+                            }
                         }
-                    }
-                    .addOnFailureListener {
-                        log("Failed to get data. Error: $it")
-                    }
-        }else{
-            val listId = getListId(listName)
-            val psalmChecked = getBoolPref("psalms")
-            val reading = getReading(getIntPref(listName), listId, listName, false, psalmChecked)
-            val resultObject: ReadingLists = ReadingLists(listName, getIntPref("${listName}Done"), getIntPref(listName), reading)
-            data.value = resultObject
+                        .addOnFailureListener { exception ->
+                            log(logString = "Failed to get data. Error: $exception")
+                        }
+            }
+            else -> {
+                val listId = getListId(listName)
+                val psalmChecked = getBoolPref(name = "psalms")
+                val reading = getReading(getIntPref(listName), listId, listName, psalmChecked)
+                val resultObject = ReadingLists(listName, getIntPref(name = "${listName}Done"), getIntPref(listName), reading)
+                data.value = resultObject
+            }
         }
         return data
     }
-    fun getListId(listName: String) : Int{
+    private fun getListId(listName: String) : Int{
         return when(listName){
             "list1"-> R.array.list_1
             "list2"-> R.array.list_2
@@ -57,33 +66,68 @@ class ReadingListRepository {
             "list8"-> R.array.list_8
             "list9"-> R.array.list_9
             "list10"-> R.array.list_10
+            "mcheyneList1"->R.array.mcheyne_list1
+            "mcheyneList2"->R.array.mcheyne_list2
+            "mcheyneList3"->R.array.mcheyne_list3
+            "mcheyneList4"->R.array.mcheyne_list4
             else-> 0
         }
     }
-    fun getReading(index:Int, listId: Int, listName: String, fromFirebase: Boolean, psalmChecked: Boolean): String {
+    private fun getReading(index:Int, listId: Int, listName: String, psalmChecked: Boolean): String {
         val list = App.applicationContext().resources.getStringArray(listId)
+        val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        if (listName == "list6") {
-            if (psalmChecked) {
-                return if (day != 31) {
-                    "$day, ${day + 30}, ${day + 60}, ${day + 90}, ${day + 120}"
-                } else {
-                    "Day Off"
+        when (listName) {
+            "list6" -> {
+                when (psalmChecked) {
+                    true-> {
+                        return when(day){
+                            in 1..30-> "$day, ${day + 30}, ${day + 60}, ${day + 90}, ${day + 120}"
+                            else-> "Day Off"
+                        }
+                    }
                 }
             }
         }
-        return when(index){
-            list.size -> {
-                if(fromFirebase){
-                    SharedPref.updateFS(listName, 0)
+        when (getStringPref(name="planType", defaultValue="horner")) {
+            "horner" -> {
+                return when (index) {
+                    list.size -> {
+                        setIntPref(name=listName, value=0, updateFS=true)
+                        list[0]
+                    }
+                    else -> {
+                        setIntPref(name=listName, value=index, updateFS=true)
+                        list[index]
+                    }
                 }
-                setIntPref(listName, 0)
-                list[0]
             }
-            else -> {
-                setIntPref(listName, index)
-                list[index]
+            "numerical" -> {
+                var newIndex = when(planSystem){
+                    "pgh"->getIntPref(name="currentDayIndex", defaultValue=0)
+                    else->getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0)
+                }
+                when (newIndex){
+                    in 0 .. list.size ->{
+                        while(newIndex>=list.size){
+                            newIndex -= list.size
+                        }
+                    }
+                }
+                return list[newIndex]
             }
+            "calendar" -> {
+                var newIndex = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1
+                when (newIndex){
+                    in 0 .. list.size -> {
+                        while (newIndex >= list.size) {
+                            newIndex -= list.size
+                        }
+                    }
+                }
+                return list[newIndex]
+            }
+            else -> return list[index]
         }
     }
 }

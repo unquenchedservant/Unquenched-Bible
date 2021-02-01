@@ -2,7 +2,6 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.app.AlertDialog
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,8 +16,8 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class ManualListSet: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
@@ -32,7 +31,7 @@ class ManualListSet: Fragment() {
         val listSelector = root.findViewById<Spinner>(R.id.listSelector)
         val listSpinner1 = root.findViewById<Spinner>(R.id.listSpinner1)
         val listSpinner2 = root.findViewById<NumberPicker>(R.id.listSpinner2)
-        val dark = getBoolPref("darkMode", true)
+        val dark = getBoolPref(name="darkMode", defaultValue=true)
         val button = root.findViewById<Button>(R.id.set_button)
         if(dark){
             listSelector.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)
@@ -49,48 +48,72 @@ class ManualListSet: Fragment() {
             listSpinner2.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
             button.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
         }
-        var listNames = ArrayList<String>()
+        val listNames = ArrayList<String>()
+        val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
         listNames.add("----")
-        listNames.add("The Gospels")
-        listNames.add("The Pentateuch")
-        listNames.add("Epistles I")
-        listNames.add("Epistles II")
-        listNames.add("Poetry")
-        listNames.add("Psalms")
-        listNames.add("Proverbs")
-        listNames.add("History")
-        listNames.add("Prophets")
-        listNames.add("Acts")
-        if(getIntPref("list1Done") == 1){
-            listNames.remove("The Gospels")
+        when(planSystem) {
+            "pgh" -> {
+                listNames.add("The Gospels")
+                listNames.add("The Pentateuch")
+                listNames.add("Epistles I")
+                listNames.add("Epistles II")
+                listNames.add("Poetry")
+                listNames.add("Psalms")
+                listNames.add("Proverbs")
+                listNames.add("History")
+                listNames.add("Prophets")
+                listNames.add("Acts")
+                when (getIntPref(name = "list1Done")) {
+                    1 -> listNames.remove("The Gospels")
+                }
+                when (getIntPref(name = "list2Done")) {
+                    1 -> listNames.remove("The Pentateuch")
+                }
+                when (getIntPref(name = "list3Done")) {
+                    1 -> listNames.remove("Epistles I")
+                }
+                when (getIntPref(name = "list4Done")) {
+                    1 -> listNames.remove("Epistles II")
+                }
+                when (getIntPref(name = "list5Done")) {
+                    1 -> listNames.remove("Poetry")
+                }
+                when (getIntPref(name = "list6Done")) {
+                    1 -> listNames.remove("Psalms")
+                }
+                when (getIntPref(name = "list7Done")) {
+                    1 -> listNames.remove("Proverbs")
+                }
+                when (getIntPref(name = "list8Done")) {
+                    1 -> listNames.remove("History")
+                }
+                when (getIntPref(name = "list9Done")) {
+                    1 -> listNames.remove("Prophets")
+                }
+                when (getIntPref(name = "list10Done")) {
+                    1 -> listNames.remove("Acts")
+                }
+            }
+            "mcheyne" -> {
+                listNames.add("Family I")
+                listNames.add("Family II")
+                listNames.add("Secret I")
+                listNames.add("Secret II")
+                when (getIntPref(name = "mcheyneList1Done")) {
+                    1 -> listNames.remove("Family I")
+                }
+                when (getIntPref(name = "mcheyneList2Done")) {
+                    1 -> listNames.remove("Family II")
+                }
+                when (getIntPref(name = "mcheyneList3Done")) {
+                    1 -> listNames.remove("Secret I")
+                }
+                when (getIntPref(name = "mcheyneList4Done")) {
+                    1 -> listNames.remove("Secret II")
+                }
+            }
         }
-        if(getIntPref("list2Done") == 1){
-            listNames.remove("The Pentateuch")
-        }
-        if(getIntPref("list3Done") == 1){
-            listNames.remove("Epistles I")
-        }
-        if(getIntPref("list4Done") == 1){
-            listNames.remove("Epistles II")
-        }
-        if(getIntPref("list5Done") == 1){
-            listNames.remove("Poetry")
-        }
-        if(getIntPref("list6Done") == 1){
-            listNames.remove("Psalms")
-        }
-        if(getIntPref("list7Done") == 1){
-            listNames.remove("Proverbs")
-        }
-        if(getIntPref("list8Done") == 1){
-            listNames.remove("History")
-        }
-        if(getIntPref("list9Done") == 1){
-            listNames.remove("Prophets")
-        }
-        if(getIntPref("list10Done") == 1){
-            listNames.remove("Acts")
-        }
+
         val adapter = ArrayAdapter(requireContext(), android.R.layout.simple_spinner_item, listNames)
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
         listSelector.adapter = adapter
@@ -99,17 +122,15 @@ class ManualListSet: Fragment() {
         listSelector.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val buttonColor: Int
-                if(dark){
-                    buttonColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                val buttonColor: Int = if(dark){
+                    getColor(App.applicationContext(), R.color.buttonBackgroundDark)
                 }else{
-                    buttonColor = getColor(App.applicationContext(), R.color.buttonBackground)
+                    getColor(App.applicationContext(), R.color.buttonBackground)
                 }
 
                 val selectedItem      = parent?.getItemAtPosition(position).toString()
                 val list              = root.findViewById<Spinner>(R.id.listSpinner1)
                 val verseSelector     = root.findViewById<LinearLayout>(R.id.verseSelector)
-                val button            = root.findViewById<Button>(R.id.set_button)
                 verseSelector.visibility     = View.INVISIBLE
                 when(selectedItem){
                     "----"             -> {
@@ -138,8 +159,78 @@ class ManualListSet: Fragment() {
                             }
                         } }
 
+                    "Family I"         ->{
+                        val cInfo                   = getCurrentInfo(1, "mcheyne") as String
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
+
+                        button.isEnabled            = true
+                        button.isVisible            = true
+                        button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
+
+
+                        ArrayAdapter.createFromResource(
+                                context!!,
+                                R.array.mcheyne_list1,
+                                android.R.layout.simple_spinner_item).also{
+                                    it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                                    list.adapter = it
+                                    list.setSelection(it.getPosition(cInfo)) }
+                    }
+                    "Family II"         ->{
+                        val cInfo                   = getCurrentInfo(2, "mcheyne") as String
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
+
+                        button.isEnabled            = true
+                        button.isVisible            = true
+                        button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
+
+                        ArrayAdapter.createFromResource(
+                                context!!,
+                                R.array.mcheyne_list2,
+                                android.R.layout.simple_spinner_item).also{
+                            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            list.adapter = it
+                            list.setSelection(it.getPosition(cInfo)) }
+                    }
+                    "Secret I"         ->{
+                        val cInfo                   = getCurrentInfo(3, "mcheyne") as String
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
+
+                        button.isEnabled            = true
+                        button.isVisible            = true
+                        button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
+
+                        ArrayAdapter.createFromResource(
+                                context!!,
+                                R.array.mcheyne_list3,
+                                android.R.layout.simple_spinner_item).also{
+                            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            list.adapter = it
+                            list.setSelection(it.getPosition(cInfo)) }
+                    }
+                    "Secret II"         ->{
+                        val cInfo                   = getCurrentInfo(4, "mcheyne") as String
+                        verseSelector.visibility    = View.VISIBLE
+                        listSpinner2.visibility     = View.INVISIBLE
+
+                        button.isEnabled            = true
+                        button.isVisible            = true
+                        button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
+
+                        ArrayAdapter.createFromResource(
+                                context!!,
+                                R.array.mcheyne_list4,
+                                android.R.layout.simple_spinner_item).also{
+                            it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+                            list.adapter = it
+                            list.setSelection(it.getPosition(cInfo)) }
+                    }
+
                     "The Gospels"      -> {
-                        val cInfo                    = getCurrentInfo(1)
+                        val cInfo                    = getCurrentInfo(1) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -174,7 +265,7 @@ class ManualListSet: Fragment() {
                             override fun onNothingSelected(parent: AdapterView<*>?) {} } }
 
                     "The Pentateuch"   -> {
-                        val cInfo                    = getCurrentInfo(2)
+                        val cInfo                    = getCurrentInfo(2) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -211,7 +302,7 @@ class ManualListSet: Fragment() {
 
 
                     "Epistles I"       -> {
-                        val cInfo                    = getCurrentInfo(3)
+                        val cInfo                    = getCurrentInfo(3) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -246,7 +337,7 @@ class ManualListSet: Fragment() {
 
 
                     "Epistles II"      -> {
-                        val cInfo                    = getCurrentInfo(4)
+                        val cInfo                    = getCurrentInfo(4) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -286,7 +377,7 @@ class ManualListSet: Fragment() {
 
 
                     "Poetry"           ->{
-                        val cInfo                    = getCurrentInfo(5)
+                        val cInfo                    = getCurrentInfo(5) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -320,7 +411,7 @@ class ManualListSet: Fragment() {
 
 
                     "Psalms"           -> {
-                        val cInfo                  = getCurrentInfo(6)
+                        val cInfo                  = getCurrentInfo(6) as Array<*>
                         val cBook                  = cInfo[0] as String
                         val cVerse                 = cInfo[1] as Int
                         verseSelector.visibility   = View.VISIBLE
@@ -350,7 +441,7 @@ class ManualListSet: Fragment() {
 
 
                     "Proverbs"         -> {
-                        val cInfo                    = getCurrentInfo(7)
+                        val cInfo                    = getCurrentInfo(7) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -381,7 +472,7 @@ class ManualListSet: Fragment() {
 
 
                     "History"          -> {
-                        val cInfo                    = getCurrentInfo(8)
+                        val cInfo                    = getCurrentInfo(8) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -421,7 +512,7 @@ class ManualListSet: Fragment() {
 
 
                     "Prophets"         -> {
-                        val cInfo                    = getCurrentInfo(9)
+                        val cInfo                    = getCurrentInfo(9) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
@@ -465,7 +556,7 @@ class ManualListSet: Fragment() {
 
 
                     "Acts"             -> {
-                        val cInfo                    = getCurrentInfo(10)
+                        val cInfo                    = getCurrentInfo(10) as Array<*>
                         val cVerse                   = cInfo[1] as Int
                         verseSelector.visibility     = View.VISIBLE
 
@@ -507,30 +598,52 @@ class ManualListSet: Fragment() {
             val selectedVerse     = verseSpinner.value
 
             alert.setTitle("Set $selectedList?")
-            alert.setMessage("Are you sure you want to set $selectedList to $selectedBook $selectedVerse")
+            if(planSystem == "pgh") {
+                alert.setMessage("Are you sure you want to set $selectedList to $selectedBook $selectedVerse?")
+            }else{
+                alert.setMessage("Are you sure you want to set $selectedList to $selectedBook?")
+            }
             alert.setPositiveButton("Yes") { dialogInterface, _ ->
                 when(selectedList) {
-
+                    "Family I"    -> {
+                        val array = resources.getStringArray(R.array.mcheyne_list1)
+                        val num = array.indexOf("$selectedBook")
+                        setIntPref(name="mcheyneList1", value=num, updateFS=true)
+                    }
+                    "Family II"   -> {
+                        val array = resources.getStringArray(R.array.mcheyne_list2)
+                        val num = array.indexOf("$selectedBook")
+                        setIntPref(name="mcheyneList2", value=num, updateFS=true)
+                    }
+                    "Secret I"    -> {
+                        val array = resources.getStringArray(R.array.mcheyne_list3)
+                        val num = array.indexOf("$selectedBook")
+                        setIntPref(name="mcheyneList3", value=num, updateFS=true)
+                    }
+                    "Secret II"   -> {
+                        val array = resources.getStringArray(R.array.mcheyne_list4)
+                        val num = array.indexOf("$selectedBook")
+                        setIntPref(name="mcheyneList4", value=num, updateFS=true)
+                    }
                     "The Gospels" -> {
                         val array = resources.getStringArray(R.array.list_1)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list1", num)
-                        updateFS( "list1", num)
+                        setIntPref(name = "list1", value=num, updateFS=true)
                     }
 
 
                     "The Pentateuch" -> {
                         val array = resources.getStringArray(R.array.list_2)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list2", num)
-                        updateFS("list2", num)}
+                        setIntPref(name = "list2", value = num, updateFS=true)
+                    }
 
 
                     "Epistles I" -> {
                         val array = resources.getStringArray(R.array.list_3)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list3", num)
-                        updateFS("list3", num)}
+                        setIntPref(name = "list3", value = num, updateFS = true)
+                    }
 
 
                     "Epistles II" -> {
@@ -540,54 +653,55 @@ class ManualListSet: Fragment() {
                         } else {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        setIntPref("list4", num)
-                        updateFS("list4", num)}
+                        setIntPref(name = "list4", value = num, updateFS = true)
+                    }
 
 
                     "Poetry" -> {
                         val array = resources.getStringArray(R.array.list_5)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list5", num)
-                        updateFS("list5", num)}
+                        setIntPref(name = "list5", value = num, updateFS = true)
+                    }
 
 
                     "Psalms" -> {
                         val array = resources.getStringArray(R.array.list_6)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list6", num)
-                        updateFS("list6", num)}
+                        setIntPref(name = "list6", value = num, updateFS = true)
+                    }
 
 
                     "Proverbs" -> {
                         val array = resources.getStringArray(R.array.list_7)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list7", num)
-                        updateFS( "list7", num)}
+                        setIntPref(name = "list7", value = num, updateFS = true)
+                    }
 
 
                     "History" -> {
                         val array = resources.getStringArray(R.array.list_8)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list8", num)
-                        updateFS( "list8", num)}
+                        setIntPref(name="list8", value=num, updateFS=true)
+                    }
 
 
                     "Prophets" -> {
                         val array = resources.getStringArray(R.array.list_9)
-                        val num = if(selectedBook == "Obadiah") {
+                        val num = if (selectedBook == "Obadiah") {
                             array.indexOf("$selectedBook")
-                        }else{
+                        } else {
                             array.indexOf("$selectedBook $selectedVerse")
                         }
-                        setIntPref("list9", num)
-                        updateFS("list9", num)}
+                        setIntPref(name="list9", value=num, updateFS=true)
+                    }
 
 
                     "Acts" -> {
                         val array = resources.getStringArray(R.array.list_10)
                         val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref("list10", num)
-                        updateFS( "list10", num)}}
+                        setIntPref(name="list10", value=num, updateFS=true)
+                    }
+                }
 
 
                 dialogInterface.dismiss()
@@ -601,21 +715,32 @@ class ManualListSet: Fragment() {
             alert.create().show() } }
 
 
-    fun getCurrentInfo(listNum:Int): Array<Any> {
-
-        val data : Array<Any> = when(listNum){
-            1  ->  arrayOf(getIntPref("list1"), R.array.list_1)
-            2  ->  arrayOf(getIntPref("list2"), R.array.list_2)
-            3  ->  arrayOf(getIntPref("list3"), R.array.list_3)
-            4  ->  arrayOf(getIntPref("list4"), R.array.list_4)
-            5  ->  arrayOf(getIntPref("list5"), R.array.list_5)
-            6  ->  arrayOf(getIntPref("list6"), R.array.list_6)
-            7  ->  arrayOf(getIntPref("list7"), R.array.list_7)
-            8  ->  arrayOf(getIntPref("list8"), R.array.list_8)
-            9  ->  arrayOf(getIntPref("list9"), R.array.list_9)
-            10 ->  arrayOf(getIntPref("list10"), R.array.list_10)
-            else -> arrayOf(0, 0) }
-
+    fun getCurrentInfo(listNum:Int, type:String="pgh"): Any {
+        val data: Array<Any> = if(type=="pgh") {
+            val returnVal: Array<Any> = when (listNum) {
+                1 -> arrayOf(getIntPref("list1"), R.array.list_1)
+                2 -> arrayOf(getIntPref("list2"), R.array.list_2)
+                3 -> arrayOf(getIntPref("list3"), R.array.list_3)
+                4 -> arrayOf(getIntPref("list4"), R.array.list_4)
+                5 -> arrayOf(getIntPref("list5"), R.array.list_5)
+                6 -> arrayOf(getIntPref("list6"), R.array.list_6)
+                7 -> arrayOf(getIntPref("list7"), R.array.list_7)
+                8 -> arrayOf(getIntPref("list8"), R.array.list_8)
+                9 -> arrayOf(getIntPref("list9"), R.array.list_9)
+                10 -> arrayOf(getIntPref("list10"), R.array.list_10)
+                else -> arrayOf(0, 0)
+            }
+            returnVal
+        }else{
+            val returnVal: Array<Any> = when(listNum){
+                1 -> arrayOf(getIntPref("mcheyneList1"), R.array.mcheyne_list1)
+                2 -> arrayOf(getIntPref("mcheyneList2"), R.array.mcheyne_list2)
+                3 -> arrayOf(getIntPref("mcheyneList3"), R.array.mcheyne_list3)
+                4 -> arrayOf(getIntPref("mcheyneList4"), R.array.mcheyne_list4)
+                else -> arrayOf(0, 0)
+            }
+            returnVal
+        }
         val number = data[0] as Int
         val listId = data[1] as Int
 
@@ -623,9 +748,15 @@ class ManualListSet: Fragment() {
         val fullValue = list[number]
         val afterSplit = fullValue.split(" ")
 
-        return when (afterSplit.size){
-            1 -> arrayOf(fullValue, 1)
-            3 -> arrayOf("${afterSplit[0]} ${afterSplit[1]}", afterSplit[2].toInt())
-            4 -> arrayOf("${afterSplit[0]} ${afterSplit[1]} ${afterSplit[2]}", afterSplit[3].toInt())
-            else -> arrayOf(afterSplit[0], afterSplit[1].toInt()) } }
+        return if(type=="pgh"){
+           val returnVal = when (afterSplit.size){
+                1 -> arrayOf<Any>(fullValue, 1)
+                3 -> arrayOf<Any>("${afterSplit[0]} ${afterSplit[1]}", afterSplit[2].toInt())
+                4 -> arrayOf<Any>("${afterSplit[0]} ${afterSplit[1]} ${afterSplit[2]}", afterSplit[3].toInt())
+                else -> arrayOf<Any>(afterSplit[0], afterSplit[1].toInt()) }
+            returnVal
+        } else{
+            fullValue
+        }
+    }
 }
