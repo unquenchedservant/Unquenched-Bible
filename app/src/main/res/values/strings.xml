@@ -1,11 +1,7 @@
 <resources>
     <string name="app_name">Unquenched Bible</string>
 
-<<<<<<< HEAD
-    <string name="title_new_update">Announcing Update 2.0 - Unquenched Bible</string>
-=======
     <string name="title_new_update">Changelog for Version 2.0</string>
->>>>>>> dev
 
     <string name="title_home">Reading</string>
     <string name="title_stats">Statistics</string>
@@ -32,11 +28,7 @@
     <string name="title_licenses">Licenses</string>
     <string name="title_information">Information</string>
     <string name="title_support">Support</string>
-<<<<<<< HEAD
-    <string name="title_version">App Version 1.6.3</string>
-=======
     <string name="title_version">App Version 2.0</string>
->>>>>>> dev
     <string name="title_contact">Question/Comments</string>
     <string name="title_twitter">Check out the Github Repo</string>
     <string name="title_mailchimp">Sign Up for the Mailing List</string>
