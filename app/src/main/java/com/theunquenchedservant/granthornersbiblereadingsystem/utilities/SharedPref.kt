@@ -17,13 +17,13 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.c
 
 
 object SharedPref {
-
+    val context = App.applicationContext()
     fun setStreak(){
         if(!checkDate(option="both", fullMonth=false)){
             setIntPref(name="currentStreak", value=0)
         }
     }
-    private fun getPref(): SharedPreferences{
+
         val context = App.applicationContext()
         return PreferenceManager.getDefaultSharedPreferences(context)
     }
@@ -35,14 +35,14 @@ object SharedPref {
     }
 
     fun setIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
-        getPref().edit().putInt(name, value).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
         return value
     }
     private fun deletePref(name:String){
-        getPref().edit().remove(name).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().remove(name).apply()
     }
     fun increaseIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
         val newValue = getIntPref(name) + value
@@ -55,9 +55,10 @@ object SharedPref {
     fun getIntPref(name: String, defaultValue: Int = 0): Int {
         return getPref().getInt(name, defaultValue)
     }
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(name, defaultValue)
 
     fun setStringPref(name:String, value: String, updateFS: Boolean = false):String {
-        getPref().edit().putString(name, value).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
@@ -66,6 +67,7 @@ object SharedPref {
     fun getStringPref(name:String, defaultValue: String = "itsdeadjim"): String{
         return getPref().getString(name, defaultValue)!!
     }
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(name, defaultValue)!!
 
     fun setBoolPref(name: String, value: Boolean, updateFS:Boolean=false):Boolean{
         getPref().edit().putBoolean(name, value).apply()
@@ -76,6 +78,7 @@ object SharedPref {
     }
     fun getBoolPref(name: String, defaultValue: Boolean=false): Boolean{
         return getPref().getBoolean(name, defaultValue)
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(name, defaultValue)
     }
 
     private val user = Firebase.auth.currentUser
@@ -253,23 +256,23 @@ object SharedPref {
     fun listNumbersReset() { App.applicationContext().getSharedPreferences("listNumbers", Context.MODE_PRIVATE).edit().clear().apply() }
 
     fun updatePrefNames(){
-        if (getPref().contains("notif_switch")) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).contains("notif_switch")) {
             setBoolPref(name="notifications", value=getBoolPref(name="notif_switch"))
             deletePref(name="notif_switch")
         }
-        if (getPref().contains("vacation_mode")){
+        if (PreferenceManager.getDefaultSharedPreferences(context).contains("vacation_mode")){
             setBoolPref(name="vacationMode", value= getBoolPref(name="vacation_mode"))
             deletePref(name="vacation_mode")
         }
-        if(getPref().contains("allow_partial_switch")) {
+        if(PreferenceManager.getDefaultSharedPreferences(context).contains("allow_partial_switch")) {
             setBoolPref(name = "allowPartial", value = getBoolPref(name = "allow_partial_switch"))
             deletePref(name="allow_partial_switch")
         }
-        if(getPref().contains("daily_time")) {
+        if(PreferenceManager.getDefaultSharedPreferences(context).contains("daily_time")) {
             setIntPref(name = "dailyNotif", value = getIntPref(name = "daily_time"))
             deletePref(name="daily_time")
         }
-        if(getPref().contains("remind_time")) {
+        if(PreferenceManager.getDefaultSharedPreferences(context).contains("remind_time")) {
             setIntPref(name = "remindNotif", value = getIntPref(name = "remind_time"))
             deletePref(name="remind_time")
         }
