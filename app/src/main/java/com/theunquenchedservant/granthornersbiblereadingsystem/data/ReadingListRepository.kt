@@ -89,6 +89,7 @@ class ReadingListRepository {
                 }
             }
         }
+        log("THIS IS THE PLAN TYPE ${getStringPref("planType")}")
         when (getStringPref(name="planType", defaultValue="horner")) {
             "horner" -> {
                 return when (index) {
@@ -107,23 +108,15 @@ class ReadingListRepository {
                     "pgh"->getIntPref(name="currentDayIndex", defaultValue=0)
                     else->getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0)
                 }
-                when (newIndex){
-                    in 0 .. list.size ->{
-                        while(newIndex>=list.size){
-                            newIndex -= list.size
-                        }
-                    }
+                while(newIndex>=list.size){
+                    newIndex -= list.size
                 }
                 return list[newIndex]
             }
             "calendar" -> {
-                var newIndex = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 1
-                when (newIndex){
-                    in 0 .. list.size -> {
-                        while (newIndex >= list.size) {
-                            newIndex -= list.size
-                        }
-                    }
+                var newIndex = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 3
+                while(newIndex >= list.size){
+                    newIndex -= list.size
                 }
                 return list[newIndex]
             }
