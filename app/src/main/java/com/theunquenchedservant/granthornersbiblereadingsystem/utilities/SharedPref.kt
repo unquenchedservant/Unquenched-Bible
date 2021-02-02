@@ -24,16 +24,15 @@ object SharedPref {
         }
     }
 
-        val context = App.applicationContext()
-        return PreferenceManager.getDefaultSharedPreferences(context)
-    }
     fun updateFS(name: String, value: Any) {
         val db = Firebase.firestore
         val user = Firebase.auth.currentUser
         if (user != null)
             db.collection("main").document(user.uid).update(name, value)
     }
-
+    fun doesNotExist(name:String):Boolean{
+        return !PreferenceManager.getDefaultSharedPreferences(context).contains(name)
+    }
     fun setIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
         PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(name, value).apply()
         if(updateFS) {
@@ -53,9 +52,11 @@ object SharedPref {
         return newValue
     }
     fun getIntPref(name: String, defaultValue: Int = 0): Int {
-        return getPref().getInt(name, defaultValue)
-    }
+        if(doesNotExist(name)){
+            setIntPref(name, defaultValue, updateFS=true)
+        }
         return PreferenceManager.getDefaultSharedPreferences(context).getInt(name, defaultValue)
+    }
 
     fun setStringPref(name:String, value: String, updateFS: Boolean = false):String {
         PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name, value).apply()
@@ -65,19 +66,23 @@ object SharedPref {
         return value
     }
     fun getStringPref(name:String, defaultValue: String = "itsdeadjim"): String{
-        return getPref().getString(name, defaultValue)!!
-    }
+        if(doesNotExist(name)){
+            setStringPref(name, defaultValue, updateFS=true)
+        }
         return PreferenceManager.getDefaultSharedPreferences(context).getString(name, defaultValue)!!
+    }
 
     fun setBoolPref(name: String, value: Boolean, updateFS:Boolean=false):Boolean{
-        getPref().edit().putBoolean(name, value).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
         return value
     }
     fun getBoolPref(name: String, defaultValue: Boolean=false): Boolean{
-        return getPref().getBoolean(name, defaultValue)
+        if(doesNotExist(name)){
+            setBoolPref(name, defaultValue, updateFS=true)
+        }
         return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(name, defaultValue)
     }
 
