@@ -55,11 +55,11 @@ object AlarmCreator {
         when(alarmType) {
             "daily" -> {
                 notifPendingIntent = dailyPending
-                timeInMinutes = getIntPref(name="${alarmType}Notif")
+                timeInMinutes = getIntPref(name="dailyNotif")
             }
             "remind" -> {
                 notifPendingIntent = remindPending
-                timeInMinutes = getIntPref(name="${alarmType}Notif")
+                timeInMinutes = getIntPref(name="remindNotif")
             }
             else -> {
                 notifPendingIntent = checkPending
@@ -76,12 +76,14 @@ object AlarmCreator {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
-        val maxDone = when(getStringPref(name="planSystem", defaultValue="pgh")){
-            "pgh"-> 10
-            "mcheyne"->4
-            else->10
+        val maxDone: Int
+        val listsDone: String
+        when(getStringPref(name="planSystem", defaultValue="pgh")){
+            "pgh"->{ maxDone = 10; listsDone = "listsDone"}
+            "mcheyne"-> {maxDone = 4; listsDone = "mcheyneListsDone"}
+            else-> {maxDone = 10; listsDone = "listsDone"}
         }
-        when (calendar.before(Calendar.getInstance()) && ((alarmType=="daily" && getIntPref(name="listsDone") == maxDone) || alarmType != "daily")) {
+        when (calendar.before(Calendar.getInstance()) && ((alarmType=="daily" && getIntPref(name=listsDone) == maxDone) || alarmType != "daily")) {
                 true->calendar.add(Calendar.DATE, 1)
         }
         when(alarmType){
