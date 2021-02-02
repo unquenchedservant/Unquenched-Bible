@@ -379,23 +379,24 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
-        when {
-            Firebase.auth.currentUser == null -> {
-                finish()
-                val i = Intent(App.applicationContext(), MainActivity::class.java)
-                startActivity(i)
-            }
-            navController.currentDestination?.id != R.id.navigation_home -> {
-                navController.popBackStack()
-                supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                binding.bottomNav.isVisible = true
-                supportActionBar?.show()
-            }
-            else -> {
-                finish()
+        if(this::navController.isInitialized) {
+            when {
+                Firebase.auth.currentUser == null -> {
+                    finish()
+                    val i = Intent(App.applicationContext(), MainActivity::class.java)
+                    startActivity(i)
+                }
+                navController.currentDestination?.id != R.id.navigation_home -> {
+                    navController.popBackStack()
+                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
+                    binding.bottomNav.isVisible = true
+                    supportActionBar?.show()
+                }
+                else -> {
+                    finish()
+                }
             }
         }
-
     }
 
 
