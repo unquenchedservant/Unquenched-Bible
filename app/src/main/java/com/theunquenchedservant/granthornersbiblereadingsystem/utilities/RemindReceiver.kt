@@ -37,7 +37,7 @@ class RemindReceiver : BroadcastReceiver() {
                             deliverNotification(context, false)
                         }
                          in 1 until doneMax -> {
-                            mNotificationManager?.cancel(4)
+                            mNotificationManager?.cancel(1)
                             mNotificationManager?.cancel(2)
                             deliverNotification(context, true)
                         }

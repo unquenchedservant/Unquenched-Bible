@@ -43,7 +43,7 @@ class AlarmReceiver : BroadcastReceiver() {
         val today = getDate(option=0, fullMonth=false)
         val tapIntent = Intent(context, MainActivity::class.java)
         val mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-        mNotificationManager.cancel(4)
+        mNotificationManager.cancel(1)
         mNotificationManager.cancel(2)
         tapIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val tapPending = PendingIntent.getActivity(context, 0, tapIntent, 0)
