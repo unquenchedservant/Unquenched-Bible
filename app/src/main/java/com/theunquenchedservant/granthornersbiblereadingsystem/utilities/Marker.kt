@@ -74,44 +74,52 @@ object Marker {
         alert.setMessage(message)
         alert.show()
     }
-    private fun updateStatistics(book: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int){
+    private fun updateStatistics(book: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int) {
         val updateValues = mutableMapOf<String, Any>()
         val bookName = BOOK_NAMES[book]
-        if (getIntPref(name="${book}ChaptersRead") == bookChaps){
-            updateValues["${book}ChaptersRead"] = setIntPref(name="${book}ChaptersRead", value=0)
-            updateValues["${book}AmountRead"] = increaseIntPref(name="${book}AmountRead",value=1)
-            for (i in 1..bookChaps){
-                updateValues["${book}${i}Read"] = setBoolPref(name="${book}${i}Read", value=false)
+        if (getIntPref(name = "${book}ChaptersRead") == bookChaps) {
+            updateValues["${book}ChaptersRead"] = setIntPref(name = "${book}ChaptersRead", value = 0)
+            updateValues["${book}AmountRead"] = increaseIntPref(name = "${book}AmountRead", value = 1)
+            for (i in 1..bookChaps) {
+                updateValues["${book}${i}Read"] = setBoolPref(name = "${book}${i}Read", value = false)
             }
-            if(!getBoolPref(name="${book}DoneTestament")) {
-                updateValues["${book}DoneTestament"] = setBoolPref(name="${book}DoneTestament", value=true)
-                if (getIntPref(name="${testament}ChaptersRead") == testamentChapters) {
-                    updateValues["${testament}ChaptersRead"] = setIntPref(name="${testament}ChaptersRead", value=0)
-                    for(item in BOOK_NAMES){
-                        updateValues["${item}DoneTestament"] = setBoolPref(name="${item}DoneTestament", value=false)
+            if (!getBoolPref(name = "${book}DoneTestament")) {
+                updateValues["${book}DoneTestament"] = setBoolPref(name = "${book}DoneTestament", value = true)
+                if (getIntPref(name = "${testament}ChaptersRead") == testamentChapters) {
+                    updateValues["${testament}ChaptersRead"] = setIntPref(name = "${testament}ChaptersRead", value = 0)
+                    for (item in BOOK_NAMES) {
+                        updateValues["${item}DoneTestament"] = setBoolPref(name = "${item}DoneTestament", value = false)
                     }
-                    updateValues["${testament}AmountRead"] = increaseIntPref(name="${testament}AmountRead",  value=1)
+                    updateValues["${testament}AmountRead"] = increaseIntPref(name = "${testament}AmountRead", value = 1)
                 }
             }
-            if(!getBoolPref(name="${book}DoneWhole")){
-                updateValues["${book}DoneWhole"] = setBoolPref(name="${book}DoneWhole", value=true)
-                if(getIntPref(name="totalChaptersRead") == 1189){
-                    updateValues["totalChaptersRead"] = setIntPref(name="totalChaptersRead", value=0)
-                    for(item in BOOK_NAMES){
-                        updateValues["${item}DoneWhole"] = setBoolPref(name="${item}DoneWhole", value=false)
+            if (!getBoolPref(name = "${book}DoneWhole")) {
+                updateValues["${book}DoneWhole"] = setBoolPref(name = "${book}DoneWhole", value = true)
+                if (getIntPref(name = "totalChaptersRead") == 1189) {
+                    updateValues["totalChaptersRead"] = setIntPref(name = "totalChaptersRead", value = 0)
+                    for (item in BOOK_NAMES) {
+                        updateValues["${item}DoneWhole"] = setBoolPref(name = "${item}DoneWhole", value = false)
                     }
-                    updateValues["bibleAmountRead"] = increaseIntPref(name="bibleAmountRead", value=1)
+                    updateValues["bibleAmountRead"] = increaseIntPref(name = "bibleAmountRead", value = 1)
                 }
             }
         }
-        updateValues["${book}ChaptersRead"] = increaseIntPref(name="${book}ChaptersRead",value=1)
-        updateValues["${book}${chapter}Read"] = setBoolPref(name="${book}${chapter}Read", value=true)
+        if (!getBoolPref("${book}${chapter}Read")) {
+            updateValues["${book}ChaptersRead"] = increaseIntPref(name = "${book}ChaptersRead", value = 1)
+            updateValues["${book}${chapter}Read"] = setBoolPref(name = "${book}${chapter}Read", value = true)
+        }
         updateValues["${book}${chapter}AmountRead"] = increaseIntPref(name="${book}${chapter}AmountRead", value=1)
         when(getBoolPref(name="${book}DoneTestament")){
-            false->updateValues["${testament}ChaptersRead"] = increaseIntPref(name="${testament}ChaptersRead", value=1)
+            false->{
+                updateValues["${testament}ChaptersRead"] = increaseIntPref(name="${testament}ChaptersRead", value=1)
+                updateValues["${book}DoneTestament"] = setBoolPref("${book}DoneTestament", true)
+            }
         }
         when(getBoolPref("${book}DoneWhole")){
-            false->updateValues["totalChaptersRead"] = increaseIntPref(name="totalChaptersRead", value=1)
+            false->{
+                updateValues["totalChaptersRead"] = increaseIntPref(name="totalChaptersRead", value=1)
+                updateValues["${book}DoneWhole"] = setBoolPref("${book}DoneWhole", true)
+            }
         }
         when(getIntPref("${book}ChaptersRead")){
             bookChaps->bibleAlertBuilder("book", bookName!!)
