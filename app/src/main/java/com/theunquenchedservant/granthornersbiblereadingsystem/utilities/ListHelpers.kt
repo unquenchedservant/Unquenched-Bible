@@ -34,6 +34,19 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
+        if(getIntPref(name="versionNumber") == 70){
+            val builder = AlertDialog.Builder(context)
+            builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = 70, updateFS = true)
+                dialog.dismiss()
+            }
+            builder.setTitle(R.string.title_new_update)
+            builder.setMessage(
+                    "[FIXED] An issue with Calendar and Numerical methods.\n\n" +
+                            "[FIXED] An issue with Bible statistics not being added correctly.\n\n" +
+                            "[FIXED] An issue where notifications weren't getting properly cleared."
+            )
+        }
         if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
