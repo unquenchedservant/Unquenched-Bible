@@ -3,7 +3,6 @@ package com.theunquenchedservant.granthornersbiblereadingsystem
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.content.res.Configuration
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -11,7 +10,6 @@ import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
 import android.widget.Toast
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.content.ContextCompat
@@ -49,7 +47,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     private var _rcSignIn = 96
     private var user: FirebaseUser? = null
     private var globalmenu : Menu? = null
-    private lateinit var toggle: ActionBarDrawerToggle
     lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
@@ -85,6 +82,10 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             startActivity(Intent(this, OnboardingPagerActivity::class.java))
         }else {
+            binding = ActivityMainBinding.inflate(layoutInflater)
+            setContentView(binding.root)
+            navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+            navController = navHostFragment.navController
             Firebase.auth.currentUser
             if (Firebase.auth.currentUser != null) {
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
@@ -116,19 +117,15 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 )
             }
             val colorStateList = ColorStateList(stateList, colorList)
-            binding = ActivityMainBinding.inflate(layoutInflater)
             user = Firebase.auth.currentUser
-            setContentView(binding.root)
             val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
             toolbar.setBackgroundColor(toolbarColor)
             setSupportActionBar(findViewById(R.id.my_toolbar))
             supportActionBar?.title = getDate(option = 0, fullMonth = true)
-                navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-                navController = navHostFragment.navController
-                binding.bottomNav.setupWithNavController(navController)
-                binding.bottomNav.setBackgroundColor(toolbarColor)
-                binding.bottomNav.itemIconTintList = colorStateList
-                binding.bottomNav.itemTextColor = colorStateList
+            binding.bottomNav.setupWithNavController(navController)
+            binding.bottomNav.setBackgroundColor(toolbarColor)
+            binding.bottomNav.itemIconTintList = colorStateList
+            binding.bottomNav.itemTextColor = colorStateList
 
                 when (getStringPref(name = "planSystem", defaultValue = "pgh")) {
                     "mcheyne" -> navController.navigate(R.id.navigation_home_mcheyne)
@@ -379,18 +376,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         menu.findItem(R.id.navigation_stats)?.isEnabled = current != "stats"
         menu.findItem(R.id.navigation_settings)?.isEnabled = current != "settings"
     }
-
-    override fun onPostCreate(savedInstanceState: Bundle?) {
-        super.onPostCreate(savedInstanceState)
-        try {
-            toggle.syncState()
-        }catch(e: UninitializedPropertyAccessException){
-
-        }
-    }
-    override fun onConfigurationChanged(newConfig: Configuration) {
-        super.onConfigurationChanged(newConfig)
-        toggle.onConfigurationChanged(newConfig) }
 
 
     override fun onBackPressed() {
