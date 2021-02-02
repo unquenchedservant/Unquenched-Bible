@@ -137,13 +137,13 @@ object SharedPref {
         results["mcheyneSystem"] = getBoolPref(name="mcheyneSystem")
         results["hasCompletedOnboarding"] = getBoolPref(name="hasCompletedOnboarding")
         for(book in ALL_BOOKS) {
-            results["${book}AmountRead"] = getIntPref(name = "${book}AmountRead")
-            results["${book}ChaptersRead"] = getIntPref(name = "${book}ChaptersRead")
-            results["${book}DoneTestament"] = getBoolPref(name = "${book}DoneTestament")
-            results["${book}DoneWhole"] = getBoolPref(name = "${book}DoneWhole")
+            if(!doesNotExist("${book}AmountRead")) results["${book}AmountRead"] = getIntPref(name="${book}AmountRead")
+            if(!doesNotExist("${book}ChaptersRead")) results["${book}ChaptersRead"] = getIntPref(name="${book}ChaptersRead")
+            if(!doesNotExist("${book}DoneTestament")) results["${book}DoneTestament"] = getBoolPref(name="${book}DoneTestament")
+            if(!doesNotExist("${book}DoneWhole")) results["${book}DoneWhole"] = getBoolPref(name="${book}DoneWhole")
             for (chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))) {
-                results["${book}${chapter}Read"] = getBoolPref(name = "${book}${chapter}Read")
-                results["${book}${chapter}AmountRead"] = getIntPref(name = "${book}${chapter}AmountRead")
+                if(!doesNotExist("${book}${chapter}Read")) results["${book}${chapter}Read"] = getBoolPref(name = "${book}${chapter}Read")
+                if(!doesNotExist("${book}${chapter}AmountRead")) results["${book}${chapter}AmountRead"] = getIntPref(name = "${book}${chapter}AmountRead")
             }
         }
         db.collection("main").document(user2!!.uid).set(results)
