@@ -170,6 +170,7 @@ object Marker {
                 if (!getBoolPref(name="psalm${day+120}Read")) updateStatistics(codedBook, bookChapters, testament="old", testamentChapters=929, chapter=day + 120)
             }
         }else{
+            log("LIST LENGTH ${list.size} LIST INDEX ${listIndex}")
             val reading = list[listIndex]
             val readingArray = reading.split(" ")
             val bookArray = readingArray.subList(0, reading.split(" ").lastIndex)
@@ -217,7 +218,6 @@ object Marker {
                 updateValues["${listStart}${i}DoneDaily"] = setIntPref(name = "${listStart}${i}DoneDaily", value = 1)
             }
         }
-
         updateValues[listsDone] = setIntPref(listsDone, doneMax)
         if (getIntPref("dailyStreak") == 0 || getBoolPref("isGrace") && getIntPref("graceTime") == 1) {
             if(getBoolPref("isGrace") && getIntPref("graceTime") == 0){

@@ -40,7 +40,7 @@ class ScriptureViewer : Fragment() {
     private var iteration = 0
     private var _binding: ScriptureViewerBinding? = null
     private val binding get() = _binding!!
-    private var versionId:String = ""
+    private var versionId:String? = ""
     private lateinit var act: MainActivity
 
     private external fun getESVKey() : String
@@ -104,7 +104,7 @@ class ScriptureViewer : Fragment() {
         }
         var bibleVersion = getStringPref("bibleVersion", "ESV")
         bibleVersion = if(bibleVersion == "---") setStringPref("bibleVersion", "ESV", updateFS=true) else bibleVersion
-        versionId = BIBLE_IDS[bibleVersion]!!
+        versionId = BIBLE_IDS[bibleVersion]
         act.findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
         val buttonColor: Int
         val textColor: Int
@@ -133,7 +133,6 @@ class ScriptureViewer : Fragment() {
                 getReferenceMCheyne(chapter, iterations[1], maxIteration = iterations[0] + 1, type)
             }
         }
-        log("THIS IS THE RETURN URL $returnURL")
         getScriptureView(returnURL, type)
     }
 
@@ -141,7 +140,6 @@ class ScriptureViewer : Fragment() {
         val title : String
         val url: String
         val chapters = getBook(chapter)
-        log("this is the iteration $iteration")
         val book = chapters[chapters.lastIndex]
         chapters.removeLast()
         when(iteration){
@@ -287,7 +285,7 @@ class ScriptureViewer : Fragment() {
         }
         return chapters
     }
-    private fun getBibleApiURL(chapter:String, versionId:String, book:String):String{
+    private fun getBibleApiURL(chapter:String, versionId:String?, book:String):String{
         return when {
             (":" in chapter) -> {
                 val chapterSection = chapter.split(":")[0]
