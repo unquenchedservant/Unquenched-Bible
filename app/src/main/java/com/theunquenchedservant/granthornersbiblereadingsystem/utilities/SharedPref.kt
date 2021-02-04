@@ -122,7 +122,7 @@ object SharedPref {
         results["isGrace"] = getBoolPref(name="isGrace")
         results["currentDayIndex"] = getIntPref(name="currentDayIndex")
         results["mcheyneCurrentDayIndex"] = getIntPref(name="mcheyneCurrentDayIndex")
-        results["horner"] = getBoolPref(name="grantHorner", defaultValue=true)
+        results["horner"] = getBoolPref(name="horner", defaultValue=true)
         results["numericalDay"] = getBoolPref(name="numericalDay", defaultValue=false)
         results["calendarDay"] = getBoolPref(name="calendarDay", defaultValue=false)
         results["vacationMode"] = getBoolPref(name="vacationMode")
