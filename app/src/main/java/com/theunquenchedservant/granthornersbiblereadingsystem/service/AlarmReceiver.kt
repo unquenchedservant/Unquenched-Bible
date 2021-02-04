@@ -22,7 +22,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private val _primaryChannelId = "primary_notification_channel"
     private var mNotificationManager: NotificationManager? = null
     private fun isOffDay():Boolean{
-        return !(getBoolPref("vacationMode", false) || (getBoolPref("weekendMode") && isWeekend())) || !getBoolPref("notifications")
+        return (getBoolPref("vacationMode", false) || (getBoolPref("weekendMode") && isWeekend())) || !getBoolPref("notifications")
     }
     private fun isListsDone():Boolean{
         val planSystem = getStringPref(name="planSystem", defaultValue ="pgh")
