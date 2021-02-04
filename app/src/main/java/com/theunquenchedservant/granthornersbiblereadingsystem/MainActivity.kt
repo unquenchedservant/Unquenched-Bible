@@ -51,6 +51,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
     var darkMode: Boolean = false
+    val context = this
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -164,7 +165,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     }
                 }
                 R.id.navigation_plan_settings ->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = false, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
                 }
                 R.id.navigation_bible_stats_main ->{
                     setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
