@@ -403,6 +403,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()
         if(requestCode == _rcSignIn){
             val response = IdpResponse.fromResultIntent(data)
             if(resultCode == Activity.RESULT_OK){
@@ -413,16 +414,23 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         .addOnSuccessListener { doc ->
                             if (doc["list1"] != null) {
                                 firestoreToPreference(doc)
+                                finish()
+                                val i = Intent(this@MainActivity, MainActivity::class.java)
+                                startActivity(i)
                             } else {
                                 preferenceToFirestore()
                                 val i = Intent(applicationContext, MainActivity::class.java)
                                 finish()
+                                val i = Intent(this@MainActivity, MainActivity::class.java)
                                 startActivity(i)
                             }
                         }
             }else{
                 if(response == null){
+                    preferenceToFirestore()
                     finish()
+                    val i = Intent(this@MainActivity, MainActivity::class.java)
+                    startActivity(i)
                 }
             }
         }
