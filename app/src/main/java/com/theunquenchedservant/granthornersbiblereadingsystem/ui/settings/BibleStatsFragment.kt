@@ -1,12 +1,18 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import kotlin.math.roundToInt
 
@@ -19,24 +25,34 @@ class BibleStatsFragment : PreferenceFragmentCompat() {
         val mainActivity = activity as MainActivity
         oldTestament!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
         newTestament!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-        val oldPercent = if(getIntPref(name="oldChaptersRead") != 0) {
-            val oldPercent1: Double = (getIntPref(name="oldChaptersRead").toDouble() / 929)
-            (oldPercent1 * 100).roundToInt()
-        }else{
-            0
-        }
-        val newPercent = if(getIntPref(name="newChaptersRead") != 0){
-            val newPercent1 = getIntPref(name="newChaptersRead").toDouble() / 260
-            (newPercent1 * 100).roundToInt()
-        }else{
-            0
-        }
-        val newAmountRead = getIntPref(name="newAmountRead")
-        val oldAmountRead = getIntPref(name="oldAmountRead")
-        val bibleReadInt = getIntPref(name="bibleAmountRead")
-        oldTestament.summary = "$oldPercent % | Times Read: $oldAmountRead"
-        newTestament.summary = "$newPercent % | Times Read: $newAmountRead"
-        bibleRead!!.summary = "$bibleReadInt"
+        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                .addOnSuccessListener {
+                    val currentData = it.data
+                    val oldPercent = if(extractIntPref(currentData, "oldChaptersRead") != 0){
+                        val oldPercent1 = extractIntPref(currentData,"oldChaptersRead").toDouble()/929
+                        (oldPercent1 * 100).roundToInt()
+                    }else{
+                        0
+                    }
+                    val newPercent = if(extractIntPref(currentData, "newChaptersRead") != 0){
+                        val newPercent1 = extractIntPref(currentData, "newChaptersRead").toDouble() / 260
+                        (newPercent1 * 100).roundToInt()
+                    }else{
+                        0
+                    }
+                    val newAmountRead = extractIntPref(currentData, "newAmountRead")
+                    val oldAmountRead = extractIntPref(currentData, "oldAmountRead")
+                    val bibleReadInt = extractIntPref(currentData, "bibleAmountRead")
+                    oldTestament.summary = "$oldPercent % | Times Read: $oldAmountRead"
+                    newTestament.summary = "$newPercent % | Times Read: $newAmountRead"
+                    bibleRead!!.summary = "$bibleReadInt"
+                }
+                .addOnFailureListener { error->
+                    MainActivity.log("Error getting dataa $error")
+                    oldTestament.summary = "Error loading data"
+                    newTestament.summary = "Error loading data"
+                    bibleRead!!.summary = "Error loading data"
+                }
         oldTestament.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val bundle = bundleOf("testament" to "old")
             mainActivity.navController.navigate(R.id.navigation_bible_testament_stats, bundle)

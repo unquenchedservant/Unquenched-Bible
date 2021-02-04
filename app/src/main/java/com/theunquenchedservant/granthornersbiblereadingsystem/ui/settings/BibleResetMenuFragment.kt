@@ -2,14 +2,19 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.app.AlertDialog
 import android.os.Bundle
+import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.preference.Preference
 import androidx.preference.PreferenceCategory
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset.resetBible
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset.resetTestament
@@ -52,8 +57,16 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         fullHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetBible(hardReset=true)
-                dialog.dismiss()
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                        .addOnSuccessListener {
+                            val currentData = it.data
+                            resetBible(currentData,hardReset=true)
+                            dialog.dismiss()
+                        }
+                        .addOnFailureListener { error->
+                            log("Error getting dataa $error")
+                            Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
+                        }
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
                 dialog.dismiss()
@@ -66,8 +79,16 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         fullSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetBible(hardReset=false)
-                dialog.dismiss()
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                        .addOnSuccessListener {
+                            val currentData = it.data
+                            resetBible(currentData,hardReset=false)
+                            dialog.dismiss()
+                        }
+                        .addOnFailureListener { error->
+                            log("Error getting dataa $error")
+                            Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
+                        }
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
                 dialog.dismiss()
@@ -80,8 +101,16 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         oldHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament(testament="old", hardReset=true, internal=false)
-                dialog.dismiss()
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                        .addOnSuccessListener {
+                            val currentData = it.data
+                            resetTestament(currentData, testament="old",hardReset=true, internal=false)
+                            dialog.dismiss()
+                        }
+                        .addOnFailureListener { error->
+                            log("Error getting dataa $error")
+                            Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
+                        }
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
                 dialog.dismiss()
@@ -94,8 +123,16 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         oldSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament(testament="old", hardReset=false, internal=false)
-                dialog.dismiss()
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                        .addOnSuccessListener {
+                            val currentData = it.data
+                            resetTestament(currentData, testament="old", hardReset=false, internal=false)
+                            dialog.dismiss()
+                        }
+                        .addOnFailureListener { error->
+                            log("Error getting dataa $error")
+                            Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
+                        }
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
                 dialog.dismiss()
@@ -108,8 +145,16 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         newHardReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament(testament="new", hardReset=true, internal=false)
-                dialog.dismiss()
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                        .addOnSuccessListener {
+                            val currentData = it.data
+                            resetTestament(currentData, testament="new", hardReset=true, internal=false)
+                            dialog.dismiss()
+                        }
+                        .addOnFailureListener { error->
+                            log("Error getting dataa $error")
+                            Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
+                        }
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
                 dialog.dismiss()
@@ -122,8 +167,16 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
         newSoftReset.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val alertDialog = AlertDialog.Builder(context)
             alertDialog.setPositiveButton("Yes"){dialog, _->
-                resetTestament(testament="new", hardReset=false, internal=false)
-                dialog.dismiss()
+                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                        .addOnSuccessListener {
+                            val currentData = it.data
+                            resetTestament(currentData, testament="new", hardReset=false, internal=false)
+                            dialog.dismiss()
+                        }
+                        .addOnFailureListener { error->
+                            log("Error getting dataa $error")
+                            Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
+                        }
             }
             alertDialog.setNeutralButton("Nevermind"){dialog, _->
                 dialog.dismiss()

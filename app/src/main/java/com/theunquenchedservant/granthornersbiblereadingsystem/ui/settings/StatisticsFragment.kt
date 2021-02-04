@@ -5,8 +5,12 @@ import android.os.Bundle
 import androidx.core.content.res.ResourcesCompat
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import kotlin.math.roundToInt
@@ -19,15 +23,22 @@ class StatisticsFragment : PreferenceFragmentCompat() {
         val bibleStats: Preference? = findPreference("bibleStatMain")
         curStreak?.summary = String.format("%d", getIntPref(name="currentStreak"))
         maxStreak?.summary = String.format("%d", getIntPref(name="maxStreak"))
-        val biblePercentRead = if(getIntPref(name="totalChaptersRead") != 0){
-            val biblePercentRead_1 = getIntPref(name="totalChaptersRead").toDouble() / 1189
-            (biblePercentRead_1 * 100).roundToInt()
-        }else{
-            0
-        }
-
-        val bibleAmountRead = getIntPref(name="bibleAmountRead")
-        bibleStats?.summary = "$biblePercentRead % | Times Read: $bibleAmountRead"
+        bibleStats?.summary = "Loading..."
+        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                .addOnSuccessListener {
+                    val currentData = it.data
+                    val biblePercentRead = if(extractIntPref(currentData, "totalChaptersRead") != 0){
+                        val biblePercentRead1 = extractIntPref(currentData, "totalChaptersRead").toDouble() / 1189
+                        (biblePercentRead1 * 100).roundToInt()
+                    }else{
+                        0
+                    }
+                    val bibleAmountRead = extractIntPref(currentData,"bibleAmountRead")
+                    bibleStats?.summary = "$biblePercentRead % | Times Read: $bibleAmountRead"
+                }
+                .addOnFailureListener {
+                    bibleStats?.summary = "Error Loading Data"
+                }
         val mainActivity = activity as MainActivity
         val statReset : Preference? = findPreference("resetStatistics")
         val bibleResetMenu: Preference? = findPreference("resetBibleMenu")
