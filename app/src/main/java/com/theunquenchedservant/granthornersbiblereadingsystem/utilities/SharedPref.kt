@@ -19,11 +19,19 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.c
 object SharedPref {
     val context = App.applicationContext()
     fun setStreak(){
-        if(!checkDate(option="both", fullMonth=false)){
+        if(!checkDate(getStringPref("dateChecked"), option="both", fullMonth=false)){
             setIntPref(name="currentStreak", value=0)
         }
     }
-
+    fun extractIntPref(currentData: MutableMap<String, Any>?, keyName:String, defaultValue:Int=0):Int{
+        return if(currentData?.get(keyName) != null) (currentData[keyName] as Long).toInt() else defaultValue
+    }
+    fun extractStringPref(currentData: MutableMap<String, Any>?, keyName:String, defaultValue:String="itsdeadjim"):String{
+        return if(currentData?.get(keyName) != null) currentData[keyName] as String else defaultValue
+    }
+    fun extractBoolPref(currentData: MutableMap<String, Any>?, keyName:String, defaultValue: Boolean=false):Boolean{
+        return if(currentData?.get(keyName) != null) currentData[keyName] as Boolean else defaultValue
+    }
     fun updateFS(name: String, value: Any) {
         val db = Firebase.firestore
         val user = Firebase.auth.currentUser
