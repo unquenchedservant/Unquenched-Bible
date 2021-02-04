@@ -1,6 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
 import android.app.Activity
+import android.app.LauncherActivity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -29,12 +30,17 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
@@ -317,58 +323,66 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }
         return true
     }
-
-    private fun checkReadingDate(){
-        if(!checkDate("current", false)){
-            val data:MutableMap<String, Any> = mutableMapOf()
-            val allowPartial = getBoolPref(name="allowPartial")
-            val planType = getStringPref("planType", "horner")
-            var pghDone = 0
-            var mcheyneDone = 0
-            for(i in 1..10){
-                if(getIntPref("list${i}Done") == 1){
-                    pghDone += 1
-                    if(planType=="horner") data["list$i"] = increaseIntPref("list$i", 1)
-                    data["list${i}Done"] = setIntPref("list${i}Done", 0)
-                    data["list${i}DoneDaily"] = setIntPref("list${i}DoneDaily", 0)
+    private fun checkReadingDate() {
+        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                .addOnSuccessListener {
+                    val currentData = it.data
+                    val dateChecked = extractStringPref(currentData, "dateChecked")
+                    if (!checkDate(dateChecked, "current", false)) {
+                        val data: MutableMap<String, Any> = mutableMapOf()
+                        val allowPartial = extractBoolPref(currentData, "allowPartial")
+                        val planType = extractStringPref(currentData, "planType", "horner")
+                        var pghDone = 0
+                        var mcheyneDone = 0
+                        for (i in 1..10) {
+                            if (extractIntPref(currentData, "list${i}Done") == 1) {
+                                pghDone += 1
+                                if (planType == "horner") data["list$i"] = extractIntPref(currentData, "list$i") + 1
+                                data["list${i}Done"] = 0
+                                data["list${i}DoneDaily"] = 0
+                            }
+                        }
+                        for (i in 1..4) {
+                            if (extractIntPref(currentData, "mcheyneList${i}Done") == 1) {
+                                mcheyneDone += 1
+                                if (planType == "horner") data["mcheyneList${i}"] = extractIntPref(currentData, "mcheyneList$i") + 1
+                                data["mcheyneList${i}Done"] = 0
+                                data["mcheyneList${i}DoneDaily"] = 0
+                            }
+                        }
+                        if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
+                            data["currentDayIndex"] = extractIntPref(currentData, "currentDayIndex") + 1
+                        }
+                        if (planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)) {
+                            data["mcheyneCurrentDayIndex"] = extractIntPref(currentData, "mcheyneCurrentDayIndex") + 1
+                        }
+                        if ((pghDone == 10 || (allowPartial && pghDone > 0)) || (mcheyneDone == 4 || (allowPartial && mcheyneDone > 0))) {
+                            data["currentStreak"] = extractIntPref(currentData, "currentStreak") + 1
+                            if (extractIntPref(currentData, "currentStreak") > extractIntPref(currentData, "maxStreak")) {
+                                data["maxStreak"] = extractIntPref(currentData, "currentStreak")
+                            }
+                        }
+                        if (pghDone == 0 && mcheyneDone == 0 && !extractBoolPref(currentData, "vacationMode")) {
+                            if (checkDate(dateChecked, "yesterday", false)) {
+                                data["isGrace"] = true
+                                data["graceTime"] = 0
+                                data["holdStreak"] = extractIntPref(currentData, "currentStreak")
+                            } else {
+                                data["graceTime"] = 0
+                                data["isGrace"] = false
+                                data["holdStreak"] = 0
+                            }
+                            data["currentStreak"] = 0
+                        }
+                        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
+                                .addOnSuccessListener {
+                                    log("Updated Successfully")
+                                }
+                                .addOnFailureListener {
+                                    Toast.makeText(context, "Error updating lists", Toast.LENGTH_LONG).show()
+                                }
+                    }
                 }
-            }
-            for(i in 1..4){
-                if(getIntPref("mcheyneList${i}Done") == 1){
-                    mcheyneDone += 1
-                    if(planType=="horner") data["mcheyneList${i}"] = increaseIntPref("list$i", 1)
-                    data["mcheyneList${i}Done"] = setIntPref("mcheyneList${i}Done", 0)
-                    data["mcheyneList${i}DoneDaily"] = setIntPref("mcheyneList${i}DoneDaily", 0)
-                }
-            }
-            if(planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)){
-                data["currentDayIndex"] = increaseIntPref("currentDayIndex", 1)
-            }
-            if(planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)){
-                data["mcheyneCurrentDayIndex"] = increaseIntPref("mcheyneCurrentDayIndex", 1)
-            }
-            if((pghDone == 10 || (allowPartial && pghDone > 0)) || (mcheyneDone == 4 || (allowPartial && mcheyneDone > 0))){
-                data["currentStreak"] = increaseIntPref("currentStreak", 1)
-                if(getIntPref("currentStreak") > getIntPref("maxStreak")){
-                    data["maxStreak"] = setIntPref("maxStreak", getIntPref("currentStreak"))
-                }
-            }
-            if(pghDone == 0 && mcheyneDone == 0 && !getBoolPref("vacationMode")){
-                if(checkDate("yesterday", false)){
-                    data["isGrace"] = setBoolPref("isGrace", true)
-                    data["graceTime"] = setIntPref("graceTime", 0)
-                    data["holdStreak"] = getIntPref("currentStreak")
-                }else{
-                    data["graceTime"] = setIntPref("graceTime", 0)
-                    data["isGrace"] = setBoolPref("isGrace", false)
-                    data["holdStreak"] = setIntPref("holdStreak",0)
-                }
-                data["currentStreak"] = setIntPref("currentStreak", 0)
-            }
-            if(Firebase.auth.currentUser != null){
-                Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
-            }
-        }
     }
 
     private fun switchEnabled(current: String){
@@ -419,7 +433,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                                 startActivity(i)
                             } else {
                                 preferenceToFirestore()
-                                val i = Intent(applicationContext, MainActivity::class.java)
                                 finish()
                                 val i = Intent(this@MainActivity, MainActivity::class.java)
                                 startActivity(i)
