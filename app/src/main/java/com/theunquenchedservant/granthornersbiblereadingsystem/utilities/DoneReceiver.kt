@@ -20,9 +20,9 @@ class DoneReceiver : BroadcastReceiver() {
         when(getIntPref(name=listsDone)) {
             in 0 until doneMax -> {
                 if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh") {
-                    markAll(planType="pgh")
+                    markAll(planType="pgh", context)
                 }else{
-                    markAll(planType="mcheyne")
+                    markAll(planType="mcheyne", context)
                 }
                 Toast.makeText(context, "Lists Marked!", Toast.LENGTH_LONG)
                         .show()

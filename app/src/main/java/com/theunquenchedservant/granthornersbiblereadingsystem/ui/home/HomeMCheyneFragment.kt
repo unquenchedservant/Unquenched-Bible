@@ -171,7 +171,7 @@ class HomeMCheyneFragment : Fragment() {
     private fun createButtonListener() {
         binding.materialButton.setOnClickListener {
             hideOthers(cardList = null, binding = null, binding, isMcheyne = true)
-            markAll(planType = "mcheyne")
+            markAll(planType = "mcheyne", context)
             val mNotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             mNotificationManager.cancel(1)
             mNotificationManager.cancel(2)
@@ -181,7 +181,7 @@ class HomeMCheyneFragment : Fragment() {
             binding.materialButton.setOnLongClickListener {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    resetDaily()
+                    resetDaily(requireContext())
                     (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
                 }
                 builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
@@ -209,7 +209,7 @@ class HomeMCheyneFragment : Fragment() {
                     hideOthers(cardView.root, binding = null, binding, isMcheyne = true)
                     cardView.listDone.setOnClickListener {
                         changeVisibility(cardView, isCardView = false)
-                        markSingle(listDone)
+                        markSingle(listDone, "mcheyne", context=context)
                         cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
                         (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
                     }
