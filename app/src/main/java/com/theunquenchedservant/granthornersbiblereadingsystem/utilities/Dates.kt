@@ -29,8 +29,7 @@ object Dates {
         }
     }
 
-    fun checkDate(option: String, fullMonth: Boolean): Boolean{
-        val date = getStringPref("dateChecked")
+    fun checkDate(date:String, option: String, fullMonth: Boolean): Boolean{
         return when(option){
             "current"-> date == getDate(0, fullMonth)
             "yesterday"-> date == getDate(1, fullMonth)
