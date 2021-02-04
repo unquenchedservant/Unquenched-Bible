@@ -19,11 +19,16 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isLeapDay
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -34,27 +39,27 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if(getIntPref(name="versionNumber") == 70){
+        if(getIntPref(name="versionNumber") <= 72){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 70, updateFS = true)
+                setIntPref(name = "versionNumber", value = 73, updateFS = true)
                 dialog.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "[FIXED] An issue with Calendar and Numerical methods.\n\n" +
-                            "[FIXED] An issue with Bible statistics not being added correctly.\n\n" +
-                            "[FIXED] An issue where notifications weren't getting properly cleared."
+                    "[PERFORMANCE IMPROVEMENT] Better segmented some items so that performance should be better.\n\n" +
+                            "[FIXED] Notifications getting sent even if notification setting is off, vacation mode is on, or weekend mode is on and it's the weekend.\n\n" +
+                            "[FIXED] Unable to go back from Plan Settings menu."
             )
         }
         if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 70, updateFS = true)
+                setIntPref(name = "versionNumber", value = 73, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 70, updateFS = true)
+                setIntPref(name = "versionNumber", value = 73, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
                 try {
                     startActivity(context, i, null)
