@@ -41,7 +41,7 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if(getIntPref(name="versionNumber") in 70..73){
+        if(getIntPref(name="versionNumber") in 70..74){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
                 setIntPref(name = "versionNumber", value = 74, updateFS = true)
@@ -49,9 +49,8 @@ object ListHelpers {
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "[PERFORMANCE IMPROVEMENT] Better segmented some items so that performance should be better.\n\n" +
-                            "[FIXED] Notifications getting sent even if notification setting is off, vacation mode is on, or weekend mode is on and it's the weekend.\n\n" +
-                            "[FIXED] Unable to go back from Plan Settings menu."
+                    "[FIXED] Issue where when pressing individual list \"Done\" button the screen wouldn't change\n\n"+
+                            "[FIXED] Issue where the app wasn't advancing the lists correctly.\n\n"
             )
         }
         if (getIntPref(name = "versionNumber") < 70) {
