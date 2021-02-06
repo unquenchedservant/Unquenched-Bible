@@ -31,7 +31,7 @@ class ReadingListRepository {
                                     val listId = getListId(listName)
                                     val reading: String
                                     val resultObject: ReadingLists
-                                    val listIndex = if(task.result!!.data!![listName] != null) (task.result!!.data!![listName] as Long).toInt() else 0
+                                    val listIndex = if(task.result!!.data!![listName] != null && task.result!!.data!![listName] is Long) (task.result!!.data!![listName] as Long).toInt() else 0
                                     val listDone = if(task.result!!.data!!["${listName}Done"] != null) (task.result!!.data!!["${listName}Done"] as Long).toInt() else 0
                                     reading = getReading(listIndex, listId, listName, psalmChecked)
                                     resultObject = ReadingLists(listName, listDone, listIndex, reading)
