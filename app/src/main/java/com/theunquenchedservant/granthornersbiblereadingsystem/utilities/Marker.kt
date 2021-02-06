@@ -4,7 +4,9 @@ import android.app.AlertDialog
 import android.content.Context
 import android.util.Log
 import android.widget.Toast
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
@@ -204,8 +206,8 @@ object Marker {
         alert.show()
     }
 
-    fun markAll(planType: String = "", context: Context?) {
-        Firebase.firestore.collection("main").document(isLogged!!.uid).get()
+    fun markAll(planType: String = "", context: Context?): Task<DocumentSnapshot> {
+       return Firebase.firestore.collection("main").document(isLogged!!.uid).get()
                 .addOnSuccessListener {
                     var updateValues = mutableMapOf<String, Any>()
                     val currentData = it.data
@@ -257,7 +259,7 @@ object Marker {
                         }
                         updateValues["dailyStreak"] = setIntPref("dailyStreak", 1)
                     }
-                    Firebase.firestore.collection("main").document(isLogged.uid).update(updateValues)
+                     Firebase.firestore.collection("main").document(isLogged.uid).update(updateValues)
                             .addOnSuccessListener {
                                 log("Successful update")
                             }
@@ -266,15 +268,10 @@ object Marker {
                                 Log.w("PROFGRANT", "Failure writing to firestore", error)
                             }
                 }
-                .addOnFailureListener {
-                    val error = it
-                    log("FAILURE WRITING TO FIRESTORE $error")
-                    Toast.makeText(context, "Unable to mark lists as done, please try again", Toast.LENGTH_LONG).show()
-                }
     }
 
-    fun markSingle(cardDone: String, planSystem: String = "", context: Context?) {
-        Firebase.firestore.collection("main").document(isLogged!!.uid).get()
+    fun markSingle(cardDone: String, planSystem: String = "", context: Context?): Task<DocumentSnapshot> {
+       return Firebase.firestore.collection("main").document(isLogged!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
                     var updateValues = mutableMapOf<String, Any>()

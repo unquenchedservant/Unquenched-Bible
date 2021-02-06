@@ -15,7 +15,9 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.startActivity
+import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
@@ -39,10 +41,10 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if(getIntPref(name="versionNumber") <= 72){
+        if(getIntPref(name="versionNumber") in 70..73){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 73, updateFS = true)
+                setIntPref(name = "versionNumber", value = 74, updateFS = true)
                 dialog.dismiss()
             }
             builder.setTitle(R.string.title_new_update)
@@ -186,8 +188,8 @@ object ListHelpers {
             1-> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
         }
     }
-    fun resetDaily(context:Context){
-        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+    fun resetDaily(context:Context): Task<DocumentSnapshot> {
+       return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
                     val data = mutableMapOf<String, Any>()
@@ -221,8 +223,8 @@ object ListHelpers {
                                 1 -> data["${listStart}${i}DoneDaily"] = setIntPref("$listStart${i}DoneDaily", 0)
                             }
                             when (getIntPref(name = "$listStart${i}Done")) {
-                                1 -> data["${listStart}$i"] = {
-                                    setIntPref("$listStart$i", extractIntPref(currentData, "$listStart$i") + 1)
+                                1 -> {
+                                    data["${listStart}$i"] = setIntPref("$listStart$i", extractIntPref(currentData, "$listStart$i") + 1)
                                     data["$listStart${i}Done"] = setIntPref("$listStart${i}Done", 0)
                                 }
 
