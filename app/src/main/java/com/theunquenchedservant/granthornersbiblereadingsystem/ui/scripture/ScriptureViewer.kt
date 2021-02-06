@@ -81,7 +81,12 @@ class ScriptureViewer : Fragment() {
         act = activity as MainActivity
         view.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
         act.supportActionBar?.title = chapter
-        val translation = getStringPref("bibleVersion", defaultValue="ESV")
+        var bibleVersion = getStringPref("bibleVersion", "ESV")
+        bibleVersion = when (bibleVersion){
+            "---"->setStringPref("bibleVersion", "ESV", updateFS=true)
+            "NASB"->setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
+            else->bibleVersion
+        }
         act.binding.translationSelector.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 var version = parent?.getItemAtPosition(position).toString()
@@ -90,8 +95,8 @@ class ScriptureViewer : Fragment() {
                     "---"->"ESV"
                     else -> version
                 }
-                if(version != translation) {
-                    setStringPref(name = "bibleVersion", value = version, updateFS = true)
+                setStringPref(name = "bibleVersion", value = version, updateFS = true)
+                if(version != bibleVersion) {
                     val bundle = bundleOf("chapter" to chapter, "psalms" to psalms, "iteration" to iteration)
                     act.navController.navigate(R.id.navigation_scripture, bundle)
                 }
@@ -99,11 +104,7 @@ class ScriptureViewer : Fragment() {
 
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        when (getStringPref(name="bibleVersion", defaultValue="ESV")){
-            "NASB"->setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
-        }
-        var bibleVersion = getStringPref("bibleVersion", "ESV")
-        bibleVersion = if(bibleVersion == "---") setStringPref("bibleVersion", "ESV", updateFS=true) else bibleVersion
+
         versionId = BIBLE_IDS[bibleVersion]
         act.findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
         val buttonColor: Int
@@ -121,7 +122,7 @@ class ScriptureViewer : Fragment() {
         binding.psalmsNext.setTextColor(textColor)
         binding.psalmsBack.setBackgroundColor(buttonColor)
         binding.psalmsBack.setTextColor(textColor)
-        val type=if(translation == "ESV"){
+        val type=if(bibleVersion == "ESV"){
             "esv"
         }else{
             "apiBible"
