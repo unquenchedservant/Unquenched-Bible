@@ -82,7 +82,7 @@ class DailyCheck : BroadcastReceiver() {
             }
         }
         if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}Done") == doneMax) {
-            data["${listStart}sDone"] = setIntPref(name="${listStart}Done", value=0)
+            data["${listStart}sDone"] = setIntPref(name="${listStart}sDone", value=0)
         }
 
         if(isLogged != null) {
