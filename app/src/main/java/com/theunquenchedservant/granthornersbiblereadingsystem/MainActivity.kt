@@ -350,6 +350,8 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                                 data["mcheyneList${i}DoneDaily"] = 0
                             }
                         }
+                        data["listsDone"] = 0
+                        data["mcheyneListsDone"] = 0
                         if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
                             data["currentDayIndex"] = extractIntPref(currentData, "currentDayIndex") + 1
                         }
