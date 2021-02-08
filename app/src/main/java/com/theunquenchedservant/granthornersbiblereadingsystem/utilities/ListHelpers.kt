@@ -41,14 +41,14 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if(getIntPref(name="versionNumber") in 70..75){
+        if(getIntPref(name="versionNumber") in 70..76){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 76, updateFS = true)
+                setIntPref(name = "versionNumber", value = 77, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 76, updateFS = true)
+                setIntPref(name = "versionNumber", value = 77, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
                 try {
                     startActivity(context, i, null)
@@ -66,7 +66,7 @@ object ListHelpers {
         if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 76, updateFS = true)
+                setIntPref(name = "versionNumber", value = 77, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->

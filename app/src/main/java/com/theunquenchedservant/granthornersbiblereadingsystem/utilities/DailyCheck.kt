@@ -81,7 +81,7 @@ class DailyCheck : BroadcastReceiver() {
                 data["mcheyneCurrentDayIndex"] = increaseIntPref(name="mcheyneCurrentDayIndex", value=1)
             }
         }
-        if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}Done") == doneMax) {
+        if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}sDone") == doneMax) {
             data["${listStart}sDone"] = setIntPref(name="${listStart}sDone", value=0)
         }
 

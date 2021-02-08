@@ -66,7 +66,7 @@ class ManualListNumericalSet: Fragment() {
             alert.setTitle("Set Day?")
             alert.setMessage("Are you sure you want to set the current day of reading to ${dayPicker.value}")
             alert.setPositiveButton("Yes") { dialogInterface, _ ->
-                setIntPref(name=indexName, value=dayPicker.value, updateFS=true)
+                setIntPref(name=indexName, value=dayPicker.value - 1, updateFS=true)
                 dialogInterface.dismiss()
                 Toast.makeText(context, "Changed current day of reading", Toast.LENGTH_LONG).show()
                 mainActivity.navController.navigate(homeId)
