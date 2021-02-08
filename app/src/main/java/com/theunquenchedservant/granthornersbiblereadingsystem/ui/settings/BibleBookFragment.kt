@@ -1,13 +1,20 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
+import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import androidx.preference.PreferenceScreen
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 
@@ -24,9 +31,17 @@ class BibleBookFragment : PreferenceFragmentCompat(){
         for(i in 1..chapters!!){
             val chapterPref = Preference(App.applicationContext())
             chapterPref.title = "$bookName $i"
-            val hasBeenRead = if(getBoolPref(name="${book}${i}Read")) "Yes " else "No "
-            val amountRead = getIntPref(name="${book}${i}AmountRead")
-            chapterPref.summary = "Read: $hasBeenRead| Times Read: $amountRead"
+            Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+                    .addOnSuccessListener {
+                        val currentData = it.data
+                        val hasBeenRead = if(extractBoolPref(currentData, "${book}${i}Read")) "Yes" else "No"
+                        val amountRead = extractIntPref(currentData, "${book}${i}AmountRead")
+                        chapterPref.summary = "Read: $hasBeenRead | Times Read: $amountRead"
+                    }
+                    .addOnFailureListener { error->
+                        MainActivity.log("Error getting dataa $error")
+                        chapterPref.summary = "Error loading data"
+                    }
             screen.addPreference(chapterPref)
         }
         preferenceScreen = screen

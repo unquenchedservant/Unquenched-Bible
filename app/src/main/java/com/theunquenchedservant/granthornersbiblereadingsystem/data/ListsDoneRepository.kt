@@ -7,6 +7,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
@@ -20,12 +22,10 @@ class ListsDoneRepository {
                 val db = Firebase.firestore
                 db.collection("main").document(user.uid).get()
                         .addOnSuccessListener { docSnap ->
-                            val mcheyneDone = if (docSnap.data!!["mcheyneListsDone"] == null){
-                                0
-                            }else{
-                                (docSnap.data!!["mcheyneListsDone"] as Long).toInt()
-                            }
-                            val listsDone = if(docSnap.data!!["planSystem"] == "pgh") ListsDone((docSnap.data!!["listsDone"] as Long).toInt()) else ListsDone(mcheyneDone)
+                            val planSystem = extractStringPref(docSnap.data, "planSystem")
+                            val mcheyneDone = extractIntPref(docSnap.data, "mcheyneListsDone")
+                            val listDone = extractIntPref(docSnap.data, "listsDone")
+                            val listsDone = if(planSystem == "pgh") ListsDone(listDone) else ListsDone(mcheyneDone)
                             data.value = listsDone
                         }
                         .addOnFailureListener { exception ->

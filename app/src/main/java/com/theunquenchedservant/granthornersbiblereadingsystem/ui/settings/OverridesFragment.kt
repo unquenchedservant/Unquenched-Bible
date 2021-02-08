@@ -34,10 +34,11 @@ class OverridesFragment:PreferenceFragmentCompat(){
             false
         }
         dailyReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            resetDaily()
-            Toast.makeText(mainActivity.applicationContext, "Forced Daily Reset", Toast.LENGTH_LONG).show()
-            val homeId = if(getStringPref("planSystem") == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
-            mainActivity.navController.navigate(homeId)
+            resetDaily(requireContext()).addOnSuccessListener {
+                Toast.makeText(mainActivity.applicationContext, "Forced Daily Reset", Toast.LENGTH_LONG).show()
+                val homeId = if(getStringPref("planSystem") == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
+                mainActivity.navController.navigate(homeId)
+            }
             false
         }
     }

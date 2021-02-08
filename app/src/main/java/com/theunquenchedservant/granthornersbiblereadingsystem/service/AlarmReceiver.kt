@@ -22,7 +22,7 @@ class AlarmReceiver : BroadcastReceiver() {
     private val _primaryChannelId = "primary_notification_channel"
     private var mNotificationManager: NotificationManager? = null
     private fun isOffDay():Boolean{
-        return !(getBoolPref("vacationMode", false) || (getBoolPref("weekendMode") && isWeekend())) || !getBoolPref("notifications")
+        return (getBoolPref("vacationMode", false) || (getBoolPref("weekendMode") && isWeekend())) || !getBoolPref("notifications")
     }
     private fun isListsDone():Boolean{
         val planSystem = getStringPref(name="planSystem", defaultValue ="pgh")
@@ -33,23 +33,8 @@ class AlarmReceiver : BroadcastReceiver() {
             log("Vacation Mode on, not sending notification")
         }else{
             mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            if(!isListsDone()) {
+            if(!isListsDone() && getBoolPref(name="notifications")) {
                 deliverNotification(context)
-            }
-        }
-        val vacation = getBoolPref(name="vacationMode", defaultValue=false)
-        when(vacation || (getBoolPref(name="weekendMode") && isWeekend())){
-            false -> {
-                when(getBoolPref(name="notifications")) {
-                    true-> {
-                        mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-                        deliverNotification(context)
-                    }
-                    else->log(logString="Notification switch turned off, not sending notification")
-                }
-            }
-            true -> {
-                log(logString="Vacation mode on, not sending notification")
             }
         }
     }

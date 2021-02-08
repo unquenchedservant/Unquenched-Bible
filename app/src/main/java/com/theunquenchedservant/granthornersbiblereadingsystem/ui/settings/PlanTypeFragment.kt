@@ -16,23 +16,7 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
         val hornerMethod: Preference? = findPreference("horner")
         val numericalMethod: Preference? = findPreference("numericalDay")
         val calendarMethod: Preference? = findPreference("calendarDay")
-        when(getStringPref("planType", "horner")){
-            "horner"->{
-                hornerMethod!!.setDefaultValue(true)
-                numericalMethod!!.setDefaultValue(false)
-                calendarMethod!!.setDefaultValue(false)
-            }
-            "numerical"->{
-                hornerMethod!!.setDefaultValue(false)
-                numericalMethod!!.setDefaultValue(true)
-                calendarMethod!!.setDefaultValue(false)
-            }
-            "calendar"->{
-                hornerMethod!!.setDefaultValue(false)
-                numericalMethod!!.setDefaultValue(false)
-                calendarMethod!!.setDefaultValue(true)
-            }
-        }
+
         hornerMethod!!.onPreferenceClickListener = Preference.OnPreferenceClickListener{
             setStringPref(name="planType", value="horner", updateFS=true)
             setBoolPref(name="numericalDay", value=false)
@@ -42,7 +26,7 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
         }
         numericalMethod!!.onPreferenceClickListener = Preference.OnPreferenceClickListener{
             setStringPref(name="planType", value="numerical", updateFS=true)
-            setBoolPref(name="grantHorner", value=false)
+            setBoolPref(name="horner", value=false)
             setBoolPref(name="calendarDay", value=false)
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true
@@ -50,7 +34,7 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
         calendarMethod!!.onPreferenceClickListener = Preference.OnPreferenceClickListener{
             setStringPref(name="planType", value="calendar", updateFS=true)
             setBoolPref(name="numericalDay", value=false)
-            setBoolPref(name="grantHorner", value=false)
+            setBoolPref(name="horner", value=false)
             setBoolPref(name="holdPlan", value=false, updateFS=true)
             mainActivity.navController.navigate(R.id.navigation_plan_type)
             true

@@ -171,18 +171,20 @@ class HomeMCheyneFragment : Fragment() {
     private fun createButtonListener() {
         binding.materialButton.setOnClickListener {
             hideOthers(cardList = null, binding = null, binding, isMcheyne = true)
-            markAll(planType = "mcheyne")
-            val mNotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            mNotificationManager.cancel(1)
-            mNotificationManager.cancel(2)
-            (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+            markAll(planType = "mcheyne", context).addOnSuccessListener {
+                val mNotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                mNotificationManager.cancel(1)
+                mNotificationManager.cancel(2)
+                (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+            }
         }
         if (isAdvanceable(4)) {
             binding.materialButton.setOnLongClickListener {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    resetDaily()
-                    (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                    resetDaily(requireContext()).addOnSuccessListener {
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                    }
                 }
                 builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
                     diag.dismiss()
@@ -209,9 +211,11 @@ class HomeMCheyneFragment : Fragment() {
                     hideOthers(cardView.root, binding = null, binding, isMcheyne = true)
                     cardView.listDone.setOnClickListener {
                         changeVisibility(cardView, isCardView = false)
-                        markSingle(listDone)
-                        cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                        markSingle(listDone, "mcheyne", context=context).addOnSuccessListener {
+                            cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                            (activity as MainActivity).navController.navigate(R.id.navigation_home_mcheyne)
+                        }
+
                     }
                     cardView.listRead.setOnClickListener {
                         val chapter = ListHelpers.getChapter(list, listName)

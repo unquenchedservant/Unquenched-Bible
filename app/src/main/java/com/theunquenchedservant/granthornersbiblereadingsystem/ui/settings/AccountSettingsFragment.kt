@@ -1,6 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.app.AlertDialog
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
@@ -43,7 +44,9 @@ class AccountSettingsFragment: PreferenceFragmentCompat()  {
             builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
                 Firebase.auth.signOut()
                 Toast.makeText(context, "Signed Out!", Toast.LENGTH_LONG).show()
-                mainActivity.navController.navigate(R.id.navigation_settings)
+                (activity as MainActivity).finish()
+                val i = Intent(requireContext(), MainActivity::class.java)
+                startActivity(i)
             }
             builder.setNeutralButton(getString(R.string.no)) { dialogInterface, _ ->
                 dialogInterface.cancel()

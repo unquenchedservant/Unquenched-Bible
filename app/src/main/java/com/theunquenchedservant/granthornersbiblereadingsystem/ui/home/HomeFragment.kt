@@ -51,6 +51,10 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.runBlocking
 import java.util.*
 
 class HomeFragment : Fragment() {
@@ -202,18 +206,21 @@ class HomeFragment : Fragment() {
     private fun createButtonListener() {
         binding.materialButton.setOnClickListener {
             hideOthers(cardList = null, binding)
-            markAll("pgh")
-            val mNotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
-            mNotificationManager.cancel(1)
-            mNotificationManager.cancel(2)
-            (activity as MainActivity).navController.navigate(R.id.navigation_home)
+            val job = markAll("pgh", context)
+            job.addOnSuccessListener {
+                val mNotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                mNotificationManager.cancel(1)
+                mNotificationManager.cancel(2)
+                (activity as MainActivity).navController.navigate(R.id.navigation_home)
+            }
         }
         if (isAdvanceable(10)) {
             binding.materialButton.setOnLongClickListener {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
-                    resetDaily()
-                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                    resetDaily(requireContext()).addOnSuccessListener {
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                    }
                 }
                 builder.setNegativeButton(getString(R.string.no)) { diag, _ ->
                     diag.dismiss()
@@ -232,7 +239,7 @@ class HomeFragment : Fragment() {
             true -> getColor(App.applicationContext(), R.color.buttonBackgroundDark)
             false -> getColor(App.applicationContext(), R.color.buttonBackground)
         }
-        if(getIntPref("listsDone") == 0) {
+        if(getIntPref(listDone) == 0) {
             cardView.root.setOnClickListener { view ->
                 if (cardView.listButtons.isVisible) {
                     listSwitcher(view, getIntPref(listDone), binding.materialButton)
@@ -240,9 +247,10 @@ class HomeFragment : Fragment() {
                     hideOthers(cardView.root, binding)
                     cardView.listDone.setOnClickListener {
                         changeVisibility(cardView, isCardView = false)
-                        markSingle(listDone)
-                        cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                        markSingle(listDone, "pgh", context).addOnSuccessListener {
+                            cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                            (activity as MainActivity).navController.navigate(R.id.navigation_home)
+                        }
                     }
                     cardView.listRead.setOnClickListener {
                        val bundle = if(isPsalm(cardView, binding, psalms)) {

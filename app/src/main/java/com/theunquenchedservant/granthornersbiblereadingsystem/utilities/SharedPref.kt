@@ -17,15 +17,20 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.c
 
 
 object SharedPref {
-
+    val context = App.applicationContext()
     fun setStreak(){
-        if(!checkDate(option="both", fullMonth=false)){
+        if(!checkDate(getStringPref("dateChecked"), option="both", fullMonth=false)){
             setIntPref(name="currentStreak", value=0)
         }
     }
-    private fun getPref(): SharedPreferences{
-        val context = App.applicationContext()
-        return PreferenceManager.getDefaultSharedPreferences(context)
+    fun extractIntPref(currentData: MutableMap<String, Any>?, keyName:String, defaultValue:Int=0):Int{
+        return if(currentData?.get(keyName) != null) (currentData[keyName] as Long).toInt() else defaultValue
+    }
+    fun extractStringPref(currentData: MutableMap<String, Any>?, keyName:String, defaultValue:String="itsdeadjim"):String{
+        return if(currentData?.get(keyName) != null) currentData[keyName] as String else defaultValue
+    }
+    fun extractBoolPref(currentData: MutableMap<String, Any>?, keyName:String, defaultValue: Boolean=false):Boolean{
+        return if(currentData?.get(keyName) != null) currentData[keyName] as Boolean else defaultValue
     }
     fun updateFS(name: String, value: Any) {
         val db = Firebase.firestore
@@ -33,16 +38,18 @@ object SharedPref {
         if (user != null)
             db.collection("main").document(user.uid).update(name, value)
     }
-
+    fun doesNotExist(name:String):Boolean{
+        return !PreferenceManager.getDefaultSharedPreferences(context).contains(name)
+    }
     fun setIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
-        getPref().edit().putInt(name, value).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putInt(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
         return value
     }
     private fun deletePref(name:String){
-        getPref().edit().remove(name).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().remove(name).apply()
     }
     fun increaseIntPref(name: String, value: Int, updateFS:Boolean=false): Int{
         val newValue = getIntPref(name) + value
@@ -53,29 +60,38 @@ object SharedPref {
         return newValue
     }
     fun getIntPref(name: String, defaultValue: Int = 0): Int {
-        return getPref().getInt(name, defaultValue)
+        if(doesNotExist(name)){
+            setIntPref(name, defaultValue, updateFS=true)
+        }
+        return PreferenceManager.getDefaultSharedPreferences(context).getInt(name, defaultValue)
     }
 
     fun setStringPref(name:String, value: String, updateFS: Boolean = false):String {
-        getPref().edit().putString(name, value).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putString(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
         return value
     }
     fun getStringPref(name:String, defaultValue: String = "itsdeadjim"): String{
-        return getPref().getString(name, defaultValue)!!
+        if(doesNotExist(name)){
+            setStringPref(name, defaultValue, updateFS=true)
+        }
+        return PreferenceManager.getDefaultSharedPreferences(context).getString(name, defaultValue)!!
     }
 
     fun setBoolPref(name: String, value: Boolean, updateFS:Boolean=false):Boolean{
-        getPref().edit().putBoolean(name, value).apply()
+        PreferenceManager.getDefaultSharedPreferences(context).edit().putBoolean(name, value).apply()
         if(updateFS) {
             updateFS(name, value)
         }
         return value
     }
     fun getBoolPref(name: String, defaultValue: Boolean=false): Boolean{
-        return getPref().getBoolean(name, defaultValue)
+        if(doesNotExist(name)){
+            setBoolPref(name, defaultValue, updateFS=true)
+        }
+        return PreferenceManager.getDefaultSharedPreferences(context).getBoolean(name, defaultValue)
     }
 
     private val user = Firebase.auth.currentUser
@@ -106,7 +122,7 @@ object SharedPref {
         results["isGrace"] = getBoolPref(name="isGrace")
         results["currentDayIndex"] = getIntPref(name="currentDayIndex")
         results["mcheyneCurrentDayIndex"] = getIntPref(name="mcheyneCurrentDayIndex")
-        results["horner"] = getBoolPref(name="grantHorner", defaultValue=true)
+        results["horner"] = getBoolPref(name="horner", defaultValue=true)
         results["numericalDay"] = getBoolPref(name="numericalDay", defaultValue=false)
         results["calendarDay"] = getBoolPref(name="calendarDay", defaultValue=false)
         results["vacationMode"] = getBoolPref(name="vacationMode")
@@ -128,16 +144,6 @@ object SharedPref {
         results["pghSystem"] = getBoolPref(name="pghSystem")
         results["mcheyneSystem"] = getBoolPref(name="mcheyneSystem")
         results["hasCompletedOnboarding"] = getBoolPref(name="hasCompletedOnboarding")
-        for(book in ALL_BOOKS) {
-            results["${book}AmountRead"] = getIntPref(name = "${book}AmountRead")
-            results["${book}ChaptersRead"] = getIntPref(name = "${book}ChaptersRead")
-            results["${book}DoneTestament"] = getBoolPref(name = "${book}DoneTestament")
-            results["${book}DoneWhole"] = getBoolPref(name = "${book}DoneWhole")
-            for (chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))) {
-                results["${book}${chapter}Read"] = getBoolPref(name = "${book}${chapter}Read")
-                results["${book}${chapter}AmountRead"] = getIntPref(name = "${book}${chapter}AmountRead")
-            }
-        }
         db.collection("main").document(user2!!.uid).set(results)
                 .addOnSuccessListener {log("Data transferred to firestore") }
                 .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
@@ -237,39 +243,29 @@ object SharedPref {
                 setBoolPref("pghSystem", false)
             }
             updateBoolPref(data, key = "hasCompletedOnboarding")
-            for (book in ALL_BOOKS) {
-                updateIntPref(data, key = "${book}AmountRead")
-                updateIntPref(data, key = "${book}ChaptersRead")
-                updateBoolPref(data, key = "${book}DoneTestament")
-                updateBoolPref(data, key = "${book}DoneWhole")
-                for (chapter in 1..(BOOK_CHAPTERS[book] ?: error(""))) {
-                    updateBoolPref(data, key = "${book}${chapter}Read")
-                    updateIntPref(data, key = "${book}${chapter}AmountRead")
-                }
-            }
         }
     }
 
     fun listNumbersReset() { App.applicationContext().getSharedPreferences("listNumbers", Context.MODE_PRIVATE).edit().clear().apply() }
 
     fun updatePrefNames(){
-        if (getPref().contains("notif_switch")) {
+        if (PreferenceManager.getDefaultSharedPreferences(context).contains("notif_switch")) {
             setBoolPref(name="notifications", value=getBoolPref(name="notif_switch"))
             deletePref(name="notif_switch")
         }
-        if (getPref().contains("vacation_mode")){
+        if (PreferenceManager.getDefaultSharedPreferences(context).contains("vacation_mode")){
             setBoolPref(name="vacationMode", value= getBoolPref(name="vacation_mode"))
             deletePref(name="vacation_mode")
         }
-        if(getPref().contains("allow_partial_switch")) {
+        if(PreferenceManager.getDefaultSharedPreferences(context).contains("allow_partial_switch")) {
             setBoolPref(name = "allowPartial", value = getBoolPref(name = "allow_partial_switch"))
             deletePref(name="allow_partial_switch")
         }
-        if(getPref().contains("daily_time")) {
+        if(PreferenceManager.getDefaultSharedPreferences(context).contains("daily_time")) {
             setIntPref(name = "dailyNotif", value = getIntPref(name = "daily_time"))
             deletePref(name="daily_time")
         }
-        if(getPref().contains("remind_time")) {
+        if(PreferenceManager.getDefaultSharedPreferences(context).contains("remind_time")) {
             setIntPref(name = "remindNotif", value = getIntPref(name = "remind_time"))
             deletePref(name="remind_time")
         }

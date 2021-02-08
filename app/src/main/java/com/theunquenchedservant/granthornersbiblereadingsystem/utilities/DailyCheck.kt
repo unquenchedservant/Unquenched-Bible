@@ -40,7 +40,7 @@ class DailyCheck : BroadcastReceiver() {
             0 -> {
                 when (vacation || getBoolPref(name="vacationOff") || (getBoolPref(name="weekendMode") && isWeekend())) {
                     false -> {
-                        if(!checkDate(option="yesterday", fullMonth=false)){
+                        if(!checkDate(getStringPref("dateChecked"), option="yesterday", fullMonth=false)){
                                 if(!getBoolPref(name="isGrace")){
                                     data["holdStreak"] = setIntPref(name="holdStreak", getIntPref(name="currentStreak"))
                                     data["isGrace"] = setBoolPref(name="isGrace", value=true)
@@ -82,7 +82,7 @@ class DailyCheck : BroadcastReceiver() {
             }
         }
         if(!getBoolPref(name="holdPlan") || getIntPref(name="${listStart}Done") == doneMax) {
-            data["${listStart}sDone"] = setIntPref(name="${listStart}Done", value=0)
+            data["${listStart}sDone"] = setIntPref(name="${listStart}sDone", value=0)
         }
 
         if(isLogged != null) {
