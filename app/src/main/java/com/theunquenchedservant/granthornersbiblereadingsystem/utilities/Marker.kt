@@ -127,13 +127,13 @@ object Marker {
                 updateValues["${book}DoneWhole"] = true
             }
         }
-        when (extractIntPref(currentData,"${book}ChaptersRead")) {
+        when (extractIntPref(currentData,"${book}ChaptersRead") + 1) {
             bookChaps -> bibleAlertBuilder("book", bookName!!, context)
         }
-        when (extractIntPref(currentData,"${testament}ChaptersRead")) {
+        when (extractIntPref(currentData,"${testament}ChaptersRead") + 1) {
             testamentChapters -> bibleAlertBuilder("testament", testament.capitalize(Locale.ROOT), context)
         }
-        when (extractIntPref(currentData,"totalChaptersRead")) {
+        when (extractIntPref(currentData,"totalChaptersRead") + 1) {
             1189 -> bibleAlertBuilder("bible", "bible", context)
         }
         return updateValues
