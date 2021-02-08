@@ -177,14 +177,15 @@ object Marker {
         } else {
             val reading = list[listIndex]
             val readingArray = reading.split(" ")
-            val bookArray = readingArray.subList(0, reading.split(" ").lastIndex)
+            val lastIndex = if(reading.split(" ").lastIndex == 0) 1 else reading.split(" ").lastIndex
+            val bookArray = readingArray.subList(0, lastIndex)
             val book = bookArray.joinToString(" ")
             val codedBook = BOOK_NAMES_CODED[book]
-            val chapter = readingArray[readingArray.lastIndex]
+            val chapter = if(readingArray[readingArray.lastIndex].toIntOrNull() != null) readingArray[readingArray.lastIndex].toInt() else 1
             val bookChapters = BOOK_CHAPTERS[codedBook]
             val testament = getTestament(codedBook!!)
             val testamentChapters = if (testament == "old") 929 else 260
-            updateValues = updateStatistics(currentData, codedBook, bookChapters!!, testament, testamentChapters, chapter.toInt(), context, updateValues)
+            updateValues = updateStatistics(currentData, codedBook, bookChapters!!, testament, testamentChapters, chapter, context, updateValues)
         }
         return updateValues
     }
