@@ -239,7 +239,7 @@ class HomeFragment : Fragment() {
             true -> getColor(App.applicationContext(), R.color.buttonBackgroundDark)
             false -> getColor(App.applicationContext(), R.color.buttonBackground)
         }
-        if(getIntPref("listsDone") == 0) {
+        if(getIntPref(listDone) == 0) {
             cardView.root.setOnClickListener { view ->
                 if (cardView.listButtons.isVisible) {
                     listSwitcher(view, getIntPref(listDone), binding.materialButton)
