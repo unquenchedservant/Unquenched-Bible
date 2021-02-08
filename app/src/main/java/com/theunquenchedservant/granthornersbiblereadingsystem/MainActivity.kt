@@ -334,24 +334,31 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         val planType = extractStringPref(currentData, "planType", "horner")
                         var pghDone = 0
                         var mcheyneDone = 0
-                        for (i in 1..10) {
-                            if (extractIntPref(currentData, "list${i}Done") == 1) {
-                                pghDone += 1
-                                if (planType == "horner") data["list$i"] = extractIntPref(currentData, "list$i") + 1
-                                data["list${i}Done"] = 0
-                                data["list${i}DoneDaily"] = 0
+                        val pghDoneAlready = extractIntPref(currentData, "listsDone")
+                        val mcheyneDoneAlready = extractIntPref(currentData, "mcheyneListsDone")
+                        val holdPlan = extractBoolPref(currentData, "holdPlan", false)
+                        if ((holdPlan && pghDoneAlready == 10) || !holdPlan) {
+                            for (i in 1..10) {
+                                if (extractIntPref(currentData, "list${i}Done") == 1) {
+                                    pghDone += 1
+                                    if (planType == "horner") data["list$i"] = extractIntPref(currentData, "list$i") + 1
+                                    data["list${i}Done"] = 0
+                                    data["list${i}DoneDaily"] = 0
+                                }
                             }
+                            data["listsDone"] = 0
                         }
-                        for (i in 1..4) {
-                            if (extractIntPref(currentData, "mcheyneList${i}Done") == 1) {
-                                mcheyneDone += 1
-                                if (planType == "horner") data["mcheyneList${i}"] = extractIntPref(currentData, "mcheyneList$i") + 1
-                                data["mcheyneList${i}Done"] = 0
-                                data["mcheyneList${i}DoneDaily"] = 0
+                        if((holdPlan && mcheyneDoneAlready == 4) || !holdPlan) {
+                            for (i in 1..4) {
+                                if (extractIntPref(currentData, "mcheyneList${i}Done") == 1) {
+                                    mcheyneDone += 1
+                                    if (planType == "horner") data["mcheyneList${i}"] = extractIntPref(currentData, "mcheyneList$i") + 1
+                                    data["mcheyneList${i}Done"] = 0
+                                    data["mcheyneList${i}DoneDaily"] = 0
+                                }
                             }
+                            data["mcheyneListsDone"] = 0
                         }
-                        data["listsDone"] = 0
-                        data["mcheyneListsDone"] = 0
                         if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
                             data["currentDayIndex"] = extractIntPref(currentData, "currentDayIndex") + 1
                         }
