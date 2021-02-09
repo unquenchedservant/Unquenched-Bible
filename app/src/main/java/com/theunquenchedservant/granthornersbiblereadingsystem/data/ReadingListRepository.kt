@@ -89,7 +89,6 @@ class ReadingListRepository {
                 }
             }
         }
-        log("THIS IS THE PLAN TYPE ${getStringPref("planType")}")
         when (getStringPref(name="planType", defaultValue="horner")) {
             "horner" -> {
                 return when (index) {
