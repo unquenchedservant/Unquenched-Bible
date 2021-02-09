@@ -62,6 +62,7 @@ object ListHelpers {
                     "This update contains a bunch of fixes for marking lists as done as well as advanving single lists.\n\n"+
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
+            builder.create().show()
         }
         if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
