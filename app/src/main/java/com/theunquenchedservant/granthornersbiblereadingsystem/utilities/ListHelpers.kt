@@ -41,14 +41,14 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if(getIntPref(name="versionNumber") in 70..76){
+        if(getIntPref(name="versionNumber") > 70 && getIntPref("versionNumber") < 78){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 77, updateFS = true)
+                setIntPref(name = "versionNumber", value = 78, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 77, updateFS = true)
+                setIntPref(name = "versionNumber", value = 78, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
                 try {
                     startActivity(context, i, null)
@@ -59,19 +59,19 @@ object ListHelpers {
             }
             builder.setTitle(R.string.title_new_update)
             builder.setMessage(
-                    "This update contains a bunch of fixes for marking lists as done as well as advanving single lists.\n\n"+
+                    "This update fixes all final issues with one chapter books and marking lists as done. It also has some UI fixes and support related changes\n\n"+
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
             builder.create().show()
         }
-        if (getIntPref(name = "versionNumber") < 70) {
+        else if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 77, updateFS = true)
+                setIntPref(name = "versionNumber", value = 78, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 76, updateFS = true)
+                setIntPref(name = "versionNumber", value = 78, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
                 try {
                     startActivity(context, i, null)
