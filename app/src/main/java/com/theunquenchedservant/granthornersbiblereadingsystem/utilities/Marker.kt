@@ -177,7 +177,8 @@ object Marker {
         } else {
             val reading = list[listIndex]
             val readingArray = reading.split(" ")
-            val lastIndex = if(reading.split(" ").lastIndex == 0) 1 else reading.split(" ").lastIndex
+            var lastIndex = if(readingArray.lastIndex == 0) 1 else readingArray.lastIndex
+            lastIndex = if(readingArray[0].toIntOrNull() != null && readingArray[lastIndex].toIntOrNull() == null) lastIndex + 1 else lastIndex
             val bookArray = readingArray.subList(0, lastIndex)
             val book = bookArray.joinToString(" ")
             val codedBook = BOOK_NAMES_CODED[book]
