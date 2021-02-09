@@ -3,6 +3,7 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.preference.Preference
@@ -11,6 +12,7 @@ import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
@@ -71,7 +73,7 @@ class InformationFragment : PreferenceFragmentCompat() {
         }
         contact!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             var emailText = "\n\n(Please leave the following)\n\n"
-            emailText += "Version: ${getIntPref("versionNumber")}\n"
+            emailText += "App Version: ${BuildConfig.VERSION_CODE} | ${BuildConfig.VERSION_NAME}\n"
             emailText += "Plan System: ${getStringPref("planSystem")}\n"
             emailText += "Plan Method: ${getStringPref("planType")}\n"
             val psText = if(getBoolPref("psalms")) "5Psalms" else getIntPref("list6").toString()
@@ -80,15 +82,15 @@ class InformationFragment : PreferenceFragmentCompat() {
             emailText += "Indexes: (${getIntPref("currentDayIndex")}, ${getIntPref("mcheyneCurrentDayIndex")})\n"
             emailText += "PGH Lists Done: ${getIntPref("listsDone")}\n"
             emailText += "Mcheyne Lists Done: ${getIntPref("mcheyneListsDone")}\n"
-            emailText += "Phone: ${android.os.Build.PRODUCT}\n"
-            emailText += "Android Version: ${android.os.Build.VERSION.RELEASE}\n"
+            emailText += "Phone: ${Build.PRODUCT}\n"
+            emailText += "Android Version: ${Build.VERSION.RELEASE}\n"
             emailText += "ID: ${Firebase.auth.currentUser?.uid}"
             val i = Intent(Intent.ACTION_SENDTO)
                     .setType("text/plain")
                     .setData(Uri.parse("mailto:"))
                     .putExtra(Intent.EXTRA_EMAIL, arrayOf("contact@unquenched.tech"))
                     .putExtra(Intent.EXTRA_TEXT, emailText)
-                    .putExtra(Intent.EXTRA_SUBJECT, "COMMENT/QUESTION - PGH APP (VERSION ${getIntPref("versionNumber")})")
+                    .putExtra(Intent.EXTRA_SUBJECT, "COMMENT/QUESTION - Unquenched Bible (Android)")
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
