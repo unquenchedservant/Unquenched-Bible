@@ -43,8 +43,8 @@ class BibleStatsFragment : PreferenceFragmentCompat() {
                     val newAmountRead = extractIntPref(currentData, "newAmountRead")
                     val oldAmountRead = extractIntPref(currentData, "oldAmountRead")
                     val bibleReadInt = extractIntPref(currentData, "bibleAmountRead")
-                    oldTestament.summary = "$oldPercent % | Times Read: $oldAmountRead"
-                    newTestament.summary = "$newPercent % | Times Read: $newAmountRead"
+                    oldTestament.summary = "$oldPercent % (${extractIntPref(currentData,"oldChaptersRead")}/929) | Times Read: $oldAmountRead"
+                    newTestament.summary = "$newPercent % (${extractIntPref(currentData, "newChaptersRead")}/260) | Times Read: $newAmountRead"
                     bibleRead!!.summary = "$bibleReadInt"
                 }
                 .addOnFailureListener { error->

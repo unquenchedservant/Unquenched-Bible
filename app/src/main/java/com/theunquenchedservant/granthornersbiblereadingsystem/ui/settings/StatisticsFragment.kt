@@ -34,7 +34,7 @@ class StatisticsFragment : PreferenceFragmentCompat() {
                         0
                     }
                     val bibleAmountRead = extractIntPref(currentData,"bibleAmountRead")
-                    bibleStats?.summary = "$biblePercentRead % | Times Read: $bibleAmountRead"
+                    bibleStats?.summary = "$biblePercentRead % (${extractIntPref(currentData, "totalChaptersRead")}/1189) | Times Read: $bibleAmountRead"
                 }
                 .addOnFailureListener {
                     bibleStats?.summary = "Error Loading Data"

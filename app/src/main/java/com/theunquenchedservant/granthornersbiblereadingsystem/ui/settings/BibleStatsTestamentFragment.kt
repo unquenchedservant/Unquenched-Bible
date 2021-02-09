@@ -45,7 +45,7 @@ class BibleStatsTestamentFragment : PreferenceFragmentCompat()  {
                         }else{
                             0
                         }
-                        bookPref.summary = "$percentRead % | Times Read: $timesRead"
+                        bookPref.summary = "$percentRead % (${extractIntPref(currentData, "${book}ChaptersRead")}/${BOOK_CHAPTERS[book]}) | Times Read: $timesRead"
                     }
                     .addOnFailureListener { error->
                         MainActivity.log("Error getting dataa $error")
