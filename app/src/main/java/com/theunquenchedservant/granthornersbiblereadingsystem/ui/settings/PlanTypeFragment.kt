@@ -16,6 +16,11 @@ class PlanTypeFragment : PreferenceFragmentCompat() {
         val hornerMethod: Preference? = findPreference("horner")
         val numericalMethod: Preference? = findPreference("numericalDay")
         val calendarMethod: Preference? = findPreference("calendarDay")
+        when(getStringPref(name="planType", defaultValue="pgh")){
+            "horner"-> {hornerMethod!!.setDefaultValue(true); numericalMethod!!.setDefaultValue(false); calendarMethod!!.setDefaultValue(false)}
+            "numerical" -> {hornerMethod!!.setDefaultValue(false); numericalMethod!!.setDefaultValue(true); calendarMethod!!.setDefaultValue(false)}
+            "calendar" -> {hornerMethod!!.setDefaultValue(false); numericalMethod!!.setDefaultValue(false); calendarMethod!!.setDefaultValue(true)}
+        }
 
         hornerMethod!!.onPreferenceClickListener = Preference.OnPreferenceClickListener{
             setStringPref(name="planType", value="horner", updateFS=true)

@@ -122,9 +122,6 @@ object SharedPref {
         results["isGrace"] = getBoolPref(name="isGrace")
         results["currentDayIndex"] = getIntPref(name="currentDayIndex")
         results["mcheyneCurrentDayIndex"] = getIntPref(name="mcheyneCurrentDayIndex")
-        results["horner"] = getBoolPref(name="horner", defaultValue=true)
-        results["numericalDay"] = getBoolPref(name="numericalDay", defaultValue=false)
-        results["calendarDay"] = getBoolPref(name="calendarDay", defaultValue=false)
         results["vacationMode"] = getBoolPref(name="vacationMode")
         results["allowPartial"] = getBoolPref(name="allowPartial")
         results["dailyNotif"] = getIntPref( name="dailyNotif")
@@ -141,8 +138,6 @@ object SharedPref {
         results["bibleAmountRead"] = getIntPref(name="bibleAmountRead")
         results["totalChaptersRead"] = getIntPref(name="totalChaptersRead")
         results["planSystem"] = getStringPref(name="planSystem")
-        results["pghSystem"] = getBoolPref(name="pghSystem")
-        results["mcheyneSystem"] = getBoolPref(name="mcheyneSystem")
         results["hasCompletedOnboarding"] = getBoolPref(name="hasCompletedOnboarding")
         db.collection("main").document(user2!!.uid).set(results)
                 .addOnSuccessListener {log("Data transferred to firestore") }
@@ -229,12 +224,22 @@ object SharedPref {
             updateIntPref(data, key = "totalChaptersRead")
             updateIntPref(data, key = "mcheyneCurrentDayIndex")
             updateIntPref(data, key = "currentDayIndex")
-            updateBoolPref(data, key = "horner")
-            updateBoolPref(data, key = "numericalDay")
-            updateBoolPref(data, key = "calendarDay")
             updateIntPref(data, key = "graceTime")
             updateBoolPref(data, key = "isGrace")
             updateStringPref(data, key = "planSystem")
+            if(getStringPref("planType") == "horner"){
+                setBoolPref("horner", true)
+                setBoolPref("numericalDay", false)
+                setBoolPref("calendarDay", false)
+            }else if(getStringPref("planType")== "numerical"){
+                setBoolPref("horner", false)
+                setBoolPref("numericalDay", true)
+                setBoolPref("calendarDay", false)
+            }else{
+                setBoolPref("horner", false)
+                setBoolPref("numericalDay", false)
+                setBoolPref("calendarDay", true)
+            }
             if (getStringPref("planSystem") == "pgh") {
                 setBoolPref("mcheyneSystem", false)
                 setBoolPref("pghSystem", true)
