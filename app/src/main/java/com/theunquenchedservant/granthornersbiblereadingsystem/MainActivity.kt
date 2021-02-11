@@ -328,7 +328,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 .addOnSuccessListener {
                     val currentData = it.data
                     val dateChecked = extractStringPref(currentData, "dateChecked")
-                    if (!checkDate(dateChecked, "current", false)) {
+                    if (!checkDate(dateChecked, "current", false) && extractIntPref(currentData,"listsDone") != 0 || extractIntPref(currentData, "mcheyneListsDone") != 0) {
                         val data: MutableMap<String, Any> = mutableMapOf()
                         val allowPartial = extractBoolPref(currentData, "allowPartial")
                         val planType = extractStringPref(currentData, "planType", "horner")
@@ -383,9 +383,10 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             }
                             data["currentStreak"] = 0
                         }
+                        val homeID = if(extractStringPref(currentData, "planSystem")== "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
                         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
                                 .addOnSuccessListener {
-                                    log("Updated Successfully")
+                                    navController.navigate(homeID)
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(context, "Error updating lists", Toast.LENGTH_LONG).show()
