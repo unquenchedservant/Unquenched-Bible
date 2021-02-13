@@ -1,16 +1,10 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 
 import android.app.NotificationManager
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
@@ -51,7 +45,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
-import java.util.*
 
 class HomeMCheyneFragment : Fragment() {
 

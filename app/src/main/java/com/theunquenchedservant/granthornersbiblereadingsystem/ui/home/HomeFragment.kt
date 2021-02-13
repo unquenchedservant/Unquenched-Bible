@@ -1,16 +1,10 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 
 import android.app.NotificationManager
-import android.content.ActivityNotFoundException
 import android.content.Context
-import android.content.Intent
-import android.content.res.ColorStateList
 import android.graphics.Color
-import android.graphics.PorterDuff
-import android.net.Uri
 import android.os.Bundle
 import android.view.*
-import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
@@ -26,7 +20,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.ReadingLists
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
@@ -49,13 +42,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
-import java.util.*
 
 class HomeFragment : Fragment() {
 

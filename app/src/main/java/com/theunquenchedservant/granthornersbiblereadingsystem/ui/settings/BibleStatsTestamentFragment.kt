@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.preference.Preference
@@ -15,9 +14,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import java.util.*
 import kotlin.math.roundToInt
 

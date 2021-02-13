@@ -9,8 +9,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_C
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 
 object BibleStatsReset {
     private val isLogged = Firebase.auth.currentUser
