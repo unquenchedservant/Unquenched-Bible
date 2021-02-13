@@ -172,7 +172,7 @@ object Marker {
                 if (!extractBoolPref(currentData,"psalm${day + 90}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 90, updateValue = updateValues)
                 if (!extractBoolPref(currentData,"psalm${day + 120}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 120, updateValue = updateValues)
             }
-        } else {
+        } else if(planSystem == "pgh"){
             val reading = list[listIndex]
             val readingArray = reading.split(" ")
             var lastIndex = if(readingArray.lastIndex == 0) 1 else readingArray.lastIndex
