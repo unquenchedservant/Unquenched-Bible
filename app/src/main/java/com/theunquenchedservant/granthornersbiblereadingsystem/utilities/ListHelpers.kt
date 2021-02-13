@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings.Global.getString
 import android.view.View
 import android.widget.Button
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
@@ -57,7 +59,7 @@ object ListHelpers {
                 }
                 dialog.dismiss()
             }
-            builder.setTitle(R.string.title_new_update)
+            builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
                     "This update fixes all final issues with one chapter books and marking lists as done. It also has some UI fixes and support related changes\n\n"+
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
@@ -80,7 +82,7 @@ object ListHelpers {
                 }
                 dialog.dismiss()
             }
-            builder.setTitle(R.string.title_new_update)
+            builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
                     "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
                             "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +

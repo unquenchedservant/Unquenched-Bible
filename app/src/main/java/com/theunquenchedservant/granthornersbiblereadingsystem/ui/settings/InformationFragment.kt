@@ -52,7 +52,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             false
         }
-        currentVersion?.title = resources.getString(R.string.title_version)
+        currentVersion?.title = resources.getString(R.string.title_version, BuildConfig.VERSION_NAME)
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://headwayapp.co/unquenched-bible-changelog"))
             try {
