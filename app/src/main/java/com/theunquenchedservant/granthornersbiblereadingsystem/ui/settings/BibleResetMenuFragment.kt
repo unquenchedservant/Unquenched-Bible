@@ -59,8 +59,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
-                            val currentData = it.data
-                            resetBible(currentData,hardReset=true)
+                            resetBible(hardReset=true)
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
@@ -81,8 +80,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
             alertDialog.setPositiveButton("Yes"){dialog, _->
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
-                            val currentData = it.data
-                            resetBible(currentData,hardReset=false)
+                            resetBible(hardReset=false)
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
@@ -104,7 +102,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
                             val currentData = it.data
-                            resetTestament(currentData, testament="old",hardReset=true, internal=false)
+                            resetTestament(testament="old",hardReset=true, internal=false, if(currentData?.toMutableMap() != null) currentData.toMutableMap() else mutableMapOf())
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
@@ -126,7 +124,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
                             val currentData = it.data
-                            resetTestament(currentData, testament="old", hardReset=false, internal=false)
+                            resetTestament(testament="old", hardReset=false, internal=false, if(currentData?.toMutableMap() != null) currentData.toMutableMap() else mutableMapOf())
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
@@ -148,7 +146,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
                             val currentData = it.data
-                            resetTestament(currentData, testament="new", hardReset=true, internal=false)
+                            resetTestament(testament="new", hardReset=true, internal=false, if(currentData?.toMutableMap() != null) currentData.toMutableMap() else mutableMapOf())
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
@@ -170,7 +168,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
                             val currentData = it.data
-                            resetTestament(currentData, testament="new", hardReset=false, internal=false)
+                            resetTestament(testament="new", hardReset=false, internal=false, if(currentData?.toMutableMap() != null) currentData.toMutableMap() else mutableMapOf())
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
