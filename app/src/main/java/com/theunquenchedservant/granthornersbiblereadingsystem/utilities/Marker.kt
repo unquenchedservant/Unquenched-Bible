@@ -80,8 +80,7 @@ object Marker {
         alert.show()
     }*/
 
-    private fun updateStatistics(currentData: MutableMap<String, Any>?, book: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int, context: Context?, updateValue:MutableMap<String, Any>):MutableMap<String, Any> {
-        val bookName = BOOK_NAMES[book]
+    private fun updateStatistics(currentData: MutableMap<String, Any>?, book: String, bookChaps: Int, testament: String, testamentChapters: Int, chapter: Int, updateValue: MutableMap<String, Any>):MutableMap<String, Any> {
         if (extractIntPref(currentData, "${book}ChaptersRead") == bookChaps) {
             updateValue["${book}ChaptersRead"] = 0
             updateValue["${book}AmountRead"] = extractIntPref(currentData, "${book}AmountRead") + 1
@@ -138,7 +137,7 @@ object Marker {
         return updateValue
     }
 
-    private fun updateReadingStatistic(currentData:MutableMap<String, Any>?, listName: String, context: Context?, updateValue: MutableMap<String, Any>):MutableMap<String, Any> {
+    private fun updateReadingStatistic(currentData: MutableMap<String, Any>?, listName: String, updateValue: MutableMap<String, Any>):MutableMap<String, Any> {
         var updateValues = updateValue
         val listId = getListId(listName)
         val list = App.applicationContext().resources.getStringArray(listId)
@@ -167,11 +166,11 @@ object Marker {
             val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
             if (day != 31) {
                 val bookChapters = 150
-                if (!extractBoolPref(currentData,"psalm${day}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day, context, updateValues)
-                if (!extractBoolPref(currentData, "psalm${day + 30}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 30, context, updateValues)
-                if (!extractBoolPref(currentData, "psalm${day + 60}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 60, context, updateValues)
-                if (!extractBoolPref(currentData,"psalm${day + 90}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 90, context, updateValues)
-                if (!extractBoolPref(currentData,"psalm${day + 120}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 120, context, updateValues)
+                if (!extractBoolPref(currentData,"psalm${day}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day, updateValue = updateValues)
+                if (!extractBoolPref(currentData, "psalm${day + 30}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 30, updateValue = updateValues)
+                if (!extractBoolPref(currentData, "psalm${day + 60}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 60, updateValue = updateValues)
+                if (!extractBoolPref(currentData,"psalm${day + 90}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 90, updateValue = updateValues)
+                if (!extractBoolPref(currentData,"psalm${day + 120}Read")) updateValues=updateStatistics(currentData, codedBook, bookChapters, testament = "old", testamentChapters = 929, chapter = day + 120, updateValue = updateValues)
             }
         } else {
             val reading = list[listIndex]
@@ -185,7 +184,7 @@ object Marker {
             val bookChapters = BOOK_CHAPTERS[codedBook]
             val testament = getTestament(codedBook!!)
             val testamentChapters = if (testament == "old") 929 else 260
-            updateValues = updateStatistics(currentData, codedBook, bookChapters!!, testament, testamentChapters, chapter, context, updateValues)
+            updateValues = updateStatistics(currentData, codedBook, bookChapters!!, testament, testamentChapters, chapter, updateValues)
         }
         return updateValues
     }
@@ -220,7 +219,7 @@ object Marker {
                     val listStart = if(planType=="pgh") "list" else "mcheyneList"
                     val listsDone = "${listStart}sDone"
                     for (i in 1..doneMax){
-                        updateValues = updateReadingStatistic(currentData, listName = "${listStart}${i}", context, updateValues)
+                        updateValues = updateReadingStatistic(currentData, listName = "${listStart}${i}", updateValue = updateValues)
                         updateValues["${listStart}${i}Done"] = setIntPref("$listStart${i}Done", 1)
                         if(extractIntPref(currentData, "${listStart}${i}DoneDaily") == 0){
                             updateValues["${listStart}${i}DoneDaily"] = setIntPref("$listStart${i}DoneDaily", 1)
@@ -295,7 +294,7 @@ object Marker {
                     }
                     updateValues[listsDoneString] = setIntPref(listsDoneString, listsDone)
                     if (extractIntPref(currentData, cardDone) != 1) {
-                        updateValues = updateReadingStatistic(currentData, listName, context, updateValues)
+                        updateValues = updateReadingStatistic(currentData, listName, updateValues)
                         updateValues[cardDone] = setIntPref(cardDone, 1)
                         updateValues["dateChecked"] = setStringPref("dateChecked",getDate(0, false))
                         if (allowPartial || listsDone == doneMax) {
