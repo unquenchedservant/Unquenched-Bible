@@ -22,10 +22,6 @@ import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.google.android.play.core.appupdate.AppUpdateManagerFactory
-import com.google.android.play.core.install.model.AppUpdateType
-import com.google.android.play.core.install.model.AppUpdateType.IMMEDIATE
-import com.google.android.play.core.install.model.UpdateAvailability
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
@@ -55,14 +51,13 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     lateinit var binding: ActivityMainBinding
     var darkMode: Boolean = false
     val context = this
-    val UPDATE_RC = 54
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         WebView(applicationContext)
         super.onCreate(savedInstanceState)
-        checkUpdateProgress()
+
         val stateList = arrayOf(
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
@@ -88,7 +83,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             startActivity(Intent(this, OnboardingPagerActivity::class.java))
         }else {
-            checkUpdate()
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
             navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -140,11 +134,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 binding.translationSelector.isVisible = false
                 setupBottomNavigationBar()
             }
-    }
-
-    override fun onResume(){
-       super.onResume()
-       checkUpdateProgress()
     }
 
     fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
@@ -334,7 +323,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 .addOnSuccessListener {
                     val currentData = it.data
                     val dateChecked = extractStringPref(currentData, "dateChecked")
-                    if (!checkDate(dateChecked, "current", false) && extractIntPref(currentData,"listsDone") != 0 || extractIntPref(currentData, "mcheyneListsDone") != 0) {
+                    if (!checkDate(dateChecked, "current", false) && (extractIntPref(currentData,"listsDone") != 0 || extractIntPref(currentData, "mcheyneListsDone") != 0)) {
                         val data: MutableMap<String, Any> = mutableMapOf()
                         val allowPartial = extractBoolPref(currentData, "allowPartial")
                         val planType = extractStringPref(currentData, "planType", "horner")
@@ -429,33 +418,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             }
         }
     }
-
-    fun checkUpdate(){
-        val appUpdateManager = AppUpdateManagerFactory.create(context)
-        val appUpdateInfoTask = appUpdateManager.appUpdateInfo
-        appUpdateInfoTask.addOnSuccessListener { appUpdateInfo ->
-            if(appUpdateInfo.updateAvailability() == UpdateAvailability.UPDATE_AVAILABLE
-                    && appUpdateInfo.isUpdateTypeAllowed(AppUpdateType.IMMEDIATE)){
-                        appUpdateManager.startUpdateFlowForResult(
-                                appUpdateInfo,
-                                AppUpdateType.IMMEDIATE,
-                                this,
-                                UPDATE_RC)
-                    }
-        }
-    }
-    fun checkUpdateProgress(){
-        val appUpdateManager = AppUpdateManagerFactory.create(context)
-        appUpdateManager.appUpdateInfo.addOnSuccessListener { appUpdateInfo->
-            if(appUpdateInfo.updateAvailability() == UpdateAvailability.DEVELOPER_TRIGGERED_UPDATE_IN_PROGRESS){
-                appUpdateManager.startUpdateFlowForResult(
-                        appUpdateInfo,
-                        IMMEDIATE,
-                        this,
-                        UPDATE_RC)
-            }
-        }
-    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()
@@ -486,10 +448,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     val i = Intent(this@MainActivity, MainActivity::class.java)
                     startActivity(i)
                 }
-            }
-        }else if(requestCode == UPDATE_RC){
-            if (resultCode != RESULT_OK){
-                log("Update flow failed! Result code: $resultCode")
             }
         }
     }

@@ -183,7 +183,6 @@ object SharedPref {
     fun firestoreToPreference(database: DocumentSnapshot){
         val data = database.data
         if(data != null) {
-            log("User document exists")
             for (i in 1..10) {
                 updateIntPref(data, key = "list${i}")
                 updateIntPref(data, key = "list${i}Done")
