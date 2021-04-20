@@ -31,7 +31,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ALL_BO
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.NT_BOOKS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.OT_BOOKS
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getVerses
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
@@ -88,34 +87,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             startActivity(Intent(this, OnboardingPagerActivity::class.java))
         }else {
-            val bible = mutableMapOf<String, Any>()
-            val oldTestament = mutableMapOf<String, Any>()
-            val newTestament = mutableMapOf<String, Any>()
-            oldTestament["booksRead"] = 0
-            oldTestament["read"] = false
-            oldTestament["amountRead"] = 0
-            newTestament["booksRead"] = 0
-            newTestament["read"] = false
-            newTestament["amountRead"] = 0
-            for(bookName in OT_BOOKS){
-                val generatedBook : MutableMap<String, Any> = bookCreator(bookName)
-                oldTestament[bookName] = generatedBook
-            }
-            for(bookName in NT_BOOKS){
-                val generatedBook : MutableMap<String, Any> = bookCreator(bookName)
-                newTestament[bookName] = generatedBook
-            }
-            bible["oldTestament"] = oldTestament
-            bible["newTestament"] = newTestament
-            Firebase.firestore.collection("test").document("test").update(bible)
-                    .addOnFailureListener{
-                        log("${it.message}")
-                    }
-                    .addOnSuccessListener {
-                        log("Updated successfully (bible stats)")
-                    }
-          //  Firebase.firestore.collection("test").document("test")
-         //   }
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
             navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -167,25 +138,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 binding.translationSelector.isVisible = false
                 setupBottomNavigationBar()
             }
-    }
-    fun bookCreator(bookName:String): MutableMap<String, Any>{
-        val currentBook = mutableMapOf<String, Any>()
-        currentBook["chaptersRead"] = 0
-        currentBook["versesRead"] = 0
-        currentBook["amountRead"] = 0
-        for (y in 1..BOOK_CHAPTERS["${bookName}"]!!) {
-            val currentChapterValues = mutableMapOf<String, Any>()
-            currentChapterValues["read"] = false
-            currentChapterValues["amountRead"] = 0
-            currentChapterValues["versesRead"] = 0
-            val verseCount = getVerses("${bookName}", y)
-            for (x in 1..verseCount) {
-                currentChapterValues["${y}_${x}_read"] = false
-                currentChapterValues["${y}_${x}_amountRead"] = false
-            }
-            currentBook["chapter_${y}"] = currentChapterValues
-        }
-        return currentBook
     }
     fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
         binding.myToolbar.setNavigationOnClickListener {
