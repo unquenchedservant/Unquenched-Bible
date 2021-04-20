@@ -156,17 +156,17 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     setupNavigation(homeId, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = true)
-                    if (getStringPref(name="bibleVersion", defaultValue="NIV") == "NASB"){
+                    if (getStringPref(name="bibleVersion", defaultValue="ESV") == "NASB"){
                         setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
                     }
-                    when (getStringPref(name="bibleVersion", defaultValue="NIV")){
+                    when (getStringPref(name="bibleVersion", defaultValue="ESV")){
                         "AMP" -> binding.translationSelector.setSelection(1)
                         "CSB" -> binding.translationSelector.setSelection(2)
                         "ESV" -> binding.translationSelector.setSelection(3)
                         "KJV" -> binding.translationSelector.setSelection(4)
-                        "NIV" -> binding.translationSelector.setSelection(5)
-                        "NASB95" -> binding.translationSelector.setSelection(7)
-                        "NASB20" -> binding.translationSelector.setSelection(8)
+                       // "NIV" -> binding.translationSelector.setSelection(5)
+                        "NASB95" -> binding.translationSelector.setSelection(6)
+                        "NASB20" -> binding.translationSelector.setSelection(7)
                     }
                 }
                 R.id.navigation_plan_settings ->{
