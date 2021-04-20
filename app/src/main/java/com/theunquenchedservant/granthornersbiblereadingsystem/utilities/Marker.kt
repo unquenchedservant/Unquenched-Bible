@@ -280,7 +280,7 @@ object Marker {
                         else -> 10
                     }
                     val listStart = if (currentData?.get(planSystem) == "pgh") "list" else "mcheyneList"
-                    val listsDoneString = "${listStart}Done"
+                    val listsDoneString = "${listStart}sDone"
                     val cardDoneDaily = "${cardDone}Daily"
                     val listName = cardDone.replace("Done", "")
                     val allowPartial = extractBoolPref(currentData, "allowPartial")
