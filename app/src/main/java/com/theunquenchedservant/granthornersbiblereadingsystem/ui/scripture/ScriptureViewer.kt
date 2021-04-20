@@ -202,7 +202,11 @@ class ScriptureViewer : Fragment() {
             getPsalms(type)
         }else {
             prepBindings(1, R.id.navigation_home, chapter, false, 0)
-            title = chapter
+            title = if (" " !in chapter){
+                "$chapter 1"
+            }else{
+                chapter
+            }
             log("THIS IS THE CHAPTER ${chapter}")
             act.supportActionBar?.title = title
             if(type == "esv"){
