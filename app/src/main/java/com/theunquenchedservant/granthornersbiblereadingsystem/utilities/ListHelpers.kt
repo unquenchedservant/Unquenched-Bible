@@ -43,14 +43,14 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if(getIntPref(name="versionNumber") > 70 && getIntPref("versionNumber") < 88){
+        if(getIntPref("versionNumber") < 89){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 88, updateFS = true)
+                setIntPref(name = "versionNumber", value = 89, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 88, updateFS = true)
+                setIntPref(name = "versionNumber", value = 89, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
                 try {
                     startActivity(context, i, null)
@@ -61,7 +61,9 @@ object ListHelpers {
             }
             builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
-                    "Made app version references dynamic. Also temporarily disabled bible stat updates for mcheyne until I can fix it.\n\n"+
+                    "Disabled Bible stats until we are able to fix\n"+
+                            "Potentially fixed an issue with leap year calculations. Luckily there are a few years til that's an issue.\n\n"+
+                            "Various other fixes\n\n"+
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
             builder.create().show()
