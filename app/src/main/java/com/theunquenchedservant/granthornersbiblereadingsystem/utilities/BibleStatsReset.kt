@@ -9,13 +9,11 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_C
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 
 object BibleStatsReset {
     private val isLogged = Firebase.auth.currentUser
 
-    fun resetBook(currentData: MutableMap<String, Any>?, bookName: String, testament: String, hardReset: Boolean = false, internal: Boolean = false, updateValues: MutableMap<String, Any> = mutableMapOf()):MutableMap<String, Any>{
+    fun resetBook(bookName: String, testament: String, hardReset: Boolean = false, internal: Boolean = false, updateValues: MutableMap<String, Any> = mutableMapOf()):MutableMap<String, Any>{
         val chapters = BOOK_CHAPTERS[bookName] ?: error("")
         for(chapter in 1..chapters){
             updateValues["${bookName}${chapter}Read"] = false
@@ -52,17 +50,14 @@ object BibleStatsReset {
                         Log.w("PROFGRANT", "Failure writing to firestore", error)
                     }
         }
-        if(internal){
-            return updateValues
-        }
         return updateValues
     }
 
-    fun resetTestament(currentData:MutableMap<String, Any>?, testament: String, hardReset: Boolean=false, internal: Boolean=false, updateValues: MutableMap<String, Any> = mutableMapOf()) :MutableMap<String, Any>{
+    fun resetTestament(testament: String, hardReset: Boolean=false, internal: Boolean=false, updateValues: MutableMap<String, Any> = mutableMapOf()) :MutableMap<String, Any>{
         val books = getBooks(testament)!!
         var updateValueUpdated = updateValues
         for(book in books){
-            updateValueUpdated = resetBook(currentData, book, testament, hardReset, internal=true, updateValueUpdated)
+            updateValueUpdated = resetBook(book, testament, hardReset, internal=true, updateValueUpdated)
         }
 
         updateValueUpdated["${testament}ChaptersRead"] = 0
@@ -84,10 +79,10 @@ object BibleStatsReset {
         return updateValueUpdated
     }
 
-    fun resetBible(currentData:MutableMap<String, Any>?, hardReset: Boolean=false) {
+    fun resetBible(hardReset: Boolean=false) {
         var updateValues = mutableMapOf<String, Any>()
-        updateValues = resetTestament(currentData, testament = "new", hardReset, internal = true, updateValues)
-        updateValues = resetTestament(currentData, testament = "old", hardReset, internal = true, updateValues)
+        updateValues = resetTestament(testament = "new", hardReset, internal = true, updateValues)
+        updateValues = resetTestament(testament = "old", hardReset, internal = true, updateValues)
         if (hardReset) {
             updateValues["bibleAmountRead"] = 0
         }
@@ -97,8 +92,7 @@ object BibleStatsReset {
                 .addOnSuccessListener {
                     MainActivity.log("Successful update")
                 }
-                .addOnFailureListener {
-                    val error = it
+                .addOnFailureListener { error ->
                     Log.w("PROFGRANT", "Failure writing to firestore", error)
                 }
     }

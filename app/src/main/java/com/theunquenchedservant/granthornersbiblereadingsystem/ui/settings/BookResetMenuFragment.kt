@@ -37,7 +37,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
                             val currentData = it.data
-                            resetBook(currentData, book!!, testament!!, hardReset=true, internal=false)
+                            resetBook(book!!, testament!!, hardReset=true, internal=false, currentData?.toMutableMap()!!)
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
@@ -59,7 +59,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnSuccessListener {
                             val currentData = it.data
-                            resetBook(currentData,book!!, testament!!, hardReset=false, internal=false)
+                            resetBook(book!!, testament!!, hardReset=false, internal=false, currentData?.toMutableMap()!!)
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error ->

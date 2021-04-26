@@ -7,6 +7,7 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
+import android.os.Build
 import android.provider.Settings.Global.getString
 import android.view.View
 import android.widget.Button
@@ -21,6 +22,7 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
@@ -41,14 +43,14 @@ import java.util.*
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
-        if(getIntPref(name="versionNumber") in 70..76){
+        if(getIntPref("versionNumber") < 89){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 77, updateFS = true)
+                setIntPref(name = "versionNumber", value = 89, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 77, updateFS = true)
+                setIntPref(name = "versionNumber", value = 89, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
                 try {
                     startActivity(context, i, null)
@@ -57,20 +59,23 @@ object ListHelpers {
                 }
                 dialog.dismiss()
             }
-            builder.setTitle(R.string.title_new_update)
+            builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
-                    "This update contains a bunch of fixes for marking lists as done as well as advanving single lists.\n\n"+
+                    "Disabled Bible stats until we are able to fix\n"+
+                            "Potentially fixed an issue with leap year calculations. Luckily there are a few years til that's an issue.\n\n"+
+                            "Various other fixes\n\n"+
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
+            builder.create().show()
         }
-        if (getIntPref(name = "versionNumber") < 70) {
+        else if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 77, updateFS = true)
+                setIntPref(name = "versionNumber", value = 88, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 76, updateFS = true)
+                setIntPref(name = "versionNumber", value = 88, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
                 try {
                     startActivity(context, i, null)
@@ -79,7 +84,7 @@ object ListHelpers {
                 }
                 dialog.dismiss()
             }
-            builder.setTitle(R.string.title_new_update)
+            builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
                     "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
                             "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +

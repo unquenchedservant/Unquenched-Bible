@@ -89,7 +89,6 @@ class ReadingListRepository {
                 }
             }
         }
-        log("THIS IS THE PLAN TYPE ${getStringPref("planType")}")
         when (getStringPref(name="planType", defaultValue="horner")) {
             "horner" -> {
                 return when (index) {
@@ -115,7 +114,11 @@ class ReadingListRepository {
             }
             "calendar" -> {
                 var newIndex = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 3
-                while(newIndex >= list.size){
+                val cal = Calendar.getInstance();
+                if(cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365 && cal.get(Calendar.DAY_OF_YEAR) > 60){
+                    newIndex -= 1
+                }
+                while (newIndex >= list.size) {
                     newIndex -= list.size
                 }
                 return list[newIndex]

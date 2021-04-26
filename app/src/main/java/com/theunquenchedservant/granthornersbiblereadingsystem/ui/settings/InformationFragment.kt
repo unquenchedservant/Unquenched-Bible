@@ -3,13 +3,20 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 import android.content.ActivityNotFoundException
 import android.content.Intent
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.widget.Toast
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.google.android.gms.oss.licenses.OssLicensesMenuActivity
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
 class InformationFragment : PreferenceFragmentCompat() {
 
@@ -45,7 +52,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             startActivity(Intent(context, OssLicensesMenuActivity::class.java))
             false
         }
-        currentVersion?.title = resources.getString(R.string.title_version)
+        currentVersion?.title = resources.getString(R.string.title_version, BuildConfig.VERSION_NAME)
         currentVersion!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://headwayapp.co/unquenched-bible-changelog"))
             try {
@@ -65,11 +72,25 @@ class InformationFragment : PreferenceFragmentCompat() {
             false
         }
         contact!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
+            var emailText = "\n\n(Please leave the following)\n\n"
+            emailText += "App Version: ${BuildConfig.VERSION_CODE} | ${BuildConfig.VERSION_NAME}\n"
+            emailText += "Plan System: ${getStringPref("planSystem")}\n"
+            emailText += "Plan Method: ${getStringPref("planType")}\n"
+            val psText = if(getBoolPref("psalms")) "5Psalms" else getIntPref("list6").toString()
+            emailText += "PGH Lists: (${getIntPref("list1")}, ${getIntPref("list2")}, ${getIntPref("list3")}, ${getIntPref("list4")}, ${getIntPref("list5")}, $psText, ${getIntPref("list7")}, ${getIntPref("list8")}, ${getIntPref("list9")}, ${getIntPref("list10")})\n"
+            emailText += "MCheyne Lists: (${getIntPref("mcheyneList1")}, ${getIntPref("mcheyneList2")}, ${getIntPref("mcheyneList3")}, ${getIntPref("mcheyneList4")})\n"
+            emailText += "Indexes: (${getIntPref("currentDayIndex")}, ${getIntPref("mcheyneCurrentDayIndex")})\n"
+            emailText += "PGH Lists Done: ${getIntPref("listsDone")}\n"
+            emailText += "Mcheyne Lists Done: ${getIntPref("mcheyneListsDone")}\n"
+            emailText += "Phone: ${Build.PRODUCT}\n"
+            emailText += "Android Version: ${Build.VERSION.RELEASE}\n"
+            emailText += "ID: ${Firebase.auth.currentUser?.uid}"
             val i = Intent(Intent.ACTION_SENDTO)
                     .setType("text/plain")
                     .setData(Uri.parse("mailto:"))
                     .putExtra(Intent.EXTRA_EMAIL, arrayOf("contact@unquenched.tech"))
-                    .putExtra(Intent.EXTRA_SUBJECT, "COMMENT/QUESTION - PGH APP")
+                    .putExtra(Intent.EXTRA_TEXT, emailText)
+                    .putExtra(Intent.EXTRA_SUBJECT, "COMMENT/QUESTION - Unquenched Bible (Android)")
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){

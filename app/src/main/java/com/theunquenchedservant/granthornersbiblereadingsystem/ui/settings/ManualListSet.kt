@@ -747,14 +747,12 @@ class ManualListSet: Fragment() {
         val list = resources.getStringArray(listId)
         val fullValue = list[number]
         val afterSplit = fullValue.split(" ")
-
         return if(type=="pgh"){
-           val returnVal = when (afterSplit.size){
-                1 -> arrayOf<Any>(fullValue, 1)
-                3 -> arrayOf<Any>("${afterSplit[0]} ${afterSplit[1]}", afterSplit[2].toInt())
-                4 -> arrayOf<Any>("${afterSplit[0]} ${afterSplit[1]} ${afterSplit[2]}", afterSplit[3].toInt())
-                else -> arrayOf<Any>(afterSplit[0], afterSplit[1].toInt()) }
-            returnVal
+            var lastIndex = if(afterSplit.lastIndex == 0) 1 else afterSplit.lastIndex
+            lastIndex = if(afterSplit[0].toIntOrNull() != null && afterSplit[lastIndex].toIntOrNull() == null) lastIndex + 1 else lastIndex
+            val book = afterSplit.subList(0, lastIndex).joinToString(" ")
+            val chapter = if(afterSplit[afterSplit.lastIndex].toIntOrNull() != null) afterSplit[afterSplit.lastIndex].toInt() else 1
+            arrayOf<Any>(book, chapter)
         } else{
             fullValue
         }

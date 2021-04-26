@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
 
 import android.os.Bundle
-import android.widget.Toast
 import androidx.core.content.res.ResourcesCompat
 import androidx.core.os.bundleOf
 import androidx.preference.Preference
@@ -11,9 +10,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import kotlin.math.roundToInt
 
 class BibleStatsFragment : PreferenceFragmentCompat() {
@@ -43,8 +40,8 @@ class BibleStatsFragment : PreferenceFragmentCompat() {
                     val newAmountRead = extractIntPref(currentData, "newAmountRead")
                     val oldAmountRead = extractIntPref(currentData, "oldAmountRead")
                     val bibleReadInt = extractIntPref(currentData, "bibleAmountRead")
-                    oldTestament.summary = "$oldPercent % | Times Read: $oldAmountRead"
-                    newTestament.summary = "$newPercent % | Times Read: $newAmountRead"
+                    oldTestament.summary = "$oldPercent % (${extractIntPref(currentData,"oldChaptersRead")}/929) | Times Read: $oldAmountRead"
+                    newTestament.summary = "$newPercent % (${extractIntPref(currentData, "newChaptersRead")}/260) | Times Read: $newAmountRead"
                     bibleRead!!.summary = "$bibleReadInt"
                 }
                 .addOnFailureListener { error->

@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
 import android.app.Activity
-import android.app.LauncherActivity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -28,24 +27,22 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ALL_BOOKS
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.NT_BOOKS
+import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.OT_BOOKS
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
@@ -64,6 +61,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         setTheme(R.style.AppTheme)
         WebView(applicationContext)
         super.onCreate(savedInstanceState)
+
         val stateList = arrayOf(
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
@@ -166,8 +164,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         "CSB" -> binding.translationSelector.setSelection(2)
                         "ESV" -> binding.translationSelector.setSelection(3)
                         "KJV" -> binding.translationSelector.setSelection(4)
-                        "NASB95" -> binding.translationSelector.setSelection(5)
-                        "NASB20" -> binding.translationSelector.setSelection(6)
+                       // "NIV" -> binding.translationSelector.setSelection(5)
+                        "NASB95" -> binding.translationSelector.setSelection(6)
+                        "NASB20" -> binding.translationSelector.setSelection(7)
                     }
                 }
                 R.id.navigation_plan_settings ->{
@@ -328,7 +327,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 .addOnSuccessListener {
                     val currentData = it.data
                     val dateChecked = extractStringPref(currentData, "dateChecked")
-                    if (!checkDate(dateChecked, "current", false)) {
+                    if (!checkDate(dateChecked, "current", false) && (extractIntPref(currentData,"listsDone") != 0 || extractIntPref(currentData, "mcheyneListsDone") != 0)) {
                         val data: MutableMap<String, Any> = mutableMapOf()
                         val allowPartial = extractBoolPref(currentData, "allowPartial")
                         val planType = extractStringPref(currentData, "planType", "horner")
@@ -383,9 +382,10 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             }
                             data["currentStreak"] = 0
                         }
+                        val homeID = if(extractStringPref(currentData, "planSystem")== "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
                         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
                                 .addOnSuccessListener {
-                                    log("Updated Successfully")
+                                    navController.navigate(homeID)
                                 }
                                 .addOnFailureListener {
                                     Toast.makeText(context, "Error updating lists", Toast.LENGTH_LONG).show()
@@ -422,8 +422,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             }
         }
     }
-
-
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()

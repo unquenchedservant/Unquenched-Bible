@@ -25,3 +25,5 @@ app/src/main/cpp/native-lib.cpp
 .idea/render.experimental.xml
 
 app/test.txt
+
+app/src/main/java/com/theunquenchedservant/granthornersbiblereadingsystem/utilities/FirebaseHelper.kt
