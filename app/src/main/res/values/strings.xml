@@ -61,6 +61,7 @@
     <string name="title_log_out">Log Out</string>
     <string name="title_kenny_loggins">DANGER ZONE</string>
     <string name="title_delete_account">Delete Account</string>
+    <string name="title_acknowledgements">Acknowledgements</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>

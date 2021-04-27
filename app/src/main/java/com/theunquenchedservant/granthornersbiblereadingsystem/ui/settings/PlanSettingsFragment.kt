@@ -27,7 +27,7 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         val weekendMode: SwitchPreference? = findPreference("weekendMode")
         translation!!.setEntries(R.array.translationArray)
         translation.setEntryValues(R.array.translationArray)
-        val currentTranslation = getStringPref("bibleVersion", "ESV")
+        val currentTranslation = getStringPref("bibleVersion", "NIV")
         translation.value = currentTranslation
         planType!!.summary = "${getString(R.string.summary_plan_type)} Current Plan: ${getStringPref(name="planSystem", defaultValue="pgh").toUpperCase(Locale.ROOT)}"
         planType.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)

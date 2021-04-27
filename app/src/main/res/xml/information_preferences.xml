@@ -19,6 +19,12 @@
             app:allowDividerBelow="true">
         </Preference>
         <Preference
+            app:key="acknowledgements"
+            app:title="@string/title_acknowledgements"
+            app:allowDividerBelow="true"
+            app:allowDividerAbove="true">
+        </Preference>
+        <Preference
             app:key="privacy"
             app:title="@string/title_privacy"
             app:allowDividerAbove="true"
