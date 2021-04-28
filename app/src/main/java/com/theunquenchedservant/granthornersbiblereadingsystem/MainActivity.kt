@@ -27,10 +27,6 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.ALL_BOOKS
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.NT_BOOKS
-import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.OT_BOOKS
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
