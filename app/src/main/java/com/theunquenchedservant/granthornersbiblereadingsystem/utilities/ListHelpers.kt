@@ -61,8 +61,9 @@ object ListHelpers {
             }
             builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
+                    "Added the NIV translation (now the default), and a way to reset all lists to the beginning in one go! \n" +
                     "Disabled Bible stats until we are able to fix\n"+
-                            "Potentially fixed an issue with leap year calculations. Luckily there are a few years til that's an issue.\n\n"+
+                            "Potentially fixed an issue with leap year calculations. Luckily there are a few years til that's an issue.\n"+
                             "Various other fixes\n\n"+
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
