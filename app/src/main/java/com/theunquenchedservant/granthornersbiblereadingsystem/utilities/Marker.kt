@@ -219,7 +219,7 @@ object Marker {
                     val listStart = if(planType=="pgh") "list" else "mcheyneList"
                     val listsDone = "${listStart}sDone"
                     for (i in 1..doneMax){
-                        updateValues = updateReadingStatistic(currentData, listName = "${listStart}${i}", updateValue = updateValues)
+                       // updateValues = updateReadingStatistic(currentData, listName = "${listStart}${i}", updateValue = updateValues)
                         updateValues["${listStart}${i}Done"] = setIntPref("$listStart${i}Done", 1)
                         if(extractIntPref(currentData, "${listStart}${i}DoneDaily") == 0){
                             updateValues["${listStart}${i}DoneDaily"] = setIntPref("$listStart${i}DoneDaily", 1)
@@ -280,7 +280,7 @@ object Marker {
                         else -> 10
                     }
                     val listStart = if (currentData?.get(planSystem) == "pgh") "list" else "mcheyneList"
-                    val listsDoneString = "${listStart}Done"
+                    val listsDoneString = "${listStart}sDone"
                     val cardDoneDaily = "${cardDone}Daily"
                     val listName = cardDone.replace("Done", "")
                     val allowPartial = extractBoolPref(currentData, "allowPartial")
@@ -294,7 +294,7 @@ object Marker {
                     }
                     updateValues[listsDoneString] = setIntPref(listsDoneString, listsDone)
                     if (extractIntPref(currentData, cardDone) != 1) {
-                        updateValues = updateReadingStatistic(currentData, listName, updateValues)
+                        //updateValues = updateReadingStatistic(currentData, listName, updateValues)
                         updateValues[cardDone] = setIntPref(cardDone, 1)
                         updateValues["dateChecked"] = setStringPref("dateChecked",getDate(0, false))
                         if (allowPartial || listsDone == doneMax) {

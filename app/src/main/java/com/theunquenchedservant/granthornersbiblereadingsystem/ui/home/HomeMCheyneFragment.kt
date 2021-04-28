@@ -152,6 +152,9 @@ class HomeMCheyneFragment : Fragment() {
             true -> {
                 cardList.listReading.text = resources.getString(R.string.dayOff)
                 cardList.listTitle.text = resources.getString(readingString)
+                cardListRoot.setCardBackgroundColor(disabled)
+                cardList.listButtons.setBackgroundColor(disabled)
+                cardListRoot.isEnabled = false
             }
             false -> {
                 cardList.listReading.text = readingLists.listReading

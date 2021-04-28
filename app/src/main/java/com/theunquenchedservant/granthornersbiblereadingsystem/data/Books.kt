@@ -1,5 +1,7 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.data
 
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+
 object Books {
     val BOOK_CHAPTERS : Map<String, Int> = mapOf(
             "genesis" to 50, "exodus" to 40, "leviticus" to 27, "numbers" to 36,
@@ -78,6 +80,9 @@ object Books {
             "corinthians2", "galatians", "ephesians", "philippians", "colossians", "thessalonians1",
             "thessalonians2", "timothy1", "timothy2", "titus", "philemon", "hebrews", "james",
             "peter1", "peter2", "john1", "john2", "john3", "jude", "revelation")
+
+
+
 
     fun getBooks(testament: String) : Array<String>?{
         return when(testament){

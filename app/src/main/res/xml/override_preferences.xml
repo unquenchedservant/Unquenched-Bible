@@ -6,6 +6,12 @@
         app:title="@string/title_overrides_manual"
         app:allowDividerBelow="true"/>
     <Preference
+        app:key="resetAll"
+        app:title="@string/title_reset_all_lists"
+        app:summary="@string/summary_reset_all_lists"
+        app:allowDividerAbove="true"
+        app:allowDividerBelow="true"/>
+    <Preference
         app:key="resetDaily"
         app:title="@string/title_overrides_reset"
         app:summary="@string/summary_overrides_reset"

@@ -6,8 +6,10 @@
         <item>CSB</item>
         <item>ESV</item>
         <item>KJV</item>
+        <item>NIV</item>
         <item>NASB95</item>
         <item>NASB20</item>
+
     </string-array>
     <string-array name="listNames">
         <item>----</item>

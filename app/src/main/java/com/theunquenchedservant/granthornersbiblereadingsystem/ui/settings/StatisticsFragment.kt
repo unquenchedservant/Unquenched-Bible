@@ -20,43 +20,13 @@ class StatisticsFragment : PreferenceFragmentCompat() {
         setPreferencesFromResource(R.xml.statistics, rootKey)
         val curStreak: Preference? = findPreference("currentStreak")
         val maxStreak: Preference? = findPreference("MaximumStreak")
-        val bibleStats: Preference? = findPreference("bibleStatMain")
         curStreak?.summary = String.format("%d", getIntPref(name="currentStreak"))
         maxStreak?.summary = String.format("%d", getIntPref(name="maxStreak"))
-        bibleStats?.summary = "Loading..."
-        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
-                .addOnSuccessListener {
-                    val currentData = it.data
-                    val biblePercentRead = if(extractIntPref(currentData, "totalChaptersRead") != 0){
-                        val biblePercentRead1 = extractIntPref(currentData, "totalChaptersRead").toDouble() / 1189
-                        (biblePercentRead1 * 100).roundToInt()
-                    }else{
-                        0
-                    }
-                    val bibleAmountRead = extractIntPref(currentData,"bibleAmountRead")
-                    bibleStats?.summary = "$biblePercentRead % (${extractIntPref(currentData, "totalChaptersRead")}/1189) | Times Read: $bibleAmountRead"
-                }
-                .addOnFailureListener {
-                    bibleStats?.summary = "Error Loading Data"
-                }
-        val mainActivity = activity as MainActivity
         val statReset : Preference? = findPreference("resetStatistics")
-        val bibleResetMenu: Preference? = findPreference("resetBibleMenu")
-        bibleStats!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-        bibleResetMenu!!.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-        bibleStats.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            mainActivity.navController.navigate(R.id.navigation_bible_stats_main)
-            true
-        }
         statReset!!.onPreferenceClickListener  = Preference.OnPreferenceClickListener {
             resetCheck()
             true
         }
-        bibleResetMenu.onPreferenceClickListener = Preference.OnPreferenceClickListener {
-            mainActivity.navController.navigate(R.id.navigation_bible_reset_menu)
-            true
-        }
-
     }
     private fun resetCheck(){
         val builder = AlertDialog.Builder(context)

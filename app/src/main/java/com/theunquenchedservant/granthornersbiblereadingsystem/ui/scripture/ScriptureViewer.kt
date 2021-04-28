@@ -47,7 +47,7 @@ class ScriptureViewer : Fragment() {
 
     private external fun getBibleApiKey() : String
 
-    private var BIBLE_IDS : Map<String, String> = mapOf("KJV" to "55212e3cf5d04d49-01","CSB" to "a556c5305ee15c3f-01","NASB95" to "b8ee27bcd1cae43a-01", "NASB20" to "a761ca71e0b3ddcf-01", "AMP" to "a81b73293d3080c9-01", "ESV" to "ksdjfldjlkfjeiiethisdoesntmatteranyway")
+    private var BIBLE_IDS : Map<String, String> = mapOf("KJV" to "55212e3cf5d04d49-01","CSB" to "a556c5305ee15c3f-01","NASB95" to "b8ee27bcd1cae43a-01", "NASB20" to "a761ca71e0b3ddcf-01", "AMP" to "a81b73293d3080c9-01", "NIV" to "78a9f6124f344018-01", "ESV" to "ksdjfldjlkfjeiiethisdoesntmatteranyway")
     private val BOOK_IDS : Map<String, String> = mapOf(
             "Genesis" to "GEN", "Exodus" to "EXO", "Leviticus" to "LEV",
             "Numbers" to "NUM", "Deuteronomy" to "DEU", "Joshua" to "JOS",
@@ -81,9 +81,9 @@ class ScriptureViewer : Fragment() {
         act = activity as MainActivity
         view.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
         act.supportActionBar?.title = chapter
-        var bibleVersion = getStringPref("bibleVersion", "ESV")
+        var bibleVersion = getStringPref("bibleVersion", "NIV")
         bibleVersion = when (bibleVersion){
-            "---"->setStringPref("bibleVersion", "ESV", updateFS=true)
+            "---"->setStringPref("bibleVersion", "NIV", updateFS=true)
             "NASB"->setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
             else->bibleVersion
         }
@@ -92,7 +92,7 @@ class ScriptureViewer : Fragment() {
                 var version = parent?.getItemAtPosition(position).toString()
                 version = when(version){
                     "NASB2020" -> "NASB20"
-                    "---"->"ESV"
+                    "---"->"NIV"
                     else -> version
                 }
                 setStringPref(name = "bibleVersion", value = version, updateFS = true)
@@ -202,7 +202,11 @@ class ScriptureViewer : Fragment() {
             getPsalms(type)
         }else {
             prepBindings(1, R.id.navigation_home, chapter, false, 0)
-            title = chapter
+            title = if (" " !in chapter){
+                "$chapter 1"
+            }else{
+                chapter
+            }
             log("THIS IS THE CHAPTER ${chapter}")
             act.supportActionBar?.title = title
             if(type == "esv"){
@@ -336,11 +340,13 @@ class ScriptureViewer : Fragment() {
     private fun prepBibleApi(html2:String, css:String, response: JSONObject):String{
         val fums = response.getJSONObject("meta").getString("fums")
         var html = html2
-        val copyright = when (getStringPref(name="bibleVersion", defaultValue="ESV")){
-            "AMP" -> "Amplified® Bible (AMP), copyright © 1954, 1958, 1962, 1964, 1965, 1987, 2015 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
-            "CSB" -> "<center>Christian Standard Bible® Copyright © 2017 by Holman Bible Publishers</center><br>Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. Used by permission."
-            "NASB95","NASB20"-> "New American Standard Bible Copyright 1960, 1971, 1977, 1995, 2020 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br ><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
-            else -> "PUBLIC DOMAIN"
+        var copyright = ""
+        copyright = when (getStringPref(name="bibleVersion", defaultValue="NIV")){
+            "AMP" -> copyright + "Amplified® Bible (AMP), copyright © 1954, 1958, 1962, 1964, 1965, 1987, 2015 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
+            "CSB" -> copyright + "<center>Christian Standard Bible® Copyright © 2017 by Holman Bible Publishers</center><br>Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. Used by permission."
+            "NASB95","NASB20"-> copyright + "New American Standard Bible Copyright 1960, 1971, 1977, 1995, 2020 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br ><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
+            "NIV" -> copyright + "<center>Holy Bible, New International Version TM, NIV TM<br>Copyright © 1973, 1978, 1984, 2011 by <a href='https://www.biblica.com'>Biblica, Inc.</a><br>Used with permission. All rights reserved worldwide.</center><br>"
+            else -> copyright + "PUBLIC DOMAIN"
         }
         html = "<link rel=\"stylesheet\" type=\"text/css\" href=\"$css\" media=\"all\">$html"
         html = html.replace("1</span>", "1&nbsp;</span>")
