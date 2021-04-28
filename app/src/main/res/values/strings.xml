@@ -62,6 +62,7 @@
     <string name="title_kenny_loggins">DANGER ZONE</string>
     <string name="title_delete_account">Delete Account</string>
     <string name="title_acknowledgements">Acknowledgements</string>
+    <string name="title_reset_all_lists">Reset All Lists to Beginning</string>
 
     <string name="summary_home">Home</string>
     <string name="summary_stats">Stats</string>
@@ -92,7 +93,7 @@
     <string name="summary_weekend">Take weekends off. You won\t receive notifications on Saturdays or Sundays, and your streak won\'t be affected if you don\'t do the readings.</string>
     <string name="summary_log_out">Log out of your current account</string>
     <string name="summary_delete_account">Deletes your account from the Unquenched Bible System. All your local data remains.</string>
-
+    <string name="summary_reset_all_lists">Resets all the lists back to the beginning, undoes any lists you may have marked as done today.</string>
     <string name="psalms_next">Next</string>
     <string name="psalms_back">Back</string>
     <string name="scripture_done">Done</string>
