@@ -42,6 +42,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 
 class HomeFragment : Fragment() {
@@ -60,6 +61,7 @@ class HomeFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
+        traceLog(file="HomeFragment.kt", function="onCreateView()")
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         darkMode = getBoolPref(name = "darkMode", defaultValue = true)
         if(darkMode){
@@ -120,6 +122,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        traceLog(file="HomeFragment.kt", function="onResume()")
         when (allowResume) {
             true -> {
                 allowResume = false
@@ -129,6 +132,7 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        traceLog(file="HomeFragment.kt", function="onPause()")
         when (allowResume) {
             false -> allowResume = true
         }
@@ -136,7 +140,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        createUpdateAlert(requireContext())
+        traceLog(file="HomeFragment.kt", function="onViewCreated()")
         createButtonListener()
         createNotificationChannel()
         createAlarm(alarmType = "dailyCheck")
@@ -146,10 +150,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun createCard(cardList: CardviewsBinding, readingLists: ReadingLists, readingString: Int, listName: String, listArray: Int, psalms: Boolean) {
+        traceLog(file="HomeFragment.kt", function="createCard()")
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
         cardListRoot.isClickable = true
+        val context = (activity as MainActivity).applicationContext
         when (getBoolPref(name = "darkMode", defaultValue = true)) {
             true -> {
                 enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
@@ -191,6 +197,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun createButtonListener() {
+        traceLog(file="HomeFragment.kt", function="createButtonListener()")
         binding.materialButton.setOnClickListener {
             hideOthers(cardList = null, binding)
             val job = markAll("pgh", context)
@@ -221,6 +228,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, psalms: Boolean, listDone: String, listName: String) {
+        traceLog(file="HomeFragment.kt", function="createCardListener()")
         val list = resources.getStringArray(arrayId)
         val enabled: Int = when (getBoolPref("darkMode", defaultValue = true)) {
             true -> getColor(App.applicationContext(), R.color.buttonBackgroundDark)

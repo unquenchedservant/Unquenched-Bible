@@ -14,6 +14,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset.resetBook
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 
 class BookResetMenuFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
@@ -41,7 +42,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            MainActivity.log("Error getting dataa $error")
+                            debugLog(message = "Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
@@ -63,7 +64,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error ->
-                            MainActivity.log("Error getting dataa $error")
+                            debugLog(message = "Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }

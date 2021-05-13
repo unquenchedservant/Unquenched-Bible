@@ -11,6 +11,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 
@@ -35,7 +36,7 @@ class BibleBookFragment : PreferenceFragmentCompat(){
                         chapterPref.summary = "Read: $hasBeenRead | Times Read: $amountRead"
                     }
                     .addOnFailureListener { error->
-                        MainActivity.log("Error getting dataa $error")
+                        debugLog(message="Error getting data $error")
                         chapterPref.summary = "Error loading data"
                     }
             screen.addPreference(chapterPref)

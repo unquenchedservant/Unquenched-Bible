@@ -3,6 +3,7 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import java.text.SimpleDateFormat
 import java.util.*
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 
 object Dates {
 
@@ -49,9 +50,9 @@ object Dates {
             }
         }
         return if (fullMonth) {
-            SimpleDateFormat("MMMM dd", Locale.US).format(date!!)
+            debugLog("THIS IS THE FORMATTED DATE ${date.format(DateTimeFormatter.ofPattern("MMMM dd"))}")
         } else {
-            SimpleDateFormat("MMM dd", Locale.US).format(date!!)
+            debugLog("THIS IS THE FORMATTED DATE ${date.format(DateTimeFormatter.ofPattern("MMMM dd"))}")
         }
     }
 }

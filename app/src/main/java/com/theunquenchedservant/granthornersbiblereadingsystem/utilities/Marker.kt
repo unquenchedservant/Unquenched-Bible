@@ -10,7 +10,6 @@ import com.google.firebase.firestore.DocumentSnapshot
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
@@ -20,6 +19,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.OT_BOO
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
@@ -261,7 +261,7 @@ object Marker {
                     }
                      Firebase.firestore.collection("main").document(isLogged.uid).update(updateValues)
                             .addOnSuccessListener {
-                                log("Successful update")
+                                debugLog("Successful update")
                             }
                             .addOnFailureListener { error ->
                                 Log.w("PROFGRANT", "Failure writing to firestore", error)
@@ -273,7 +273,7 @@ object Marker {
        return Firebase.firestore.collection("main").document(isLogged!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
-                    var updateValues = mutableMapOf<String, Any>()
+                    val updateValues = mutableMapOf<String, Any>()
                     val doneMax = when (currentData?.get("planSystem")) {
                         "pgh" -> 10
                         "mcheyne" -> 4
@@ -282,7 +282,7 @@ object Marker {
                     val listStart = if (currentData?.get(planSystem) == "pgh") "list" else "mcheyneList"
                     val listsDoneString = "${listStart}sDone"
                     val cardDoneDaily = "${cardDone}Daily"
-                    val listName = cardDone.replace("Done", "")
+                   // val listName = cardDone.replace("Done", "")
                     val allowPartial = extractBoolPref(currentData, "allowPartial")
                     val listDoneDaily = extractIntPref(currentData, cardDoneDaily)
                     val currentListsDone = extractIntPref(currentData, listsDoneString)
@@ -332,16 +332,16 @@ object Marker {
                         Firebase.firestore.collection("main").document(isLogged.uid).update(updateValues)
                                 .addOnFailureListener {
                                     val error = it
-                                    log("FAILURE WRITING TO FIRESTORE $error")
+                                    debugLog("FAILURE WRITING TO FIRESTORE $error")
                                 }
                                 .addOnSuccessListener {
-                                    log("Firestore successfully updated")
+                                    debugLog("Firestore successfully updated")
                                 }
                     }
                 }
                 .addOnFailureListener {
                     val error = it
-                    log("FAILURE WRITING TO FIRESTORE $error")
+                    debugLog("FAILURE WRITING TO FIRESTORE $error")
                     Toast.makeText(context, "Unable to mark lists as done, please try again", Toast.LENGTH_LONG).show()
                 }
     }

@@ -21,9 +21,9 @@ import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ScriptureViewerBinding
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
@@ -109,6 +109,7 @@ class ScriptureViewer : Fragment() {
         act.findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
         val buttonColor: Int
         val textColor: Int
+        val context = act.applicationContext
         if(getBoolPref("darkMode")) {
             act.binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
             buttonColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
@@ -207,7 +208,7 @@ class ScriptureViewer : Fragment() {
             }else{
                 chapter
             }
-            log("THIS IS THE CHAPTER ${chapter}")
+
             act.supportActionBar?.title = title
             if(type == "esv"){
                 val ch = chapter.replace(" ", "")
@@ -252,7 +253,7 @@ class ScriptureViewer : Fragment() {
                     binding.scriptureWeb.loadDataWithBaseURL("file:///android_asset/", html, "text/html", "UTF-8", null)
                 },
                 Response.ErrorListener { error ->
-                    log("ERROR: $error")
+                    debugLog(message="ERROR: $error")
                 }){
             override fun getHeaders(): MutableMap<String, String>{
                 val headers = HashMap<String, String>()
@@ -283,7 +284,6 @@ class ScriptureViewer : Fragment() {
                 chapters.add(ch)
             }
             val temp5 = temp3.subList(0, temp3.lastIndex)
-            log("THIS IS TEMP5 ${temp5}")
             chapters.add(temp5.joinToString(" "))
         } else {
             chapters.add("")
@@ -298,17 +298,13 @@ class ScriptureViewer : Fragment() {
                 val verses = verseSection.split("–")
                 val startVerse = verses[0]
                 val endVerse = verses[1]
-                log("THIS IS THE BOOK ${book}")
                 "https://api.scripture.api.bible/v1/bibles/$versionId/passages/${BOOK_IDS[book]}.${chapterSection}.${startVerse}-${BOOK_IDS[book]}.${chapterSection}.${endVerse}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
             }
             else -> {
                 val temp = chapter.split(" ")
                 val realChapter = temp[temp.lastIndex]
-                log("THIS IS TEMP ${temp}")
                 val temp2 = temp.dropLast(1)
-                log("THIS IS TEMP2 ${temp2}")
                 val realBook = temp2.joinToString(" ")
-                log("THIS IS THE BOOK ${book}")
                 "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/${BOOK_IDS[realBook]}.${realChapter}?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=true"
             }
         }
@@ -381,7 +377,6 @@ class ScriptureViewer : Fragment() {
                 binding.psalmsNext.visibility = View.VISIBLE
                 binding.psalmsNext.text = getText(R.string.psalms_next)
                 binding.psalmsNext.setOnClickListener {
-                    log("this is chapter $passedChapter and this is iteration ${passedIteration+1}")
                     val bundle = bundleOf("chapter" to passedChapter, "psalms" to passedPsalm, "iteration" to passedIteration + 1)
                     act.navController.navigate(R.id.navigation_scripture, bundle)
                 }

@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
@@ -35,6 +34,8 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
@@ -57,7 +58,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         setTheme(R.style.AppTheme)
         WebView(applicationContext)
         super.onCreate(savedInstanceState)
-
+        traceLog(file="MainActivity.kt", function="onCreate()", "beginning")
         val stateList = arrayOf(
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
@@ -68,6 +69,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         darkMode = getBoolPref(name="darkMode", defaultValue=true)
         if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
         if(Firebase.auth.currentUser == null) {
+            traceLog(file="MainActivity.kt", function="onCreate()", "firebase current user == null")
             val providers = arrayListOf(
                     AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
                     AuthUI.IdpConfig.GoogleBuilder().build()
@@ -81,8 +83,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             .setAvailableProviders(providers)
                             .build(), _rcSignIn)
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
-            startActivity(Intent(this, OnboardingPagerActivity::class.java))
+            traceLog(file="MainActivity.kt", function="onCreate()", "has not completed onboarding")
         }else {
+            traceLog(file="MainActivity.kt", function="onCreate()", "normal operation")
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
             navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -94,6 +97,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             if (it.isSuccessful) {
                                 firestoreToPreference(it.result!!)
                                 checkReadingDate()
+                                firestoreToPreference(it.result!!)
                             } else {
                                 Firebase.crashlytics.log("Error getting user info")
                                 Firebase.crashlytics.recordException(it.exception?.cause!!)
@@ -135,7 +139,31 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 setupBottomNavigationBar()
             }
     }
+
+    override fun onResume() {
+        super.onResume()
+        traceLog(file="MainActivity.kt", function="onResume()")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        traceLog(file="MainActivity.kt", function="onPause()")
+    }
+    override fun onStart(){
+        super.onStart()
+        traceLog(file="MainActivity.kt", function="onStart()")
+    }
+    override fun onDestroy(){
+        super.onDestroy()
+        traceLog(file="MainActivity.kt", function="onDestroy()")
+    }
+    override fun onStop(){
+        super.onStop()
+        traceLog(file="MainActivity.kt", function="onStop()")
+    }
+
     fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
+        traceLog(file="MainActivity.kt", function="setupNavigation()")
         binding.myToolbar.setNavigationOnClickListener {
             navController.navigate(navId)
             binding.bottomNav.isVisible = bottomNavVisible
@@ -145,6 +173,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         supportActionBar?.setDisplayHomeAsUpEnabled(displayHome2)
     }
     private fun setupBottomNavigationBar() {
+        traceLog(file="MainActivity.kt", function="setupBottomNavigationBar()")
         switchEnabled(current="home")
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
@@ -291,6 +320,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        traceLog(file="MainActivity.kt", function="onNavigationItemSelected()")
         val homeId = when(getStringPref(name="planSystem", defaultValue="pgh")){
             "pgh"->R.id.navigation_home
             "mcheyne"->R.id.navigation_home_mcheyne
@@ -319,6 +349,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         return true
     }
     private fun checkReadingDate() {
+        traceLog(file="MainActivity.kt", function="checkReadingDate()")
         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
@@ -391,6 +422,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     private fun switchEnabled(current: String){
+        traceLog(file="MainActivity.kt", function="switchEnabled()")
         val menu = binding.bottomNav.menu
         menu.findItem(R.id.navigation_home)?.isEnabled = current != "home"
         menu.findItem(R.id.navigation_stats)?.isEnabled = current != "stats"
@@ -399,6 +431,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
+        traceLog(file="MainActivity.kt", function="onBackPressed()")
         if(this::navController.isInitialized) {
             when {
                 Firebase.auth.currentUser == null -> {
@@ -419,6 +452,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         }
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        traceLog(file="MainActivity.kt", function="onActivityResult()")
         super.onActivityResult(requestCode, resultCode, data)
         Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()
         if(requestCode == _rcSignIn){
@@ -450,14 +484,5 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 }
             }
         }
-    }
-
-    companion object{
-
-        fun log(logString:String){
-            Log.d("PROFGRANT", logString)
-        }
-
-
     }
 }

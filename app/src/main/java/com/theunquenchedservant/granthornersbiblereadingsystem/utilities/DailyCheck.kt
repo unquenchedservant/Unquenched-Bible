@@ -14,11 +14,13 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 
 class DailyCheck : BroadcastReceiver() {
     private val isLogged = Firebase.auth.currentUser
 
     override fun onReceive(context: Context, intent: Intent) {
+        traceLog(file = "DailyCheck.kt", function = "onReceive()")
         var data = mutableMapOf<String, Any>()
         if(isLogged != null) {
             Firebase.firestore.collection("main").document(Firebase.auth.currentUser?.uid!!).get()
@@ -114,6 +116,7 @@ class DailyCheck : BroadcastReceiver() {
 
     }
     private fun resetList(listName: String, listNameDone: String, maxDone:Int, data:MutableMap<String, Any>, listStart:String, holdPlan:Boolean, listsDone:Int, psalms:Boolean, listIndex:Int): MutableMap<String, Any>{
+        traceLog(file = "DailyCheck.kt", function = "resetList()")
         if(!holdPlan || listsDone == maxDone) {
             if(listName != "list6" || (listName == "list6" && !psalms)) {
                 data[listName] = setIntPref(name=listName, value=listIndex + 1)

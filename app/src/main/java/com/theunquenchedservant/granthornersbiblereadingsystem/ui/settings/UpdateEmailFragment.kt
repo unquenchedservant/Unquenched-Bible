@@ -22,8 +22,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 
 class UpdateEmailFragment: Fragment() {
@@ -96,7 +96,7 @@ class UpdateEmailFragment: Fragment() {
                                                 val bundle = bundleOf("error" to "Email already exists", "email" to newEmail.text.toString())
                                                 mainActivity.navController.navigate(R.id.navigation_update_email, bundle)
                                             }else {
-                                                log("THIS IS THE ERROR FOR EMAIL CHANGE ${it.exception}")
+                                                debugLog(message="THIS IS THE ERROR FOR EMAIL CHANGE ${it.exception}")
                                                 val bundle = bundleOf("error" to "Unknown Error", "email" to newEmail.text.toString())
                                                 mainActivity.navController.navigate(R.id.navigation_update_email, bundle)
                                             }
@@ -107,7 +107,7 @@ class UpdateEmailFragment: Fragment() {
                                 val bundle = bundleOf("error" to "Incorrect Password", "email" to newEmail.text.toString())
                                 mainActivity.navController.navigate(R.id.navigation_update_email, bundle)
                             }else {
-                                log("This is the error ${task.exception}")
+                                debugLog(message="This is the error ${task.exception}")
                                 val bundle = bundleOf("error" to "Unknown Error", "email" to newEmail.text.toString())
                                 mainActivity.navController.navigate(R.id.navigation_update_email, bundle)
                             }

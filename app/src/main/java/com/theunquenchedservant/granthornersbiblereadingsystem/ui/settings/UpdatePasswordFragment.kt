@@ -22,8 +22,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 
 class UpdatePasswordFragment: Fragment() {
@@ -56,31 +56,31 @@ class UpdatePasswordFragment: Fragment() {
                 errorHolder.isVisible = false
             }
             if(dark){
-                currentPasswordLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmphDark))
-                currentPassword.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedTextDark))
-                newPasswordLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmphDark))
-                newPassword.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedTextDark))
-                confirmPasswordLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmphDark))
-                confirmPassword.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedTextDark))
+                currentPasswordLabel.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedEmphDark))
+                currentPassword.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedTextDark))
+                newPasswordLabel.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedEmphDark))
+                newPassword.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedTextDark))
+                confirmPasswordLabel.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedEmphDark))
+                confirmPassword.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedTextDark))
                 currentPassword.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#9cb9d3"))
                 newPassword.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#9cb9d3"))
                 confirmPassword.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#9cb9d3"))
-                cardHolder.setCardBackgroundColor(ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+                cardHolder.setCardBackgroundColor(ContextCompat.getColor(mainActivity, R.color.buttonBackgroundDark))
                 updateBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
-                updateBtn.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedTextDark))
+                updateBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedTextDark))
             }else{
-                currentPasswordLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmph))
-                currentPassword.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedText))
-                newPasswordLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmph))
-                newPassword.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedText))
-                confirmPasswordLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmph))
-                confirmPassword.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedText))
+                currentPasswordLabel.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedEmph))
+                currentPassword.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedText))
+                newPasswordLabel.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedEmph))
+                newPassword.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedText))
+                confirmPasswordLabel.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedEmph))
+                confirmPassword.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedText))
                 currentPassword.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
                 newPassword.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
                 confirmPassword.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-                cardHolder.setCardBackgroundColor(ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground))
+                cardHolder.setCardBackgroundColor(ContextCompat.getColor(mainActivity, R.color.buttonBackground))
                 updateBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
-                updateBtn.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedText))
+                updateBtn.setTextColor(ContextCompat.getColor(mainActivity, R.color.unquenchedText))
             }
             updateBtn.setOnClickListener {
                 if(newPassword.text.toString() != confirmPassword.text.toString()){
@@ -103,7 +103,7 @@ class UpdatePasswordFragment: Fragment() {
                                                         val bundle = bundleOf("error" to errorReason)
                                                         mainActivity.navController.navigate(R.id.navigation_update_password, bundle)
                                                     }else{
-                                                        log("This is the reason the password update failed: ${it.exception}")
+                                                        debugLog("This is the reason the password update failed: ${it.exception}")
                                                         val bundle = bundleOf("error" to "Unknown Error")
                                                         mainActivity.navController.navigate(R.id.navigation_update_password, bundle)
                                                     }
@@ -114,7 +114,7 @@ class UpdatePasswordFragment: Fragment() {
                                         val bundle = bundleOf("error" to "Incorrect Password")
                                         mainActivity.navController.navigate(R.id.navigation_update_password, bundle)
                                     }else{
-                                        log("This is the reason the password update failed: ${task.exception}")
+                                        debugLog("This is the reason the password update failed: ${task.exception}")
                                         val bundle = bundleOf("error" to "Unknown Error")
                                         mainActivity.navController.navigate(R.id.navigation_update_password, bundle)
                                     }

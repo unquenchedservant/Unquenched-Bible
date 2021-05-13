@@ -2,20 +2,20 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.service
 
 import com.google.firebase.messaging.FirebaseMessagingService
 import com.google.firebase.messaging.RemoteMessage
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 
 class MyFirebaseMessagingService: FirebaseMessagingService() {
     override fun onNewToken(token: String) {
         super.onNewToken(token)
-        log(logString="Refreshed token: $token")
-        sendRegistrationToServer(token)
+        debugLog(message="Refreshed token: $token")
+        sendRegistrationToServer()
     }
-    private fun sendRegistrationToServer(token:String){
+    private fun sendRegistrationToServer(){
         // TODO: Send token to our server
     }
     override fun onMessageReceived(message: RemoteMessage) {
         super.onMessageReceived(message)
-        log(logString="Message: $message")
+        debugLog(message="Message: $message")
     }
 
 }

@@ -23,8 +23,8 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 
@@ -108,7 +108,7 @@ class DeleteAccountFragment: Fragment() {
                                         mainActivity.navController.navigate(R.id.navigation_settings)
                                         Toast.makeText(context, "Account deleted!", Toast.LENGTH_LONG).show()
                                     } else {
-                                        log("This is the reason the account deletion failed: ${task.exception}")
+                                        debugLog(message="This is the reason the account deletion failed: ${task.exception}")
                                         val bundle = bundleOf("error" to "Unknown Error")
                                         mainActivity.navController.navigate(R.id.navigation_confirm_delete, bundle)
                                     }
@@ -118,7 +118,7 @@ class DeleteAccountFragment: Fragment() {
                             val bundle = bundleOf("error" to "Incorrect Password")
                             mainActivity.navController.navigate(R.id.navigation_confirm_delete, bundle)
                         } else {
-                            log("This is the reason the account authentication failed: ${it.exception}")
+                            debugLog(message="This is the reason the account authentication failed: ${it.exception}")
                             val bundle = bundleOf("error" to "Unknown Error")
                             mainActivity.navController.navigate(R.id.navigation_confirm_delete, bundle)
                         }

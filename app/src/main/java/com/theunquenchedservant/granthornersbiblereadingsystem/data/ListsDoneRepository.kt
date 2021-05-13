@@ -6,7 +6,7 @@ import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
@@ -29,7 +29,7 @@ class ListsDoneRepository {
                             data.value = listsDone
                         }
                         .addOnFailureListener { exception ->
-                            log(logString = "Failed to get data. Error: $exception")
+                            debugLog(message = "Failed to get data. Error: $exception")
                         }
             }
             else -> data.value = if(getStringPref(name="planSystem") == "pgh") ListsDone(getIntPref(name = "listsDone")) else ListsDone(getIntPref("mcheyneListsDone"))

@@ -7,6 +7,7 @@ import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 
@@ -43,7 +44,7 @@ object BibleStatsReset {
             val db = Firebase.firestore
             db.collection("main").document(isLogged.uid).update(updateValues)
                     .addOnSuccessListener {
-                        MainActivity.log("Successful update")
+                        debugLog("Successful update")
                     }
                     .addOnFailureListener {
                         val error = it
@@ -69,7 +70,7 @@ object BibleStatsReset {
             val db = Firebase.firestore
             db.collection("main").document(isLogged!!.uid).update(updateValueUpdated)
                     .addOnSuccessListener {
-                        MainActivity.log("Successful update")
+                        debugLog("Successful update")
                     }
                     .addOnFailureListener {
                         val error = it
@@ -90,7 +91,7 @@ object BibleStatsReset {
         val db = Firebase.firestore
         db.collection("main").document(isLogged!!.uid).update(updateValues)
                 .addOnSuccessListener {
-                    MainActivity.log("Successful update")
+                    debugLog("Successful update")
                 }
                 .addOnFailureListener { error ->
                     Log.w("PROFGRANT", "Failure writing to firestore", error)

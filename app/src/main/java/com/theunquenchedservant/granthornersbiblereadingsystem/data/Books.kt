@@ -1,6 +1,5 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.data
 
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 
 object Books {
     val BOOK_CHAPTERS : Map<String, Int> = mapOf(
