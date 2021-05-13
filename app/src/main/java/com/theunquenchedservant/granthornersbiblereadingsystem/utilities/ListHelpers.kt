@@ -41,14 +41,14 @@ object ListHelpers {
 
     fun createUpdateAlert(context: Context){
         traceLog(file="ListHelpers.kt", function="createUpdateAlert()")
-        if(getIntPref("versionNumber") < 89){
+        if(getIntPref("versionNumber") < 90){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 89, updateFS = true)
+                setIntPref(name = "versionNumber", value = 90, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 89, updateFS = true)
+                setIntPref(name = "versionNumber", value = 90, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
                 try {
                     startActivity(context, i, null)
@@ -59,10 +59,9 @@ object ListHelpers {
             }
             builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
-                    "Added the NIV translation (now the default), and a way to reset all lists to the beginning in one go! \n" +
-                    "Disabled Bible stats until we are able to fix\n"+
-                            "Potentially fixed an issue with leap year calculations. Luckily there are a few years til that's an issue.\n"+
-                            "Various other fixes\n\n"+
+                    "* Added some various things along the backend to make the app run smoother \n" +
+                    "* Finally fixed an issue with the reading lists not syncing well between multiple devices. \n"+
+                            "Fixed an issue where the reading lists were not getting fully reset each night \n"+
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
             builder.create().show()
