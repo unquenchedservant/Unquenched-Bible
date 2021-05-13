@@ -10,6 +10,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Strings.capitalize
 import java.util.*
 
 class ResetBookMenuFragment: PreferenceFragmentCompat() {
@@ -19,7 +20,7 @@ class ResetBookMenuFragment: PreferenceFragmentCompat() {
         val screen: PreferenceScreen = preferenceManager.createPreferenceScreen(context)
         val b = arguments
         testament = b?.getString("testament")!!
-        mainActivity.supportActionBar?.title = "Reset ${testament.capitalize(Locale.ROOT)} Testament Books"
+        mainActivity.supportActionBar?.title = "Reset ${capitalize(testament)} Testament Books"
         val books = getBooks(testament)!!
         for(book in books){
             val bookPref = Preference(context)

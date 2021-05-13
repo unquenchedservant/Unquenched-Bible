@@ -15,7 +15,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_N
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
-import java.util.*
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Strings.capitalize
 import kotlin.math.roundToInt
 
 class BibleStatsTestamentFragment : PreferenceFragmentCompat()  {
@@ -25,7 +25,7 @@ class BibleStatsTestamentFragment : PreferenceFragmentCompat()  {
         val context = mainActivity.applicationContext
         val b = arguments
         testament = b?.getString("testament")!!
-        mainActivity.supportActionBar?.title = "${testament.capitalize(Locale.ROOT)} Testament Statistics"
+        mainActivity.supportActionBar?.title = "${capitalize(testament)} Testament Statistics"
         val books = getBooks(testament)!!
         val screen = preferenceManager.createPreferenceScreen(context)
         for (book in books){
@@ -61,7 +61,7 @@ class BibleStatsTestamentFragment : PreferenceFragmentCompat()  {
 
     override fun onResume() {
         val mainActivity = activity as MainActivity
-        mainActivity.supportActionBar?.title = "${testament.capitalize(Locale.ROOT)} Testament Statistics"
+        mainActivity.supportActionBar?.title = "${capitalize(testament)} Testament Statistics"
         super.onResume()
     }
 }
