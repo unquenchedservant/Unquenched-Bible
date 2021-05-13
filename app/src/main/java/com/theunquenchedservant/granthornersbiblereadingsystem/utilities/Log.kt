@@ -1,6 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
-import android.util.Log
+import timber.log.Timber
 
 object Log {
     fun debugLog(message:String,file:String="", function:String=""){
@@ -13,7 +13,7 @@ object Log {
         }else{
             message
         }
-        Log.d("PROFGRANT", logString)
+        Timber.tag("PROFGRANT").d(logString)
     }
     fun traceLog(file:String="", function:String="", message:String=""){
         val logString = if(file != "" && function != "" && message != ""){
@@ -35,6 +35,6 @@ object Log {
         }else{
             "TRACE you done messed up a-aron"
         }
-        Log.d("PROFGRANT", logString)
+        Timber.tag("PROFGRANT").d(logString)
     }
 }

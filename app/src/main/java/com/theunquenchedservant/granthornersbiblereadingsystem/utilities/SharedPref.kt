@@ -1,7 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
 import android.content.Context
-import android.util.Log
 import androidx.preference.PreferenceManager
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -11,6 +10,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
+import timber.log.Timber
 
 
 object SharedPref {
@@ -146,7 +146,7 @@ object SharedPref {
         results["hasCompletedOnboarding"] = getBoolPref(name="hasCompletedOnboarding")
         db.collection("main").document(user2!!.uid).set(results)
                 .addOnSuccessListener { debugLog("Data transferred to firestore") }
-                .addOnFailureListener {e -> Log.w("PROFGRANT", "Error writing to firestore", e) }
+                .addOnFailureListener {ex -> Timber.tag("PROFGRANT").e(ex, "Error writing to firestore") }
     }
     private fun updateIntPref(data: MutableMap<String, Any>?, key:String, secondKey: String=""):MutableMap<String, Any>{
         traceLog(file="SharedPref", function="updateIntPref()")

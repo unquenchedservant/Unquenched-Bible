@@ -25,6 +25,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import timber.log.Timber
 import java.util.*
 
 
@@ -209,7 +210,7 @@ object Marker {
     fun markAll(planType: String = "", context: Context?): Task<DocumentSnapshot> {
        return Firebase.firestore.collection("main").document(isLogged!!.uid).get()
                 .addOnSuccessListener {
-                    var updateValues = mutableMapOf<String, Any>()
+                    val updateValues = mutableMapOf<String, Any>()
                     val currentData = it.data
                     val doneMax = when(planType){
                         "pgh"->10
@@ -264,14 +265,14 @@ object Marker {
                                 debugLog("Successful update")
                             }
                             .addOnFailureListener { error ->
-                                Log.w("PROFGRANT", "Failure writing to firestore", error)
+                                Timber.tag("PROFGRANT").e(error, "Error writing to firestore")
                             }
                 }
     }
 
     fun markSingle(cardDone: String, planSystem: String = "", context: Context?): Task<DocumentSnapshot> {
        return Firebase.firestore.collection("main").document(isLogged!!.uid).get()
-                .addOnSuccessListener {
+                .addOnSuccessListener { it ->
                     val currentData = it.data
                     val updateValues = mutableMapOf<String, Any>()
                     val doneMax = when (currentData?.get("planSystem")) {
@@ -330,9 +331,8 @@ object Marker {
                             }
                         }
                         Firebase.firestore.collection("main").document(isLogged.uid).update(updateValues)
-                                .addOnFailureListener {
-                                    val error = it
-                                    debugLog("FAILURE WRITING TO FIRESTORE $error")
+                                .addOnFailureListener { ex ->
+                                    debugLog("FAILURE WRITING TO FIRESTORE $ex")
                                 }
                                 .addOnSuccessListener {
                                     debugLog("Firestore successfully updated")
