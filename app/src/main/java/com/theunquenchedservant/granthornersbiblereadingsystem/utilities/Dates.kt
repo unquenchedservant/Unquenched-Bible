@@ -1,31 +1,22 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import java.text.SimpleDateFormat
-import java.util.*
+import java.time.DayOfWeek
+import java.time.LocalDate
+import java.time.Month
+import java.time.format.DateTimeFormatter
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 
 object Dates {
 
     fun isLeapDay():Boolean{
-        val today = Calendar.getInstance()
-        val isFebruary = when(today.get(Calendar.MONTH)){
-            Calendar.FEBRUARY -> true
-            else -> false
-        }
-        val is29th = when(today.get(Calendar.DAY_OF_MONTH)){
-            29 -> true
-            else -> false
-        }
-        return when{
-            (isFebruary && is29th)->true
-            else->false
-        }
+        val today = LocalDate.now()
+        return today.month == Month.FEBRUARY && today.dayOfMonth == 29
+
     }
     fun isWeekend():Boolean{
-        val today = Calendar.getInstance()
-        return when(today.get(Calendar.DAY_OF_WEEK)){
-            Calendar.SATURDAY, Calendar.SUNDAY -> true
+        val today = LocalDate.now()
+        return when(today.dayOfWeek){
+            DayOfWeek.SATURDAY, DayOfWeek.SUNDAY -> true
             else -> false
         }
     }
@@ -39,20 +30,19 @@ object Dates {
         }
     }
     fun getDate(option: Int, fullMonth: Boolean): String {
-        var date : Date? = null
-        when(option){
-            0 -> date = Calendar.getInstance().time
-            1 -> {
-                val cal = Calendar.getInstance()
-                cal.set(Calendar.HOUR_OF_DAY, 0)
-                cal.add(Calendar.DATE, -1)
-                date = cal.time
-            }
+        val date : LocalDate
+        val now  = LocalDate.now()
+        date = when(option){
+            0 -> now
+            1 -> now.minusDays(1)
+            else -> now
         }
         return if (fullMonth) {
             debugLog("THIS IS THE FORMATTED DATE ${date.format(DateTimeFormatter.ofPattern("MMMM dd"))}")
+            date.format(DateTimeFormatter.ofPattern("MMMM dd"))
         } else {
             debugLog("THIS IS THE FORMATTED DATE ${date.format(DateTimeFormatter.ofPattern("MMMM dd"))}")
+            date.format(DateTimeFormatter.ofPattern("MMM dd"))
         }
     }
 }
