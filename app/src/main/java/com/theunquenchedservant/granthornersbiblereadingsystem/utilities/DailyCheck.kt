@@ -6,15 +6,14 @@ import android.content.Intent
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 
 class DailyCheck : BroadcastReceiver() {
     private val isLogged = Firebase.auth.currentUser
@@ -26,21 +25,23 @@ class DailyCheck : BroadcastReceiver() {
             Firebase.firestore.collection("main").document(Firebase.auth.currentUser?.uid!!).get()
                     .addOnSuccessListener {
                         if (it.data != null) {
-                            val planSystem: String = it.data!!["planSystem"] as String
-                            val planType: String = it.data!!["planType"] as String
-                            val dateChecked: String = it.data!!["dateChecked"] as String
-                            val vacation: Boolean = it.data!!["vacationMode"] as Boolean
-                            val vacationOff: Boolean = it.data!!["vacationOff"] as Boolean
-                            val weekendMode: Boolean = it.data!!["weekendMode"] as Boolean
-                            val isGrace: Boolean = it.data!!["isGrace"] as Boolean
-                            val holdPlan: Boolean = it.data!!["holdPlan"] as Boolean
-                            val psalms: Boolean = it.data!!["psalms"] as Boolean
-                            val currentStreak: Int = (it.data!!["currentStreak"] as Long).toInt()
-                            val dailyStreak: Int = (it.data!!["dailyStreak"] as Long).toInt()
-                            var currentDayIndex: Int = (it.data!!["currentDayIndex"] as Long).toInt()
-                            var mcheyneCurrentDayIndex: Int = (it.data!!["mcheyneCurrentDayIndex"] as Long).toInt()
+                            val currentData = it.data!!
+                            val planSystem: String = extractStringPref(currentData, "planSystem")
+                            val planType: String = extractStringPref(currentData, "planType")
+                            val dateChecked: String = extractStringPref(currentData, "dateChecked")
+                            val vacation: Boolean = extractBoolPref(currentData, "vacationMode")
+                            val vacationOff: Boolean = extractBoolPref(currentData, "vacationOff")
+                            val weekendMode: Boolean = extractBoolPref(currentData, "weekendMode")
+                            val isGrace: Boolean = extractBoolPref(currentData, "isGrace")
+                            val holdPlan: Boolean = extractBoolPref(currentData, "holdPlan")
+                            val psalms: Boolean = extractBoolPref(currentData, "psalms")
+                            val currentStreak: Int = extractIntPref(currentData, "currentStreak")
+                            val dailyStreak: Int = extractIntPref(currentData, "dailyStreak")
+                            var currentDayIndex: Int = extractIntPref(currentData, "currentDayIndex")
+                            var mcheyneCurrentDayIndex: Int = extractIntPref(currentData, "mcheyneCurrentDayIndex")
                             val listStart = if (planSystem == "pgh") "list" else "mcheyneList"
-                            val listsDone: Int = (it.data!!["${listStart}sDone"] as Long).toInt()
+                            val listsDone: Int = extractIntPref(currentData, "${listStart}Done")
+
 
                             val doneMax = when (planSystem) {
                                 "pgh" -> 10
@@ -79,21 +80,15 @@ class DailyCheck : BroadcastReceiver() {
                                 }
                             }
                             for (i in 1..doneMax) {
+                                val listName = "${listStart}$i"
                                 if (planType == "horner") {
-                                    val listDoneDaily: Int = (it.data!!["${listStart}${i}DoneDaily"] as Long).toInt()
-                                    val listDone: Int = (it.data!!["${listStart}Done"] as Long).toInt()
-                                    when (listDoneDaily) {
-                                        1 -> {
-                                            data["${listStart}${i}DoneDaily"] = setIntPref(name = "${listStart}${i}DoneDaily", value=0)
-                                        }
-                                    }
-                                    when (listDone) {
-                                        1 -> {
-                                            val listIndex: Int = (it.data!!["$listStart${i}"] as Long).toInt()
-                                            data = resetList(listName = "${listStart}${i}", listNameDone = "${listStart}${i}Done", doneMax, data, listStart, holdPlan, listsDone, psalms, listIndex)
-                                        }
-                                    }
-                                } else data["${listStart}${i}Done"] = setIntPref(name = "${listStart}${i}Done", value = 0)
+                                    val listDone: Int = extractIntPref(it.data!!, "${listName}Done")
+                                    val listIndex: Int = extractIntPref(it.data!!, listName)
+                                    data["${listName}Done"] = setIntPref(name="${listName}Done", value=0)
+                                    data["${listName}DoneDaily"] = setIntPref(name="${listName}DoneDaily", value=0)
+                                    if(listDone == 1) data = resetList(listName =listName, listNameDone="${listName}Done", doneMax, data, holdPlan, listsDone, psalms, listIndex)
+
+                                } else data["${listName}Done"] = setIntPref(name = "${listName}Done", value = 0)
                             }
                             if (planType == "numerical" && resetStreak) {
                                 if (planSystem == "pgh") {
@@ -115,7 +110,7 @@ class DailyCheck : BroadcastReceiver() {
         }
 
     }
-    private fun resetList(listName: String, listNameDone: String, maxDone:Int, data:MutableMap<String, Any>, listStart:String, holdPlan:Boolean, listsDone:Int, psalms:Boolean, listIndex:Int): MutableMap<String, Any>{
+    private fun resetList(listName: String, listNameDone: String, maxDone:Int, data:MutableMap<String, Any>, holdPlan:Boolean, listsDone:Int, psalms:Boolean, listIndex:Int): MutableMap<String, Any>{
         traceLog(file = "DailyCheck.kt", function = "resetList()")
         if(!holdPlan || listsDone == maxDone) {
             if(listName != "list6" || (listName == "list6" && !psalms)) {

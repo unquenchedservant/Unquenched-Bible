@@ -40,6 +40,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
@@ -353,25 +354,31 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 .addOnSuccessListener {
                     val currentData = it.data
                     val dateChecked = extractStringPref(currentData, "dateChecked")
-                    if (!checkDate(dateChecked, "current", false) && (extractIntPref(currentData,"listsDone") != 0 || extractIntPref(currentData, "mcheyneListsDone") != 0)) {
+                    val listsDone = extractIntPref(currentData, "listsDone")
+                    val mcheyneListsDone = extractIntPref(currentData, "mcheyneListsDone")
+
+                    if (!checkDate(dateChecked, "current", false) && (listsDone != 0 || mcheyneListsDone != 0)) {
                         val data: MutableMap<String, Any> = mutableMapOf()
-                        val allowPartial = extractBoolPref(currentData, "allowPartial")
-                        val planType = extractStringPref(currentData, "planType", "horner")
-                        var pghDone = 0
-                        var mcheyneDone = 0
-                        val pghDoneAlready = extractIntPref(currentData, "listsDone")
-                        val mcheyneDoneAlready = extractIntPref(currentData, "mcheyneListsDone")
-                        val holdPlan = extractBoolPref(currentData, "holdPlan", false)
-                        if ((holdPlan && pghDoneAlready == 10) || !holdPlan) {
+                        val allowPartial: Boolean         = extractBoolPref(currentData, "allowPartial")
+                        val planType: String              = extractStringPref(currentData, "planType", "horner")
+                        var pghDone: Int                  = 0
+                        var mcheyneDone: Int              = 0
+
+                        val mcheyneDoneAlready: Int       = extractIntPref(currentData, "mcheyneListsDone")
+                        val holdPlan: Boolean             = extractBoolPref(currentData, "holdPlan")
+
+                        debugLog(message="holdPlan = $holdPlan pghDoneAlready= $listsDone")
+
+                        if ((holdPlan && listsDone == 10) || !holdPlan) {
                             for (i in 1..10) {
                                 if (extractIntPref(currentData, "list${i}Done") == 1) {
                                     pghDone += 1
                                     if (planType == "horner") data["list$i"] = extractIntPref(currentData, "list$i") + 1
-                                    data["list${i}Done"] = 0
-                                    data["list${i}DoneDaily"] = 0
+                                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
+                                    data["list${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=0)
                                 }
                             }
-                            data["listsDone"] = 0
+                            data["listsDone"] = setIntPref(name="listsDone", value=0)
                         }
                         if((holdPlan && mcheyneDoneAlready == 4) || !holdPlan) {
                             for (i in 1..4) {
