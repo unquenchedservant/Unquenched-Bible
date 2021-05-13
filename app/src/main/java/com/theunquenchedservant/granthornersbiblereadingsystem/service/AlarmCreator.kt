@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.RemindReceiver
@@ -35,15 +36,16 @@ object AlarmCreator {
     }
 
     fun createNotificationChannel() {
+        val context = App.applicationContext()
         val primaryChannelId = "primary_notification_channel"
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = App.applicationContext().resources.getString(R.string.notification_channel_name)
-            val description = App.applicationContext().getString(R.string.notification_channel_description)
+            val name = context.resources.getString(R.string.notification_channel_name)
+            val description = context.getString(R.string.notification_channel_description)
             val importance = NotificationManager.IMPORTANCE_DEFAULT
             val channel = NotificationChannel(primaryChannelId, name, importance)
             channel.description = description
             channel.enableVibration(true)
-            val notificationManager = App.applicationContext().getSystemService(NotificationManager::class.java)!!
+            val notificationManager = context.getSystemService(NotificationManager::class.java)!!
             notificationManager.createNotificationChannel(channel)
         }
     }

@@ -7,8 +7,6 @@ import android.content.res.ColorStateList
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
-import android.os.Build
-import android.provider.Settings.Global.getString
 import android.view.View
 import android.widget.Button
 import android.widget.Toast
@@ -23,26 +21,26 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isLeapDay
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import java.util.*
 
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
+        traceLog(file="ListHelpers.kt", function="createUpdateAlert()")
         if(getIntPref("versionNumber") < 89){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
@@ -55,7 +53,7 @@ object ListHelpers {
                 try {
                     startActivity(context, i, null)
                 }catch(e: ActivityNotFoundException){
-                    Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
                 }
                 dialog.dismiss()
             }
@@ -81,11 +79,11 @@ object ListHelpers {
                 try {
                     startActivity(context, i, null)
                 }catch(e: ActivityNotFoundException){
-                    Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                    Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
                 }
                 dialog.dismiss()
             }
-            builder.setTitle(App.applicationContext().resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
+            builder.setTitle(context.resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
             builder.setMessage(
                     "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
                             "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
@@ -100,6 +98,7 @@ object ListHelpers {
         }
     }
     fun setVisibilities(binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne: Boolean=false){
+        traceLog(file="ListHelpers.kt", function="setVisibilities()")
         if(!isMcheyne) {
             changeVisibility(binding!!.cardList1, isCardView=false)
             changeVisibility(binding.cardList2, isCardView=false)
@@ -119,31 +118,35 @@ object ListHelpers {
         }
     }
     fun initList(cardList: CardviewsBinding, listTitle:String){
+        traceLog(file="ListHelpers.kt", function="initList()")
+        val context = App.applicationContext()
         val backgroundColor: Int
         val emphColor:Int
         if(getBoolPref("darkMode")){
-            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            emphColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+            backgroundColor = getColor(context, R.color.buttonBackgroundDark)
+            emphColor = getColor(context, R.color.unquenchedEmphDark)
         }else{
-            backgroundColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            emphColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+            backgroundColor = getColor(context, R.color.buttonBackgroundDark)
+            emphColor = getColor(context, R.color.unquenchedOrange)
         }
         cardList.listTitle.text = listTitle
-        cardList.listReading.text = App.applicationContext().resources.getText(R.string.loading)
+        cardList.listReading.text = context.resources.getText(R.string.loading)
         cardList.root.isClickable=false
         cardList.root.setCardBackgroundColor(backgroundColor)
         cardList.listReading.setTextColor(emphColor)
         cardList.lineSeparator.setBackgroundColor(emphColor)
     }
     fun updateButton(listsDone:Int, materialButton:Button, maxDone: Int, limitNumber:Int){
+        traceLog(file="ListHelpers.kt", function="updateButton()")
+        val context = App.applicationContext()
         val allDoneBackgroundColor: String
         val backgroundColor:String
         if (getBoolPref(name = "darkMode", defaultValue = true)) {
-            allDoneBackgroundColor = App.applicationContext().resources.getString(R.string.done_btn_background_color_dark)
-            backgroundColor = App.applicationContext().resources.getString(R.string.btn_background_color_dark)
+            allDoneBackgroundColor = context.resources.getString(R.string.done_btn_background_color_dark)
+            backgroundColor = context.resources.getString(R.string.btn_background_color_dark)
         }else{
-            allDoneBackgroundColor = App.applicationContext().resources.getString(R.string.done_btn_background_color)
-            backgroundColor = App.applicationContext().resources.getString(R.string.btn_background_color)
+            allDoneBackgroundColor = context.resources.getString(R.string.done_btn_background_color)
+            backgroundColor = context.resources.getString(R.string.btn_background_color)
         }
         when (listsDone) {
             maxDone -> {
@@ -171,6 +174,7 @@ object ListHelpers {
         }
     }
     fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne:Boolean=false){
+        traceLog(file="ListHelpers.kt", function="hideOthers()")
         if(!isMcheyne){
             changeVisibility(binding!!.cardList1, isCardView=cardList == binding.cardList1.root)
             changeVisibility(binding.cardList2, isCardView=cardList == binding.cardList2.root)
@@ -191,6 +195,7 @@ object ListHelpers {
     }
 
     fun listSwitcher(cardList: View, listDone: Int, material_button: Button){
+        traceLog(file="ListHelpers.kt", function="listSwitcher()")
         val enabled = if(getBoolPref(name="darkMode", defaultValue=true)){
             getColor(App.applicationContext(), android.R.color.background_dark)
         }else{
@@ -204,6 +209,7 @@ object ListHelpers {
         }
     }
     fun resetDaily(context:Context): Task<DocumentSnapshot> {
+        traceLog(file="ListHelpers.kt", function="resetDaily()")
        return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
@@ -258,38 +264,44 @@ object ListHelpers {
                     data["${listStart}sDone"] = setIntPref("${listStart}sDone", 0)
                         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
                                 .addOnSuccessListener {
-                                    log("Lists reset successfully")
+                                    debugLog("Lists reset successfully")
                                 }
                                 .addOnFailureListener { error->
-                                    log("FAILURE WRITING TO FIRESTORE $error")
+                                    debugLog("FAILURE WRITING TO FIRESTORE $error")
                                 }
                 }
                 .addOnFailureListener {
                     val error = it
-                    log("FAILURE WRITING TO FIRESTORE $error")
+                    debugLog("FAILURE WRITING TO FIRESTORE $error")
                     Toast.makeText(context, "Unable to reset lists, please try again", Toast.LENGTH_LONG).show()
                 }
 
     }
     fun isAdvanceable(maxDone:Int):Boolean{
+        traceLog(file="ListHelpers.kt", function="isAdvanceable()")
         val planType = getStringPref(name="planType", defaultValue="horner")
         val listsDone = if(getStringPref("planSystem") == "pgh") "listsDone" else "mcheyneListsDone"
         return getIntPref(listsDone) == maxDone && (planType == "horner" || planType == "numerical")
     }
     fun isHorner():Boolean{
+        traceLog(file="ListHelpers.kt", function="isHorner()")
         return getStringPref(name="planType", defaultValue = "horner") == "horner"
     }
 
     fun isLoggedIn():Boolean{
+        traceLog(file="ListHelpers.kt", function="isLoggedIn()")
         return Firebase.auth.currentUser != null
     }
     fun isPsalm(cardView: CardviewsBinding, binding:FragmentHomeBinding, psalms:Boolean):Boolean{
+        traceLog(file="ListHelpers.kt", function="isPsalm()")
         return cardView.root == binding.cardList6.root && psalms
     }
     fun isDayOff():Boolean{
+        traceLog(file="ListHelpers.kt", function="isDayOff()")
         return getStringPref(name="planType", defaultValue="horner") == "calendar" && isLeapDay()
     }
     fun getChapter(list:Array<String>, listName:String):String{
+        traceLog(file="ListHelpers.kt", function="getChapter()")
         return when (getStringPref(name = "planType", defaultValue = "horner")) {
             "horner" -> list[getIntPref(listName)]
             "numerical" -> {
@@ -311,6 +323,7 @@ object ListHelpers {
     }
 
     fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){
+        traceLog(file="ListHelpers.kt", function="changeVisibility()")
         if(isCardView){
             cardList.listButtons.visibility = View.VISIBLE
             cardList.listReading.visibility = View.GONE
@@ -320,6 +333,7 @@ object ListHelpers {
         }
     }
     fun getListNumber(result: Map<String, Any>?, listName: String, listId: Int): String{
+        traceLog(file="ListHelpers.kt", function="getListNumber()")
         val number = if(result != null){
             (result[listName] as Long).toInt()
         }else{

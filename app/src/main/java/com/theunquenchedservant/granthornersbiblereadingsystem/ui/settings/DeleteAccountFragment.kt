@@ -21,7 +21,6 @@ import com.google.firebase.auth.*
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
@@ -48,6 +47,7 @@ class DeleteAccountFragment: Fragment() {
         val userPassLabel = root.findViewById<MaterialTextView>(R.id.currentPassLabel)
         val userPass = root.findViewById<EditText>(R.id.userPass)
         val confirmBtn = root.findViewById<Button>(R.id.deleteAccountBtn)
+        val context = (activity as MainActivity).applicationContext
         if (b?.getString("error") != null) {
             errorHolder.isVisible = true
             errorMsg = b.getString("error")!!
@@ -57,16 +57,16 @@ class DeleteAccountFragment: Fragment() {
         }
         if (provider == "password") {
             if (dark) {
-                userPassLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmphDark))
-                userPass.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedTextDark))
+                userPassLabel.setTextColor(ContextCompat.getColor(context, R.color.unquenchedEmphDark))
+                userPass.setTextColor(ContextCompat.getColor(context, R.color.unquenchedTextDark))
                 userPass.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#9cb9d3"))
-                cardHolder.setCardBackgroundColor(ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+                cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.buttonBackgroundDark))
                 confirmBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#383838"))
             } else {
-                userPassLabel.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedEmph))
-                userPass.setTextColor(ContextCompat.getColor(App.applicationContext(), R.color.unquenchedText))
+                userPassLabel.setTextColor(ContextCompat.getColor(context, R.color.unquenchedEmph))
+                userPass.setTextColor(ContextCompat.getColor(context, R.color.unquenchedText))
                 userPass.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#121212"))
-                cardHolder.setCardBackgroundColor(ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground))
+                cardHolder.setCardBackgroundColor(ContextCompat.getColor(context, R.color.buttonBackground))
                 confirmBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
             }
             confirmBtn.setOnClickListener {
@@ -80,7 +80,7 @@ class DeleteAccountFragment: Fragment() {
                     .requestIdToken(getString(R.string.default_web_client_id))
                     .requestEmail()
                     .build()
-            GoogleSignIn.getClient(App.applicationContext(), gso).silentSignIn().addOnCompleteListener {
+            GoogleSignIn.getClient(context, gso).silentSignIn().addOnCompleteListener {
                 val credential = GoogleAuthProvider.getCredential(it.result?.idToken, null)
                 deleteAccount(credential, user, root)
             }

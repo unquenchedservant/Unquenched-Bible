@@ -33,20 +33,21 @@ class ManualListSet: Fragment() {
         val listSpinner2 = root.findViewById<NumberPicker>(R.id.listSpinner2)
         val dark = getBoolPref(name="darkMode", defaultValue=true)
         val button = root.findViewById<Button>(R.id.set_button)
+        val context = App.applicationContext()
         if(dark){
             listSelector.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)
             listSelector.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme))
             listSpinner1.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)
             listSpinner1.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme))
             listSpinner2.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners_dark, (activity as MainActivity).theme)
-            button.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
+            button.setTextColor(getColor(context, R.color.unquenchedTextDark))
         }else{
             listSelector.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
             listSelector.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme))
             listSpinner1.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
             listSpinner1.setPopupBackgroundDrawable(ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme))
             listSpinner2.background = ResourcesCompat.getDrawable(resources, R.drawable.spinners, (activity as MainActivity).theme)
-            button.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+            button.setTextColor(getColor(context, R.color.unquenchedText))
         }
         val listNames = ArrayList<String>()
         val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
@@ -123,9 +124,9 @@ class ManualListSet: Fragment() {
 
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 val buttonColor: Int = if(dark){
-                    getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                    getColor(context, R.color.buttonBackgroundDark)
                 }else{
-                    getColor(App.applicationContext(), R.color.buttonBackground)
+                    getColor(context, R.color.buttonBackground)
                 }
 
                 val selectedItem      = parent?.getItemAtPosition(position).toString()
@@ -140,7 +141,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.noneBook,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -170,7 +171,7 @@ class ManualListSet: Fragment() {
 
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.mcheyne_list1,
                                 android.R.layout.simple_spinner_item).also{
                                     it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -187,7 +188,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.mcheyne_list2,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -204,7 +205,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.mcheyne_list3,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -221,7 +222,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList   = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.mcheyne_list4,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -240,7 +241,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList    = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list1Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -275,7 +276,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList    = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list2Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -312,7 +313,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list3Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -347,7 +348,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list4Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -387,7 +388,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list5Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -421,7 +422,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list6Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -451,7 +452,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list7Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -482,7 +483,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list8Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -522,7 +523,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list9Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
@@ -565,7 +566,7 @@ class ManualListSet: Fragment() {
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
                         ArrayAdapter.createFromResource(
-                                context!!,
+                                context,
                                 R.array.list10Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)

@@ -113,7 +113,7 @@ class MainSettings : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e: ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser or Discord installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(mainActivity.applicationContext, "No browser or Discord installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -124,7 +124,7 @@ class MainSettings : PreferenceFragmentCompat() {
         if(requestCode == _rcSignIn){
             if(resultCode == Activity.RESULT_OK){
                 val user = FirebaseAuth.getInstance().currentUser
-                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
+                Toast.makeText(mainActivity.applicationContext, "Signed In!", Toast.LENGTH_LONG).show()
                 val db = FirebaseFirestore.getInstance()
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
@@ -192,11 +192,12 @@ class MainSettings : PreferenceFragmentCompat() {
     }
     fun firebaseAuthWithGoogle(acct: GoogleSignInAccount) {
         val auth = FirebaseAuth.getInstance()
-        val navControl = (activity as MainActivity).navController
+        val mainActivity = activity as MainActivity
+        val navControl = mainActivity.navController
         val credential = GoogleAuthProvider.getCredential(acct.idToken, null)
         auth.signInWithCredential(credential).addOnCompleteListener {
             if (it.isSuccessful) {
-                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
+                Toast.makeText(mainActivity.applicationContext, "Signed In!", Toast.LENGTH_LONG).show()
                 val db = FirebaseFirestore.getInstance()
                 val user = FirebaseAuth.getInstance().currentUser
                 db.collection("main").document(user!!.uid).get()
@@ -219,7 +220,7 @@ class MainSettings : PreferenceFragmentCompat() {
                             }
                         }
             } else {
-                Toast.makeText(App.applicationContext(), "Google Sign In Failed", Toast.LENGTH_LONG).show()
+                Toast.makeText(mainActivity.applicationContext, "Google Sign In Failed", Toast.LENGTH_LONG).show()
             }
         }
     }

@@ -15,7 +15,6 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
@@ -67,6 +66,7 @@ class HomeMCheyneFragment : Fragment() {
         initList(binding.cardList2, resources.getString(R.string.title_mcheyne_list2))
         initList(binding.cardList3, resources.getString(R.string.title_mcheyne_list3))
         initList(binding.cardList4, resources.getString(R.string.title_mcheyne_list4))
+        val context = (activity as MainActivity).applicationContext
         viewModel.list1.observe(viewLifecycleOwner) { readingList ->
             createCard(binding.cardList1, readingList, R.string.title_mcheyne_list1, listName = "mcheyneList1", R.array.mcheyne_list1)
         }
@@ -81,8 +81,8 @@ class HomeMCheyneFragment : Fragment() {
         }
         viewModel.listsDone.observe(viewLifecycleOwner) { listsDone ->
             when (getBoolPref(name = "darkMode", defaultValue = true)) {
-                true -> binding.materialButton.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
-                false -> binding.materialButton.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+                true -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedTextDark))
+                false -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedText))
             }
             updateButton(listsDone.listsDone, binding.materialButton, 4, 3)
         }
@@ -120,14 +120,15 @@ class HomeMCheyneFragment : Fragment() {
         val enabled: Int
         val lineColor: Int
         cardListRoot.isClickable = true
+        val context = (activity as MainActivity).applicationContext
         when (getBoolPref(name = "darkMode", defaultValue = true)) {
             true -> {
-                enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-                lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+                enabled = getColor(context, R.color.buttonBackgroundDark)
+                lineColor = getColor(context, R.color.unquenchedEmphDark)
             }
             false -> {
-                enabled = getColor(App.applicationContext(), R.color.buttonBackground)
-                lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+                enabled = getColor(context, R.color.buttonBackground)
+                lineColor = getColor(context, R.color.unquenchedOrange)
             }
         }
         val disabled = Color.parseColor("#00383838")
@@ -194,9 +195,10 @@ class HomeMCheyneFragment : Fragment() {
     }
 
     private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, listDone: String, listName: String) {
+        val context = (activity as MainActivity).applicationContext
         val enabled: Int = when (getBoolPref(name = "darkMode", defaultValue = true)) {
-            true -> getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            false -> getColor(App.applicationContext(), R.color.buttonBackground)
+            true -> getColor(context, R.color.buttonBackgroundDark)
+            false -> getColor(context, R.color.buttonBackground)
         }
         val list = resources.getStringArray(arrayId)
         if (getIntPref("mcheyneListsDone") == 0) {

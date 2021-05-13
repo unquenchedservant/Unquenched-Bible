@@ -19,7 +19,6 @@ import com.android.volley.toolbox.DiskBasedCache
 import com.android.volley.toolbox.HurlStack
 import com.android.volley.toolbox.JsonObjectRequest
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ScriptureViewerBinding
@@ -112,12 +111,12 @@ class ScriptureViewer : Fragment() {
         val context = act.applicationContext
         if(getBoolPref("darkMode")) {
             act.binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-            buttonColor = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            textColor = getColor(App.applicationContext(), R.color.unquenchedTextDark)
+            buttonColor = getColor(context, R.color.buttonBackgroundDark)
+            textColor = getColor(context, R.color.unquenchedTextDark)
         }else{
             act.binding.navHostFragment.setBackgroundColor(Color.parseColor("#fffaf0"))
-            buttonColor = getColor(App.applicationContext(), R.color.buttonBackground)
-            textColor = getColor(App.applicationContext(), R.color.unquenchedText)
+            buttonColor = getColor(context, R.color.buttonBackground)
+            textColor = getColor(context, R.color.unquenchedText)
         }
         binding.psalmsNext.setBackgroundColor(buttonColor)
         binding.psalmsNext.setTextColor(textColor)
@@ -226,8 +225,8 @@ class ScriptureViewer : Fragment() {
         val esvKey = String(Base64.decode(getESVKey(), Base64.DEFAULT))
         val key = String(Base64.decode(getBibleApiKey(), Base64.DEFAULT))
         var html: String
-        val context = App.applicationContext()
-        val cache = DiskBasedCache(context.cacheDir, 1024 * 1024)
+        val context = context
+        val cache = DiskBasedCache(context?.cacheDir, 1024 * 1024)
         val network = BasicNetwork(HurlStack())
         val requestQueue = RequestQueue(cache, network).apply{
             start()

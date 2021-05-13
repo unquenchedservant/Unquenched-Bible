@@ -13,6 +13,7 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
@@ -31,13 +32,15 @@ class InformationFragment : PreferenceFragmentCompat() {
         val discord: Preference? = findPreference("discordLink")
         val mailchimp: Preference? = findPreference("mailchimp")
         val acknowledgements: Preference? = findPreference("acknowledgements")
+        val mainActivity = activity as MainActivity
+        val context = mainActivity.applicationContext
 
         appHelp!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible"))
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -46,7 +49,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -55,7 +58,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -69,7 +72,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -78,7 +81,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -105,7 +108,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No email app or browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No email app or browser installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -114,7 +117,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser or Discord app installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser or Discord app installed", Toast.LENGTH_LONG).show()
             }
             false
         }
@@ -123,7 +126,7 @@ class InformationFragment : PreferenceFragmentCompat() {
             try {
                 startActivity(i)
             }catch(e:ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
             }
             false
         }

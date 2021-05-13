@@ -51,12 +51,11 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
     var darkMode: Boolean = false
-    val context = this
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
-        WebView(applicationContext)
+        WebView(this@MainActivity)
         super.onCreate(savedInstanceState)
         traceLog(file="MainActivity.kt", function="onCreate()", "beginning")
         val stateList = arrayOf(
@@ -84,6 +83,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             .build(), _rcSignIn)
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             traceLog(file="MainActivity.kt", function="onCreate()", "has not completed onboarding")
+            startActivity(Intent(this@MainActivity, OnboardingPagerActivity::class.java))
         }else {
             traceLog(file="MainActivity.kt", function="onCreate()", "normal operation")
             binding = ActivityMainBinding.inflate(layoutInflater)
@@ -95,7 +95,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                firestoreToPreference(it.result!!)
                                 checkReadingDate()
                                 firestoreToPreference(it.result!!)
                             } else {
@@ -108,17 +107,17 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
             if (darkMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackgroundDark)
                 colorList = intArrayOf(
-                        ContextCompat.getColor(this, R.color.unquenchedEmphDark),
-                        ContextCompat.getColor(this, R.color.unquenchedTextDark)
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedEmphDark),
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedTextDark)
                 )
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground)
+                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackground)
                 colorList = intArrayOf(
-                        ContextCompat.getColor(this, R.color.unquenchedOrange),
-                        ContextCompat.getColor(this, R.color.unquenchedText)
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedOrange),
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedText)
                 )
             }
             val colorStateList = ColorStateList(stateList, colorList)
@@ -415,10 +414,13 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                                     navController.navigate(homeID)
                                 }
                                 .addOnFailureListener {
-                                    Toast.makeText(context, "Error updating lists", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@MainActivity, "Error updating lists", Toast.LENGTH_LONG).show()
                                 }
                     }
                 }
+            .addOnFailureListener {
+                debugLog(message="Firebase failed for this reason ${it}")
+            }
     }
 
     private fun switchEnabled(current: String){
@@ -436,7 +438,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             when {
                 Firebase.auth.currentUser == null -> {
                     finish()
-                    val i = Intent(App.applicationContext(), MainActivity::class.java)
+                    val i = Intent(this@MainActivity, MainActivity::class.java)
                     startActivity(i)
                 }
                 navController.currentDestination?.id != R.id.navigation_home -> {
@@ -454,12 +456,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         traceLog(file="MainActivity.kt", function="onActivityResult()")
         super.onActivityResult(requestCode, resultCode, data)
-        Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()
+        Toast.makeText(this@MainActivity, "Loading...", Toast.LENGTH_LONG).show()
         if(requestCode == _rcSignIn){
             val response = IdpResponse.fromResultIntent(data)
             if(resultCode == Activity.RESULT_OK){
                 val user = Firebase.auth.currentUser
-                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity, "Signed In!", Toast.LENGTH_LONG).show()
                 val db = Firebase.firestore
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->

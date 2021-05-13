@@ -12,6 +12,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Strings.capitalize
 import java.util.*
 
 class PlanSettingsFragment: PreferenceFragmentCompat() {
@@ -29,9 +30,9 @@ class PlanSettingsFragment: PreferenceFragmentCompat() {
         translation.setEntryValues(R.array.translationArray)
         val currentTranslation = getStringPref("bibleVersion", "NIV")
         translation.value = currentTranslation
-        planType!!.summary = "${getString(R.string.summary_plan_type)} Current Plan: ${getStringPref(name="planSystem", defaultValue="pgh").toUpperCase(Locale.ROOT)}"
+        planType!!.summary = "${getString(R.string.summary_plan_type)} Current Plan: ${getStringPref(name="planSystem", defaultValue="pgh").uppercase(Locale.ROOT)}"
         planType.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
-        planMethod!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${getStringPref(name="planType", defaultValue="horner").capitalize(Locale.ROOT)}"
+        planMethod!!.summary = "${getString(R.string.summary_reading_type)} Current Method: ${capitalize(getStringPref(name="planType", defaultValue="horner"))}"
         planMethod.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_navigate_next_24, mainActivity.theme)
         translation.icon = ResourcesCompat.getDrawable(resources, R.drawable.ic_baseline_arrow_drop_down_24, mainActivity.theme)
         when (getStringPref(name="planType", defaultValue="horner")){
