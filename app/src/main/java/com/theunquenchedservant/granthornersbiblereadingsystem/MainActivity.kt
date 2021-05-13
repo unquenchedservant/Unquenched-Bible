@@ -18,6 +18,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -42,6 +43,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -69,19 +71,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         darkMode = getBoolPref(name="darkMode", defaultValue=true)
         if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
         if(Firebase.auth.currentUser == null) {
-            traceLog(file="MainActivity.kt", function="onCreate()", "firebase current user == null")
-            val providers = arrayListOf(
-                    AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
-                    AuthUI.IdpConfig.GoogleBuilder().build()
-            )
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setLogo(R.drawable.logo2)
-                            .setTheme(R.style.AppTheme)
-                            .setIsSmartLockEnabled(false)
-                            .setAvailableProviders(providers)
-                            .build(), _rcSignIn)
+            startFirebaseAuth()
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             traceLog(file="MainActivity.kt", function="onCreate()", "has not completed onboarding")
             startActivity(Intent(this@MainActivity, OnboardingPagerActivity::class.java))
@@ -460,6 +450,22 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             }
         }
     }
+    private fun startFirebaseAuth(){
+        traceLog(file="MainActivity.kt", function="onActivityResult()")
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setLogo(R.drawable.logo2)
+                .setTheme(R.style.AppTheme)
+                .setIsSmartLockEnabled(false)
+                .setAvailableProviders(providers)
+                .build(), _rcSignIn)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         traceLog(file="MainActivity.kt", function="onActivityResult()")
         super.onActivityResult(requestCode, resultCode, data)
@@ -485,12 +491,26 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             }
                         }
             }else{
-                if(response == null){
-                    preferenceToFirestore()
-                    finish()
-                    val i = Intent(this@MainActivity, MainActivity::class.java)
-                    startActivity(i)
+                when{
+                    response == null -> {
+                        Timber.d("onActivityResult(): sign_in_cancelled")
+                        Toast.makeText(this@MainActivity, "Sign in was cancelled", Toast.LENGTH_LONG).show()
+                    }
+                    response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
+                        Timber.d("onActivityResult(): no_internet_connection")
+                        Toast.makeText(this@MainActivity, "No internet connection", Toast.LENGTH_LONG).show()
+                    }
+                    response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
+                        Timber.e("onActivityResult(): unknown_error")
+                        Toast.makeText(this@MainActivity, "An unknown error occured", Toast.LENGTH_LONG).show()
+                    }
+                    else ->{
+                        Timber.e("onActivityResult(): unknown_sign_in_response")
+                        Toast.makeText(this@MainActivity, "Unknown sign in response", Toast.LENGTH_LONG).show()
+                    }
+
                 }
+                startFirebaseAuth()
             }
         }
     }
