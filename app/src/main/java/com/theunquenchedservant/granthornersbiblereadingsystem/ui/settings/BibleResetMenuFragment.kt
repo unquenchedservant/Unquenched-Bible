@@ -12,16 +12,15 @@ import androidx.preference.PreferenceScreen
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset.resetBible
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset.resetTestament
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 
 class BibleResetMenuFragment : PreferenceFragmentCompat(){
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?){
-        val ctx = App.applicationContext()
+        val ctx = (activity as MainActivity).applicationContext
         val screen: PreferenceScreen = preferenceManager.createPreferenceScreen(ctx)
         val mainActivity = activity as MainActivity
         val fullHardReset = Preference(ctx)
@@ -63,7 +62,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            log("Error getting dataa $error")
+                            debugLog(message="Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
@@ -84,7 +83,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            log("Error getting dataa $error")
+                            debugLog(message="Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
@@ -106,7 +105,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            log("Error getting dataa $error")
+                            debugLog(message="Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
@@ -128,7 +127,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            log("Error getting dataa $error")
+                            debugLog(message="Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
@@ -150,7 +149,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            log("Error getting dataa $error")
+                            debugLog(message="Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
@@ -172,7 +171,7 @@ class BibleResetMenuFragment : PreferenceFragmentCompat(){
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            log("Error getting dataa $error")
+                            debugLog(message="Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }

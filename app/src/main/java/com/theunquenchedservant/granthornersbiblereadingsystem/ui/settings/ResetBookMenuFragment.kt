@@ -10,20 +10,20 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.getBooks
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Strings.capitalize
 import java.util.*
 
 class ResetBookMenuFragment: PreferenceFragmentCompat() {
     private lateinit var testament: String
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val ctx = App.applicationContext()
-        val screen: PreferenceScreen = preferenceManager.createPreferenceScreen(ctx)
         val mainActivity = activity as MainActivity
+        val screen: PreferenceScreen = preferenceManager.createPreferenceScreen(context)
         val b = arguments
         testament = b?.getString("testament")!!
-        mainActivity.supportActionBar?.title = "Reset ${testament.capitalize(Locale.ROOT)} Testament Books"
+        mainActivity.supportActionBar?.title = "Reset ${capitalize(testament)} Testament Books"
         val books = getBooks(testament)!!
         for(book in books){
-            val bookPref = Preference(App.applicationContext())
+            val bookPref = Preference(context)
             bookPref.title = "Reset ${BOOK_NAMES[book]}"
             bookPref.summary = "Reset options for ${BOOK_NAMES[book]}"
             val bundle = bundleOf("book" to book, "testament" to testament)

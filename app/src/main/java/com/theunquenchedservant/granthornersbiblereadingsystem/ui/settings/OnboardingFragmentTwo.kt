@@ -81,7 +81,7 @@ class OnboardingFragmentTwo : Fragment() {
             try {
                 startActivity(i)
             }catch(e: ActivityNotFoundException){
-                Toast.makeText(App.applicationContext(), "No browser installed", Toast.LENGTH_LONG).show()
+                Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
             }
         }
         nextBtn.setOnClickListener {

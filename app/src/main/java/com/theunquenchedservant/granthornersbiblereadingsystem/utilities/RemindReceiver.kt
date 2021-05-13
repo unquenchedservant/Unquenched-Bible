@@ -7,9 +7,10 @@ import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -18,14 +19,15 @@ class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
 
     override fun onReceive(context: Context, intent: Intent) {
+        traceLog(file="RemindReceiver.kt", function="onReceive()")
         when(getBoolPref(name="vacationMode") || (getBoolPref(name="weekendMode") && isWeekend())) {
             false -> {
-                log("Vacation mode off, preparing reminder notification")
+                debugLog("Vacation mode off, preparing reminder notification")
                 if(getBoolPref(name="notifications")) {
                     val check = getIntPref(name="listsDone")
-                    log("lists done so far = $check")
+                    debugLog("lists done so far = $check")
                     val allowPartial = getBoolPref(name="allowPartial")
-                    log("Allow partial is $allowPartial")
+                    debugLog("Allow partial is $allowPartial")
                     val doneMax = when(getStringPref(name="planSystem", defaultValue="pgh")){
                         "pgh"->10
                         "mcheyne"->4
@@ -42,20 +44,21 @@ class RemindReceiver : BroadcastReceiver() {
                             deliverNotification(context, true)
                         }
                         doneMax ->{
-                            log("All lists done, not sending notification")
+                            debugLog("All lists done, not sending notification")
                         }
                     }
                 }else{
-                    log("Notification switch off, not sending notification")
+                    debugLog("Notification switch off, not sending notification")
                 }
             }
             true -> {
-                log("Vacation mode on, not sending notification")
+                debugLog("Vacation mode on, not sending notification")
             }
         }
     }
 
     private fun deliverNotification(context: Context, partial:Boolean) {
+        traceLog("RemindReceiver.kt", "deliverNotification()")
         val rem = context.resources.getString(R.string.title_reminder)
         val content : String = if(partial){
             "Don't forget to finish the reading!"

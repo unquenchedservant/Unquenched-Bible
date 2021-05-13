@@ -7,8 +7,8 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -37,11 +37,11 @@ class ReadingListRepository {
                                     resultObject = ReadingLists(listName, listDone, listIndex, reading)
                                     data.value = resultObject
                                 }
-                                else -> log(logString = "RESULT WAS NULL")
+                                else -> debugLog(message="RESULT WAS NULL")
                             }
                         }
                         .addOnFailureListener { exception ->
-                            log(logString = "Failed to get data. Error: $exception")
+                            debugLog(message="Failed to get data. Error: $exception")
                         }
             }
             else -> {

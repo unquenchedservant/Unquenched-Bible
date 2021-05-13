@@ -9,9 +9,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity.Companion.log
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
@@ -41,7 +41,7 @@ class OverridesFragment:PreferenceFragmentCompat(){
             }
             if(getStringPref("planType") != "calendar") {
                 val alert = AlertDialog.Builder(context)
-                alert.setPositiveButton("Yes") { dialog, _ ->
+                alert.setPositiveButton("Yes") { _, _ ->
                     if (getStringPref(name = "planSystem") == "pgh") {
                         if (getStringPref(name = "planType") == "horner") {
                             for (i in 1..10) {
@@ -72,7 +72,7 @@ class OverridesFragment:PreferenceFragmentCompat(){
                                 mainActivity.navController.navigate(homeId)
                             }
                             .addOnFailureListener {
-                                log("FAILED TO RESET LISTS FOR ${it.message}")
+                               debugLog(message="FAILED TO RESET LISTS FOR ${it.message}")
                                 Toast.makeText(mainActivity.applicationContext, "Unable to reset lists. Try again later", Toast.LENGTH_LONG).show()
                             }
                 }

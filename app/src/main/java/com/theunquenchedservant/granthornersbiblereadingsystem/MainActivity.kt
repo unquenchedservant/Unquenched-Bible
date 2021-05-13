@@ -5,7 +5,6 @@ import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
-import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.webkit.WebView
@@ -19,6 +18,7 @@ import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
+import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.IdpResponse
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -35,11 +35,15 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import timber.log.Timber
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
 
@@ -50,14 +54,13 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
     var darkMode: Boolean = false
-    val context = this
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
-        WebView(applicationContext)
+        WebView(this@MainActivity)
         super.onCreate(savedInstanceState)
-
+        traceLog(file="MainActivity.kt", function="onCreate()", "beginning")
         val stateList = arrayOf(
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
@@ -68,21 +71,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         darkMode = getBoolPref(name="darkMode", defaultValue=true)
         if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
         if(Firebase.auth.currentUser == null) {
-            val providers = arrayListOf(
-                    AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
-                    AuthUI.IdpConfig.GoogleBuilder().build()
-            )
-            startActivityForResult(
-                    AuthUI.getInstance()
-                            .createSignInIntentBuilder()
-                            .setLogo(R.drawable.logo2)
-                            .setTheme(R.style.AppTheme)
-                            .setIsSmartLockEnabled(false)
-                            .setAvailableProviders(providers)
-                            .build(), _rcSignIn)
+            startFirebaseAuth()
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
-            startActivity(Intent(this, OnboardingPagerActivity::class.java))
+            traceLog(file="MainActivity.kt", function="onCreate()", "has not completed onboarding")
+            startActivity(Intent(this@MainActivity, OnboardingPagerActivity::class.java))
         }else {
+            traceLog(file="MainActivity.kt", function="onCreate()", "normal operation")
             binding = ActivityMainBinding.inflate(layoutInflater)
             setContentView(binding.root)
             navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
@@ -92,8 +86,8 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                firestoreToPreference(it.result!!)
                                 checkReadingDate()
+                                firestoreToPreference(it.result!!)
                             } else {
                                 Firebase.crashlytics.log("Error getting user info")
                                 Firebase.crashlytics.recordException(it.exception?.cause!!)
@@ -104,17 +98,17 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
             if (darkMode) {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackgroundDark)
+                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackgroundDark)
                 colorList = intArrayOf(
-                        ContextCompat.getColor(this, R.color.unquenchedEmphDark),
-                        ContextCompat.getColor(this, R.color.unquenchedTextDark)
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedEmphDark),
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedTextDark)
                 )
             } else {
                 AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                toolbarColor = ContextCompat.getColor(App.applicationContext(), R.color.buttonBackground)
+                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackground)
                 colorList = intArrayOf(
-                        ContextCompat.getColor(this, R.color.unquenchedOrange),
-                        ContextCompat.getColor(this, R.color.unquenchedText)
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedOrange),
+                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedText)
                 )
             }
             val colorStateList = ColorStateList(stateList, colorList)
@@ -135,7 +129,31 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 setupBottomNavigationBar()
             }
     }
+
+    override fun onResume() {
+        super.onResume()
+        traceLog(file="MainActivity.kt", function="onResume()")
+    }
+
+    override fun onPause() {
+        super.onPause()
+        traceLog(file="MainActivity.kt", function="onPause()")
+    }
+    override fun onStart(){
+        super.onStart()
+        traceLog(file="MainActivity.kt", function="onStart()")
+    }
+    override fun onDestroy(){
+        super.onDestroy()
+        traceLog(file="MainActivity.kt", function="onDestroy()")
+    }
+    override fun onStop(){
+        super.onStop()
+        traceLog(file="MainActivity.kt", function="onStop()")
+    }
+
     fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
+        traceLog(file="MainActivity.kt", function="setupNavigation()")
         binding.myToolbar.setNavigationOnClickListener {
             navController.navigate(navId)
             binding.bottomNav.isVisible = bottomNavVisible
@@ -145,6 +163,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         supportActionBar?.setDisplayHomeAsUpEnabled(displayHome2)
     }
     private fun setupBottomNavigationBar() {
+        traceLog(file="MainActivity.kt", function="setupBottomNavigationBar()")
         switchEnabled(current="home")
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
@@ -291,6 +310,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        traceLog(file="MainActivity.kt", function="onNavigationItemSelected()")
         val homeId = when(getStringPref(name="planSystem", defaultValue="pgh")){
             "pgh"->R.id.navigation_home
             "mcheyne"->R.id.navigation_home_mcheyne
@@ -319,29 +339,36 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         return true
     }
     private fun checkReadingDate() {
+        traceLog(file="MainActivity.kt", function="checkReadingDate()")
         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
                     val dateChecked = extractStringPref(currentData, "dateChecked")
-                    if (!checkDate(dateChecked, "current", false) && (extractIntPref(currentData,"listsDone") != 0 || extractIntPref(currentData, "mcheyneListsDone") != 0)) {
+                    val listsDone = extractIntPref(currentData, "listsDone")
+                    val mcheyneListsDone = extractIntPref(currentData, "mcheyneListsDone")
+
+                    if (!checkDate(dateChecked, "current", false) && (listsDone != 0 || mcheyneListsDone != 0)) {
                         val data: MutableMap<String, Any> = mutableMapOf()
-                        val allowPartial = extractBoolPref(currentData, "allowPartial")
-                        val planType = extractStringPref(currentData, "planType", "horner")
-                        var pghDone = 0
-                        var mcheyneDone = 0
-                        val pghDoneAlready = extractIntPref(currentData, "listsDone")
-                        val mcheyneDoneAlready = extractIntPref(currentData, "mcheyneListsDone")
-                        val holdPlan = extractBoolPref(currentData, "holdPlan", false)
-                        if ((holdPlan && pghDoneAlready == 10) || !holdPlan) {
+                        val allowPartial: Boolean         = extractBoolPref(currentData, "allowPartial")
+                        val planType: String              = extractStringPref(currentData, "planType", "horner")
+                        var pghDone: Int                  = 0
+                        var mcheyneDone: Int              = 0
+
+                        val mcheyneDoneAlready: Int       = extractIntPref(currentData, "mcheyneListsDone")
+                        val holdPlan: Boolean             = extractBoolPref(currentData, "holdPlan")
+
+                        debugLog(message="holdPlan = $holdPlan pghDoneAlready= $listsDone")
+
+                        if ((holdPlan && listsDone == 10) || !holdPlan) {
                             for (i in 1..10) {
                                 if (extractIntPref(currentData, "list${i}Done") == 1) {
                                     pghDone += 1
                                     if (planType == "horner") data["list$i"] = extractIntPref(currentData, "list$i") + 1
-                                    data["list${i}Done"] = 0
-                                    data["list${i}DoneDaily"] = 0
+                                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
+                                    data["list${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=0)
                                 }
                             }
-                            data["listsDone"] = 0
+                            data["listsDone"] = setIntPref(name="listsDone", value=0)
                         }
                         if((holdPlan && mcheyneDoneAlready == 4) || !holdPlan) {
                             for (i in 1..4) {
@@ -384,13 +411,17 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                                     navController.navigate(homeID)
                                 }
                                 .addOnFailureListener {
-                                    Toast.makeText(context, "Error updating lists", Toast.LENGTH_LONG).show()
+                                    Toast.makeText(this@MainActivity, "Error updating lists", Toast.LENGTH_LONG).show()
                                 }
                     }
                 }
+            .addOnFailureListener {
+                debugLog(message="Firebase failed for this reason ${it}")
+            }
     }
 
     private fun switchEnabled(current: String){
+        traceLog(file="MainActivity.kt", function="switchEnabled()")
         val menu = binding.bottomNav.menu
         menu.findItem(R.id.navigation_home)?.isEnabled = current != "home"
         menu.findItem(R.id.navigation_stats)?.isEnabled = current != "stats"
@@ -399,11 +430,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
 
     override fun onBackPressed() {
+        traceLog(file="MainActivity.kt", function="onBackPressed()")
         if(this::navController.isInitialized) {
             when {
                 Firebase.auth.currentUser == null -> {
                     finish()
-                    val i = Intent(App.applicationContext(), MainActivity::class.java)
+                    val i = Intent(this@MainActivity, MainActivity::class.java)
                     startActivity(i)
                 }
                 navController.currentDestination?.id != R.id.navigation_home -> {
@@ -418,14 +450,31 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             }
         }
     }
+    private fun startFirebaseAuth(){
+        traceLog(file="MainActivity.kt", function="onActivityResult()")
+        val providers = arrayListOf(
+            AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
+            AuthUI.IdpConfig.GoogleBuilder().build()
+        )
+        startActivityForResult(
+            AuthUI.getInstance()
+                .createSignInIntentBuilder()
+                .setLogo(R.drawable.logo2)
+                .setTheme(R.style.AppTheme)
+                .setIsSmartLockEnabled(false)
+                .setAvailableProviders(providers)
+                .build(), _rcSignIn)
+    }
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        traceLog(file="MainActivity.kt", function="onActivityResult()")
         super.onActivityResult(requestCode, resultCode, data)
-        Toast.makeText(context, "Loading...", Toast.LENGTH_LONG).show()
+        Toast.makeText(this@MainActivity, "Loading...", Toast.LENGTH_LONG).show()
         if(requestCode == _rcSignIn){
             val response = IdpResponse.fromResultIntent(data)
             if(resultCode == Activity.RESULT_OK){
                 val user = Firebase.auth.currentUser
-                Toast.makeText(App.applicationContext(), "Signed In!", Toast.LENGTH_LONG).show()
+                Toast.makeText(this@MainActivity, "Signed In!", Toast.LENGTH_LONG).show()
                 val db = Firebase.firestore
                 db.collection("main").document(user!!.uid).get()
                         .addOnSuccessListener { doc ->
@@ -442,22 +491,27 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                             }
                         }
             }else{
-                if(response == null){
-                    preferenceToFirestore()
-                    finish()
-                    val i = Intent(this@MainActivity, MainActivity::class.java)
-                    startActivity(i)
+                when{
+                    response == null -> {
+                        Timber.d("onActivityResult(): sign_in_cancelled")
+                        Toast.makeText(this@MainActivity, "Sign in was cancelled", Toast.LENGTH_LONG).show()
+                    }
+                    response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
+                        Timber.d("onActivityResult(): no_internet_connection")
+                        Toast.makeText(this@MainActivity, "No internet connection", Toast.LENGTH_LONG).show()
+                    }
+                    response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
+                        Timber.e("onActivityResult(): unknown_error")
+                        Toast.makeText(this@MainActivity, "An unknown error occured", Toast.LENGTH_LONG).show()
+                    }
+                    else ->{
+                        Timber.e("onActivityResult(): unknown_sign_in_response")
+                        Toast.makeText(this@MainActivity, "Unknown sign in response", Toast.LENGTH_LONG).show()
+                    }
+
                 }
+                startFirebaseAuth()
             }
         }
-    }
-
-    companion object{
-
-        fun log(logString:String){
-            Log.d("PROFGRANT", logString)
-        }
-
-
     }
 }

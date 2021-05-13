@@ -15,7 +15,6 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
@@ -42,6 +41,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 
 class HomeFragment : Fragment() {
@@ -60,12 +60,14 @@ class HomeFragment : Fragment() {
             container: ViewGroup?,
             savedInstanceState: Bundle?
     ): View {
+        traceLog(file="HomeFragment.kt", function="onCreateView()")
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         darkMode = getBoolPref(name = "darkMode", defaultValue = true)
+        val context = (activity as MainActivity).applicationContext
         if(darkMode){
-            binding.materialButton.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackgroundDark))
+            binding.materialButton.setBackgroundColor(getColor(context, R.color.buttonBackgroundDark))
         }else{
-            binding.materialButton.setBackgroundColor(getColor(App.applicationContext(), R.color.buttonBackground))
+            binding.materialButton.setBackgroundColor(getColor(context, R.color.buttonBackground))
         }
         initList(binding.cardList1, resources.getString(R.string.title_pgh_list1))
         initList(binding.cardList2, resources.getString(R.string.title_pgh_list2))
@@ -110,8 +112,8 @@ class HomeFragment : Fragment() {
         }
         viewModel.listsDone.observe(viewLifecycleOwner) { listsDone ->
             when (getBoolPref(name = "darkMode", defaultValue = true)) {
-                true -> binding.materialButton.setTextColor(getColor(App.applicationContext(), R.color.unquenchedTextDark))
-                false -> binding.materialButton.setTextColor(getColor(App.applicationContext(), R.color.unquenchedText))
+                true -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedTextDark))
+                false -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedText))
             }
             updateButton(listsDone.listsDone, binding.materialButton, 10, 9)
         }
@@ -120,6 +122,7 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+        traceLog(file="HomeFragment.kt", function="onResume()")
         when (allowResume) {
             true -> {
                 allowResume = false
@@ -129,6 +132,7 @@ class HomeFragment : Fragment() {
 
     override fun onPause() {
         super.onPause()
+        traceLog(file="HomeFragment.kt", function="onPause()")
         when (allowResume) {
             false -> allowResume = true
         }
@@ -136,7 +140,7 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        createUpdateAlert(requireContext())
+        traceLog(file="HomeFragment.kt", function="onViewCreated()")
         createButtonListener()
         createNotificationChannel()
         createAlarm(alarmType = "dailyCheck")
@@ -146,18 +150,20 @@ class HomeFragment : Fragment() {
     }
 
     private fun createCard(cardList: CardviewsBinding, readingLists: ReadingLists, readingString: Int, listName: String, listArray: Int, psalms: Boolean) {
+        traceLog(file="HomeFragment.kt", function="createCard()")
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
         cardListRoot.isClickable = true
+        val context = (activity as MainActivity).applicationContext
         when (getBoolPref(name = "darkMode", defaultValue = true)) {
             true -> {
-                enabled = getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-                lineColor = getColor(App.applicationContext(), R.color.unquenchedEmphDark)
+                enabled = getColor(context, R.color.buttonBackgroundDark)
+                lineColor = getColor(context, R.color.unquenchedEmphDark)
             }
             false -> {
-                enabled = getColor(App.applicationContext(), R.color.buttonBackground)
-                lineColor = getColor(App.applicationContext(), R.color.unquenchedOrange)
+                enabled = getColor(context, R.color.buttonBackground)
+                lineColor = getColor(context, R.color.unquenchedOrange)
             }
         }
         val disabled = Color.parseColor("#00383838")
@@ -191,6 +197,7 @@ class HomeFragment : Fragment() {
     }
 
     private fun createButtonListener() {
+        traceLog(file="HomeFragment.kt", function="createButtonListener()")
         binding.materialButton.setOnClickListener {
             hideOthers(cardList = null, binding)
             val job = markAll("pgh", context)
@@ -221,10 +228,12 @@ class HomeFragment : Fragment() {
     }
 
     private fun createCardListener(cardView: CardviewsBinding, arrayId: Int, psalms: Boolean, listDone: String, listName: String) {
+        traceLog(file="HomeFragment.kt", function="createCardListener()")
         val list = resources.getStringArray(arrayId)
+        val context = (activity as MainActivity).applicationContext
         val enabled: Int = when (getBoolPref("darkMode", defaultValue = true)) {
-            true -> getColor(App.applicationContext(), R.color.buttonBackgroundDark)
-            false -> getColor(App.applicationContext(), R.color.buttonBackground)
+            true -> getColor(context, R.color.buttonBackgroundDark)
+            false -> getColor(context, R.color.buttonBackground)
         }
         if(getIntPref(listDone) == 0) {
             cardView.root.setOnClickListener { view ->

@@ -11,21 +11,23 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_CHAPTERS
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 
 class BibleBookFragment : PreferenceFragmentCompat(){
 
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?){
-        val screen: PreferenceScreen = preferenceManager.createPreferenceScreen(App.applicationContext())
+        val screen: PreferenceScreen = preferenceManager.createPreferenceScreen(context)
         val b = arguments
         val book = b?.getString("book")
         val chapters = BOOK_CHAPTERS[book]
         val bookName = BOOK_NAMES[book]
         val mainActivity = activity as MainActivity
+        val context = mainActivity.applicationContext
         mainActivity.supportActionBar?.title = "$bookName Statistics"
         for(i in 1..chapters!!){
-            val chapterPref = Preference(App.applicationContext())
+            val chapterPref = Preference(context)
             chapterPref.title = "$bookName $i"
             Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                     .addOnSuccessListener {
@@ -35,7 +37,7 @@ class BibleBookFragment : PreferenceFragmentCompat(){
                         chapterPref.summary = "Read: $hasBeenRead | Times Read: $amountRead"
                     }
                     .addOnFailureListener { error->
-                        MainActivity.log("Error getting dataa $error")
+                        debugLog(message="Error getting data $error")
                         chapterPref.summary = "Error loading data"
                     }
             screen.addPreference(chapterPref)

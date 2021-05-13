@@ -5,12 +5,14 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.widget.Toast
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
 class DoneReceiver : BroadcastReceiver() {
     override fun onReceive(context: Context, intent: Intent) {
+        traceLog(file = "DoneReceiver.kt", function = "onReceive()")
         val doneMax = when(getStringPref(name="planSystem", defaultValue="pgh")){
             "pgh"->10
             "mcheyne"->4

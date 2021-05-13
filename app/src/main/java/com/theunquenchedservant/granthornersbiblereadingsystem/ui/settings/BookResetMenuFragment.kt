@@ -9,15 +9,14 @@ import androidx.preference.PreferenceScreen
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
-import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.Books.BOOK_NAMES
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.BibleStatsReset.resetBook
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 
 class BookResetMenuFragment : PreferenceFragmentCompat() {
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
-        val ctx = App.applicationContext()
+        val ctx = (activity as MainActivity).applicationContext
         val screen: PreferenceScreen = preferenceManager.createPreferenceScreen(ctx)
         val b = arguments
         val book = b?.getString("book")
@@ -41,7 +40,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error->
-                            MainActivity.log("Error getting dataa $error")
+                            debugLog(message = "Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
@@ -63,7 +62,7 @@ class BookResetMenuFragment : PreferenceFragmentCompat() {
                             dialog.dismiss()
                         }
                         .addOnFailureListener { error ->
-                            MainActivity.log("Error getting dataa $error")
+                            debugLog(message = "Error getting data $error")
                             Toast.makeText(context, "Unable to reset Stat, try again", Toast.LENGTH_LONG).show()
                         }
             }
