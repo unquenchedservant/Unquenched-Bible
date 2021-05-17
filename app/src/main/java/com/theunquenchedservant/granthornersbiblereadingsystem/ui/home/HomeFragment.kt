@@ -15,6 +15,7 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
@@ -29,7 +30,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.changeVisibility
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.createUpdateAlert
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.getChapter
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.hideOthers
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.initList
@@ -42,6 +42,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ReadingLists as readinggList
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
 
 class HomeFragment : Fragment() {
@@ -69,17 +70,8 @@ class HomeFragment : Fragment() {
         }else{
             binding.materialButton.setBackgroundColor(getColor(context, R.color.buttonBackground))
         }
-        initList(binding.cardList1, resources.getString(R.string.title_pgh_list1))
-        initList(binding.cardList2, resources.getString(R.string.title_pgh_list2))
-        initList(binding.cardList3, resources.getString(R.string.title_pgh_list3))
-        initList(binding.cardList4, resources.getString(R.string.title_pgh_list4))
-        initList(binding.cardList5, resources.getString(R.string.title_pgh_list5))
-        initList(binding.cardList6, resources.getString(R.string.title_pgh_list6))
-        initList(binding.cardList7, resources.getString(R.string.title_pgh_list7))
-        initList(binding.cardList8, resources.getString(R.string.title_pgh_list8))
-        initList(binding.cardList9, resources.getString(R.string.title_pgh_list9))
-        initList(binding.cardList10, resources.getString(R.string.title_pgh_list10))
-         viewModel.list1.observe(viewLifecycleOwner) { readingList ->
+        readinggList(binding, resources)
+        viewModel.list1.observe(viewLifecycleOwner) { readingList ->
             createCard(binding.cardList1, readingList, R.string.title_pgh_list1, listName = "list1", R.array.list_1, psalms = false)
         }
         viewModel.list2.observe(viewLifecycleOwner) { readingList ->
@@ -156,7 +148,7 @@ class HomeFragment : Fragment() {
         val lineColor: Int
         cardListRoot.isClickable = true
         val context = (activity as MainActivity).applicationContext
-        when (getBoolPref(name = "darkMode", defaultValue = true)) {
+        when (App().preferences!!.settings.darkMode) {
             true -> {
                 enabled = getColor(context, R.color.buttonBackgroundDark)
                 lineColor = getColor(context, R.color.unquenchedEmphDark)

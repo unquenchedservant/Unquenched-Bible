@@ -2,6 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.5.0'
+    ext.koin_version = "3.0.1"
     repositories {
         google()
         mavenCentral()
@@ -13,6 +14,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.2.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+
         //noinspection GradleDependency
         classpath "com.google.gms:google-services:4.3.5"
         classpath 'com.google.android.gms:oss-licenses-plugin:0.10.4'

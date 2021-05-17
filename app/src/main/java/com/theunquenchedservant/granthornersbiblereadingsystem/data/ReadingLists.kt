@@ -4,4 +4,4 @@ data class ReadingLists(
         val listName: String,
         val listDone: Int,
         val listIndex: Int,
-        val listReading:String)
+        val listReading: String)

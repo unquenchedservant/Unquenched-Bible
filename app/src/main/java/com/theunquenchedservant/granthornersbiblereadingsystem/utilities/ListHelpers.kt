@@ -4,6 +4,7 @@ import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
 import android.content.res.ColorStateList
+import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
@@ -14,6 +15,8 @@ import androidx.appcompat.app.AlertDialog
 import androidx.cardview.widget.CardView
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.view.isVisible
+import androidx.navigation.NavController
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.DocumentSnapshot
@@ -21,6 +24,7 @@ import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
+import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
@@ -28,6 +32,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.Fragm
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isLeapDay
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
@@ -36,6 +41,145 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import java.util.*
+
+class SingleList(val cardView:CardviewsBinding, val list:ListItem, val title:String, val readingLists:ReadingLists){
+    val listIndex = list.listIndex
+    val listName = list.listName
+
+    init{
+        val backgroundColor:Int
+        val emphColor:Int
+        if(App().preferences!!.settings.darkMode){
+            backgroundColor = getColor(App().applicationContext, R.color.buttonBackgroundDark)
+            emphColor = getColor(App().applicationContext, R.color.unquenchedEmphDark)
+        }else{
+            backgroundColor = getColor(App().applicationContext, R.color.buttonBackground)
+            emphColor = getColor(App().applicationContext, R.color.unquenchedEmph)
+        }
+        val disabled = Color.parseColor("#00383838")
+        cardView.listTitle.text = title
+        cardView.listReading.text = App().applicationContext.resources.getText(R.string.loading)
+        cardView.root.isClickable = false
+        cardView.root.setCardBackgroundColor(backgroundColor)
+        cardView.listReading.setTextColor(emphColor)
+        cardView.lineSeparator.setBackgroundColor(emphColor)
+        cardView.listReading.text = getReading(list.listIndex)
+        if(cardView.listReading.text == "Day Off"){
+            cardView.root.isEnabled=false
+            cardView.root.setCardBackgroundColor(disabled)
+            cardView.listButtons.setBackgroundColor(disabled)
+            App().preferences!!.list.listsDone += 1
+        }else{
+            createCardListener()
+        }
+    }
+    fun createCardListener(){
+        val listArray = App.applicationContext().resources.getStringArray(list.listId)
+        val context = App.applicationContext()
+        val enabled: Int = when(App().preferences!!.settings.darkMode){
+            true -> getColor(context, R.color.buttonBackgroundDark)
+            false -> getColor(context, R.color.buttonBackground)
+        }
+        if(!list.listDone){
+            cardView.root.setOnClickListener {  view ->
+                if(cardView.listButtons.isVisible) setVisibility(false) else{
+                    readingLists.hideOthers(cardView)
+                    cardView.listDone.setOnClickListener {
+                        setVisibility(false)
+                        markSingle(list.listName + "Done", App().preferences!!.settings.planSystem, context).addOnSuccessListener {
+                            cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+
+                        }
+                    }
+                }
+            }
+        }
+    }
+    fun getReading(listIndex: Int):String{
+        val listArray = App.applicationContext().resources.getStringArray(list.listId)
+        val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
+        when (list.listName) {
+            "list6" -> {
+                when (App().preferences!!.settings.psalms) {
+                    true-> {
+                        return when(day){
+                            in 1..30-> "$day, ${day + 30}, ${day + 60}, ${day + 90}, ${day + 120}"
+                            else-> "Day Off"
+                        }
+                    }
+                }
+            }
+        }
+        when (getStringPref(name="planType", defaultValue="horner")) {
+            "horner" -> {
+                return when (listIndex) {
+                    listArray.size -> {
+                        list.listIndex = 0
+                        listArray[0]
+                    }
+                    else -> {
+                        list.listIndex = listIndex
+                        listArray[listIndex]
+                    }
+                }
+            }
+            "numerical" -> {
+                var newIndex = App().preferences!!.list.currentIndex
+                while(newIndex>=listArray.size){
+                    newIndex -= listArray.size
+                }
+                return listArray[newIndex]
+            }
+            "calendar" -> {
+                var newIndex = Calendar.getInstance().get(Calendar.DAY_OF_YEAR) - 3
+                val cal = Calendar.getInstance();
+                if(cal.getActualMaximum(Calendar.DAY_OF_YEAR) > 365 && cal.get(Calendar.DAY_OF_YEAR) > 60){
+                    newIndex -= 1
+                }
+                while (newIndex >= listArray.size) {
+                    newIndex -= listArray.size
+                }
+                return listArray[newIndex]
+            }
+            else -> return listArray[listIndex]
+        }
+    }
+    fun setVisibility(isVisible:Boolean){
+        if(isVisible){
+            cardView.listButtons.visibility = View.VISIBLE
+            cardView.listReading.visibility = View.GONE
+        }else{
+            cardView.listButtons.visibility = View.GONE
+            cardView.listReading.visibility = View.VISIBLE
+        }
+    }
+}
+class ReadingLists (val binding:FragmentHomeBinding, val resources: Resources){
+    var list1:SingleList = SingleList(binding.cardList1, App().preferences!!.list.list1, resources.getString(R.string.title_pgh_list1), this)
+    var list2:SingleList = SingleList(binding.cardList2, App().preferences!!.list.list2, resources.getString(R.string.title_pgh_list2), this)
+    var list3:SingleList = SingleList(binding.cardList3, App().preferences!!.list.list3, resources.getString(R.string.title_pgh_list3), this)
+    var list4:SingleList = SingleList(binding.cardList4, App().preferences!!.list.list4, resources.getString(R.string.title_pgh_list4), this)
+    var list5:SingleList = SingleList(binding.cardList5, App().preferences!!.list.list5, resources.getString(R.string.title_pgh_list5), this)
+    var list6:SingleList = SingleList(binding.cardList6, App().preferences!!.list.list6, resources.getString(R.string.title_pgh_list6), this)
+    var list7:SingleList = SingleList(binding.cardList7, App().preferences!!.list.list7, resources.getString(R.string.title_pgh_list7), this)
+    var list8:SingleList = SingleList(binding.cardList8, App().preferences!!.list.list8, resources.getString(R.string.title_pgh_list8), this)
+    var list9:SingleList = SingleList(binding.cardList9, App().preferences!!.list.list9, resources.getString(R.string.title_pgh_list9), this)
+    var list10:SingleList = SingleList(binding.cardList10, App().preferences!!.list.list10, resources.getString(R.string.title_pgh_list10), this)
+
+    fun hideOthers(currentList: CardviewsBinding){
+        list1.setVisibility(isVisible = currentList == list1.cardView)
+        list2.setVisibility(isVisible = currentList == list2.cardView)
+        list3.setVisibility(isVisible = currentList == list3.cardView)
+        list4.setVisibility(isVisible = currentList == list4.cardView)
+        list5.setVisibility(isVisible = currentList == list5.cardView)
+        list6.setVisibility(isVisible = currentList == list6.cardView)
+        list7.setVisibility(isVisible = currentList == list7.cardView)
+        list8.setVisibility(isVisible = currentList == list8.cardView)
+        list9.setVisibility(isVisible = currentList == list9.cardView)
+        list10.setVisibility(isVisible = currentList == list10.cardView)
+    }
+
+}
 
 object ListHelpers {
 
