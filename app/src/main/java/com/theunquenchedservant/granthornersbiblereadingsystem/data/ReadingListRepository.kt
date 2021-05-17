@@ -92,7 +92,7 @@ class ReadingListRepository {
         when (getStringPref(name="planType", defaultValue="horner")) {
             "horner" -> {
                 return when (index) {
-                    list.size -> {
+                    !in 0..list.size -> {
                         setIntPref(name=listName, value=0, updateFS=true)
                         list[0]
                     }

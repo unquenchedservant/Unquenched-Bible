@@ -15,6 +15,7 @@ import androidx.lifecycle.SavedStateViewModelFactory
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
@@ -117,6 +118,7 @@ class HomeFragment : Fragment() {
             }
             updateButton(listsDone.listsDone, binding.materialButton, 10, 9)
         }
+
         return binding.root
     }
 
@@ -141,6 +143,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         traceLog(file="HomeFragment.kt", function="onViewCreated()")
+        createUpdateAlert(activity as MainActivity)
         createButtonListener()
         createNotificationChannel()
         createAlarm(alarmType = "dailyCheck")

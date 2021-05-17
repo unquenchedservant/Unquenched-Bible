@@ -41,14 +41,16 @@ object ListHelpers {
 
     fun createUpdateAlert(context: Context){
         traceLog(file="ListHelpers.kt", function="createUpdateAlert()")
-        if(getIntPref("versionNumber") < 90){
+        val currentVersion = BuildConfig.VERSION_CODE
+        debugLog("currentVersion $currentVersion")
+        if(getIntPref("versionNumber") < currentVersion){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 90, updateFS = true)
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 90, updateFS = true)
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
                 try {
                     startActivity(context, i, null)
@@ -69,11 +71,11 @@ object ListHelpers {
         else if (getIntPref(name = "versionNumber") < 70) {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 88, updateFS = true)
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 88, updateFS = true)
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
                 try {
                     startActivity(context, i, null)
