@@ -8,7 +8,6 @@ import android.view.View
 import android.view.ViewGroup
 import android.webkit.WebView
 import android.widget.AdapterView
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
@@ -23,14 +22,12 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ScriptureViewerBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
 import org.json.JSONObject
 import java.util.*
 import kotlin.collections.HashMap
 
 class ScriptureViewer : Fragment() {
+    lateinit var preferences: com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Preferences
     init{
         System.loadLibrary("native-lib")
     }
@@ -70,7 +67,26 @@ class ScriptureViewer : Fragment() {
         _binding = ScriptureViewerBinding.inflate(inflater, container, false)
         return binding.root
     }
-
+    fun getSelectionIndex(bibleVersion: String):Int{
+        return when(bibleVersion){
+            "AMP" -> 1
+            "CSB" -> 2
+            "ESV" -> 3
+            "KJV" -> 4
+            "NIV" -> 5
+            "NASB" -> 6
+            "NASB20" -> 7
+            else -> 5
+        }
+    }
+    fun getBibleVersion(bibleVersion:String):String{
+        return when(bibleVersion){
+            "---" -> "NIV"
+            "NASB" -> "NASB20"
+            "NASB2020" -> "NASB20"
+            else-> bibleVersion
+        }
+    }
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val b = arguments
@@ -78,23 +94,16 @@ class ScriptureViewer : Fragment() {
         psalms = b.getBoolean("psalms")
         iteration = b.getInt("iteration")
         act = activity as MainActivity
+        preferences = act.preferences
         view.findViewById<WebView>(R.id.scripture_web).setBackgroundColor(Color.parseColor("#121212"))
         act.supportActionBar?.title = chapter
-        var bibleVersion = getStringPref("bibleVersion", "NIV")
-        bibleVersion = when (bibleVersion){
-            "---"->setStringPref("bibleVersion", "NIV", updateFS=true)
-            "NASB"->setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
-            else->bibleVersion
-        }
+        val bibleVersion = getBibleVersion(preferences.settings.bibleVersion)
+        act.binding.translationSelector.setSelection(getSelectionIndex(bibleVersion))
         act.binding.translationSelector.onItemSelectedListener = object: AdapterView.OnItemSelectedListener{
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                 var version = parent?.getItemAtPosition(position).toString()
-                version = when(version){
-                    "NASB2020" -> "NASB20"
-                    "---"->"NIV"
-                    else -> version
-                }
-                setStringPref(name = "bibleVersion", value = version, updateFS = true)
+                version = getBibleVersion(version)
+                preferences.settings.bibleVersion = version
                 if(version != bibleVersion) {
                     val bundle = bundleOf("chapter" to chapter, "psalms" to psalms, "iteration" to iteration)
                     act.navController.navigate(R.id.navigation_scripture, bundle)
@@ -106,38 +115,25 @@ class ScriptureViewer : Fragment() {
 
         versionId = BIBLE_IDS[bibleVersion]
         act.findViewById<BottomNavigationView>(R.id.bottom_nav).isVisible = false
-        val buttonColor: Int
-        val textColor: Int
-        val context = act.applicationContext
-        if(getBoolPref("darkMode")) {
-            act.binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-            buttonColor = getColor(context, R.color.buttonBackgroundDark)
-            textColor = getColor(context, R.color.unquenchedTextDark)
-        }else{
-            act.binding.navHostFragment.setBackgroundColor(Color.parseColor("#fffaf0"))
-            buttonColor = getColor(context, R.color.buttonBackground)
-            textColor = getColor(context, R.color.unquenchedText)
-        }
+        act.binding.navHostFragment.setBackgroundColor(preferences.colors.colorPrimary)
+        val buttonColor: Int = preferences.colors.buttonBackground
+        val textColor: Int = preferences.colors.textColor
         binding.psalmsNext.setBackgroundColor(buttonColor)
         binding.psalmsNext.setTextColor(textColor)
         binding.psalmsBack.setBackgroundColor(buttonColor)
         binding.psalmsBack.setTextColor(textColor)
-        val type=if(bibleVersion == "ESV"){
-            "esv"
-        }else{
-            "apiBible"
-        }
-        val returnURL = when (getStringPref(name = "planSystem", defaultValue = "pgh")) {
-            "pgh" -> getReference(chapter, psalms, type)
+
+        val returnURL = when (preferences.settings.planSystem) {
+            "pgh" -> getReference(chapter, psalms, preferences.settings.planType, preferences.settings.bibleVersion)
             else -> {
                 val iterations = getIterations(chapter)
-                getReferenceMCheyne(chapter, iterations[1], maxIteration = iterations[0] + 1, type)
+                getReferenceMCheyne(chapter, iterations[1], maxIteration = iterations[0] + 1, preferences.settings.planType, preferences.settings.bibleVersion)
             }
         }
-        getScriptureView(returnURL, type)
+        getScriptureView(returnURL, preferences.settings.planType, preferences.settings.bibleVersion)
     }
 
-    private fun getReferenceMCheyne(chapter: String, iteration: Int, maxIteration: Int, type:String):String{
+    private fun getReferenceMCheyne(chapter: String, iteration: Int, maxIteration: Int, type:String, version:String):String{
         val title : String
         val url: String
         val chapters = getBook(chapter)
@@ -147,7 +143,7 @@ class ScriptureViewer : Fragment() {
             0->{
                 prepBindings(1, R.id.navigation_home_mcheyne, chapter, false, iteration)
                 title = chapter
-                url = if(type=="esv"){
+                url = if(version=="ESV"){
                     "https://api.esv.org/v3/passage/html/?q=$chapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
                 }else{
                     getBibleApiURL(title, versionId, book)
@@ -157,7 +153,7 @@ class ScriptureViewer : Fragment() {
                 prepBindings(2, R.id.navigation_home_mcheyne, chapter, false, iteration)
                 val currentChapter = chapters[iteration - 1]
                 title = "$book $currentChapter"
-                url = if (type == "esv") {
+                url = if (version == "ESV") {
                     "https://api.esv.org/v3/passage/html/?q=${book}.$currentChapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
                 }else{
                     getBibleApiURL(title, versionId, book)
@@ -167,7 +163,7 @@ class ScriptureViewer : Fragment() {
                 prepBindings(3, R.id.navigation_home_mcheyne, chapter, false, iteration)
                 val currentChapter = chapters[iteration - 1]
                 title = "$book $currentChapter"
-                url = if (type == "esv") {
+                url = if (version == "ESV") {
                     "https://api.esv.org/v3/passage/html/?q=${book}.$currentChapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
                 }else{
                     getBibleApiURL(title, versionId, book)
@@ -177,7 +173,7 @@ class ScriptureViewer : Fragment() {
                 prepBindings(4, R.id.navigation_home_mcheyne, chapter, false, iteration)
                 val currentChapter = chapters[iteration-1]
                 title = "$book $currentChapter"
-                url = if(type=="esv"){
+                url = if(version=="ESV"){
                     "https://api.esv.org/v3/passage/html/?q=${book}.$currentChapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
                 }else{
                     getBibleApiURL(title, versionId, book)
@@ -192,12 +188,9 @@ class ScriptureViewer : Fragment() {
         act.supportActionBar?.title = title
         return url
     }
-    private fun getReference(chapter: String, psalms: Boolean, type:String) : String {
+    private fun getReference(chapter: String, psalms: Boolean, type:String, version:String) : String {
         val title: String
-        when (getStringPref(name = "bibleVersion", defaultValue = "ESV")) {
-            "NASB" -> setStringPref(name = "bibleVersion", value = "NASB20", updateFS = true)
-        }
-        val versionId: String? = BIBLE_IDS[getStringPref(name="bibleVersion", defaultValue="ESV")]
+        val versionId: String? = BIBLE_IDS[preferences.settings.bibleVersion]
         return if(psalms) {
             getPsalms(type)
         }else {
@@ -209,7 +202,7 @@ class ScriptureViewer : Fragment() {
             }
 
             act.supportActionBar?.title = title
-            if(type == "esv"){
+            if(version == "ESV"){
                 val ch = chapter.replace(" ", "")
                 "https://api.esv.org/v3/passage/html/?q=$ch&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
             }else{
@@ -221,8 +214,8 @@ class ScriptureViewer : Fragment() {
             }
         }
     }
-    private fun getScriptureView(url: String, type:String=""){
-        val esvKey = String(Base64.decode(getESVKey(), Base64.DEFAULT))
+    private fun getScriptureView(url: String, type:String="", version:String){
+        val esvKey =String(Base64.decode(getESVKey(), Base64.DEFAULT))
         val key = String(Base64.decode(getBibleApiKey(), Base64.DEFAULT))
         var html: String
         val context = context
@@ -234,17 +227,17 @@ class ScriptureViewer : Fragment() {
         val jsonObjectRequest = object : JsonObjectRequest(Method.GET, url, null,
                 Response.Listener { response ->
                     val css: String
-                    html = if(type=="esv") {
+                    html = if(version=="ESV") {
                         response.getJSONArray("passages").getString(0)
                     }else {
                         response.getJSONObject("data").getString("content")
                     }
-                    css = when (getBoolPref(name="darkMode", defaultValue=true)) {
-                        true -> if(type=="esv") "https://unquenched.bible/esv-2.css" else "https://unquenched.bible/api_bible_night.css"
+                    css = when (preferences.settings.darkMode) {
+                        true -> if(version=="ESV") "https://unquenched.bible/esv-2.css" else "https://unquenched.bible/api_bible_night.css"
 
-                        false -> if(type=="esv") "https://unquenched.bible/esv-day2.css" else "https://unquenched.bible/api_bible_day.css"
+                        false -> if(version=="ESV") "https://unquenched.bible/esv-day2.css" else "https://unquenched.bible/api_bible_day.css"
                     }
-                    html = if(type=="esv"){
+                    html = if(version=="ESV"){
                         html.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", css)
                     }else{
                         prepBibleApi(html, css, response)
@@ -256,7 +249,7 @@ class ScriptureViewer : Fragment() {
                 }){
             override fun getHeaders(): MutableMap<String, String>{
                 val headers = HashMap<String, String>()
-                if(type=="esv"){
+                if(version=="ESV"){
                     headers["Authorization"] = esvKey
                 }else{
                     headers["api-key"] = key
@@ -325,7 +318,7 @@ class ScriptureViewer : Fragment() {
             }
         }
         act.supportActionBar?.title  = "Psalm $day"
-        return if(type=="esv"){
+        return if(type=="ESV"){
             "https://api.esv.org/v3/passage/html/?q=Psalm$day&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
         }else{
             "https://api.scripture.api.bible/v1/bibles/$versionId/chapters/PSA.$day?content-type=html&include-notes=false&include-titles=true&include-chapter-numbers=false&include-verse-numbers=true&include-verse-spans=false"
@@ -336,7 +329,7 @@ class ScriptureViewer : Fragment() {
         val fums = response.getJSONObject("meta").getString("fums")
         var html = html2
         var copyright = ""
-        copyright = when (getStringPref(name="bibleVersion", defaultValue="NIV")){
+        copyright = when (preferences.settings.bibleVersion){
             "AMP" -> copyright + "Amplified® Bible (AMP), copyright © 1954, 1958, 1962, 1964, 1965, 1987, 2015 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"
             "CSB" -> copyright + "<center>Christian Standard Bible® Copyright © 2017 by Holman Bible Publishers</center><br>Christian Standard Bible® and CSB® are federally registered trademarks of Holman Bible Publishers. Used by permission."
             "NASB95","NASB20"-> copyright + "New American Standard Bible Copyright 1960, 1971, 1977, 1995, 2020 by The Lockman Foundation, La Habra, Calif. All rights reserved.<br ><br><center>For Permission to Quote Information visit <a href=\"https://www.lockman.org\">www.lockman.org</a></center>"

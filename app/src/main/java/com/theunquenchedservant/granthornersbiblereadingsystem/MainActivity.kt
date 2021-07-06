@@ -3,7 +3,6 @@ package com.theunquenchedservant.granthornersbiblereadingsystem
 import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
-import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
@@ -11,7 +10,6 @@ import android.webkit.WebView
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.app.AppCompatDelegate
-import androidx.core.content.ContextCompat
 import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
@@ -24,16 +22,17 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
-import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Firestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Preferences
+import kotlinx.coroutines.*
 import timber.log.Timber
 
 class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
@@ -44,111 +43,86 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
+    lateinit var app:App
+    lateinit var preferences: Preferences
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
         WebView(this@MainActivity)
         super.onCreate(savedInstanceState)
-        traceLog(file="MainActivity.kt", function="onCreate()", "beginning")
-
-        val stateList = arrayOf(
-            intArrayOf(android.R.attr.state_checked),
-            intArrayOf(-android.R.attr.state_checked)
-        )
-        if(Firebase.auth.currentUser == null) {
+        app = App()
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
+        if (Firebase.auth.currentUser == null) {
+            debugLog("NO CURRENT USER")
             startFirebaseAuth()
-        }else {
-            binding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
+        } else {
+            debugLog("OKAY")
             Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                 .addOnSuccessListener {
-                    App().preferences = Preferences(it.data!!)
-                    if (!App().preferences!!.settings.hasCompletedOnboarding) {
-                        startActivity(Intent(this@MainActivity, OnboardingPagerActivity::class.java))
+                    preferences = Preferences(it.data!!, resources, this)
+                    if (preferences.settings.darkMode) AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES) else AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+
+                    if (!preferences.settings.hasCompletedOnboarding) {
+                        startActivity(Intent(this@MainActivity, OnboardingActivity::class.java))
                     } else {
                         checkReadingDate()
                         navHostFragment =
                             supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
                         navController = navHostFragment.navController
-                        val colorList: IntArray
-                        val toolbarColor: Int
-                        if (App().preferences!!.settings.darkMode) {
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                            toolbarColor =
-                                ContextCompat.getColor(
-                                    this@MainActivity,
-                                    R.color.buttonBackgroundDark
-                                )
-                            colorList = intArrayOf(
-                                ContextCompat.getColor(
-                                    this@MainActivity,
-                                    R.color.unquenchedEmphDark
-                                ),
-                                ContextCompat.getColor(
-                                    this@MainActivity,
-                                    R.color.unquenchedTextDark
-                                )
-                            )
-                        } else {
-                            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                            toolbarColor =
-                                ContextCompat.getColor(this@MainActivity, R.color.buttonBackground)
-                            colorList = intArrayOf(
-                                ContextCompat.getColor(this@MainActivity, R.color.unquenchedOrange),
-                                ContextCompat.getColor(this@MainActivity, R.color.unquenchedText)
-                            )
-                        }
+
+                        val stateList = arrayOf(
+                            intArrayOf(android.R.attr.state_checked),
+                            intArrayOf(-android.R.attr.state_checked)
+                        )
+                        val colorList: IntArray =
+                            intArrayOf(preferences.colors.textColor2, preferences.colors.textColor)
                         val colorStateList = ColorStateList(stateList, colorList)
                         user = Firebase.auth.currentUser
                         val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
-                        toolbar.setBackgroundColor(toolbarColor)
+                        toolbar.setTitleTextColor(preferences.colors.textColor)
+                        toolbar.setBackgroundColor(preferences.colors.buttonBackground)
                         setSupportActionBar(findViewById(R.id.my_toolbar))
                         supportActionBar?.title = getDate(option = 0, fullMonth = true)
                         binding.bottomNav.setupWithNavController(navController)
-                        binding.bottomNav.setBackgroundColor(toolbarColor)
+                        binding.bottomNav.setBackgroundColor(preferences.colors.buttonBackground)
                         binding.bottomNav.itemIconTintList = colorStateList
                         binding.bottomNav.itemTextColor = colorStateList
-
-                        when (App().preferences!!.settings.planSystem) {
+                        setupBottomNavigationBar()
+                        debugLog("IN COROUTINE GOING TO NAVIGATION HOME")
+                        when (preferences.settings.planSystem) {
                             "mcheyne" -> navController.navigate(R.id.navigation_home_mcheyne)
                             "pgh" -> navController.navigate(R.id.navigation_home)
                         }
-                        binding.translationSelector.isVisible = false
-                        setupBottomNavigationBar()
                     }
                 }
-                .addOnFailureListener {
-                    debugLog("Firestore initialization failed for $it")
-                    Firebase.crashlytics.log("Error getting user info")
-                    Firebase.crashlytics.recordException(it.cause!!)
-                    Firebase.crashlytics.setCustomKey("userId", Firebase.auth.currentUser?.uid!!)
-                }
-        }
 
+        }
+        traceLog(file="MainActivity.kt", function="onCreate()", "beginning")
     }
 
     override fun onResume() {
         super.onResume()
-        traceLog(file="MainActivity.kt", function="onResume()")
+        if(isPreferenceInitialized()) {
+            val stateList = arrayOf(
+                intArrayOf(android.R.attr.state_checked),
+                intArrayOf(-android.R.attr.state_checked)
+            )
+            val colorList: IntArray =
+                intArrayOf(preferences.colors.textColor2, preferences.colors.textColor)
+            val colorStateList = ColorStateList(stateList, colorList)
+            val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
+            toolbar.setTitleTextColor(preferences.colors.textColor)
+            toolbar.setBackgroundColor(preferences.colors.buttonBackground)
+            binding.bottomNav.setupWithNavController(navController)
+            binding.bottomNav.setBackgroundColor(preferences.colors.buttonBackground)
+            binding.bottomNav.itemIconTintList = colorStateList
+            binding.bottomNav.itemTextColor = colorStateList
+        }
     }
-
-    override fun onPause() {
-        super.onPause()
-        traceLog(file="MainActivity.kt", function="onPause()")
+    fun isPreferenceInitialized():Boolean{
+        return this::preferences.isInitialized
     }
-    override fun onStart(){
-        super.onStart()
-        traceLog(file="MainActivity.kt", function="onStart()")
-    }
-    override fun onDestroy(){
-        super.onDestroy()
-        traceLog(file="MainActivity.kt", function="onDestroy()")
-    }
-    override fun onStop(){
-        super.onStop()
-        traceLog(file="MainActivity.kt", function="onStop()")
-    }
-
     fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
         traceLog(file="MainActivity.kt", function="setupNavigation()")
         binding.myToolbar.setNavigationOnClickListener {
@@ -163,12 +137,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         traceLog(file="MainActivity.kt", function="setupBottomNavigationBar()")
         switchEnabled(current="home")
         navController.addOnDestinationChangedListener{ _, destination, _ ->
-            val planSystem = App().preferences!!.settings.planSystem
+            val planSystem = preferences.settings.planSystem
             val homeId = if (planSystem == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
             when (destination.id) {
                 R.id.navigation_scripture ->{
                     setupNavigation(homeId, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = true)
-                    when (App().preferences!!.settings.bibleVersion){
+                    when (preferences.settings.bibleVersion){
                         "AMP" -> binding.translationSelector.setSelection(1)
                         "CSB" -> binding.translationSelector.setSelection(2)
                         "ESV" -> binding.translationSelector.setSelection(3)
@@ -180,33 +154,6 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 }
                 R.id.navigation_plan_settings ->{
                     setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
-                }
-                R.id.navigation_bible_stats_main ->{
-                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
-                    supportActionBar?.title = "Bible Statistics"
-                }
-                R.id.navigation_bible_testament_stats ->{
-                    setupNavigation(R.id.navigation_bible_stats_main, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
-                }
-                R.id.navigation_book_stats->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.popBackStack()
-                        binding.bottomNav.isVisible = true
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                }
-                R.id.navigation_bible_reset_menu->{
-                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
-                    supportActionBar?.title = "Reset Bible Stats"
-                }
-                R.id.navigation_books_reset_menu->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.popBackStack()
-                        binding.bottomNav.isVisible = true
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_plan_type->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -263,25 +210,20 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.title = "Delete Account"
                 }
                 R.id.navigation_home -> {
+                    binding.translationSelector.isVisible = false
                     if(planSystem == "mcheyne"){
                         navController.navigate(R.id.navigation_home_mcheyne)
                     }
                     switchEnabled(current="home")
-                    when(App().preferences!!.settings.darkMode){
-                        true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-                        false->binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    }
+                    binding.navHostFragment.setBackgroundColor(preferences.colors.background2)
                     supportActionBar?.title = getDate(option=0, fullMonth=true)
                     supportActionBar?.show()
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    binding.translationSelector.isVisible = false
+
                 }
                 R.id.navigation_home_mcheyne -> {
                     switchEnabled(current="home")
-                    when(App().preferences!!.settings.darkMode){
-                        true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-                        false->binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    }
+                    binding.navHostFragment.setBackgroundColor(preferences.colors.background2)
                     supportActionBar?.title = getDate(option=0, fullMonth=true)
                     supportActionBar?.show()
                     supportActionBar?.setDisplayHomeAsUpEnabled(false)
@@ -305,7 +247,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         traceLog(file="MainActivity.kt", function="onNavigationItemSelected()")
-        val homeId = when(App().preferences!!.settings.planSystem){
+        val homeId = when(preferences.settings.planSystem){
             "pgh"->R.id.navigation_home
             "mcheyne"->R.id.navigation_home_mcheyne
             else->R.id.navigation_home
@@ -334,8 +276,8 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
     private fun checkReadingDate() {
         traceLog(file="MainActivity.kt", function="checkReadingDate()")
-        val streak = App().preferences!!.streak
-        val list = App().preferences!!.list
+        val streak = preferences.streak
+        val list = preferences.list
         val dateChecked = streak.dateChecked
         val listsDone = list.listsDone
         val checkDate = checkDate(dateChecked, "current", false)
@@ -434,6 +376,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                 }
                 startFirebaseAuth()
             }
+        }
+    }
+    fun updateFSData() {
+        val data = preferences.data
+        CoroutineScope(Dispatchers.IO).launch {
+            Firestore().updateFirestoreData(data)
         }
     }
 }

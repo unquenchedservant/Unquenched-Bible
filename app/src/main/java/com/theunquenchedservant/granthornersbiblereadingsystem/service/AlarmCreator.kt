@@ -8,12 +8,9 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.RemindReceiver
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import java.util.*
 
 object AlarmCreator {
@@ -57,11 +54,11 @@ object AlarmCreator {
         when(alarmType) {
             "daily" -> {
                 notifPendingIntent = dailyPending
-                timeInMinutes = getIntPref(name="dailyNotif")
+                timeInMinutes = App().preferences!!.settings.dailyNotif
             }
             "remind" -> {
                 notifPendingIntent = remindPending
-                timeInMinutes = getIntPref(name="remindNotif")
+                timeInMinutes = App().preferences!!.settings.remindNotif
             }
             else -> {
                 notifPendingIntent = checkPending
@@ -78,14 +75,7 @@ object AlarmCreator {
         val calendar = Calendar.getInstance()
         calendar.set(Calendar.HOUR_OF_DAY, hour)
         calendar.set(Calendar.MINUTE, minute)
-        val maxDone: Int
-        val listsDone: String
-        when(getStringPref(name="planSystem", defaultValue="pgh")){
-            "pgh"->{ maxDone = 10; listsDone = "listsDone"}
-            "mcheyne"-> {maxDone = 4; listsDone = "mcheyneListsDone"}
-            else-> {maxDone = 10; listsDone = "listsDone"}
-        }
-        when (calendar.before(Calendar.getInstance()) && ((alarmType=="daily" && getIntPref(name=listsDone) == maxDone) || alarmType != "daily")) {
+        when (calendar.before(Calendar.getInstance()) && ((alarmType=="daily" && App().preferences!!.list.listsDone == App().preferences!!.list.maxDone) || alarmType != "daily")) {
                 true->calendar.add(Calendar.DATE, 1)
         }
         when(alarmType){

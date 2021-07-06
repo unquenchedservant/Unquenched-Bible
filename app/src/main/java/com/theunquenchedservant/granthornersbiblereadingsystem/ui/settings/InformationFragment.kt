@@ -15,12 +15,9 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 
 class InformationFragment : PreferenceFragmentCompat() {
-
+    val preferences = App().preferences!!
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.information_preferences, rootKey)
         val license: Preference? = findPreference("licenses")
@@ -88,14 +85,14 @@ class InformationFragment : PreferenceFragmentCompat() {
         contact!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             var emailText = "\n\n(Please leave the following)\n\n"
             emailText += "App Version: ${BuildConfig.VERSION_CODE} | ${BuildConfig.VERSION_NAME}\n"
-            emailText += "Plan System: ${getStringPref("planSystem")}\n"
-            emailText += "Plan Method: ${getStringPref("planType")}\n"
-            val psText = if(getBoolPref("psalms")) "5Psalms" else getIntPref("list6").toString()
-            emailText += "PGH Lists: (${getIntPref("list1")}, ${getIntPref("list2")}, ${getIntPref("list3")}, ${getIntPref("list4")}, ${getIntPref("list5")}, $psText, ${getIntPref("list7")}, ${getIntPref("list8")}, ${getIntPref("list9")}, ${getIntPref("list10")})\n"
-            emailText += "MCheyne Lists: (${getIntPref("mcheyneList1")}, ${getIntPref("mcheyneList2")}, ${getIntPref("mcheyneList3")}, ${getIntPref("mcheyneList4")})\n"
-            emailText += "Indexes: (${getIntPref("currentDayIndex")}, ${getIntPref("mcheyneCurrentDayIndex")})\n"
-            emailText += "PGH Lists Done: ${getIntPref("listsDone")}\n"
-            emailText += "Mcheyne Lists Done: ${getIntPref("mcheyneListsDone")}\n"
+            emailText += "Plan System: ${preferences.settings.planSystem}\n"
+            emailText += "Plan Method: ${preferences.settings.planType}\n"
+            val psText = if(preferences.settings.psalms) "5Psalms" else preferences.list.pgh.list6.toString()
+            emailText += "PGH Lists: ${preferences.list.pgh}\n"
+            emailText += "MCheyne Lists: ${preferences.list.mcheyne}\n"
+            emailText += "Indexes: (${preferences.list.pgh.currentIndex}, ${preferences.list.mcheyne.currentIndex})\n"
+            emailText += "PGH Lists Done: ${preferences.list.pgh.listsDone}\n"
+            emailText += "Mcheyne Lists Done: ${preferences.list.pgh.listsDone}\n"
             emailText += "Phone: ${Build.PRODUCT}\n"
             emailText += "Android Version: ${Build.VERSION.RELEASE}\n"
             emailText += "ID: ${Firebase.auth.currentUser?.uid}"

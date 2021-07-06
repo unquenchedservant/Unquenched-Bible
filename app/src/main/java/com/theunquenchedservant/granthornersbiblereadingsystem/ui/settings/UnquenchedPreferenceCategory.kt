@@ -7,7 +7,7 @@ import android.util.AttributeSet
 import android.view.View
 import android.widget.TextView
 import androidx.preference.PreferenceViewHolder
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 
 
 class UnquenchedPreferenceCategory : PreferenceCategory {
@@ -20,19 +20,13 @@ class UnquenchedPreferenceCategory : PreferenceCategory {
     override fun onBindViewHolder(holder: PreferenceViewHolder?) {
         super.onBindViewHolder(holder)
         holderr = holder!!
-        val view: View = holder.itemView
-        val titleView = view.findViewById<TextView>(android.R.id.title)
-        if (getBoolPref(name="darkMode", defaultValue=true)) {
-            titleView?.setTextColor(Color.parseColor("#9CB9D3"))
-        } else {
-            titleView?.setTextColor(Color.parseColor("#000000"))
-        }
+        setTitleColors()
     }
 
     fun setTitleColors() {
         val view: View = holderr.itemView
         val titleView = view.findViewById<TextView>(android.R.id.title)
-        if (getBoolPref(name="darkMode", defaultValue=true)) {
+        if (App().preferences!!.settings.darkMode) {
             titleView.setTextColor(Color.parseColor("#9CB9D3"))
         } else {
             titleView.setTextColor(Color.parseColor("#000000"))

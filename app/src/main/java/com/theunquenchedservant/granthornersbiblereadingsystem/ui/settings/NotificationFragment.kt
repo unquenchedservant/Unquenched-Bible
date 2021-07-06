@@ -4,41 +4,43 @@ import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.cancelAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarm
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Firestore
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.text.DecimalFormat
 
 class NotificationsFragment : PreferenceFragmentCompat() {
+    val preferences = App().preferences!!
     override fun onCreatePreferences(savedInstanceState: Bundle?, rootKey: String?) {
         setPreferencesFromResource(R.xml.notification_preferences, rootKey)
         val vacationToggle: Preference? = findPreference("vacationMode")
         val dailyList: Preference? = findPreference("dailyNotif")
         val remindTime: Preference? = findPreference("remindNotif")
 
-        val dailyMillis = getIntPref(name="dailyNotif")
+        val dailyMillis = preferences.settings.dailyNotif
         dailyList!!.summary = getSummary(dailyMillis)
 
-        val remindMillis = getIntPref(name="remindNotif")
+        val remindMillis = preferences.settings.remindNotif
         remindTime!!.summary = getSummary(remindMillis)
 
         remindTime.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            setIntPref(name="remindNotif", value=o as Int, updateFS=true)
+            preferences.settings.remindNotif = o as Int
             true
         }
         dailyList.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
-            setIntPref(name="dailyNotif", value=o as Int, updateFS=true)
+            preferences.settings.dailyNotif = o as Int
             true
         }
 
         val notifOn = findPreference<Preference>("notifications")
         notifOn!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
             val isOn = o as Boolean
-            updateFS(name="notifications", isOn)
+            preferences.settings.notifications = isOn
             if (isOn) {
                 createAlarm(alarmType="daily"); createAlarm(alarmType="remind")
                 true
@@ -51,10 +53,10 @@ class NotificationsFragment : PreferenceFragmentCompat() {
         vacationToggle!!.onPreferenceChangeListener = Preference.OnPreferenceChangeListener { _, o ->
             o as Boolean
             if(o){
-                updateFS(name="vacationMode", o)
+                preferences.settings.vacation = true
             }else{
-                updateFS(name="vacationMode", o)
-                setBoolPref(name="vacationOff", value=true, updateFS=true)
+                preferences.settings.vacation = false
+                preferences.settings.vacationOff = true
             }
             true
         }
@@ -76,6 +78,25 @@ class NotificationsFragment : PreferenceFragmentCompat() {
         return "$hour:${DecimalFormat("00").format(minute)} $amPm"
     }
 
+    override fun onDestroy() {
+        super.onDestroy()
+        CoroutineScope(Dispatchers.IO).launch{
+            Firestore().updateFirestoreData(preferences.getMap())
+        }
+    }
+
+    override fun onStop() {
+        super.onStop()
+        CoroutineScope(Dispatchers.IO).launch{
+            Firestore().updateFirestoreData(preferences.getMap())
+        }
+    }
+    override fun onPause(){
+        super.onPause()
+        CoroutineScope(Dispatchers.IO).launch{
+            Firestore().updateFirestoreData(preferences.getMap())
+        }
+    }
     override fun onDisplayPreferenceDialog(preference: Preference) {
         var dialogFragment: DialogFragment? = null
         if (preference is TimePreference) {

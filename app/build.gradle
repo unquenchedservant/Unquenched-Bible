@@ -48,6 +48,7 @@ dependencies {
     implementation platform('com.google.firebase:firebase-bom:28.0.0')
     implementation 'androidx.annotation:annotation:1.2.0'
     implementation 'com.firebaseui:firebase-ui-auth:7.1.1'
+    implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.1.1'
     implementation "io.insert-koin:koin-android:$koin_version"
     implementation "io.insert-koin:koin-core:$koin_version"
     implementation 'com.google.android.gms:play-services-auth:19.0.0'

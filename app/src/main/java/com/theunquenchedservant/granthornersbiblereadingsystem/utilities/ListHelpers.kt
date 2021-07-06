@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
+import android.app.NotificationManager
 import android.content.ActivityNotFoundException
 import android.content.Context
 import android.content.Intent
@@ -9,19 +10,11 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.net.Uri
 import android.view.View
-import android.widget.Button
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.cardview.widget.CardView
-import androidx.core.content.ContextCompat.getColor
 import androidx.core.content.ContextCompat.startActivity
+import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
-import androidx.navigation.NavController
-import com.google.android.gms.tasks.Task
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.DocumentSnapshot
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
@@ -29,88 +22,138 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isLeapDay
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import java.util.*
 
-class SingleList(val cardView:CardviewsBinding, val list:ListItem, val title:String, val readingLists:ReadingLists){
-    val listIndex = list.listIndex
-    val listName = list.listName
+class SingleList(val cardView:CardviewsBinding, val list:ListItem?, val title:String, val readingLists:ReadingLists, val activity:MainActivity, val isLoading:Boolean){
 
     init{
-        val backgroundColor:Int
-        val emphColor:Int
-        if(App().preferences!!.settings.darkMode){
-            backgroundColor = getColor(App().applicationContext, R.color.buttonBackgroundDark)
-            emphColor = getColor(App().applicationContext, R.color.unquenchedEmphDark)
-        }else{
-            backgroundColor = getColor(App().applicationContext, R.color.buttonBackground)
-            emphColor = getColor(App().applicationContext, R.color.unquenchedEmph)
-        }
-        val disabled = Color.parseColor("#00383838")
-        cardView.listTitle.text = title
-        cardView.listReading.text = App().applicationContext.resources.getText(R.string.loading)
-        cardView.root.isClickable = false
-        cardView.root.setCardBackgroundColor(backgroundColor)
-        cardView.listReading.setTextColor(emphColor)
-        cardView.lineSeparator.setBackgroundColor(emphColor)
-        cardView.listReading.text = getReading(list.listIndex)
-        if(cardView.listReading.text == "Day Off"){
-            cardView.root.isEnabled=false
-            cardView.root.setCardBackgroundColor(disabled)
-            cardView.listButtons.setBackgroundColor(disabled)
-            App().preferences!!.list.listsDone += 1
-        }else{
-            createCardListener()
+        if(isLoading){
+            cardView.listTitle.text = title
+            cardView.listReading.text = "Loading..."
+            cardView.root.isClickable = false
+            cardView.listButtons.isVisible = false
+            cardView.root.setBackgroundColor(Color.parseColor("#00383838"))
+            cardView.listReading.setTextColor(Color.parseColor("#9CB9D3"))
+            cardView.root.isEnabled = false
+            cardView.listButtons.setBackgroundColor(Color.parseColor("#00383838"))
+        }else {
+            val preferences = activity.preferences
+            if (readingLists.isDayOff()) {
+                cardView.listTitle.text = title
+                cardView.listReading.text = "Day Off"
+                cardView.root.isClickable = false
+                cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                cardView.listReading.setTextColor(preferences.colors.emphColor)
+                cardView.lineSeparator.setBackgroundColor(preferences.colors.emphColor)
+                cardView.root.isEnabled = false
+                cardView.listButtons.setBackgroundColor(Color.parseColor("#00383838"))
+            } else {
+                val backgroundColor = preferences.colors.buttonBackground
+                val disabled = Color.parseColor("#00383838")
+                cardView.listTitle.text = title
+                cardView.listReading.text =
+                    App.applicationContext().resources.getText(R.string.loading)
+                cardView.root.isClickable = false
+                cardView.root.setCardBackgroundColor(backgroundColor)
+                cardView.listRead.setBackgroundColor(backgroundColor)
+                cardView.listDone.setBackgroundColor(backgroundColor)
+                cardView.listButtons.setBackgroundColor(backgroundColor)
+                cardView.listRead.setTextColor(preferences.colors.emphColor)
+                cardView.listDone.setTextColor(preferences.colors.emphColor)
+                cardView.listReading.setTextColor(preferences.colors.textColor2)
+                cardView.lineSeparator.setBackgroundColor(preferences.colors.textColor2)
+                cardView.buttonSeparator.setBackgroundColor(preferences.colors.textColor2)
+                cardView.listReading.text = getReading(list!!.listIndex, preferences)
+                if (cardView.listReading.text == "Day Off") {
+                    cardView.root.isEnabled = false
+                    cardView.root.setCardBackgroundColor(disabled)
+                    cardView.listButtons.setBackgroundColor(disabled)
+                    preferences.list.addListsDone(1)
+                } else {
+                    createCardListener(preferences)
+                }
+            }
         }
     }
-    fun createCardListener(){
-        val listArray = App.applicationContext().resources.getStringArray(list.listId)
-        val context = App.applicationContext()
-        val enabled: Int = when(App().preferences!!.settings.darkMode){
-            true -> getColor(context, R.color.buttonBackgroundDark)
-            false -> getColor(context, R.color.buttonBackground)
-        }
+    fun createCardListener(preferences: Preferences){
+        val listArray = activity.resources.getStringArray(list!!.listId)
+        val context = activity
+        val enabled = preferences.colors.buttonBackground
         if(!list.listDone){
-            cardView.root.setOnClickListener {  view ->
-                if(cardView.listButtons.isVisible) setVisibility(false) else{
+            cardView.root.setOnClickListener {
+                if(cardView.listButtons.isVisible) readingLists.listSwitcher(this) else{
                     readingLists.hideOthers(cardView)
                     cardView.listDone.setOnClickListener {
                         setVisibility(false)
-                        markSingle(list.listName + "Done", App().preferences!!.settings.planSystem, context).addOnSuccessListener {
-                            cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-
+                        list.markDone(single=true)
+                        preferences.list.addListsDone(1)
+                        cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
+                    }
+                    cardView.listRead.setOnClickListener {
+                        val bundle = if(list.listName == "list6" && preferences.settings.psalms){
+                            bundleOf("chapter" to "no", "psalms" to true, "iteration" to 1)
+                        }else{
+                            bundleOf("chapter" to getChapter(listArray, list, preferences), "psalms" to false, "iteration" to 0)
                         }
+                        activity.navController.navigate(R.id.navigation_scripture, bundle)
                     }
                 }
+            }
+        }else if(preferences.settings.planType == "horner"){
+            cardView.root.setOnLongClickListener{
+                val builder = AlertDialog.Builder(context)
+                builder.setPositiveButton(R.string.yes){ diag, _->
+                    list.resetList(true)
+                    preferences.list.subtractListsDone(1)
+                    cardView.root.isEnabled = true
+                    cardView.root.setBackgroundColor(enabled)
+                    cardView.listButtons.setBackgroundColor(enabled)
+                    diag.dismiss()
+                    activity.navController.navigate(R.id.navigation_home)
+                }
+                builder.setNegativeButton(R.string.no){diag, _ -> diag.dismiss()}
+                builder.setMessage(R.string.msg_reset_one)
+                builder.setTitle(R.string.title_reset_list)
+                builder.show()
+                true
             }
         }
     }
-    fun getReading(listIndex: Int):String{
-        val listArray = App.applicationContext().resources.getStringArray(list.listId)
+    fun getChapter(list:Array<String>, listItem:ListItem, preferences:Preferences):String {
+        traceLog(file = "ListHelpers.kt", function = "getChapter()")
+        return when (preferences.settings.planType) {
+            "horner" -> list[listItem.listIndex]
+            "numerical" -> {
+                var index = preferences.list.currentIndex
+                while (index >= list.size) {
+                    index -= list.size
+                }
+                list[index]
+            }
+            "calendar" -> {
+                var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
+                while (index >= list.size) {
+                    index -= list.size
+                }
+                list[index]
+            }
+            else -> list[listItem.listIndex]
+        }
+    }
+
+    fun getReading(listIndex: Int, preferences:Preferences):String{
+        val listArray = App.applicationContext().resources.getStringArray(list!!.listId)
         val day = Calendar.getInstance().get(Calendar.DAY_OF_MONTH)
-        when (list.listName) {
-            "list6" -> {
-                when (App().preferences!!.settings.psalms) {
-                    true-> {
-                        return when(day){
-                            in 1..30-> "$day, ${day + 30}, ${day + 60}, ${day + 90}, ${day + 120}"
-                            else-> "Day Off"
-                        }
-                    }
+        if (list.listName == "list6") {
+            if (preferences.settings.psalms) {
+                return when (day) {
+                    in 1..30 -> "$day, ${day + 30}, ${day + 60}, ${day + 90}, ${day + 120}"
+                    else -> "Day Off"
                 }
             }
         }
-        when (getStringPref(name="planType", defaultValue="horner")) {
+        when (preferences.settings.planType) {
             "horner" -> {
                 return when (listIndex) {
                     listArray.size -> {
@@ -124,7 +167,7 @@ class SingleList(val cardView:CardviewsBinding, val list:ListItem, val title:Str
                 }
             }
             "numerical" -> {
-                var newIndex = App().preferences!!.list.currentIndex
+                var newIndex = preferences.list.currentIndex
                 while(newIndex>=listArray.size){
                     newIndex -= listArray.size
                 }
@@ -154,45 +197,190 @@ class SingleList(val cardView:CardviewsBinding, val list:ListItem, val title:Str
         }
     }
 }
-class ReadingLists (val binding:FragmentHomeBinding, val resources: Resources){
-    var list1:SingleList = SingleList(binding.cardList1, App().preferences!!.list.list1, resources.getString(R.string.title_pgh_list1), this)
-    var list2:SingleList = SingleList(binding.cardList2, App().preferences!!.list.list2, resources.getString(R.string.title_pgh_list2), this)
-    var list3:SingleList = SingleList(binding.cardList3, App().preferences!!.list.list3, resources.getString(R.string.title_pgh_list3), this)
-    var list4:SingleList = SingleList(binding.cardList4, App().preferences!!.list.list4, resources.getString(R.string.title_pgh_list4), this)
-    var list5:SingleList = SingleList(binding.cardList5, App().preferences!!.list.list5, resources.getString(R.string.title_pgh_list5), this)
-    var list6:SingleList = SingleList(binding.cardList6, App().preferences!!.list.list6, resources.getString(R.string.title_pgh_list6), this)
-    var list7:SingleList = SingleList(binding.cardList7, App().preferences!!.list.list7, resources.getString(R.string.title_pgh_list7), this)
-    var list8:SingleList = SingleList(binding.cardList8, App().preferences!!.list.list8, resources.getString(R.string.title_pgh_list8), this)
-    var list9:SingleList = SingleList(binding.cardList9, App().preferences!!.list.list9, resources.getString(R.string.title_pgh_list9), this)
-    var list10:SingleList = SingleList(binding.cardList10, App().preferences!!.list.list10, resources.getString(R.string.title_pgh_list10), this)
+class LoadingDone(val binding: FragmentHomeBinding?=null, val mcheyneBinding:FragmentHomeMcheyneBinding?=null, val readingLists: ReadingLists){
+    val button = if (readingLists.isPGH) binding!!.materialButton else mcheyneBinding!!.materialButton
+    init{
+        button.setBackgroundColor(Color.parseColor("#00383838"))
+        button.setTextColor(Color.parseColor("#9cb9d3"))
+        button.text="Loading"
 
-    fun hideOthers(currentList: CardviewsBinding){
+    }
+}
+class DoneButton(val binding:FragmentHomeBinding? = null, val mcheyneBinding:FragmentHomeMcheyneBinding? = null, val resources:Resources, val activity: MainActivity, val readingLists:ReadingLists){
+    val preferences = activity.preferences
+    val button = if(readingLists.isPGH) binding!!.materialButton else mcheyneBinding!!.materialButton
+    init{
+        if(readingLists.isDayOff()){
+            button.setBackgroundColor(Color.parseColor("#00383838"))
+            button.setTextColor(preferences.colors.textColor)
+            button.text = "Day Off"
+        }else {
+            button.setBackgroundColor(preferences.colors.buttonBackground)
+            button.setTextColor(preferences.colors.textColor)
+            updateButton()
+            createButtonListener()
+        }
+    }
+    fun updateButton(){
+        val allDoneBackgroundColor = preferences.colors.sAllDoneBackgroundColor
+        val backgroundColor = preferences.colors.sBackgroundColor
+        val limitNumber = preferences.list.maxDone - 1
+        when (preferences.list.listsDone) {
+            preferences.list.maxDone -> {
+                button.setText(R.string.done)
+                button.isEnabled = true
+                button.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$allDoneBackgroundColor"))
+                button.backgroundTintMode = PorterDuff.Mode.ADD
+            }
+            0 -> {
+                button.setText(R.string.not_done)
+                button.isEnabled = true
+                button.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
+            }
+            in 1..limitNumber -> {
+                button.setText(R.string.btn_mark_remaining)
+                button.isEnabled = true
+                val opacity = if (preferences.list.listsDone < 5) {
+                    100 - (preferences.list.listsDone * 5)
+                } else {
+                    100 - ((preferences.list.listsDone * 5) - 5)
+                }
+                button.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
+                button.backgroundTintMode = PorterDuff.Mode.ADD
+            }
+        }
+    }
+    fun createButtonListener(){
+        button.setOnClickListener{
+            readingLists.hideOthers()
+            preferences.list.markAll()
+            val mNotificationManager = App.applicationContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+            mNotificationManager.cancel(1)
+            mNotificationManager.cancel(2)
+            activity.navController.navigate(R.id.navigation_home)
+        }
+        if(readingLists.isAdvanceable(10)){
+            button.setOnLongClickListener{
+                val builder = AlertDialog.Builder(activity)
+                builder.setPositiveButton(R.string.yes) { _, _ ->
+                    preferences.list.resetList()
+                    activity.navController.navigate(R.id.navigation_home)
+                }
+                builder.setNegativeButton(R.string.no) { diag, _ ->
+                    diag.dismiss()
+                }
+                builder.setMessage(R.string.msg_reset_all)
+                builder.setTitle(R.string.title_reset_lists)
+                builder.show()
+                true
+            }
+        }
+    }
+}
+class ReadingLists (val homeBinding:FragmentHomeBinding?=null, val mcheyneBinding:FragmentHomeMcheyneBinding?=null, val resources: Resources, val activity: MainActivity, val isPGH:Boolean, val displayLoading:Boolean){
+    val preferences = if(displayLoading) null else activity.preferences
+    var list1:SingleList = if(isPGH)
+        if(displayLoading) SingleList(homeBinding!!.cardList1, null,resources.getString(R.string.title_pgh_list1), this, activity, true) else  SingleList(homeBinding!!.cardList1, preferences!!.list.list1, resources.getString(R.string.title_pgh_list1), this, activity, false)
+    else
+        if(displayLoading) SingleList(mcheyneBinding!!.cardList1, null, resources.getString(R.string.title_mcheyne_list1), this, activity, true) else SingleList(mcheyneBinding!!.cardList1, preferences!!.list.list1, resources.getString(R.string.title_mcheyne_list1), this, activity, false)
+    var list2:SingleList = if(isPGH)
+        if(displayLoading) SingleList(homeBinding!!.cardList2, null,resources.getString(R.string.title_pgh_list2), this, activity, true) else SingleList(homeBinding!!.cardList2, preferences!!.list.list2, resources.getString(R.string.title_pgh_list2), this, activity, false)
+    else
+        if(displayLoading) SingleList(mcheyneBinding!!.cardList2, null,resources.getString(R.string.title_mcheyne_list2), this, activity, true) else SingleList(mcheyneBinding!!.cardList2, preferences!!.list.list2, resources.getString(R.string.title_mcheyne_list3), this, activity, false)
+    var list3:SingleList = if(isPGH)
+        if(displayLoading) SingleList(homeBinding!!.cardList3, null,resources.getString(R.string.title_pgh_list3), this, activity, true) else SingleList(homeBinding!!.cardList3, preferences!!.list.list3, resources.getString(R.string.title_pgh_list3), this, activity, false)
+    else
+        if(displayLoading) SingleList(mcheyneBinding!!.cardList3, null,resources.getString(R.string.title_mcheyne_list3), this, activity, true) else SingleList(mcheyneBinding!!.cardList3, preferences!!.list.list3, resources.getString(R.string.title_mcheyne_list3), this, activity, false)
+    var list4:SingleList = if(isPGH)
+        if(displayLoading) SingleList(homeBinding!!.cardList4, null,resources.getString(R.string.title_pgh_list4), this, activity, true) else SingleList(homeBinding!!.cardList4, preferences!!.list.list4, resources.getString(R.string.title_pgh_list4), this, activity, false)
+    else
+        if(displayLoading) SingleList(mcheyneBinding!!.cardList4, null,resources.getString(R.string.title_mcheyne_list4), this, activity, true) else SingleList(mcheyneBinding!!.cardList4, preferences!!.list.list4, resources.getString(R.string.title_mcheyne_list4), this, activity, false)
+    var list5:SingleList? = if(isPGH) if(displayLoading) SingleList(homeBinding!!.cardList5, null,resources.getString(R.string.title_pgh_list5), this, activity, true) else SingleList(homeBinding!!.cardList5, preferences!!.list.list5, resources.getString(R.string.title_pgh_list5), this, activity, false) else null
+    var list6:SingleList? = if(isPGH) if(displayLoading) SingleList(homeBinding!!.cardList6, null,resources.getString(R.string.title_pgh_list6), this, activity, true) else SingleList(homeBinding!!.cardList6, preferences!!.list.list6, resources.getString(R.string.title_pgh_list6), this, activity, false) else null
+    var list7:SingleList? = if(isPGH) if(displayLoading) SingleList(homeBinding!!.cardList7, null,resources.getString(R.string.title_pgh_list7), this, activity, true) else SingleList(homeBinding!!.cardList7, preferences!!.list.list7, resources.getString(R.string.title_pgh_list7), this, activity, false) else null
+    var list8:SingleList? = if(isPGH) if(displayLoading) SingleList(homeBinding!!.cardList8, null,resources.getString(R.string.title_pgh_list8), this, activity, true) else SingleList(homeBinding!!.cardList8, preferences!!.list.list8, resources.getString(R.string.title_pgh_list8), this, activity, false) else null
+    var list9:SingleList? = if(isPGH) if(displayLoading) SingleList(homeBinding!!.cardList9, null,resources.getString(R.string.title_pgh_list9), this, activity, true) else SingleList(homeBinding!!.cardList9, preferences!!.list.list9, resources.getString(R.string.title_pgh_list9), this, activity, false) else null
+    var list10:SingleList? = if(isPGH) if(displayLoading) SingleList(homeBinding!!.cardList10, null,resources.getString(R.string.title_pgh_list10), this, activity, true) else SingleList(homeBinding!!.cardList10, preferences!!.list.list10, resources.getString(R.string.title_pgh_list10), this, activity, false) else null
+    var button:DoneButton? = if(isPGH) if(displayLoading) null else DoneButton(homeBinding!!, mcheyneBinding = null, resources, activity, this) else if(displayLoading) null else DoneButton(binding=null, mcheyneBinding!!, resources, activity, this)
+    var loadingButton: LoadingDone? = if(isPGH) if(displayLoading) LoadingDone(homeBinding!!,mcheyneBinding=null, this) else null else if (displayLoading) LoadingDone(binding=null, mcheyneBinding=mcheyneBinding, this) else null
+    init{
+        if(!displayLoading) {
+            setVisibilities()
+            if (this.isDayOff()) {
+                preferences!!.list.setListDone(preferences.list.maxDone)
+                preferences.streak.dailyStreak = 1
+            }
+        }
+    }
+    fun isAdvanceable(maxDone:Int):Boolean{
+        return preferences!!.list.listsDone == maxDone && (preferences.settings.planType == "horner" || preferences.settings.planType == "numerical")
+    }
+    fun isDayOff():Boolean{
+        return Calendar.getInstance().get(Calendar.MONTH) == Calendar.FEBRUARY && Calendar.getInstance().get(Calendar.DAY_OF_MONTH) == 29 && preferences!!.settings.planType == "calendar" && preferences.settings.planSystem == "mcheyne"
+    }
+    fun listSwitcher(singleList: SingleList){
+        val enabled = preferences!!.colors.background
+        val disabled = Color.parseColor("#00383838")
+        val cardList = singleList.cardView
+        when(singleList.list!!.listDone){
+            false -> { cardList.root.isEnabled = true; cardList.root.setCardBackgroundColor(enabled) }
+            true -> {
+                if(isPGH)
+                    homeBinding!!.materialButton.setText(R.string.btn_mark_remaining)
+                else
+                    mcheyneBinding!!.materialButton.setText(R.string.btn_mark_remaining)
+                cardList.root.isEnabled = false
+                cardList.root.setCardBackgroundColor(disabled)
+            }
+        }
+    }
+
+    fun setVisibilities(){
+        list1.setVisibility(isVisible=false)
+        list2.setVisibility(isVisible=false)
+        list3.setVisibility(isVisible=false)
+        list4.setVisibility(isVisible=false)
+        if(isPGH){
+            list5!!.setVisibility(isVisible=false)
+            list6!!.setVisibility(isVisible=false)
+            list7!!.setVisibility(isVisible=false)
+            list8!!.setVisibility(isVisible=false)
+            list9!!.setVisibility(isVisible=false)
+            list10!!.setVisibility(isVisible=false)
+        }
+
+
+    }
+
+    fun hideOthers(currentList: CardviewsBinding?=null) {
         list1.setVisibility(isVisible = currentList == list1.cardView)
         list2.setVisibility(isVisible = currentList == list2.cardView)
         list3.setVisibility(isVisible = currentList == list3.cardView)
         list4.setVisibility(isVisible = currentList == list4.cardView)
-        list5.setVisibility(isVisible = currentList == list5.cardView)
-        list6.setVisibility(isVisible = currentList == list6.cardView)
-        list7.setVisibility(isVisible = currentList == list7.cardView)
-        list8.setVisibility(isVisible = currentList == list8.cardView)
-        list9.setVisibility(isVisible = currentList == list9.cardView)
-        list10.setVisibility(isVisible = currentList == list10.cardView)
+        if (isPGH) {
+            list5!!.setVisibility(isVisible = currentList == list5!!.cardView)
+            list6!!.setVisibility(isVisible = currentList == list6!!.cardView)
+            list7!!.setVisibility(isVisible = currentList == list7!!.cardView)
+            list8!!.setVisibility(isVisible = currentList == list8!!.cardView)
+            list9!!.setVisibility(isVisible = currentList == list9!!.cardView)
+            list10!!.setVisibility(isVisible = currentList == list10!!.cardView)
+        }
     }
 
 }
 
 object ListHelpers {
-
-    fun createUpdateAlert(context: Context){
+    fun createUpdateAlert(context: Context, preferences: Preferences){
         traceLog(file="ListHelpers.kt", function="createUpdateAlert()")
-        if(getIntPref("versionNumber") < 90){
+        val versionNumber = BuildConfig.VERSION_CODE
+        if(preferences.settings.versionNumber < versionNumber){
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 90, updateFS = true)
+                preferences.settings.versionNumber = versionNumber
                 dialog.dismiss()
             }
             builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 90, updateFS = true)
+                preferences.settings.versionNumber = versionNumber
                 val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
                 try {
                     startActivity(context, i, null)
@@ -209,289 +397,6 @@ object ListHelpers {
                             "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
             builder.create().show()
-        }
-        else if (getIntPref(name = "versionNumber") < 70) {
-            val builder = AlertDialog.Builder(context)
-            builder.setPositiveButton(R.string.ok) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 88, updateFS = true)
-                dialog.dismiss()
-            }
-            builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
-                setIntPref(name = "versionNumber", value = 88, updateFS = true)
-                val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/"))
-                try {
-                    startActivity(context, i, null)
-                }catch(e: ActivityNotFoundException){
-                    Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
-                }
-                dialog.dismiss()
-            }
-            builder.setTitle(context.resources.getString(R.string.title_new_update, BuildConfig.VERSION_NAME))
-            builder.setMessage(
-                    "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
-                            "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
-                            "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
-                            "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n" +
-                            "[ADDED] New Statistics for amount of the Bible read\n\n" +
-                            "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n" +
-                            "[UPDATED] New sign in screen with the option to log in with your email and password\n\n" +
-                            "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
-            )
-            builder.create().show()
-        }
-    }
-    fun setVisibilities(binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne: Boolean=false){
-        traceLog(file="ListHelpers.kt", function="setVisibilities()")
-        if(!isMcheyne) {
-            changeVisibility(binding!!.cardList1, isCardView=false)
-            changeVisibility(binding.cardList2, isCardView=false)
-            changeVisibility(binding.cardList3, isCardView=false)
-            changeVisibility(binding.cardList4, isCardView=false)
-            changeVisibility(binding.cardList5, isCardView=false)
-            changeVisibility(binding.cardList6, isCardView=false)
-            changeVisibility(binding.cardList7, isCardView=false)
-            changeVisibility(binding.cardList8, isCardView=false)
-            changeVisibility(binding.cardList9, isCardView=false)
-            changeVisibility(binding.cardList10, isCardView=false)
-        }else{
-            changeVisibility(bindingMCheyne!!.cardList1, isCardView=false)
-            changeVisibility(bindingMCheyne.cardList2, isCardView=false)
-            changeVisibility(bindingMCheyne.cardList3, isCardView=false)
-            changeVisibility(bindingMCheyne.cardList4, isCardView=false)
-        }
-    }
-    fun initList(cardList: CardviewsBinding, listTitle:String){
-        traceLog(file="ListHelpers.kt", function="initList()")
-        val context = App.applicationContext()
-        val backgroundColor: Int
-        val emphColor:Int
-        if(getBoolPref("darkMode")){
-            backgroundColor = getColor(context, R.color.buttonBackgroundDark)
-            emphColor = getColor(context, R.color.unquenchedEmphDark)
-        }else{
-            backgroundColor = getColor(context, R.color.buttonBackgroundDark)
-            emphColor = getColor(context, R.color.unquenchedOrange)
-        }
-        cardList.listTitle.text = listTitle
-        cardList.listReading.text = context.resources.getText(R.string.loading)
-        cardList.root.isClickable=false
-        cardList.root.setCardBackgroundColor(backgroundColor)
-        cardList.listReading.setTextColor(emphColor)
-        cardList.lineSeparator.setBackgroundColor(emphColor)
-    }
-    fun updateButton(listsDone:Int, materialButton:Button, maxDone: Int, limitNumber:Int){
-        traceLog(file="ListHelpers.kt", function="updateButton()")
-        val context = App.applicationContext()
-        val allDoneBackgroundColor: String
-        val backgroundColor:String
-        if (getBoolPref(name = "darkMode", defaultValue = true)) {
-            allDoneBackgroundColor = context.resources.getString(R.string.done_btn_background_color_dark)
-            backgroundColor = context.resources.getString(R.string.btn_background_color_dark)
-        }else{
-            allDoneBackgroundColor = context.resources.getString(R.string.done_btn_background_color)
-            backgroundColor = context.resources.getString(R.string.btn_background_color)
-        }
-        when (listsDone) {
-            maxDone -> {
-                materialButton.setText(R.string.done)
-                materialButton.isEnabled = true
-                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$allDoneBackgroundColor"))
-                materialButton.backgroundTintMode = PorterDuff.Mode.ADD
-            }
-            0 -> {
-                materialButton.setText(R.string.not_done)
-                materialButton.isEnabled = true
-                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
-            }
-            in 1..limitNumber -> {
-                materialButton.setText(R.string.btn_mark_remaining)
-                materialButton.isEnabled = true
-                val opacity = if (listsDone < 5) {
-                    100 - (listsDone * 5)
-                } else {
-                    100 - ((listsDone * 5) - 5)
-                }
-                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
-                materialButton.backgroundTintMode = PorterDuff.Mode.ADD
-            }
-        }
-    }
-    fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne:Boolean=false){
-        traceLog(file="ListHelpers.kt", function="hideOthers()")
-        if(!isMcheyne){
-            changeVisibility(binding!!.cardList1, isCardView=cardList == binding.cardList1.root)
-            changeVisibility(binding.cardList2, isCardView=cardList == binding.cardList2.root)
-            changeVisibility(binding.cardList3, isCardView=cardList == binding.cardList3.root)
-            changeVisibility(binding.cardList4, isCardView=cardList == binding.cardList4.root)
-            changeVisibility(binding.cardList5, isCardView=cardList == binding.cardList5.root)
-            changeVisibility(binding.cardList6, isCardView=cardList == binding.cardList6.root)
-            changeVisibility(binding.cardList7, isCardView=cardList == binding.cardList7.root)
-            changeVisibility(binding.cardList8, isCardView=cardList == binding.cardList8.root)
-            changeVisibility(binding.cardList9, isCardView=cardList == binding.cardList9.root)
-            changeVisibility(binding.cardList10, isCardView=cardList == binding.cardList10.root)
-        }else{
-            changeVisibility(bindingMCheyne!!.cardList1, isCardView=cardList == bindingMCheyne.cardList1.root)
-            changeVisibility(bindingMCheyne.cardList2, isCardView=cardList == bindingMCheyne.cardList2.root)
-            changeVisibility(bindingMCheyne.cardList3, isCardView=cardList == bindingMCheyne.cardList3.root)
-            changeVisibility(bindingMCheyne.cardList4, isCardView=cardList == bindingMCheyne.cardList4.root)
-        }
-    }
-
-    fun listSwitcher(cardList: View, listDone: Int, material_button: Button){
-        traceLog(file="ListHelpers.kt", function="listSwitcher()")
-        val enabled = if(getBoolPref(name="darkMode", defaultValue=true)){
-            getColor(App.applicationContext(), android.R.color.background_dark)
-        }else{
-            getColor(App.applicationContext(), android.R.color.background_light)
-        }
-        val disabled = Color.parseColor("#00383838")
-        cardList as CardView
-        when(listDone){
-            0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-            1-> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
-        }
-    }
-    fun resetDaily(context:Context): Task<DocumentSnapshot> {
-        traceLog(file="ListHelpers.kt", function="resetDaily()")
-       return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
-                .addOnSuccessListener {
-                    val currentData = it.data
-                    val data = mutableMapOf<String, Any>()
-                    val planSystem  = extractStringPref(currentData,"planSystem", defaultValue="pgh")
-                    val doneMax = when(planSystem){
-                        "pgh"->10
-                        "mcheyne"->4
-                        else->10
-                    }
-                    val planType = extractStringPref(currentData,"planType", defaultValue="horner")
-                    val listStart = if(planSystem=="pgh") "list" else "mcheyneList"
-                    var resetStreak  = false
-                    val vacation = extractBoolPref(currentData,"vacationMode")
-                    when (extractIntPref(currentData,"dailyStreak")) {
-                        1 -> {
-                            data["dailyStreak"] = setIntPref("dailyStreak", 0)
-                            resetStreak = true
-                        }
-                        0 -> {
-                            when (vacation) {
-                                false -> {
-                                    if (!Dates.checkDate(extractStringPref(currentData, "dateChecked"), option="both", fullMonth=false))
-                                        data["currentStreak"] = setIntPref("currentStreak", 0)
-                                }
-                            }
-                        }
-                    }
-                    for(i in 1..doneMax){
-                        if(planType == "horner") {
-                            when (extractIntPref(currentData, "${listStart}${i}DoneDaily")) {
-                                1 -> data["${listStart}${i}DoneDaily"] = setIntPref("$listStart${i}DoneDaily", 0)
-                            }
-                            when (getIntPref(name = "$listStart${i}Done")) {
-                                1 -> {
-                                    data["${listStart}$i"] = setIntPref("$listStart$i", extractIntPref(currentData, "$listStart$i") + 1)
-                                    data["$listStart${i}Done"] = setIntPref("$listStart${i}Done", 0)
-                                }
-
-                            }
-                        }else if(planType == "numerical"){
-                            data["${listStart}${i}Done"] = setIntPref("$listStart${i}Done", 0)
-                        }
-                    }
-                    if(planType== "numerical" && resetStreak) {
-                        if(planSystem=="pgh") {
-                            data["currentDayIndex"] = setIntPref("currentDayIndex", extractIntPref(currentData,"currentDayIndex") + 1)
-                        }else{
-                            data["mcheyneCurrentDayIndex"] = setIntPref("mcheyneCurrentDayIndex", extractIntPref(currentData,"mcheyneCurrentDayIndex") + 1)
-                        }
-                    }
-                    data["${listStart}sDone"] = setIntPref("${listStart}sDone", 0)
-                        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
-                                .addOnSuccessListener {
-                                    debugLog("Lists reset successfully")
-                                }
-                                .addOnFailureListener { error->
-                                    debugLog("FAILURE WRITING TO FIRESTORE $error")
-                                }
-                }
-                .addOnFailureListener {
-                    val error = it
-                    debugLog("FAILURE WRITING TO FIRESTORE $error")
-                    Toast.makeText(context, "Unable to reset lists, please try again", Toast.LENGTH_LONG).show()
-                }
-
-    }
-    fun isAdvanceable(maxDone:Int):Boolean{
-        traceLog(file="ListHelpers.kt", function="isAdvanceable()")
-        val planType = getStringPref(name="planType", defaultValue="horner")
-        val listsDone = if(getStringPref("planSystem") == "pgh") "listsDone" else "mcheyneListsDone"
-        return getIntPref(listsDone) == maxDone && (planType == "horner" || planType == "numerical")
-    }
-    fun isHorner():Boolean{
-        traceLog(file="ListHelpers.kt", function="isHorner()")
-        return getStringPref(name="planType", defaultValue = "horner") == "horner"
-    }
-
-    fun isLoggedIn():Boolean{
-        traceLog(file="ListHelpers.kt", function="isLoggedIn()")
-        return Firebase.auth.currentUser != null
-    }
-    fun isPsalm(cardView: CardviewsBinding, binding:FragmentHomeBinding, psalms:Boolean):Boolean{
-        traceLog(file="ListHelpers.kt", function="isPsalm()")
-        return cardView.root == binding.cardList6.root && psalms
-    }
-    fun isDayOff():Boolean{
-        traceLog(file="ListHelpers.kt", function="isDayOff()")
-        return getStringPref(name="planType", defaultValue="horner") == "calendar" && isLeapDay()
-    }
-    fun getChapter(list:Array<String>, listName:String):String{
-        traceLog(file="ListHelpers.kt", function="getChapter()")
-        return when (getStringPref(name = "planType", defaultValue = "horner")) {
-            "horner" -> list[getIntPref(listName)]
-            "numerical" -> {
-                var index = getIntPref(name = "currentDayIndex", defaultValue = 0)
-                while (index >= list.size) {
-                    index -= list.size
-                }
-                list[index]
-            }
-            "calendar" -> {
-                var index = Calendar.getInstance().get(Calendar.DAY_OF_YEAR)
-                while (index >= list.size) {
-                    index -= list.size
-                }
-                list[index]
-            }
-            else -> list[getIntPref(listName)]
-        }
-    }
-
-    fun changeVisibility(cardList: CardviewsBinding, isCardView: Boolean){
-        traceLog(file="ListHelpers.kt", function="changeVisibility()")
-        if(isCardView){
-            cardList.listButtons.visibility = View.VISIBLE
-            cardList.listReading.visibility = View.GONE
-        }else {
-            cardList.listButtons.visibility = View.GONE
-            cardList.listReading.visibility = View.VISIBLE
-        }
-    }
-    fun getListNumber(result: Map<String, Any>?, listName: String, listId: Int): String{
-        traceLog(file="ListHelpers.kt", function="getListNumber()")
-        val number = if(result != null){
-            (result[listName] as Long).toInt()
-        }else{
-            getIntPref(listName)
-        }
-        val list = App.applicationContext().resources.getStringArray(listId)
-        return when(number){
-            list.size -> {
-                setIntPref(listName, value=0, updateFS=true)
-                list[0]
-            }
-            else -> {
-                setIntPref(listName, value=number, updateFS=true)
-                list[number]
-            }
         }
     }
 }

@@ -6,53 +6,42 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import androidx.core.app.NotificationCompat
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import kotlinx.coroutines.*
+import kotlinx.coroutines.tasks.await
 
 class RemindReceiver : BroadcastReceiver() {
     private var mNotificationManager: NotificationManager? = null
+    lateinit var preferences: Preferences
 
+    init {
+        CoroutineScope(Dispatchers.IO).launch{
+            val data = Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get().await().data
+            preferences = Preferences(data!!, context = App().applicationContext)
+        }
+    }
     override fun onReceive(context: Context, intent: Intent) {
-        traceLog(file="RemindReceiver.kt", function="onReceive()")
-        when(getBoolPref(name="vacationMode") || (getBoolPref(name="weekendMode") && isWeekend())) {
+        traceLog(file = "RemindReceiver.kt", function = "onReceive()")
+        when (preferences.settings.vacation || (preferences.settings.weekendMode && isWeekend())) {
             false -> {
-                debugLog("Vacation mode off, preparing reminder notification")
-                if(getBoolPref(name="notifications")) {
-                    val check = getIntPref(name="listsDone")
-                    debugLog("lists done so far = $check")
-                    val allowPartial = getBoolPref(name="allowPartial")
-                    debugLog("Allow partial is $allowPartial")
-                    val doneMax = when(getStringPref(name="planSystem", defaultValue="pgh")){
-                        "pgh"->10
-                        "mcheyne"->4
-                        else->10
-                    }
-                    mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+                if (preferences.settings.notifications) {
+                    val check = preferences.list.listsDone
                     when (check) {
-                        0 -> {
-                            deliverNotification(context, false)
-                        }
-                         in 1 until doneMax -> {
+                        0 -> deliverNotification(context, false)
+                        in 1 until preferences.list.maxDone -> {
                             mNotificationManager?.cancel(1)
                             mNotificationManager?.cancel(2)
                             deliverNotification(context, true)
                         }
-                        doneMax ->{
-                            debugLog("All lists done, not sending notification")
-                        }
                     }
-                }else{
-                    debugLog("Notification switch off, not sending notification")
                 }
-            }
-            true -> {
-                debugLog("Vacation mode on, not sending notification")
             }
         }
     }
