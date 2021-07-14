@@ -29,7 +29,7 @@ android {
         applicationId "com.theunquenchedservant.granthornersbiblereadingsystem"
         minSdkVersion 24
         targetSdkVersion 30
-        versionCode 92
+        versionCode 94
         versionName "2.1.2"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
@@ -77,7 +77,7 @@ dependencies {
     implementation 'com.google.android.gms:play-services-oss-licenses:17.0.0'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.4.0'
     implementation "androidx.core:core-ktx:1.6.0"
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.20"
+    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.5.21"
 }
 
 apply plugin: 'com.google.gms.google-services'
