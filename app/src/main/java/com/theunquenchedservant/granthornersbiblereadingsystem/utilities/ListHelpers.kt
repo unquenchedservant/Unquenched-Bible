@@ -195,7 +195,7 @@ object ListHelpers {
         }
     }
 
-    fun listSwitcher(cardList: View, listDone: Int, material_button: Button){
+    fun listSwitcher(cardList: View, listDone: Boolean, material_button: Button){
         traceLog(file="ListHelpers.kt", function="listSwitcher()")
         val enabled = if(getBoolPref(name="darkMode", defaultValue=true)){
             getColor(App.applicationContext(), android.R.color.background_dark)
@@ -205,13 +205,13 @@ object ListHelpers {
         val disabled = Color.parseColor("#00383838")
         cardList as CardView
         when(listDone){
-            0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-            1-> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
+            false -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
+            true -> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
         }
     }
     fun resetDaily(context:Context): Task<DocumentSnapshot> {
         traceLog(file="ListHelpers.kt", function="resetDaily()")
-       return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+        return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
                     val data = mutableMapOf<String, Any>()
@@ -222,7 +222,7 @@ object ListHelpers {
                         else->10
                     }
                     val planType = extractStringPref(currentData,"planType", defaultValue="horner")
-                    val listStart = if(planSystem=="pgh") "list" else "mcheyneList"
+                    val listStart = if(planSystem=="pgh") "pgh" else "mcheyne"
                     var resetStreak  = false
                     val vacation = extractBoolPref(currentData,"vacationMode")
                     when (extractIntPref(currentData,"dailyStreak")) {
@@ -241,28 +241,26 @@ object ListHelpers {
                     }
                     for(i in 1..doneMax){
                         if(planType == "horner") {
-                            when (extractIntPref(currentData, "${listStart}${i}DoneDaily")) {
-                                1 -> data["${listStart}${i}DoneDaily"] = setIntPref("$listStart${i}DoneDaily", 0)
-                            }
-                            when (getIntPref(name = "$listStart${i}Done")) {
-                                1 -> {
-                                    data["${listStart}$i"] = setIntPref("$listStart$i", extractIntPref(currentData, "$listStart$i") + 1)
-                                    data["$listStart${i}Done"] = setIntPref("$listStart${i}Done", 0)
+                            when (getBoolPref(name = "$listStart${i}Done")) {
+                                true -> {
+                                    data["${listStart}${i}Index"] = setIntPref("${listStart}${i}Index", extractIntPref(currentData, "$listStart${i}Index") + 1)
+                                    data["$listStart${i}Done"] = setBoolPref("$listStart${i}Done", false)
                                 }
 
                             }
                         }else if(planType == "numerical"){
-                            data["${listStart}${i}Done"] = setIntPref("$listStart${i}Done", 0)
+                            data["${listStart}${i}Done"] = setBoolPref("$listStart${i}Done", false)
                         }
                     }
                     if(planType== "numerical" && resetStreak) {
                         if(planSystem=="pgh") {
-                            data["currentDayIndex"] = setIntPref("currentDayIndex", extractIntPref(currentData,"currentDayIndex") + 1)
+                            data["pghIndex"] = setIntPref("pghIndex", extractIntPref(currentData,"pghIndex") + 1)
                         }else{
-                            data["mcheyneCurrentDayIndex"] = setIntPref("mcheyneCurrentDayIndex", extractIntPref(currentData,"mcheyneCurrentDayIndex") + 1)
+                            data["mcheyneIndex"] = setIntPref("mcheyneIndex", extractIntPref(currentData,"mcheyneIndex") + 1)
                         }
                     }
-                    data["${listStart}sDone"] = setIntPref("${listStart}sDone", 0)
+                    data["pghDone"] = setIntPref("pghDone", 0)
+                    data["mcheyneDone"] = setIntPref("mcheyneDone", 0)
                         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
                                 .addOnSuccessListener {
                                     debugLog("Lists reset successfully")
@@ -281,7 +279,7 @@ object ListHelpers {
     fun isAdvanceable(maxDone:Int):Boolean{
         traceLog(file="ListHelpers.kt", function="isAdvanceable()")
         val planType = getStringPref(name="planType", defaultValue="horner")
-        val listsDone = if(getStringPref("planSystem") == "pgh") "listsDone" else "mcheyneListsDone"
+        val listsDone = if(getStringPref("planSystem") == "pgh") "pghDone" else "mcheyneDone"
         return getIntPref(listsDone) == maxDone && (planType == "horner" || planType == "numerical")
     }
     fun isHorner():Boolean{
@@ -304,9 +302,9 @@ object ListHelpers {
     fun getChapter(list:Array<String>, listName:String):String{
         traceLog(file="ListHelpers.kt", function="getChapter()")
         return when (getStringPref(name = "planType", defaultValue = "horner")) {
-            "horner" -> list[getIntPref(listName)]
+            "horner" -> list[getIntPref("${listName}Index")]
             "numerical" -> {
-                var index = getIntPref(name = "currentDayIndex", defaultValue = 0)
+                var index = getIntPref(name = "pghIndex", defaultValue = 0)
                 while (index >= list.size) {
                     index -= list.size
                 }

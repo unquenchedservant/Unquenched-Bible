@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualOverrides
 
 import android.app.AlertDialog
 import android.content.res.ColorStateList
@@ -200,7 +200,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list1Book,
+                                R.array.pgh_list1Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -235,7 +235,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list2Book,
+                                R.array.pgh_list2Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -272,7 +272,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list3Book,
+                                R.array.pgh_list3Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -307,7 +307,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list4Book,
+                                R.array.pgh_list4Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -347,7 +347,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list5Book,
+                                R.array.pgh_list5Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -381,7 +381,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list6Book,
+                                R.array.pgh_list6Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -409,10 +409,7 @@ class ManualListSet: Fragment() {
                         button.isVisible             = true
                         button.backgroundTintList = ColorStateList.valueOf(buttonColor)
 
-                        ArrayAdapter.createFromResource(
-                                context,
-                                R.array.list7Book,
-                                android.R.layout.simple_spinner_item).also{
+                        ArrayAdapter.createFromResource(context, R.array.pgh_list7Book, android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
                             list.setSelection(it.getPosition(cBook)) }
@@ -421,7 +418,7 @@ class ManualListSet: Fragment() {
 
                             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
                                 val verse                 = root.findViewById<NumberPicker>(R.id.listSpinner2)
-                                verse.visibility = View.VISIBLE
+                                verse.visibility          = View.VISIBLE
 
                                 verse.minValue            = 1
                                 verse.value               = cVerse
@@ -442,7 +439,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list8Book,
+                                R.array.pgh_list8Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -482,7 +479,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list9Book,
+                                R.array.pgh_list9Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it
@@ -525,7 +522,7 @@ class ManualListSet: Fragment() {
 
                         ArrayAdapter.createFromResource(
                                 context,
-                                R.array.list10Book,
+                                R.array.pgh_list10Book,
                                 android.R.layout.simple_spinner_item).also{
                             it.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
                             list.adapter = it }
@@ -567,99 +564,43 @@ class ManualListSet: Fragment() {
                     "Family I"    -> {
                         val array = resources.getStringArray(R.array.mcheyne_list1)
                         val num = array.indexOf("$selectedBook")
-                        setIntPref(name="mcheyneList1", value=num, updateFS=true)
+                        setIntPref(name="mcheyne1Index", value=num, updateFS=true)
                     }
                     "Family II"   -> {
                         val array = resources.getStringArray(R.array.mcheyne_list2)
                         val num = array.indexOf("$selectedBook")
-                        setIntPref(name="mcheyneList2", value=num, updateFS=true)
+                        setIntPref(name="mcheyne2Index", value=num, updateFS=true)
                     }
                     "Secret I"    -> {
                         val array = resources.getStringArray(R.array.mcheyne_list3)
                         val num = array.indexOf("$selectedBook")
-                        setIntPref(name="mcheyneList3", value=num, updateFS=true)
+                        setIntPref(name="mcheyne3Index", value=num, updateFS=true)
                     }
                     "Secret II"   -> {
                         val array = resources.getStringArray(R.array.mcheyne_list4)
                         val num = array.indexOf("$selectedBook")
-                        setIntPref(name="mcheyneList4", value=num, updateFS=true)
+                        setIntPref(name="mcheyne4Index", value=num, updateFS=true)
                     }
-                    "The Gospels" -> {
-                        val array = resources.getStringArray(R.array.list_1)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name = "list1", value=num, updateFS=true)
-                    }
-
-
-                    "The Pentateuch" -> {
-                        val array = resources.getStringArray(R.array.list_2)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name = "list2", value = num, updateFS=true)
-                    }
-
-
-                    "Epistles I" -> {
-                        val array = resources.getStringArray(R.array.list_3)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name = "list3", value = num, updateFS = true)
-                    }
-
-
+                    "The Gospels" -> setIntPref(name = "pgh1Index", value=resources.getStringArray(R.array.pgh_list1).indexOf("$selectedBook $selectedVerse"), updateFS=true)
+                    "The Pentateuch" -> setIntPref(name = "pgh2Index", value = resources.getStringArray(R.array.pgh_list2).indexOf("$selectedBook $selectedVerse"), updateFS=true)
+                    "Epistles I" -> setIntPref(name = "pgh3Index", value = resources.getStringArray(R.array.pgh_list3).indexOf("$selectedBook $selectedVerse"), updateFS = true)
                     "Epistles II" -> {
-                        val array = resources.getStringArray(R.array.list_4)
-                        val num = if (selectedBook == "Philemon" || selectedBook == "Jude" || selectedBook == "2 John" || selectedBook == "3 John") {
-                            array.indexOf("$selectedBook")
-                        } else {
-                            array.indexOf("$selectedBook $selectedVerse")
+                        val indexOf = if (selectedBook == "Philemon" || selectedBook == "Jude" || selectedBook == "2 John" || selectedBook == "3 John"){
+                            selectedBook
+                        }else{
+                            "$selectedBook $selectedVerse"
                         }
-                        setIntPref(name = "list4", value = num, updateFS = true)
+                        setIntPref(name = "pgh4Index", value = resources.getStringArray(R.array.pgh_list4).indexOf(indexOf), updateFS = true)
                     }
-
-
-                    "Poetry" -> {
-                        val array = resources.getStringArray(R.array.list_5)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name = "list5", value = num, updateFS = true)
-                    }
-
-
-                    "Psalms" -> {
-                        val array = resources.getStringArray(R.array.list_6)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name = "list6", value = num, updateFS = true)
-                    }
-
-
-                    "Proverbs" -> {
-                        val array = resources.getStringArray(R.array.list_7)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name = "list7", value = num, updateFS = true)
-                    }
-
-
-                    "History" -> {
-                        val array = resources.getStringArray(R.array.list_8)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name="list8", value=num, updateFS=true)
-                    }
-
-
+                    "Poetry" -> setIntPref(name = "pgh5Index", value = resources.getStringArray(R.array.pgh_list5).indexOf("$selectedBook $selectedVerse"), updateFS = true)
+                    "Psalms" ->  setIntPref(name = "pgh6Index", value = resources.getStringArray(R.array.pgh_list6).indexOf("$selectedBook $selectedVerse"), updateFS = true)
+                    "Proverbs" -> setIntPref(name = "pgh7Index", value = resources.getStringArray(R.array.pgh_list7).indexOf("$selectedBook $selectedVerse"), updateFS = true)
+                    "History" -> setIntPref(name="pgh8Index", value=resources.getStringArray(R.array.pgh_list8).indexOf("$selectedBook $selectedVerse"), updateFS=true)
                     "Prophets" -> {
-                        val array = resources.getStringArray(R.array.list_9)
-                        val num = if (selectedBook == "Obadiah") {
-                            array.indexOf("$selectedBook")
-                        } else {
-                            array.indexOf("$selectedBook $selectedVerse")
-                        }
-                        setIntPref(name="list9", value=num, updateFS=true)
+                        val indexOf = if (selectedBook == "Obadiah") selectedBook else "$selectedBook $selectedVerse"
+                        setIntPref(name="pgh9Index", value=resources.getStringArray(R.array.pgh_list9).indexOf(indexOf), updateFS=true)
                     }
-
-
-                    "Acts" -> {
-                        val array = resources.getStringArray(R.array.list_10)
-                        val num = array.indexOf("$selectedBook $selectedVerse")
-                        setIntPref(name="list10", value=num, updateFS=true)
-                    }
+                    "Acts" -> setIntPref(name="pgh10Index", value=resources.getStringArray(R.array.pgh_list10).indexOf("$selectedBook $selectedVerse"), updateFS=true)
                 }
 
 
@@ -677,25 +618,25 @@ class ManualListSet: Fragment() {
     fun getCurrentInfo(listNum:Int, type:String="pgh"): Any {
         val data: Array<Any> = if(type=="pgh") {
             val returnVal: Array<Any> = when (listNum) {
-                1 -> arrayOf(getIntPref("list1"), R.array.list_1)
-                2 -> arrayOf(getIntPref("list2"), R.array.list_2)
-                3 -> arrayOf(getIntPref("list3"), R.array.list_3)
-                4 -> arrayOf(getIntPref("list4"), R.array.list_4)
-                5 -> arrayOf(getIntPref("list5"), R.array.list_5)
-                6 -> arrayOf(getIntPref("list6"), R.array.list_6)
-                7 -> arrayOf(getIntPref("list7"), R.array.list_7)
-                8 -> arrayOf(getIntPref("list8"), R.array.list_8)
-                9 -> arrayOf(getIntPref("list9"), R.array.list_9)
-                10 -> arrayOf(getIntPref("list10"), R.array.list_10)
+                1 -> arrayOf(getIntPref("pghIndex"), R.array.pgh_list1)
+                2 -> arrayOf(getIntPref("pgh2Index"), R.array.pgh_list2)
+                3 -> arrayOf(getIntPref("pgh3Index"), R.array.pgh_list3)
+                4 -> arrayOf(getIntPref("pgh4Index"), R.array.pgh_list4)
+                5 -> arrayOf(getIntPref("pgh5Index"), R.array.pgh_list5)
+                6 -> arrayOf(getIntPref("pgh6Index"), R.array.pgh_list6)
+                7 -> arrayOf(getIntPref("pgh7Index"), R.array.pgh_list7)
+                8 -> arrayOf(getIntPref("pgh8Index"), R.array.pgh_list8)
+                9 -> arrayOf(getIntPref("pgh9Index"), R.array.pgh_list9)
+                10 -> arrayOf(getIntPref("pgh10Index"), R.array.pgh_list10)
                 else -> arrayOf(0, 0)
             }
             returnVal
         }else{
             val returnVal: Array<Any> = when(listNum){
-                1 -> arrayOf(getIntPref("mcheyneList1"), R.array.mcheyne_list1)
-                2 -> arrayOf(getIntPref("mcheyneList2"), R.array.mcheyne_list2)
-                3 -> arrayOf(getIntPref("mcheyneList3"), R.array.mcheyne_list3)
-                4 -> arrayOf(getIntPref("mcheyneList4"), R.array.mcheyne_list4)
+                1 -> arrayOf(getIntPref("mcheyne1Index"), R.array.mcheyne_list1)
+                2 -> arrayOf(getIntPref("mcheyne2Index"), R.array.mcheyne_list2)
+                3 -> arrayOf(getIntPref("mcheyne3Index"), R.array.mcheyne_list3)
+                4 -> arrayOf(getIntPref("mcheyne4Index"), R.array.mcheyne_list4)
                 else -> arrayOf(0, 0)
             }
             returnVal

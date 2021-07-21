@@ -64,6 +64,7 @@ class HomeFragment : Fragment() {
         traceLog(file="HomeFragment.kt", function="onCreateView()")
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         darkMode = getBoolPref(name = "darkMode", defaultValue = true)
+        planSystem = getStringPref("planSystem")
         val context = (activity as MainActivity).applicationContext
         if(darkMode){
             binding.materialButton.setBackgroundColor(getColor(context, R.color.buttonBackgroundDark))
@@ -267,9 +268,14 @@ class HomeFragment : Fragment() {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setPositiveButton(getString(R.string.yes)) { diag, _ ->
                     val data = mutableMapOf<String, Any>()
-                    data[listDone] = setIntPref(name = listDone, value = 0)
-                    data[listName] = increaseIntPref(name = listName, value = 1)
-                    if (isLoggedIn()) Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
+                    data[listDone] = setBoolPref(name = listDone, value = false)
+                    data["${listName}Index"] = increaseIntPref(name = "${listName}Index", value = 1)
+                    if(planSystem == "pgh"){
+                        data["pghDone"] = setIntPref("pghDone", getIntPref("pghDone") - 1)
+                    }else if(planSystem == "mcheyne"){
+                        data["mcheyneDone"] = setIntPref("mcheyneDone", getIntPref("mcheyneDone") - 1)
+                    }
+                    if (isLoggedIn()) updateFirestore(data)
                     cardView.root.isEnabled = true
                     cardView.root.setCardBackgroundColor(enabled)
                     cardView.listButtons.setBackgroundColor(enabled)

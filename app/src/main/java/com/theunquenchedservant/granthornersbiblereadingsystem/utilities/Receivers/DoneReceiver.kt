@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
+package com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Receivers
 
 import android.app.NotificationManager
 import android.content.BroadcastReceiver
@@ -22,9 +22,9 @@ class DoneReceiver : BroadcastReceiver() {
         when(getIntPref(name=listsDone)) {
             in 0 until doneMax -> {
                 if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh") {
-                    markAll(planType="pgh", context)
+                    markAll(planSystem="pgh", context=context)
                 }else{
-                    markAll(planType="mcheyne", context)
+                    markAll(planSystem="mcheyne", context=context)
                 }
                 Toast.makeText(context, "Lists Marked!", Toast.LENGTH_LONG)
                         .show()
