@@ -475,66 +475,60 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun startFirebaseAuth(){
         traceLog(file="MainActivity.kt", function="onActivityResult()")
+
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setLogo(R.drawable.logo2)
-                .setTheme(R.style.AppTheme)
-                .setIsSmartLockEnabled(false)
-                .setAvailableProviders(providers)
-                .build(), _rcSignIn)
+        val signInIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setAvailableProviders(providers)
+            .build()
+        signInLauncher.launch(signInIntent)
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        traceLog(file="MainActivity.kt", function="onActivityResult()")
-        super.onActivityResult(requestCode, resultCode, data)
-        Toast.makeText(this@MainActivity, "Loading...", Toast.LENGTH_LONG).show()
-        if(requestCode == _rcSignIn){
-            val response = IdpResponse.fromResultIntent(data)
-            if(resultCode == Activity.RESULT_OK){
-                val user = Firebase.auth.currentUser
-                Toast.makeText(this@MainActivity, "Signed In!", Toast.LENGTH_LONG).show()
-                val db = Firebase.firestore
-                db.collection("main").document(user!!.uid).get()
-                        .addOnSuccessListener { doc ->
-                            if (doc["list1"] != null) {
-                                firestoreToPreference(doc)
-                                finish()
-                                val i = Intent(this@MainActivity, MainActivity::class.java)
-                                startActivity(i)
-                            } else {
-                                preferenceToFirestore()
-                                finish()
-                                val i = Intent(this@MainActivity, MainActivity::class.java)
-                                startActivity(i)
-                            }
+    private fun onSignInResult(result:FirebaseAuthUIAuthenticationResult){
+        val response = result.idpResponse
+        if(result.resultCode == RESULT_OK){
+            val user = Firebase.auth.currentUser
+            Toast.makeText(this@MainActivity, "Signed In!", Toast.LENGTH_LONG).show()
+            val db = Firebase.firestore
+            db.collection("main").document(user!!.uid).get()
+                .addOnSuccessListener { doc ->
+                    if(Firebase.auth.currentUser!!.uid == getStringPref("uid") && (doc.data!!["lastUpdated"] == null || (doc.data!!["lastUpdated"] as Long) < getLongPref("lastUpdated"))){
+                        preferenceToFirestore().addOnSuccessListener {
+                            finish()
+                            val i = Intent(this@MainActivity, MainActivity::class.java)
+                            startActivity(i)
                         }
-            }else{
-                when{
-                    response == null -> {
-                        Timber.d("onActivityResult(): sign_in_cancelled")
-                        Toast.makeText(this@MainActivity, "Sign in was cancelled", Toast.LENGTH_LONG).show()
+                    }else if(doc.data!!["lastUpdated"] as Long > getLongPref("lastUpdated")){
+                        firestoreToPreference(doc.data!!)
+                        setStringPref("uid", user.uid)
+                        finish()
+                        val i = Intent(this@MainActivity, MainActivity::class.java)
+                        startActivity(i)
                     }
-                    response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
-                        Timber.d("onActivityResult(): no_internet_connection")
-                        Toast.makeText(this@MainActivity, "No internet connection", Toast.LENGTH_LONG).show()
-                    }
-                    response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
-                        Timber.e("onActivityResult(): unknown_error")
-                        Toast.makeText(this@MainActivity, "An unknown error occured", Toast.LENGTH_LONG).show()
-                    }
-                    else ->{
-                        Timber.e("onActivityResult(): unknown_sign_in_response")
-                        Toast.makeText(this@MainActivity, "Unknown sign in response", Toast.LENGTH_LONG).show()
-                    }
-
                 }
-                startFirebaseAuth()
+        }else{
+            when{
+                response == null -> {
+                    Timber.d("onActivityResult(): sign_in_cancelled")
+                    Toast.makeText(this@MainActivity, "Sign in was cancelled", Toast.LENGTH_LONG).show()
+                }
+                response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
+                    Timber.d("onActivityResult(): no_internet_connection")
+                    Toast.makeText(this@MainActivity, "No internet connection", Toast.LENGTH_LONG).show()
+                }
+                response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
+                    Timber.e("onActivityResult(): unknown_error")
+                    Toast.makeText(this@MainActivity, "An unknown error occured", Toast.LENGTH_LONG).show()
+                }
+                else ->{
+                    Timber.e("onActivityResult(): unknown_sign_in_response")
+                    Toast.makeText(this@MainActivity, "Unknown sign in response", Toast.LENGTH_LONG).show()
+                }
+
             }
+            startFirebaseAuth()
         }
     }
 }
