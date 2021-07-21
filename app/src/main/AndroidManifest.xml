@@ -23,20 +23,16 @@
             </intent-filter>
         </receiver>
         <receiver
-            android:name=".utilities.RemindReceiver"
+            android:name=".utilities.Receivers.RemindReceiver"
             android:enabled="true"
             android:exported="false" />
         <receiver
-            android:name=".utilities.DailyCheck"
-            android:enabled="true"
-            android:exported="false" />
-        <receiver
-            android:name=".utilities.DoneReceiver"
+            android:name=".utilities.Receivers.DoneReceiver"
             android:enabled="true"
             android:exported="false" />
         <activity android:name="com.google.android.gms.oss.licenses.OssLicensesMenuActivity"
             android:theme="@style/licensesTheme"/>
-        <activity android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity"
+        <activity android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Onboarding.OnboardingPagerActivity"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|screenLayout|orientation"/>
         <activity
