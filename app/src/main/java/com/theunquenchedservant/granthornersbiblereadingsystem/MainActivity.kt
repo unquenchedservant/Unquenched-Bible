@@ -172,15 +172,15 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         traceLog(file="MainActivity.kt", function="onStop()")
     }
 
-    fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
+    private fun setupNavigation(navId:Int, displayHome1:Boolean, translationVisible:Boolean){
         traceLog(file="MainActivity.kt", function="setupNavigation()")
         binding.myToolbar.setNavigationOnClickListener {
             navController.navigate(navId)
-            binding.bottomNav.isVisible = bottomNavVisible
+            binding.bottomNav.isVisible = true
             supportActionBar?.setDisplayHomeAsUpEnabled(displayHome1)
         }
         binding.translationSelector.isVisible = translationVisible
-        supportActionBar?.setDisplayHomeAsUpEnabled(displayHome2)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
     private fun setupBottomNavigationBar() {
         traceLog(file="MainActivity.kt", function="setupBottomNavigationBar()")
@@ -255,37 +255,37 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_notifications->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                 }
                 R.id.navigation_overrides->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title="Overrides"
                 }
                 R.id.navigation_manual->{
-                    setupNavigation(R.id.navigation_overrides, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_overrides, displayHome1 = true, translationVisible = false)
                     supportActionBar?.title="Manual Override"
                 }
                 R.id.navigation_manual_numerical->{
-                    setupNavigation(R.id.navigation_overrides, bottomNavVisible = true, displayHome1 = true, displayHome2 =true, translationVisible = false)
+                    setupNavigation(R.id.navigation_overrides, displayHome1 = true, translationVisible = false)
                     supportActionBar?.title="Manual Override"
                 }
                 R.id.navigation_information->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                 }
                 R.id.navigation_account_settings->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Account Settings"
                 }
                 R.id.navigation_update_email->{
-                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_account_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Update Email"
                 }
                 R.id.navigation_update_password->{
-                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_account_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Update Password"
                 }
                 R.id.navigation_confirm_delete->{
-                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_account_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Delete Account"
                 }
                 R.id.navigation_home -> {
