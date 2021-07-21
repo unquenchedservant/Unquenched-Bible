@@ -42,6 +42,7 @@ object Dates {
         return when(option){
             "current"-> date == getDate(0, fullMonth)
             "yesterday"-> date == getDate(1, fullMonth)
+            "two" -> date == getDate(2, fullMonth)
             "both"-> date == getDate(0, fullMonth) || date == getDate(1, false)
             else -> false
         }
@@ -54,6 +55,8 @@ object Dates {
             date = when (option) {
                 0 -> now
                 1 -> now.minusDays(1)
+                2 -> now.minusDays(2)
+                4 -> now.minusDays(3)
                 else -> now
             }
             return if (fullMonth) {
@@ -67,12 +70,19 @@ object Dates {
             val date: Date
             val now: Date = Calendar.getInstance().time
             val yesterday = Calendar.getInstance()
+            val two = Calendar.getInstance()
+            val test = Calendar.getInstance()
             yesterday.set(Calendar.HOUR_OF_DAY, 0)
             yesterday.add(Calendar.DATE, -1)
-
+            two.set(Calendar.HOUR_OF_DAY, 0)
+            two.add(Calendar.DATE, -2)
+            test.set(Calendar.HOUR_OF_DAY, 0)
+            test.add(Calendar.DATE, -3)
             date = when(option){
                 0 -> now
                 1 -> { yesterday.time }
+                2 -> { two.time }
+                4 -> { test.time }
                 else -> now
             }
             return if(fullMonth){
