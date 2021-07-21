@@ -90,7 +90,7 @@
     <string name="summary_numerical_method">All lists are connected, partial completion is possible, but all lists will advance at once.</string>
     <string name="summary_calendar_method">All lists are connected, and will advance whether you complete all the readings or not. Everyone using this method will have the same reading for that day. This is similar to the M\'Cheyne system.</string>
     <string name="summary_plan_type">Select The Reading Plan system you want to use!</string>
-    <string name="summary_weekend">Take weekends off. You won\t receive notifications on Saturdays or Sundays, and your streak won\'t be affected if you don\'t do the readings.</string>
+    <string name="summary_weekend">Take weekends off. You won\'t receive notifications on Saturdays or Sundays, and your streak won\'t be affected if you don\'t do the readings.</string>
     <string name="summary_log_out">Log out of your current account</string>
     <string name="summary_delete_account">Deletes your account from the Unquenched Bible System. All your local data remains.</string>
     <string name="summary_reset_all_lists">Resets all the lists back to the beginning, undoes any lists you may have marked as done today.</string>
