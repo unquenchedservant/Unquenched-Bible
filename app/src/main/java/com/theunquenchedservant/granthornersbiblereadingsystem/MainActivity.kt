@@ -1,6 +1,5 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
-import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -19,33 +18,39 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
-import com.firebase.ui.auth.IdpResponse
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Onboarding.OnboardingPagerActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getLongPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFirestore
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFirestoreAndPrefs
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var _rcSignIn = 96
     private var user: FirebaseUser? = null
@@ -54,7 +59,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
     var darkMode: Boolean = false
-
+    private val signInLauncher = registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
+        this.onSignInResult(res)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -65,10 +72,41 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
         )
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
         val colorList: IntArray
         val toolbarColor: Int
-        darkMode = getBoolPref(name="darkMode", defaultValue=true)
+        if(getBoolPref("darkMode", defaultValue=true)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackgroundDark)
+            colorList = intArrayOf(
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedEmphDark),
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedTextDark)
+            )
+            binding.navHostFragment.backgroundTintList = ColorStateList.valueOf(getColor(R.color.backg_night))
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackground)
+            colorList = intArrayOf(
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedOrange),
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedText)
+            )
+            binding.navHostFragment.backgroundTintList = ColorStateList.valueOf(getColor(R.color.backg))
+        }
+        val colorStateList = ColorStateList(stateList, colorList)
+        setContentView(binding.root)
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
+        toolbar.setBackgroundColor(toolbarColor)
+        toolbar.title = getDate(option=0, fullMonth = true)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        binding.bottomNav.setupWithNavController(navController)
+        binding.bottomNav.setBackgroundColor(toolbarColor)
+        binding.bottomNav.itemIconTintList = colorStateList
+        binding.bottomNav.itemTextColor = colorStateList
+        binding.translationSelector.isVisible = false
+        setupBottomNavigationBar()
         if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
         if(Firebase.auth.currentUser == null) {
             startFirebaseAuth()
@@ -77,17 +115,30 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             startActivity(Intent(this@MainActivity, OnboardingPagerActivity::class.java))
         }else {
             traceLog(file="MainActivity.kt", function="onCreate()", "normal operation")
-            binding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-            navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            navController = navHostFragment.navController
             Firebase.auth.currentUser
             if (Firebase.auth.currentUser != null) {
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                checkReadingDate()
-                                firestoreToPreference(it.result!!)
+                                val data = it.result!!.data!!
+
+                                if((data["lastUpdated"]) == null){
+                                    data["lastUpdated"] = 0.toLong()
+                                }
+                                if((data["lastUpdated"] as Long) > getLongPref("lastUpdated") && data["lastUpdated"] != 0){
+                                    debugLog("firestore to preference - FOR SCIENCE")
+                                    firestoreToPreference(data)
+                                }else{
+                                    debugLog("preference to firestore - FOR SCIENCE")
+                                    preferenceToFirestore()
+                                }
+                                if(data["updatedPreferences"] == null || !(data["updatedPreferences"] as Boolean)){
+                                    updateFirestoreAndPrefs().addOnSuccessListener {
+                                        checkReadingDate()
+                                    }
+                                }else{
+                                    checkReadingDate()
+                                }
                             } else {
                                 Firebase.crashlytics.log("Error getting user info")
                                 Firebase.crashlytics.recordException(it.exception?.cause!!)
@@ -96,43 +147,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                         }
             }
 
-            if (darkMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackgroundDark)
-                colorList = intArrayOf(
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedEmphDark),
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedTextDark)
-                )
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackground)
-                colorList = intArrayOf(
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedOrange),
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedText)
-                )
-            }
-            val colorStateList = ColorStateList(stateList, colorList)
-            user = Firebase.auth.currentUser
-            val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
-            toolbar.setBackgroundColor(toolbarColor)
-            setSupportActionBar(findViewById(R.id.my_toolbar))
-            supportActionBar?.title = getDate(option = 0, fullMonth = true)
-            binding.bottomNav.setupWithNavController(navController)
-            binding.bottomNav.setBackgroundColor(toolbarColor)
-            binding.bottomNav.itemIconTintList = colorStateList
-            binding.bottomNav.itemTextColor = colorStateList
-
-                when (getStringPref(name = "planSystem", defaultValue = "pgh")) {
-                    "mcheyne" -> navController.navigate(R.id.navigation_home_mcheyne)
-                }
-                binding.translationSelector.isVisible = false
-                setupBottomNavigationBar()
-            }
+        }
     }
-
     override fun onResume() {
         super.onResume()
         traceLog(file="MainActivity.kt", function="onResume()")
+        checkReadingDate()
     }
 
     override fun onPause() {
