@@ -18,7 +18,7 @@ class DoneReceiver : BroadcastReceiver() {
             "mcheyne"->4
             else->10
         }
-        val listsDone = if(getStringPref("planSystem", defaultValue = "pgh") =="pgh") "listsDone" else "mcheyneListsDone"
+        val listsDone = if(getStringPref("planSystem", defaultValue = "pgh") =="pgh") "pghDone" else "mcheyneDone"
         when(getIntPref(name=listsDone)) {
             in 0 until doneMax -> {
                 if(getStringPref(name="planSystem", defaultValue="pgh") == "pgh") {

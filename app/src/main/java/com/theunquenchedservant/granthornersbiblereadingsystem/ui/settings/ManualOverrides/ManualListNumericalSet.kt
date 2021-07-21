@@ -48,19 +48,16 @@ class ManualListNumericalSet: Fragment() {
         dayPicker.minValue = 1
         dayPicker.maxValue = 9999
         val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
-        val homeId = when(planSystem){
-            "pgh"->R.id.navigation_home
-            "mcheyne"->R.id.navigation_home_mcheyne
-            else->R.id.navigation_home
-        }
+        val homeId = R.id.navigation_home
         val indexName:String
         if(planSystem == "pgh") {
-            indexName = "currentDayIndex"
-            dayPicker.value = getIntPref(name="currentDayIndex", defaultValue=0) + 1
+            indexName = "pghIndex"
+        }else if(planSystem == "mcheyne"){
+            indexName = "mcheyneIndex"
         }else{
-            indexName = "mcheyneCurrentDayIndex"
-            dayPicker.value = getIntPref(name="mcheyneCurrentDayIndex", defaultValue=0) + 1
+            indexName = "pghIndex"
         }
+        dayPicker.value = getIntPref(name=indexName, defaultValue=0) + 1
         selectButton.setOnClickListener {
             val alert             = AlertDialog.Builder(requireContext())
             alert.setTitle("Set Day?")

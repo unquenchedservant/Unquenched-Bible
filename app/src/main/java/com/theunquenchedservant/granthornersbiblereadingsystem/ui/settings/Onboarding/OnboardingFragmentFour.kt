@@ -12,6 +12,9 @@ import android.widget.TextView
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import com.google.android.material.button.MaterialButton
+import com.google.firebase.auth.ktx.auth
+import com.google.firebase.firestore.ktx.firestore
+import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
@@ -57,10 +60,15 @@ class OnboardingFragmentFour : Fragment() {
             mainActivity.viewPager.currentItem -= 1
         }
         doneBtn.setOnClickListener {
-            setBoolPref(name="hasCompletedOnboarding", value=true, updateFS=true)
-            updateFS(name="planSystem", value=getStringPref(name="planSystem", defaultValue="pgh"))
-            updateFS(name="planType", value=getStringPref(name="planType", defaultValue="horner"))
-            startActivity(Intent(mainActivity, MainActivity::class.java))
+            val data = mutableMapOf<String, Any>()
+            data["hasCompletedOnboarding"] = setBoolPref(name="hasCompletedOnboarding", value=true)
+            data["planSystem"] = getStringPref("planSystem", defaultValue="pgh")
+            data["planType"] = getStringPref("planType", defaultValue="horner")
+            data["darkMode"] = getBoolPref("darkMode", defaultValue=true)
+            Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
+                .addOnSuccessListener {
+                    startActivity(Intent(mainActivity, MainActivity::class.java))
+                }
         }
         return vieww
     }

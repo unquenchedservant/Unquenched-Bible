@@ -54,64 +54,22 @@ class ManualListSet: Fragment() {
         listNames.add("----")
         when(planSystem) {
             "pgh" -> {
-                listNames.add("The Gospels")
-                listNames.add("The Pentateuch")
-                listNames.add("Epistles I")
-                listNames.add("Epistles II")
-                listNames.add("Poetry")
-                listNames.add("Psalms")
-                listNames.add("Proverbs")
-                listNames.add("History")
-                listNames.add("Prophets")
-                listNames.add("Acts")
-                when (getIntPref(name = "list1Done")) {
-                    1 -> listNames.remove("The Gospels")
-                }
-                when (getIntPref(name = "list2Done")) {
-                    1 -> listNames.remove("The Pentateuch")
-                }
-                when (getIntPref(name = "list3Done")) {
-                    1 -> listNames.remove("Epistles I")
-                }
-                when (getIntPref(name = "list4Done")) {
-                    1 -> listNames.remove("Epistles II")
-                }
-                when (getIntPref(name = "list5Done")) {
-                    1 -> listNames.remove("Poetry")
-                }
-                when (getIntPref(name = "list6Done")) {
-                    1 -> listNames.remove("Psalms")
-                }
-                when (getIntPref(name = "list7Done")) {
-                    1 -> listNames.remove("Proverbs")
-                }
-                when (getIntPref(name = "list8Done")) {
-                    1 -> listNames.remove("History")
-                }
-                when (getIntPref(name = "list9Done")) {
-                    1 -> listNames.remove("Prophets")
-                }
-                when (getIntPref(name = "list10Done")) {
-                    1 -> listNames.remove("Acts")
-                }
+                if (!getBoolPref(name = "pgh1Done")) listNames.add("Gospels")
+                if (!getBoolPref(name = "pgh2Done")) listNames.add("The Pentateuch")
+                if (!getBoolPref(name = "pgh3Done")) listNames.add("Epistles I")
+                if (!getBoolPref(name = "pgh4Done")) listNames.add("Epistles II")
+                if (!getBoolPref(name = "pgh5Done")) listNames.add("Poetry")
+                if (!getBoolPref(name = "pgh6Done") || !getBoolPref("psalms")) listNames.add("Psalms")
+                if (!getBoolPref(name = "pgh7Done")) listNames.add("Proverbs")
+                if (!getBoolPref(name = "pgh8Done")) listNames.add("History")
+                if (!getBoolPref(name = "pgh9Done")) listNames.add("Prophets")
+                if (!getBoolPref(name = "pgh10Done")) listNames.add("Acts")
             }
             "mcheyne" -> {
-                listNames.add("Family I")
-                listNames.add("Family II")
-                listNames.add("Secret I")
-                listNames.add("Secret II")
-                when (getIntPref(name = "mcheyneList1Done")) {
-                    1 -> listNames.remove("Family I")
-                }
-                when (getIntPref(name = "mcheyneList2Done")) {
-                    1 -> listNames.remove("Family II")
-                }
-                when (getIntPref(name = "mcheyneList3Done")) {
-                    1 -> listNames.remove("Secret I")
-                }
-                when (getIntPref(name = "mcheyneList4Done")) {
-                    1 -> listNames.remove("Secret II")
-                }
+                if (!getBoolPref(name = "mcheyne1Done")) listNames.add("Family I")
+                if (!getBoolPref(name = "mcheyne2Done")) listNames.add("Family II")
+                if (!getBoolPref(name = "mcheyne3Done")) listNames.add("Secret I")
+                if (!getBoolPref(name = "mcheyne4Done")) listNames.add("Secret II")
             }
         }
 

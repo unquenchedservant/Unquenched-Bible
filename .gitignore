@@ -27,3 +27,5 @@ app/src/main/cpp/native-lib.cpp
 app/test.txt
 
 app/src/main/java/com/theunquenchedservant/granthornersbiblereadingsystem/utilities/FirebaseHelper.kt
+
+.idea/deploymentTargetDropDown.xml

@@ -93,7 +93,7 @@ class DeleteAccountFragment: Fragment() {
         db.collection("main").document(user.uid).get()
                 .addOnSuccessListener { doc ->
                     if (doc != null) {
-                        firestoreToPreference(doc)
+                        firestoreToPreference(doc.data!!)
                     }
                 }
 
