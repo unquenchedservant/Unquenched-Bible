@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Onboarding
 
 import android.content.Intent
 import android.content.res.ColorStateList
@@ -20,7 +20,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFS
 
 class OnboardingFragmentFour : Fragment() {
     lateinit var vieww: View

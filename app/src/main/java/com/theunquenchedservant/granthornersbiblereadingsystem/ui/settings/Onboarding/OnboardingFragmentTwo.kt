@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Onboarding
 
 import android.content.ActivityNotFoundException
 import android.content.Intent

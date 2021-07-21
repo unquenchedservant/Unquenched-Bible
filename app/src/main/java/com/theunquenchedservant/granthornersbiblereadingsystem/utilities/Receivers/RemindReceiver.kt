@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
+package com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Receivers
 
 import android.app.NotificationManager
 import android.app.PendingIntent

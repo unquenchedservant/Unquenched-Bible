@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualOverrides
 
 import android.app.AlertDialog
 import android.content.res.ColorStateList

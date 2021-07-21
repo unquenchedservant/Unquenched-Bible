@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Account
 
 import android.content.res.ColorStateList
 import android.graphics.Color
