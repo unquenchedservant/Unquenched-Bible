@@ -360,83 +360,113 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun checkReadingDate() {
         traceLog(file="MainActivity.kt", function="checkReadingDate()")
+        debugLog("checkreadingdate - FOR SCIENCE")
         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
-                .addOnSuccessListener {
-                    val currentData = it.data
-                    val dateChecked = extractStringPref(currentData, "dateChecked")
-                    val listsDone = extractIntPref(currentData, "listsDone")
-                    val mcheyneListsDone = extractIntPref(currentData, "mcheyneListsDone")
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    val currentData = it.result!!.data!!
+                    if (!checkDate(extractStringPref(currentData, "dateReset"), "current", false)) {
+                        val dateChecked = extractStringPref(currentData, "dateChecked")
+                        val listsDone = extractIntPref(currentData, "pghDone")
+                        val mcheyneListsDone = extractIntPref(currentData, "mcheyneDone")
+                        debugLog("This is the date checked $dateChecked")
+                        if (!checkDate(dateChecked, "current", false)) {
+                            val allowPartial: Boolean = extractBoolPref(currentData, "allowPartial")
+                            val planType: String =
+                                extractStringPref(currentData, "planType", "horner")
+                            var pghDone = 0
+                            var mcheyneDone = 0
+                            val holdPlan: Boolean = extractBoolPref(currentData, "holdPlan")
 
-                    if (!checkDate(dateChecked, "current", false) && (listsDone != 0 || mcheyneListsDone != 0)) {
-                        val data: MutableMap<String, Any> = mutableMapOf()
-                        val allowPartial: Boolean         = extractBoolPref(currentData, "allowPartial")
-                        val planType: String              = extractStringPref(currentData, "planType", "horner")
-                        var pghDone: Int                  = 0
-                        var mcheyneDone: Int              = 0
-
-                        val mcheyneDoneAlready: Int       = extractIntPref(currentData, "mcheyneListsDone")
-                        val holdPlan: Boolean             = extractBoolPref(currentData, "holdPlan")
-
-                        debugLog(message="holdPlan = $holdPlan pghDoneAlready= $listsDone")
-
-                        if ((holdPlan && listsDone == 10) || !holdPlan) {
-                            for (i in 1..10) {
-                                if (extractIntPref(currentData, "list${i}Done") == 1) {
-                                    pghDone += 1
-                                    if (planType == "horner") data["list$i"] = extractIntPref(currentData, "list$i") + 1
-                                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
-                                    data["list${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=0)
+                            if ((holdPlan && listsDone == 10) || !holdPlan) {
+                                for (i in 1..10) {
+                                    if (extractBoolPref(currentData, "pgh${i}Done")) {
+                                        pghDone += 1
+                                        if (planType == "horner") currentData["pgh${i}Index"] =
+                                            setIntPref(
+                                                "pgh${i}Index",
+                                                extractIntPref(currentData, "pgh${i}Index") + 1
+                                            )
+                                    }
+                                    currentData["pgh${i}Done"] =
+                                        setBoolPref(name = "pgh${i}Done", value = false)
+                                    currentData["pgh${i}DoneDaily"] =
+                                        setBoolPref(name = "pgh${i}DoneDaily", value = false)
                                 }
+                                currentData["pghDone"] = setIntPref(name = "pghDone", value = 0)
                             }
-                            data["listsDone"] = setIntPref(name="listsDone", value=0)
-                        }
-                        if((holdPlan && mcheyneDoneAlready == 4) || !holdPlan) {
-                            for (i in 1..4) {
-                                if (extractIntPref(currentData, "mcheyneList${i}Done") == 1) {
-                                    mcheyneDone += 1
-                                    if (planType == "horner") data["mcheyneList${i}"] = extractIntPref(currentData, "mcheyneList$i") + 1
-                                    data["mcheyneList${i}Done"] = 0
-                                    data["mcheyneList${i}DoneDaily"] = 0
+                            if ((holdPlan && mcheyneListsDone == 4) || !holdPlan) {
+                                for (i in 1..4) {
+                                    if (extractBoolPref(currentData, "mcheyne${i}Done")) {
+                                        mcheyneDone += 1
+                                        if (planType == "horner") currentData["mcheyne${i}Index"] =
+                                            setIntPref(
+                                                "mcheyne${i}Index",
+                                                extractIntPref(currentData, "mcheyne${i}Index") + 1
+                                            )
+                                    }
+                                    currentData["mcheyne${i}Done"] =
+                                        setBoolPref(name = "mcheyne${i}Done", value = false)
+                                    currentData["mcheyne${i}DoneDaily"] =
+                                        setBoolPref(name = "mcheyne${i}DoneDaily", value = false)
                                 }
+                                currentData["mcheyneDone"] = setIntPref("mcheyneDone", 0)
                             }
-                            data["mcheyneListsDone"] = 0
-                        }
-                        if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
-                            data["currentDayIndex"] = extractIntPref(currentData, "currentDayIndex") + 1
-                        }
-                        if (planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)) {
-                            data["mcheyneCurrentDayIndex"] = extractIntPref(currentData, "mcheyneCurrentDayIndex") + 1
-                        }
-                        if ((pghDone == 10 || (allowPartial && pghDone > 0)) || (mcheyneDone == 4 || (allowPartial && mcheyneDone > 0))) {
-                            data["currentStreak"] = extractIntPref(currentData, "currentStreak") + 1
-                            if (extractIntPref(currentData, "currentStreak") > extractIntPref(currentData, "maxStreak")) {
-                                data["maxStreak"] = extractIntPref(currentData, "currentStreak")
+                            if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
+                                currentData["pghIndex"] =
+                                    setIntPref(
+                                        "pghIndex",
+                                        extractIntPref(currentData, "pghIndex") + 1
+                                    )
                             }
-                        }
-                        if (pghDone == 0 && mcheyneDone == 0 && !extractBoolPref(currentData, "vacationMode")) {
-                            if (checkDate(dateChecked, "yesterday", false)) {
-                                data["isGrace"] = true
-                                data["graceTime"] = 0
-                                data["holdStreak"] = extractIntPref(currentData, "currentStreak")
-                            } else {
-                                data["graceTime"] = 0
-                                data["isGrace"] = false
-                                data["holdStreak"] = 0
+                            if (planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)) {
+                                currentData["mcheyneIndex"] =
+                                    setIntPref(
+                                        "mcheyneIndex",
+                                        extractIntPref(currentData, "mcheyneIndex") + 1
+                                    )
                             }
-                            data["currentStreak"] = 0
-                        }
-                        val homeID = if(extractStringPref(currentData, "planSystem")== "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
-                        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
+                            if (pghDone == 0 && mcheyneDone == 0 && (!extractBoolPref(
+                                    currentData,
+                                    "vacationMode"
+                                ) || !(extractBoolPref(currentData, "weekendMode") && isWeekend()))
+                            ) {
+                                if (!checkDate(dateChecked, "two", false)) {
+                                    if (!extractBoolPref(currentData, "isGrace")) {
+                                        currentData["isGrace"] = setBoolPref("isGrace", true)
+                                        currentData["holdStreak"] =
+                                            extractIntPref(currentData, "currentStreak")
+                                    } else {
+                                        currentData["graceTime"] = 1
+                                        currentData["isGrace"] = setBoolPref("isGrace", false)
+                                        currentData["holdStreak"] = setIntPref("holdStreak", 0)
+                                    }
+                                }
+                                currentData["currentStreak"] = 0
+                                debugLog("The current streak has been reset")
+                            }
+                            currentData["dailyStreak"] = 0
+                            currentData["dateReset"] = setStringPref("dateReset",getDate(0, false))
+                            updateFirestore(currentData)
                                 .addOnSuccessListener {
-                                    navController.navigate(homeID)
+                                    navController.navigate(R.id.navigation_home)
+                                    debugLog("updated firestore data accurately")
                                 }
-                                .addOnFailureListener {
-                                    Toast.makeText(this@MainActivity, "Error updating lists", Toast.LENGTH_LONG).show()
+                                .addOnFailureListener { error ->
+                                    Toast.makeText(
+                                        this@MainActivity,
+                                        "Error updating lists",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                    debugLog("Error updating lists $error")
                                 }
+                        }else{
+                            navController.navigate(R.id.navigation_home)
+                        }
+                    }else{
+                        navController.navigate(R.id.navigation_home)
                     }
                 }
-            .addOnFailureListener {
-                debugLog(message="Firebase failed for this reason ${it}")
             }
     }
 
