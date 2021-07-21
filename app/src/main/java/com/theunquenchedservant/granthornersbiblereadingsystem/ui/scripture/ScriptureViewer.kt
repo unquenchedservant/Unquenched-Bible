@@ -145,7 +145,7 @@ class ScriptureViewer : Fragment() {
         chapters.removeLast()
         when(iteration){
             0->{
-                prepBindings(1, R.id.navigation_home_mcheyne, chapter, false, iteration)
+                prepBindings(1, R.id.navigation_home, chapter, false, iteration)
                 title = chapter
                 url = if(type=="esv"){
                     "https://api.esv.org/v3/passage/html/?q=$chapter&include-css-link=true&inline-styles=false&wrapping-div=false&div-classes=passage&include-passage-references=false&include-footnotes=false&include-copyright=true&include-short-copyright=false"
@@ -154,7 +154,7 @@ class ScriptureViewer : Fragment() {
                 }
             }
             1-> {
-                prepBindings(2, R.id.navigation_home_mcheyne, chapter, false, iteration)
+                prepBindings(2, R.id.navigation_home, chapter, false, iteration)
                 val currentChapter = chapters[iteration - 1]
                 title = "$book $currentChapter"
                 url = if (type == "esv") {
@@ -164,7 +164,7 @@ class ScriptureViewer : Fragment() {
                 }
             }
             in 2 until maxIteration -> {
-                prepBindings(3, R.id.navigation_home_mcheyne, chapter, false, iteration)
+                prepBindings(3, R.id.navigation_home, chapter, false, iteration)
                 val currentChapter = chapters[iteration - 1]
                 title = "$book $currentChapter"
                 url = if (type == "esv") {
@@ -174,7 +174,7 @@ class ScriptureViewer : Fragment() {
                 }
             }
             maxIteration-> {
-                prepBindings(4, R.id.navigation_home_mcheyne, chapter, false, iteration)
+                prepBindings(4, R.id.navigation_home, chapter, false, iteration)
                 val currentChapter = chapters[iteration-1]
                 title = "$book $currentChapter"
                 url = if(type=="esv"){

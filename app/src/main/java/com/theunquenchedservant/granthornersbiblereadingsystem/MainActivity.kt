@@ -186,11 +186,10 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         traceLog(file="MainActivity.kt", function="setupBottomNavigationBar()")
         switchEnabled(current="home")
         navController.addOnDestinationChangedListener{ _, destination, _ ->
-            val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
-            val homeId = if (planSystem == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
+            val homeId = R.id.navigation_home
             when (destination.id) {
                 R.id.navigation_scripture ->{
-                    setupNavigation(homeId, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = true)
+                    setupNavigation(homeId, displayHome1 = false, translationVisible = true)
                     if (getStringPref(name="bibleVersion", defaultValue="NIV") == "NASB"){
                         setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
                     }
@@ -262,20 +261,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     supportActionBar?.title = "Delete Account"
                 }
                 R.id.navigation_home -> {
-                    if(planSystem == "mcheyne"){
-                        navController.navigate(R.id.navigation_home_mcheyne)
-                    }
-                    switchEnabled(current="home")
-                    when(darkMode){
-                        true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-                        false->binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    }
-                    supportActionBar?.title = getDate(option=0, fullMonth=true)
-                    supportActionBar?.show()
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    binding.translationSelector.isVisible = false
-                }
-                R.id.navigation_home_mcheyne -> {
                     switchEnabled(current="home")
                     when(darkMode){
                         true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
@@ -304,17 +289,12 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         traceLog(file="MainActivity.kt", function="onNavigationItemSelected()")
-        val homeId = when(getStringPref(name="planSystem", defaultValue="pgh")){
-            "pgh"->R.id.navigation_home
-            "mcheyne"->R.id.navigation_home_mcheyne
-            else->R.id.navigation_home
-        }
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
                 supportActionBar?.title = getDate(option=0, fullMonth=true)
                 switchEnabled(current="home")
-                navControl.navigate(homeId)
+                navControl.navigate(R.id.navigation_home)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{

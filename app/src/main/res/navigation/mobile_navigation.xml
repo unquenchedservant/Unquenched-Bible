@@ -3,13 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     app:startDestination="@id/navigation_home">
     <fragment
+    <fragment
         android:id="@+id/navigation_home"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment"
-        android:label="@string/title_home">
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_home_mcheyne"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeMCheyneFragment"
         android:label="@string/title_home">
     </fragment>
     <fragment

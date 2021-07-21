@@ -1,10 +1,16 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.home
 
 import android.app.NotificationManager
+import android.content.ActivityNotFoundException
 import android.content.Context
+import android.content.Intent
+import android.content.res.ColorStateList
 import android.graphics.Color
+import android.net.Uri
 import android.os.Bundle
 import android.view.*
+import android.widget.Button
+import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.os.bundleOf
@@ -12,10 +18,8 @@ import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.SavedStateViewModelFactory
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.ktx.firestore
-import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markAll
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Marker.markSingle
@@ -23,14 +27,12 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.data.ReadingLists
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarm
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createAlarms
 import com.theunquenchedservant.granthornersbiblereadingsystem.service.AlarmCreator.createNotificationChannel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.changeVisibility
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.createUpdateAlert
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.getChapter
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.hideOthers
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.initList
@@ -42,8 +44,12 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHel
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.resetDaily
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.setVisibilities
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.ListHelpers.updateButton
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.increaseIntPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFirestore
 
 class HomeFragment : Fragment() {
 
@@ -55,6 +61,7 @@ class HomeFragment : Fragment() {
     private val viewModel: HomeView by viewModels(
             factoryProducer = { SavedStateViewModelFactory((activity as MainActivity).application, this) }
     )
+    private var planSystem = "pgh"
 
     override fun onCreateView(
             inflater: LayoutInflater,
@@ -65,67 +72,205 @@ class HomeFragment : Fragment() {
         binding = FragmentHomeBinding.inflate(inflater, container, false)
         darkMode = getBoolPref(name = "darkMode", defaultValue = true)
         planSystem = getStringPref("planSystem")
+        if (planSystem == "pgh") binding.pgh.visibility = View.VISIBLE else if(planSystem=="mcheyne") binding.mcheyne.visibility = View.VISIBLE
         val context = (activity as MainActivity).applicationContext
         if(darkMode){
             binding.materialButton.setBackgroundColor(getColor(context, R.color.buttonBackgroundDark))
+            binding.root.backgroundTintList = ColorStateList.valueOf(getColor(context, R.color.backg_night))
         }else{
             binding.materialButton.setBackgroundColor(getColor(context, R.color.buttonBackground))
+            binding.root.backgroundTintList = ColorStateList.valueOf(getColor(context, R.color.backg))
         }
-        initList(binding.cardList1, resources.getString(R.string.title_pgh_list1))
-        initList(binding.cardList2, resources.getString(R.string.title_pgh_list2))
-        initList(binding.cardList3, resources.getString(R.string.title_pgh_list3))
-        initList(binding.cardList4, resources.getString(R.string.title_pgh_list4))
-        initList(binding.cardList5, resources.getString(R.string.title_pgh_list5))
-        initList(binding.cardList6, resources.getString(R.string.title_pgh_list6))
-        initList(binding.cardList7, resources.getString(R.string.title_pgh_list7))
-        initList(binding.cardList8, resources.getString(R.string.title_pgh_list8))
-        initList(binding.cardList9, resources.getString(R.string.title_pgh_list9))
-        initList(binding.cardList10, resources.getString(R.string.title_pgh_list10))
-         viewModel.list1.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList1, readingList, R.string.title_pgh_list1, listName = "list1", R.array.list_1, psalms = false)
-        }
-        viewModel.list2.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList2, readingList, R.string.title_pgh_list2, listName = "list2", R.array.list_2, psalms = false)
-        }
-        viewModel.list3.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList3, readingList, R.string.title_pgh_list3, listName = "list3", R.array.list_3, psalms = false)
-        }
-        viewModel.list4.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList4, readingList, R.string.title_pgh_list4, listName = "list4", R.array.list_4, psalms = false)
-        }
-        viewModel.list5.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList5, readingList, R.string.title_pgh_list5, listName = "list5", R.array.list_5, psalms = false)
-        }
-        viewModel.list6.observe(viewLifecycleOwner) { readingList ->
-            val psalms = getBoolPref(name = "psalms")
-            createCard(binding.cardList6, readingList, R.string.title_pgh_list6, listName = "list6", R.array.list_6, psalms = psalms)
-        }
-        viewModel.list7.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList7, readingList, R.string.title_pgh_list7, listName = "list7", R.array.list_7, psalms = false)
-        }
-        viewModel.list8.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList8, readingList, R.string.title_pgh_list8, listName = "list8", R.array.list_8, psalms = false)
-        }
-        viewModel.list9.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList9, readingList, R.string.title_pgh_list9, listName = "list9", R.array.list_9, psalms = false)
-        }
-        viewModel.list10.observe(viewLifecycleOwner) { readingList ->
-            createCard(binding.cardList10, readingList, R.string.title_pgh_list10, listName = "list10", R.array.list_10, psalms = false)
-        }
-        viewModel.listsDone.observe(viewLifecycleOwner) { listsDone ->
-            when (getBoolPref(name = "darkMode", defaultValue = true)) {
-                true -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedTextDark))
-                false -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedText))
-            }
-            updateButton(listsDone.listsDone, binding.materialButton, 10, 9)
-        }
+        if(getStringPref("planSystem", defaultValue = "pgh") == "pgh") {
+            initList(binding.pgh1, resources.getString(R.string.title_pgh_list1))
+            initList(binding.pgh2, resources.getString(R.string.title_pgh_list2))
+            initList(binding.pgh3, resources.getString(R.string.title_pgh_list3))
+            initList(binding.pgh4, resources.getString(R.string.title_pgh_list4))
+            initList(binding.pgh5, resources.getString(R.string.title_pgh_list5))
+            initList(binding.pgh6, resources.getString(R.string.title_pgh_list6))
+            initList(binding.pgh7, resources.getString(R.string.title_pgh_list7))
+            initList(binding.pgh8, resources.getString(R.string.title_pgh_list8))
+            initList(binding.pgh9, resources.getString(R.string.title_pgh_list9))
+            initList(binding.pgh10, resources.getString(R.string.title_pgh_list10))
 
+            viewModel.pgh1.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh1,
+                    readingList,
+                    R.string.title_pgh_list1,
+                    listName = "pgh1",
+                    R.array.pgh_list1,
+                    psalms = false
+                )
+            }
+            viewModel.pgh2.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh2,
+                    readingList,
+                    R.string.title_pgh_list2,
+                    listName = "pgh2",
+                    R.array.pgh_list2,
+                    psalms = false
+                )
+            }
+            viewModel.pgh3.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh3,
+                    readingList,
+                    R.string.title_pgh_list3,
+                    listName = "pgh3",
+                    R.array.pgh_list3,
+                    psalms = false
+                )
+            }
+            viewModel.pgh4.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh4,
+                    readingList,
+                    R.string.title_pgh_list4,
+                    listName = "pgh4",
+                    R.array.pgh_list4,
+                    psalms = false
+                )
+            }
+            viewModel.pgh5.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh5,
+                    readingList,
+                    R.string.title_pgh_list5,
+                    listName = "pgh5",
+                    R.array.pgh_list5,
+                    psalms = false
+                )
+            }
+            viewModel.pgh6.observe(viewLifecycleOwner) { readingList ->
+                val psalms = getBoolPref(name = "psalms")
+                createCard(
+                    binding.pgh6,
+                    readingList,
+                    R.string.title_pgh_list6,
+                    listName = "pgh6",
+                    R.array.pgh_list6,
+                    psalms = psalms
+                )
+            }
+            viewModel.pgh7.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh7,
+                    readingList,
+                    R.string.title_pgh_list7,
+                    listName = "pgh7",
+                    R.array.pgh_list7,
+                    psalms = false
+                )
+            }
+            viewModel.pgh8.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh8,
+                    readingList,
+                    R.string.title_pgh_list8,
+                    listName = "pgh8",
+                    R.array.pgh_list8,
+                    psalms = false
+                )
+            }
+            viewModel.pgh9.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh9,
+                    readingList,
+                    R.string.title_pgh_list9,
+                    listName = "pgh9",
+                    R.array.pgh_list9,
+                    psalms = false
+                )
+            }
+            viewModel.pgh10.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.pgh10,
+                    readingList,
+                    R.string.title_pgh_list10,
+                    listName = "pgh10",
+                    R.array.pgh_list10,
+                    psalms = false
+                )
+            }
+            viewModel.listsDone.observe(viewLifecycleOwner) { listsDone ->
+                when (getBoolPref(name = "darkMode", defaultValue = true)) {
+                    true -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedTextDark))
+                    false -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedText))
+                }
+                binding.materialButton.isEnabled = true
+
+            }
+
+        }else{
+            initList(binding.mcheyneList1, resources.getString(R.string.title_mcheyne_list1))
+            initList(binding.mcheyneList2, resources.getString(R.string.title_mcheyne_list2))
+            initList(binding.mcheyneList3, resources.getString(R.string.title_mcheyne_list3))
+            initList(binding.mcheyneList4, resources.getString(R.string.title_mcheyne_list4))
+
+            viewModel.mcheyne1.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.mcheyneList1,
+                    readingList,
+                    R.string.title_mcheyne_list1,
+                    listName = "mcheyne1",
+                    R.array.mcheyne_list1,
+                    psalms = false
+                )
+            }
+            viewModel.mcheyne2.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.mcheyneList2,
+                    readingList,
+                    R.string.title_mcheyne_list2,
+                    listName = "mcheyne2",
+                    R.array.mcheyne_list2,
+                    psalms = false
+                )
+            }
+            viewModel.mcheyne3.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.mcheyneList3,
+                    readingList,
+                    R.string.title_mcheyne_list3,
+                    listName = "mcheyne3",
+                    R.array.mcheyne_list3,
+                    psalms = false
+                )
+            }
+            viewModel.mcheyne4.observe(viewLifecycleOwner) { readingList ->
+                createCard(
+                    binding.mcheyneList4,
+                    readingList,
+                    R.string.title_mcheyne_list4,
+                    listName = "mcheyne4",
+                    R.array.mcheyne_list4,
+                    psalms = false
+                )
+            }
+            viewModel.listsDone.observe(viewLifecycleOwner) { listsDone ->
+                when (getBoolPref(name = "darkMode", defaultValue = true)) {
+                    true -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedTextDark))
+                    false -> binding.materialButton.setTextColor(getColor(context, R.color.unquenchedText))
+                }
+                binding.mcheyneButton.isEnabled = true
+            }
+
+        }
+        if(planSystem == "pgh"){
+            binding.pgh.visibility = View.VISIBLE
+        }else if(planSystem == "mcheyne"){
+            binding.mcheyne.visibility = View.VISIBLE
+        }
+        binding.loading.visibility = View.GONE
         return binding.root
     }
 
     override fun onResume() {
         super.onResume()
         traceLog(file="HomeFragment.kt", function="onResume()")
+
         when (allowResume) {
             true -> {
                 allowResume = false
@@ -144,11 +289,15 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         traceLog(file="HomeFragment.kt", function="onViewCreated()")
-        createUpdateAlert(activity as MainActivity)
+        if(planSystem == "pgh"){
+            updateButton(getIntPref("pghDone"), binding.materialButton, 10, 9)
+        }else{
+            updateButton(getIntPref("mcheyneDone"), binding.mcheyneButton, 4, 3)
+        }
+        updateAlert()
         createButtonListener()
         createNotificationChannel()
-        createAlarm(alarmType = "dailyCheck")
-        setVisibilities(binding)
+        setVisibilities(binding, planSystem=="mcheyne")
         allowResume = false
         createAlarms()
     }
@@ -158,7 +307,7 @@ class HomeFragment : Fragment() {
         val cardListRoot = cardList.root
         val enabled: Int
         val lineColor: Int
-        cardListRoot.isClickable = true
+        cardList.root.isClickable = true
         val context = (activity as MainActivity).applicationContext
         when (getBoolPref(name = "darkMode", defaultValue = true)) {
             true -> {
@@ -172,12 +321,12 @@ class HomeFragment : Fragment() {
         }
         val disabled = Color.parseColor("#00383838")
         when (readingLists.listDone) {
-            0 -> {
+            false -> {
                 cardListRoot.isEnabled = true
                 cardListRoot.setCardBackgroundColor(enabled)
                 cardList.listButtons.setBackgroundColor(enabled)
             }
-            1 -> {
+            true -> {
                 cardListRoot.isEnabled = true
                 cardListRoot.setCardBackgroundColor(disabled)
                 cardList.listButtons.setBackgroundColor(disabled)
@@ -194,7 +343,18 @@ class HomeFragment : Fragment() {
             cardListRoot.isEnabled = false
             cardListRoot.setCardBackgroundColor(disabled)
             cardList.listButtons.setBackgroundColor(disabled)
-            setIntPref("listsDone", 1)
+            if (!getBoolPref("${listName}Done")) {
+                setBoolPref("${listName}Done", true)
+                setBoolPref("${listName}DoneDaily", true)
+                val doneKey = if(planSystem == "pgh") {
+                    "pghDone"
+                }else if(planSystem == "mcheyne"){
+                    "mcheyneDone"
+                }else{
+                    "pghDone"
+                }
+                setIntPref(doneKey, getIntPref(doneKey) + 1)
+            }
         }else {
             createCardListener(cardList, listArray, psalms, listDone = "${listName}Done", listName)
         }
@@ -202,18 +362,32 @@ class HomeFragment : Fragment() {
 
     private fun createButtonListener() {
         traceLog(file="HomeFragment.kt", function="createButtonListener()")
-        binding.materialButton.setOnClickListener {
-            hideOthers(cardList = null, binding)
-            val job = markAll("pgh", context)
-            job.addOnSuccessListener {
-                val mNotificationManager = requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+        val maxDone: Int
+        val button: Button
+        val listsDone:Int
+        if(planSystem == "pgh"){
+            maxDone = 10
+            button = binding.materialButton
+        }else if(planSystem == "mcheyne"){
+            maxDone = 4
+            button = binding.mcheyneButton
+        }else{
+            maxDone = 10
+            button = binding.materialButton
+        }
+        if(getIntPref("${planSystem}Done") < maxDone) {
+            button.setOnClickListener {
+                hideOthers(cardList = null, binding, isMcheyne = planSystem == "mcheyne")
+                val job = markAll(planSystem, context)
+                val mNotificationManager =
+                    requireContext().getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                 mNotificationManager.cancel(1)
                 mNotificationManager.cancel(2)
                 (activity as MainActivity).navController.navigate(R.id.navigation_home)
             }
         }
-        if (isAdvanceable(10)) {
-            binding.materialButton.setOnLongClickListener {
+        if (isAdvanceable(maxDone)) {
+            button.setOnLongClickListener {
                 val builder = AlertDialog.Builder(requireContext())
                 builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
                     resetDaily(requireContext()).addOnSuccessListener {
@@ -239,18 +413,16 @@ class HomeFragment : Fragment() {
             true -> getColor(context, R.color.buttonBackgroundDark)
             false -> getColor(context, R.color.buttonBackground)
         }
-        if(getIntPref(listDone) == 0) {
+        if(!getBoolPref(listDone)) {
             cardView.root.setOnClickListener { view ->
                 if (cardView.listButtons.isVisible) {
-                    listSwitcher(view, getIntPref(listDone), binding.materialButton)
+                    listSwitcher(view, getBoolPref(listDone), binding.materialButton)
                 } else {
-                    hideOthers(cardView.root, binding)
+                    hideOthers(cardView.root, binding, isMcheyne = planSystem == "mcheyne")
                     cardView.listDone.setOnClickListener {
                         changeVisibility(cardView, isCardView = false)
-                        markSingle(listDone, "pgh", context).addOnSuccessListener {
-                            cardView.root.setCardBackgroundColor(Color.parseColor("#00383838"))
-                            (activity as MainActivity).navController.navigate(R.id.navigation_home)
-                        }
+                        markSingle(listDone, planSystem, context)
+                        (activity as MainActivity).navController.navigate(R.id.navigation_home)
                     }
                     cardView.listRead.setOnClickListener {
                        val bundle = if(isPsalm(cardView, binding, psalms)) {
@@ -280,7 +452,6 @@ class HomeFragment : Fragment() {
                     cardView.root.setCardBackgroundColor(enabled)
                     cardView.listButtons.setBackgroundColor(enabled)
                     diag.dismiss()
-                    (activity as MainActivity).navController.navigate(R.id.navigation_home)
                 }
                 builder.setNegativeButton(getString(R.string.no)) { diag, _ -> diag.dismiss() }
                 builder.setMessage(R.string.msg_reset_one)
