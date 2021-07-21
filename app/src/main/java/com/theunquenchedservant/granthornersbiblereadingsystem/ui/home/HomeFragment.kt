@@ -301,6 +301,78 @@ class HomeFragment : Fragment() {
         allowResume = false
         createAlarms()
     }
+    fun updateAlert() {
+        val context = activity as MainActivity
+        traceLog(file = "ListHelpers.kt", function = "createUpdateAlert()")
+        val currentVersion = BuildConfig.VERSION_CODE
+        debugLog("currentVersion $currentVersion")
+        if (getIntPref("versionNumber") < currentVersion) {
+            val builder = AlertDialog.Builder(context)
+            builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
+                dialog.dismiss()
+            }
+            builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
+                val i = Intent(Intent.ACTION_VIEW, Uri.parse("https://changelog.unquenched.bible/"))
+                try {
+                    startActivity(i)
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
+                }
+                dialog.dismiss()
+            }
+            builder.setTitle(
+                App.applicationContext().resources.getString(
+                    R.string.title_new_update,
+                    BuildConfig.VERSION_NAME
+                )
+            )
+            builder.setMessage(
+                "* Added some various things along the backend to make the app run smoother \n" +
+                        "* Finally fixed an issue with the reading lists not syncing well between multiple devices. \n" +
+                        "Fixed an issue where the reading lists were not getting fully reset each night \n" +
+                        "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
+            )
+            builder.create().show()
+        } else if (getIntPref(name = "versionNumber") < 70) {
+            val builder = AlertDialog.Builder(context)
+            builder.setPositiveButton(R.string.ok) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
+                dialog.dismiss()
+            }
+            builder.setNeutralButton(context.resources.getString(R.string.moreInfo)) { dialog, _ ->
+                setIntPref(name = "versionNumber", value = currentVersion, updateFS = true)
+                val i = Intent(
+                    Intent.ACTION_VIEW,
+                    Uri.parse("https://www.unquenched.bible/2021/01/23/announcing-unquenched-bible-or-the-professor-grant-horner-bible-reading-system-app-version-2-0/")
+                )
+                try {
+                    startActivity(i)
+                } catch (e: ActivityNotFoundException) {
+                    Toast.makeText(context, "No browser installed", Toast.LENGTH_LONG).show()
+                }
+                dialog.dismiss()
+            }
+            builder.setTitle(
+                context.resources.getString(
+                    R.string.title_new_update,
+                    BuildConfig.VERSION_NAME
+                )
+            )
+            builder.setMessage(
+                "[ADDED] M'Cheyne Bible Reading Calendar\n\n" +
+                        "[ADDED] Weekend Mode. Take Saturday and Sunday off.\n\n" +
+                        "[ADDED] Three different methods for your reading plan: Horner, Numerical, and Calendar.\n\n" +
+                        "[ADDED] Grace period for your streak. If you forgot to check your reading as done, you have one day before permanently losing your streak!\n\n" +
+                        "[ADDED] New Statistics for amount of the Bible read\n\n" +
+                        "[UPGRADED] NEW NAME! The Professor Grant Horner Bible Reading App is now Unquenched Bible\n\n" +
+                        "[UPDATED] New sign in screen with the option to log in with your email and password\n\n" +
+                        "Thank you for your continued use of the app! To find out more about these changes, press 'More Info' below!"
+            )
+            builder.create().show()
+        }
+    }
 
     private fun createCard(cardList: CardviewsBinding, readingLists: ReadingLists, readingString: Int, listName: String, listArray: Int, psalms: Boolean) {
         traceLog(file="HomeFragment.kt", function="createCard()")
