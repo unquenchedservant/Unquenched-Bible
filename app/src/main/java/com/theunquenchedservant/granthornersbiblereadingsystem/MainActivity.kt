@@ -205,34 +205,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     }
                 }
                 R.id.navigation_plan_settings ->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
-                }
-                R.id.navigation_bible_stats_main ->{
-                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
-                    supportActionBar?.title = "Bible Statistics"
-                }
-                R.id.navigation_bible_testament_stats ->{
-                    setupNavigation(R.id.navigation_bible_stats_main, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
-                }
-                R.id.navigation_book_stats->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.popBackStack()
-                        binding.bottomNav.isVisible = true
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                }
-                R.id.navigation_bible_reset_menu->{
-                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
-                    supportActionBar?.title = "Reset Bible Stats"
-                }
-                R.id.navigation_books_reset_menu->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.popBackStack()
-                        binding.bottomNav.isVisible = true
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                 }
                 R.id.navigation_plan_type->{
                     binding.myToolbar.setNavigationOnClickListener{
