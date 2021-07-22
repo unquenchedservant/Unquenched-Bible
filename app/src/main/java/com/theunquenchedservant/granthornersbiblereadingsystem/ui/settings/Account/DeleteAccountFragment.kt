@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Account
 
+import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
 import android.os.Bundle
@@ -13,6 +14,7 @@ import androidx.core.content.ContextCompat
 import androidx.core.os.bundleOf
 import androidx.core.view.isVisible
 import androidx.fragment.app.Fragment
+import androidx.preference.PreferenceManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.material.card.MaterialCardView
@@ -30,18 +32,19 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 class DeleteAccountFragment: Fragment() {
     override fun onCreateView(inflater: LayoutInflater,
                               container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_confirm_delete_account, container, false)
-    }
-
-    override fun onResume() {
-        super.onResume()
+        val root = inflater.inflate(R.layout.fragment_confirm_delete_account, container, false)
         val dark = SharedPref.getBoolPref(name="darkMode", defaultValue=true)
         val b = arguments
         val errorMsg: String
-        val root = requireView()
         val user = Firebase.auth.currentUser
         val providers = user?.providerData
-        val provider = providers!![1].providerId
+        val provider = if(providers != null){
+            providers[1].providerId
+        }else{
+            (activity as MainActivity).finish()
+            startActivity(Intent(requireContext(), MainActivity::class.java))
+            ""
+        }
         val errorHolder = root.findViewById<MaterialTextView>(R.id.errorLabel)
         val cardHolder = root.findViewById<MaterialCardView>(R.id.cardHolder)
         val userPassLabel = root.findViewById<MaterialTextView>(R.id.currentPassLabel)
@@ -70,32 +73,32 @@ class DeleteAccountFragment: Fragment() {
                 confirmBtn.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#e1e2e6"))
             }
             confirmBtn.setOnClickListener {
-                val credential = EmailAuthProvider.getCredential(user.email.toString(), userPass.text.toString())
+                val credential = EmailAuthProvider.getCredential(user!!.email.toString(), userPass.text.toString())
                 deleteAccount(credential, user, root)
             }
         } else {
             cardHolder.visibility = View.GONE
             confirmBtn.visibility = View.GONE
             val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build()
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build()
             GoogleSignIn.getClient(context, gso).silentSignIn().addOnCompleteListener {
                 val credential = GoogleAuthProvider.getCredential(it.result?.idToken, null)
-                deleteAccount(credential, user, root)
+                deleteAccount(credential, user!!, root)
             }
         }
+        return root
+    }
+
+    override fun onResume() {
+        super.onResume()
+
     }
 
     private fun deleteAccount(credential: AuthCredential, user: FirebaseUser, root: View) {
         val mainActivity = activity as MainActivity
         val db = Firebase.firestore
-        db.collection("main").document(user.uid).get()
-                .addOnSuccessListener { doc ->
-                    if (doc != null) {
-                        firestoreToPreference(doc.data!!)
-                    }
-                }
 
         user.reauthenticate(credential)
                 .addOnCompleteListener {
@@ -105,8 +108,10 @@ class DeleteAccountFragment: Fragment() {
                                 .addOnCompleteListener { task ->
                                     if (task.isSuccessful) {
                                         root.clearFocus()
-                                        mainActivity.navController.navigate(R.id.navigation_settings)
-                                        Toast.makeText(context, "Account deleted!", Toast.LENGTH_LONG).show()
+                                        PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().clear().apply()
+                                        val intent = Intent(requireContext(), MainActivity::class.java)
+                                        (activity as MainActivity).finish()
+                                        startActivity(intent)
                                     } else {
                                         debugLog(message="This is the reason the account deletion failed: ${task.exception}")
                                         val bundle = bundleOf("error" to "Unknown Error")

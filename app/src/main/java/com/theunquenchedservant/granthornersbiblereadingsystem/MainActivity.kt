@@ -43,6 +43,7 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getLongPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.newUser
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
@@ -107,43 +108,49 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.bottomNav.itemTextColor = colorStateList
         binding.translationSelector.isVisible = false
         setupBottomNavigationBar()
-        if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
+
         if(Firebase.auth.currentUser == null) {
             startFirebaseAuth()
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             traceLog(file="MainActivity.kt", function="onCreate()", "has not completed onboarding")
             startActivity(Intent(this@MainActivity, OnboardingPagerActivity::class.java))
-        }else {
+        }else if (!getBoolPref(name="updatedPref", defaultValue=false)) {
+            updatePrefNames()
+        }else{
             traceLog(file="MainActivity.kt", function="onCreate()", "normal operation")
             Firebase.auth.currentUser
             if (Firebase.auth.currentUser != null) {
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                val data = it.result!!.data!!
-
-                                if((data["lastUpdated"]) == null){
-                                    data["lastUpdated"] = 0.toLong()
-                                }
-                                if((data["lastUpdated"] as Long) > getLongPref("lastUpdated") && data["lastUpdated"] != 0){
-                                    debugLog("firestore to preference - FOR SCIENCE")
-                                    firestoreToPreference(data)
-                                }else{
-                                    debugLog("preference to firestore - FOR SCIENCE")
-                                    preferenceToFirestore()
-                                }
-                                if(data["updatedPreferences"] == null || !(data["updatedPreferences"] as Boolean)){
-                                    updateFirestoreAndPrefs().addOnSuccessListener {
+                                if(it.result?.data == null){
+                                    newUser()
+                                }else {
+                                    val data = it.result!!.data!!
+                                    if ((data["lastUpdated"]) == null) {
+                                        data["lastUpdated"] = 0.toLong()
+                                    }
+                                    if ((data["lastUpdated"] as Long) > getLongPref("lastUpdated") && data["lastUpdated"] != 0) {
+                                        debugLog("firestore to preference - FOR SCIENCE")
+                                        firestoreToPreference(data)
+                                    } else {
+                                        debugLog("preference to firestore - FOR SCIENCE")
+                                        preferenceToFirestore()
+                                    }
+                                    if (data["updatedPreferences"] == null || !(data["updatedPreferences"] as Boolean)) {
+                                        updateFirestoreAndPrefs().addOnSuccessListener {
+                                            checkReadingDate()
+                                        }
+                                    } else {
                                         checkReadingDate()
                                     }
-                                }else{
-                                    checkReadingDate()
                                 }
                             } else {
-                                Firebase.crashlytics.log("Error getting user info")
-                                Firebase.crashlytics.recordException(it.exception?.cause!!)
-                                Firebase.crashlytics.setCustomKey("userId", Firebase.auth.currentUser?.uid!!)
+                                com.google.firebase.ktx.Firebase.crashlytics.log("Error getting user info")
+                                com.google.firebase.ktx.Firebase.crashlytics.recordException(it.exception?.cause!!)
+                                com.google.firebase.ktx.Firebase.crashlytics.setCustomKey("userId", com.google.firebase.ktx.Firebase.auth.currentUser?.uid!!)
                             }
+
                         }
             }
 
@@ -152,7 +159,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onResume() {
         super.onResume()
         traceLog(file="MainActivity.kt", function="onResume()")
-        checkReadingDate()
+        if (Firebase.auth.currentUser != null && getBoolPref("hasCompletedOnboarding")) {
+            checkReadingDate()
+        }
     }
 
     override fun onPause() {
@@ -317,110 +326,131 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
-                    val currentData = it.result!!.data!!
-                    if (!checkDate(extractStringPref(currentData, "dateReset"), "current", false)) {
-                        val dateChecked = extractStringPref(currentData, "dateChecked")
-                        val listsDone = extractIntPref(currentData, "pghDone")
-                        val mcheyneListsDone = extractIntPref(currentData, "mcheyneDone")
-                        debugLog("This is the date checked $dateChecked")
-                        if (!checkDate(dateChecked, "current", false)) {
-                            val allowPartial: Boolean = extractBoolPref(currentData, "allowPartial")
-                            val planType: String =
-                                extractStringPref(currentData, "planType", "horner")
-                            var pghDone = 0
-                            var mcheyneDone = 0
-                            val holdPlan: Boolean = extractBoolPref(currentData, "holdPlan")
+                    if (it.result == null) {
+                        newUser()
+                    } else {
+                        val currentData = it.result!!.data!!
+                        if (!checkDate(
+                                extractStringPref(currentData, "dateReset"),
+                                "current",
+                                false
+                            )
+                        ) {
+                            val dateChecked = extractStringPref(currentData, "dateChecked")
+                            val listsDone = extractIntPref(currentData, "pghDone")
+                            val mcheyneListsDone = extractIntPref(currentData, "mcheyneDone")
+                            debugLog("This is the date checked $dateChecked")
+                            if (!checkDate(dateChecked, "current", false)) {
+                                val allowPartial: Boolean =
+                                    extractBoolPref(currentData, "allowPartial")
+                                val planType: String =
+                                    extractStringPref(currentData, "planType", "horner")
+                                var pghDone = 0
+                                var mcheyneDone = 0
+                                val holdPlan: Boolean = extractBoolPref(currentData, "holdPlan")
 
-                            if ((holdPlan && listsDone == 10) || !holdPlan) {
-                                for (i in 1..10) {
-                                    if (extractBoolPref(currentData, "pgh${i}Done")) {
-                                        pghDone += 1
-                                        if (planType == "horner") currentData["pgh${i}Index"] =
-                                            setIntPref(
-                                                "pgh${i}Index",
-                                                extractIntPref(currentData, "pgh${i}Index") + 1
+                                if ((holdPlan && listsDone == 10) || !holdPlan) {
+                                    for (i in 1..10) {
+                                        if (extractBoolPref(currentData, "pgh${i}Done")) {
+                                            pghDone += 1
+                                            if (planType == "horner") currentData["pgh${i}Index"] =
+                                                setIntPref(
+                                                    "pgh${i}Index",
+                                                    extractIntPref(currentData, "pgh${i}Index") + 1
+                                                )
+                                        }
+                                        currentData["pgh${i}Done"] =
+                                            setBoolPref(name = "pgh${i}Done", value = false)
+                                        currentData["pgh${i}DoneDaily"] =
+                                            setBoolPref(name = "pgh${i}DoneDaily", value = false)
+                                    }
+                                    currentData["pghDone"] = setIntPref(name = "pghDone", value = 0)
+                                }
+                                if ((holdPlan && mcheyneListsDone == 4) || !holdPlan) {
+                                    for (i in 1..4) {
+                                        if (extractBoolPref(currentData, "mcheyne${i}Done")) {
+                                            mcheyneDone += 1
+                                            if (planType == "horner") currentData["mcheyne${i}Index"] =
+                                                setIntPref(
+                                                    "mcheyne${i}Index",
+                                                    extractIntPref(
+                                                        currentData,
+                                                        "mcheyne${i}Index"
+                                                    ) + 1
+                                                )
+                                        }
+                                        currentData["mcheyne${i}Done"] =
+                                            setBoolPref(name = "mcheyne${i}Done", value = false)
+                                        currentData["mcheyne${i}DoneDaily"] =
+                                            setBoolPref(
+                                                name = "mcheyne${i}DoneDaily",
+                                                value = false
                                             )
                                     }
-                                    currentData["pgh${i}Done"] =
-                                        setBoolPref(name = "pgh${i}Done", value = false)
-                                    currentData["pgh${i}DoneDaily"] =
-                                        setBoolPref(name = "pgh${i}DoneDaily", value = false)
+                                    currentData["mcheyneDone"] = setIntPref("mcheyneDone", 0)
                                 }
-                                currentData["pghDone"] = setIntPref(name = "pghDone", value = 0)
-                            }
-                            if ((holdPlan && mcheyneListsDone == 4) || !holdPlan) {
-                                for (i in 1..4) {
-                                    if (extractBoolPref(currentData, "mcheyne${i}Done")) {
-                                        mcheyneDone += 1
-                                        if (planType == "horner") currentData["mcheyne${i}Index"] =
-                                            setIntPref(
-                                                "mcheyne${i}Index",
-                                                extractIntPref(currentData, "mcheyne${i}Index") + 1
-                                            )
+                                if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
+                                    currentData["pghIndex"] =
+                                        setIntPref(
+                                            "pghIndex",
+                                            extractIntPref(currentData, "pghIndex") + 1
+                                        )
+                                }
+                                if (planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)) {
+                                    currentData["mcheyneIndex"] =
+                                        setIntPref(
+                                            "mcheyneIndex",
+                                            extractIntPref(currentData, "mcheyneIndex") + 1
+                                        )
+                                }
+                                if (pghDone == 0 && mcheyneDone == 0 && (!extractBoolPref(
+                                        currentData,
+                                        "vacationMode"
+                                    ) || !(extractBoolPref(
+                                        currentData,
+                                        "weekendMode"
+                                    ) && isWeekend()))
+                                ) {
+                                    if (!checkDate(dateChecked, "two", false)) {
+                                        if (!extractBoolPref(currentData, "isGrace")) {
+                                            currentData["isGrace"] = setBoolPref("isGrace", true)
+                                            currentData["holdStreak"] =
+                                                extractIntPref(currentData, "currentStreak")
+                                        } else {
+                                            currentData["graceTime"] = 1
+                                            currentData["isGrace"] = setBoolPref("isGrace", false)
+                                            currentData["holdStreak"] = setIntPref("holdStreak", 0)
+                                        }
                                     }
-                                    currentData["mcheyne${i}Done"] =
-                                        setBoolPref(name = "mcheyne${i}Done", value = false)
-                                    currentData["mcheyne${i}DoneDaily"] =
-                                        setBoolPref(name = "mcheyne${i}DoneDaily", value = false)
+                                    currentData["currentStreak"] = 0
+                                    debugLog("The current streak has been reset")
                                 }
-                                currentData["mcheyneDone"] = setIntPref("mcheyneDone", 0)
-                            }
-                            if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
-                                currentData["pghIndex"] =
-                                    setIntPref(
-                                        "pghIndex",
-                                        extractIntPref(currentData, "pghIndex") + 1
-                                    )
-                            }
-                            if (planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)) {
-                                currentData["mcheyneIndex"] =
-                                    setIntPref(
-                                        "mcheyneIndex",
-                                        extractIntPref(currentData, "mcheyneIndex") + 1
-                                    )
-                            }
-                            if (pghDone == 0 && mcheyneDone == 0 && (!extractBoolPref(
-                                    currentData,
-                                    "vacationMode"
-                                ) || !(extractBoolPref(currentData, "weekendMode") && isWeekend()))
-                            ) {
-                                if (!checkDate(dateChecked, "two", false)) {
-                                    if (!extractBoolPref(currentData, "isGrace")) {
-                                        currentData["isGrace"] = setBoolPref("isGrace", true)
-                                        currentData["holdStreak"] =
-                                            extractIntPref(currentData, "currentStreak")
-                                    } else {
-                                        currentData["graceTime"] = 1
-                                        currentData["isGrace"] = setBoolPref("isGrace", false)
-                                        currentData["holdStreak"] = setIntPref("holdStreak", 0)
+                                currentData["dailyStreak"] = 0
+                                currentData["dateReset"] =
+                                    setStringPref("dateReset", getDate(0, false))
+                                updateFirestore(currentData)
+                                    .addOnSuccessListener {
+                                        navController.navigate(R.id.navigation_home)
+                                        debugLog("updated firestore data accurately")
                                     }
-                                }
-                                currentData["currentStreak"] = 0
-                                debugLog("The current streak has been reset")
+                                    .addOnFailureListener { error ->
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            "Error updating lists",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        debugLog("Error updating lists $error")
+                                    }
+                            } else {
+                                navController.navigate(R.id.navigation_home)
                             }
-                            currentData["dailyStreak"] = 0
-                            currentData["dateReset"] = setStringPref("dateReset",getDate(0, false))
-                            updateFirestore(currentData)
-                                .addOnSuccessListener {
-                                    navController.navigate(R.id.navigation_home)
-                                    debugLog("updated firestore data accurately")
-                                }
-                                .addOnFailureListener { error ->
-                                    Toast.makeText(
-                                        this@MainActivity,
-                                        "Error updating lists",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                    debugLog("Error updating lists $error")
-                                }
-                        }else{
+                        } else {
                             navController.navigate(R.id.navigation_home)
                         }
-                    }else{
-                        navController.navigate(R.id.navigation_home)
                     }
                 }
             }
+
     }
 
     private fun switchEnabled(current: String){
@@ -462,6 +492,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         )
         val signInIntent = AuthUI.getInstance()
             .createSignInIntentBuilder()
+            .setLogo(R.drawable.logo2)
+            .setTheme(R.style.AppTheme)
+            .setIsSmartLockEnabled(false)
             .setAvailableProviders(providers)
             .build()
         signInLauncher.launch(signInIntent)
@@ -474,13 +507,20 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             val db = Firebase.firestore
             db.collection("main").document(user!!.uid).get()
                 .addOnSuccessListener { doc ->
-                    if(Firebase.auth.currentUser!!.uid == getStringPref("uid") && (doc.data!!["lastUpdated"] == null || (doc.data!!["lastUpdated"] as Long) < getLongPref("lastUpdated"))){
+                    if(doc.data == null){
+                        newUser().addOnSuccessListener {
+                            finish()
+                            val i = Intent(this@MainActivity, MainActivity::class.java)
+                            startActivity(i)
+                        }
+                    }
+                    else if(Firebase.auth.currentUser!!.uid == getStringPref("uid") && (doc.data!!["lastUpdated"] == null || (doc.data!!["lastUpdated"] as Long) < getLongPref("lastUpdated"))){
                         preferenceToFirestore().addOnSuccessListener {
                             finish()
                             val i = Intent(this@MainActivity, MainActivity::class.java)
                             startActivity(i)
                         }
-                    }else if(doc.data!!["lastUpdated"] as Long > getLongPref("lastUpdated")){
+                    }else if(doc.data!!["lastUpdated"] != null && doc.data!!["lastUpdated"] as Long > getLongPref("lastUpdated")){
                         firestoreToPreference(doc.data!!)
                         setStringPref("uid", user.uid)
                         finish()

@@ -1,11 +1,13 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
 
+import android.os.Build
 import androidx.preference.PreferenceManager
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
+import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
@@ -53,7 +55,7 @@ object SharedPref {
                     debugLog("ERROR: DID NOT UPDATE ${it.message}")
                 }
                 .addOnCompleteListener {
-                    debugLog("SUCCESS? ${it.result}")
+                    debugLog("SUCCESS? ${it}")
                 }
         }else{
             debugLog("user was null")
@@ -143,7 +145,49 @@ object SharedPref {
     }
 
     private val user = Firebase.auth.currentUser
-
+    fun newUser():Task<Void>{
+        val results = mutableMapOf<String?, Any?>()
+        for(i in 1..10){
+            results["pgh${i}Index"] = setIntPref(name="pgh${i}Index", 0)
+            results["pgh${i}Done"] = setBoolPref(name="pgh${i}Done", false)
+            results["pgh${i}DoneDaily"] = setBoolPref(name="pgh${i}DoneDaily", false)
+        }
+        for(i in 1..4){
+            results["mcheyneList$i"] = setIntPref(name="mcheyne${i}Index", 0)
+            results["mcheyneList${i}Done"] = setBoolPref(name="mcheyne${i}Done", false)
+            results["mcheyneList${i}DoneDaily"] = setBoolPref(name="mcheyne${i}DoneDaily", false)
+        }
+        results["updatedPreferences"]     = setBoolPref(name="updatedPreferences", true)
+        results["pghDone"]                = setIntPref(name="pghDone", 0)
+        results["mcheyneDone"]            = setIntPref(name="mcheyneDone", 0)
+        results["currentStreak"]          = setIntPref(name="currentStreak", 0)
+        results["dailyStreak"]            = setIntPref(name="dailyStreak", 0)
+        results["maxStreak"]              = setIntPref(name="maxStreak", 0)
+        results["notifications"]          = setBoolPref(name="notifications", true)
+        results["psalms"]                 = setBoolPref(name="psalms", false)
+        results["holdPlan"]               = setBoolPref(name="holdPlan", false)
+        results["graceTime"]              = setIntPref(name="graceTime", 0)
+        results["isGrace"]                = setBoolPref(name="isGrace", false)
+        results["pghIndex"]               = setIntPref(name="pghIndex", 0)
+        results["mcheyneIndex"]           = setIntPref(name="mcheyneIndex", 0)
+        results["vacationMode"]           = setBoolPref(name="vacationMode", false)
+        results["weekendMode"]            = setBoolPref(name="weekendMode", false)
+        results["allowPartial"]           = setBoolPref(name="allowPartial", false)
+        results["dailyNotif"]             = setIntPref( name="dailyNotif", 600)
+        results["remindNotif"]            = setIntPref(name="remindNotif", 1200)
+        results["dateChecked"]            = setStringPref( name="dateChecked", "")
+        results["dateReset"]              = setStringPref(name="dateReset", "")
+        results["versionNumber"]          = setIntPref(name="versionNumber", BuildConfig.VERSION_CODE)
+        results["darkMode"]               = setBoolPref(name="darkMode", true)
+        results["planType"]               = setStringPref(name="planType", "")
+        results["bibleVersion"]           = setStringPref(name="bibleVersion", "niv")
+        results["planSystem"]             = setStringPref(name="planSystem", "")
+        results["hasCompletedOnboarding"] = setBoolPref(name="hasCompletedOnboarding", false)
+        results["lastUpdated"] = Calendar.getInstance().timeInMillis
+        return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).set(results)
+            .addOnSuccessListener { debugLog("Data transferred to firestore") }
+            .addOnFailureListener {ex -> Timber.tag("PROFGRANT").e(ex, "Error writing to firestore") }
+    }
     fun preferenceToFirestore():Task<Void>{
         traceLog(file="SharedPref.kt", function="preferenceToFirestore()")
         val db = Firebase.firestore
