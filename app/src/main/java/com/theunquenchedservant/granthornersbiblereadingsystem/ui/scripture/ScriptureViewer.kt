@@ -45,6 +45,10 @@ class ScriptureViewer : Fragment() {
     private external fun getESVKey() : String
 
     private external fun getBibleApiKey() : String
+    private val ESV_NIGHT_CSS = "https://github.com/unquenchedservant/Unquenched-Bible/blob/master/app/src/main/assets/esv.css"
+    private val ESV_DAY_CSS = "https://github.com/unquenchedservant/Unquenched-Bible/blob/master/app/src/main/assets/esv-day.css"
+    private val BIBLE_API_NIGHT_CSS = "https://github.com/unquenchedservant/Unquenched-Bible/blob/master/app/src/main/assets/api_bible_night.css"
+    private val BIBLE_API_DAY_CSS = "https://github.com/unquenchedservant/Unquenched-Bible/blob/master/app/src/main/assets/api_bible_day.css"
 
     private var BIBLE_IDS : Map<String, String> = mapOf("KJV" to "55212e3cf5d04d49-01","CSB" to "a556c5305ee15c3f-01","NASB95" to "b8ee27bcd1cae43a-01", "NASB20" to "a761ca71e0b3ddcf-01", "AMP" to "a81b73293d3080c9-01", "NIV" to "78a9f6124f344018-01", "ESV" to "ksdjfldjlkfjeiiethisdoesntmatteranyway")
     private val BOOK_IDS : Map<String, String> = mapOf(
@@ -240,9 +244,9 @@ class ScriptureViewer : Fragment() {
                         response.getJSONObject("data").getString("content")
                     }
                     css = when (getBoolPref(name="darkMode", defaultValue=true)) {
-                        true -> if(type=="esv") "https://unquenched.bible/esv-2.css" else "https://unquenched.bible/api_bible_night.css"
+                        true -> if(type=="esv") ESV_NIGHT_CSS else BIBLE_API_NIGHT_CSS
 
-                        false -> if(type=="esv") "https://unquenched.bible/esv-day2.css" else "https://unquenched.bible/api_bible_day.css"
+                        false -> if(type=="esv") ESV_DAY_CSS else BIBLE_API_DAY_CSS
                     }
                     html = if(type=="esv"){
                         html.replace("\"http://static.esvmedia.org.s3.amazonaws.com/tmp/text.css\"", css)
