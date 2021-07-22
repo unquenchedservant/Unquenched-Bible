@@ -18,7 +18,8 @@ p {
     color: #000000;
     font-family:Georgia,"Times New Roman",Times,serif;
 }
-.s1, .s, .ms{
+
+.s1, .s, .ms, .cl{
     color: #b36c38;
 	font-size:1.1em;
 	font-weight:300;
@@ -30,6 +31,9 @@ p {
 
 .copyright{
     text-indent: 0;
-    color: #9cb9d3;
+    padding: 0 0 !important;
+    margin: 0px !important;
+    color: #000000;
+    font-size: .85em;
     font-family:Georgia,"Times New Roman",Times,serif;
 }
