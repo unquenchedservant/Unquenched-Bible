@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Onboarding
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment

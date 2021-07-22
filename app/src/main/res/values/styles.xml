@@ -30,7 +30,7 @@
         <item name="colorControlActivated">#9CB9D3</item>
         <item name="colorControlHighlight">#f44336</item>
     </style>
-    <style name="AppPreference">
+    <style name="AppPreference" parent="AppTheme">
         <item name="android:layout">@layout/preference_material</item>
         <item name="android:actionMenuTextColor">@color/menu_text</item>
     </style>

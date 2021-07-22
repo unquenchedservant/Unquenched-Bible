@@ -1,6 +1,5 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem
 
-import android.app.Activity
 import android.content.Intent
 import android.content.res.ColorStateList
 import android.graphics.Color
@@ -19,33 +18,40 @@ import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
-import com.firebase.ui.auth.IdpResponse
+import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
+import com.firebase.ui.auth.data.model.FirebaseAuthUIAuthenticationResult
 import com.google.android.material.appbar.MaterialToolbar
-import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.google.android.material.navigation.NavigationView
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.crashlytics.ktx.crashlytics
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.ActivityMainBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OnboardingPagerActivity
+import com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Onboarding.OnboardingPagerActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.checkDate
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.firestoreToPreference
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.preferenceToFirestore
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updatePrefNames
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.getDate
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isWeekend
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getLongPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.newUser
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFirestore
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.updateFirestoreAndPrefs
 import timber.log.Timber
 
-class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItemSelectedListener{
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var _rcSignIn = 96
     private var user: FirebaseUser? = null
@@ -54,7 +60,9 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     private lateinit var navHostFragment: NavHostFragment
     lateinit var binding: ActivityMainBinding
     var darkMode: Boolean = false
-
+    private val signInLauncher = registerForActivityResult(FirebaseAuthUIActivityResultContract()) { res ->
+        this.onSignInResult(res)
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         setTheme(R.style.AppTheme)
@@ -65,74 +73,95 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
             intArrayOf(android.R.attr.state_checked),
             intArrayOf(-android.R.attr.state_checked)
         )
-
+        binding = ActivityMainBinding.inflate(layoutInflater)
         val colorList: IntArray
         val toolbarColor: Int
-        darkMode = getBoolPref(name="darkMode", defaultValue=true)
-        if(!getBoolPref(name="updatedPref", defaultValue=false)) updatePrefNames()
+        if(getBoolPref("darkMode", defaultValue=true)){
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
+            toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackgroundDark)
+            colorList = intArrayOf(
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedEmphDark),
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedTextDark)
+            )
+            binding.navHostFragment.backgroundTintList = ColorStateList.valueOf(getColor(R.color.backg_night))
+        } else {
+            AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
+            toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackground)
+            colorList = intArrayOf(
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedOrange),
+                ContextCompat.getColor(this@MainActivity, R.color.unquenchedText)
+            )
+            binding.navHostFragment.backgroundTintList = ColorStateList.valueOf(getColor(R.color.backg))
+        }
+        val colorStateList = ColorStateList(stateList, colorList)
+        setContentView(binding.root)
+        navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
+        navController = navHostFragment.navController
+
+        val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
+        toolbar.setBackgroundColor(toolbarColor)
+        toolbar.title = getDate(option=0, fullMonth = true)
+        setSupportActionBar(findViewById(R.id.my_toolbar))
+        binding.bottomNav.setupWithNavController(navController)
+        binding.bottomNav.setBackgroundColor(toolbarColor)
+        binding.bottomNav.itemIconTintList = colorStateList
+        binding.bottomNav.itemTextColor = colorStateList
+        binding.translationSelector.isVisible = false
+        setupBottomNavigationBar()
+
         if(Firebase.auth.currentUser == null) {
             startFirebaseAuth()
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
             traceLog(file="MainActivity.kt", function="onCreate()", "has not completed onboarding")
             startActivity(Intent(this@MainActivity, OnboardingPagerActivity::class.java))
-        }else {
+        }else if (!getBoolPref(name="updatedPref", defaultValue=false)) {
+            updatePrefNames()
+        }else{
             traceLog(file="MainActivity.kt", function="onCreate()", "normal operation")
-            binding = ActivityMainBinding.inflate(layoutInflater)
-            setContentView(binding.root)
-            navHostFragment = supportFragmentManager.findFragmentById(R.id.nav_host_fragment) as NavHostFragment
-            navController = navHostFragment.navController
             Firebase.auth.currentUser
             if (Firebase.auth.currentUser != null) {
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                checkReadingDate()
-                                firestoreToPreference(it.result!!)
+                                if(it.result?.data == null){
+                                    newUser()
+                                }else {
+                                    val data = it.result!!.data!!
+                                    if ((data["lastUpdated"]) == null) {
+                                        data["lastUpdated"] = 0.toLong()
+                                    }
+                                    if ((data["lastUpdated"] as Long) > getLongPref("lastUpdated") && data["lastUpdated"] != 0) {
+                                        debugLog("firestore to preference - FOR SCIENCE")
+                                        firestoreToPreference(data)
+                                    } else {
+                                        debugLog("preference to firestore - FOR SCIENCE")
+                                        preferenceToFirestore()
+                                    }
+                                    if (data["updatedPreferences"] == null || !(data["updatedPreferences"] as Boolean)) {
+                                        updateFirestoreAndPrefs().addOnSuccessListener {
+                                            checkReadingDate()
+                                        }
+                                    } else {
+                                        checkReadingDate()
+                                    }
+                                }
                             } else {
-                                Firebase.crashlytics.log("Error getting user info")
-                                Firebase.crashlytics.recordException(it.exception?.cause!!)
-                                Firebase.crashlytics.setCustomKey("userId", Firebase.auth.currentUser?.uid!!)
+                                com.google.firebase.ktx.Firebase.crashlytics.log("Error getting user info")
+                                com.google.firebase.ktx.Firebase.crashlytics.recordException(it.exception?.cause!!)
+                                com.google.firebase.ktx.Firebase.crashlytics.setCustomKey("userId", com.google.firebase.ktx.Firebase.auth.currentUser?.uid!!)
                             }
+
                         }
             }
 
-            if (darkMode) {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_YES)
-                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackgroundDark)
-                colorList = intArrayOf(
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedEmphDark),
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedTextDark)
-                )
-            } else {
-                AppCompatDelegate.setDefaultNightMode(AppCompatDelegate.MODE_NIGHT_NO)
-                toolbarColor = ContextCompat.getColor(this@MainActivity, R.color.buttonBackground)
-                colorList = intArrayOf(
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedOrange),
-                        ContextCompat.getColor(this@MainActivity, R.color.unquenchedText)
-                )
-            }
-            val colorStateList = ColorStateList(stateList, colorList)
-            user = Firebase.auth.currentUser
-            val toolbar = findViewById<MaterialToolbar>(R.id.my_toolbar)
-            toolbar.setBackgroundColor(toolbarColor)
-            setSupportActionBar(findViewById(R.id.my_toolbar))
-            supportActionBar?.title = getDate(option = 0, fullMonth = true)
-            binding.bottomNav.setupWithNavController(navController)
-            binding.bottomNav.setBackgroundColor(toolbarColor)
-            binding.bottomNav.itemIconTintList = colorStateList
-            binding.bottomNav.itemTextColor = colorStateList
-
-                when (getStringPref(name = "planSystem", defaultValue = "pgh")) {
-                    "mcheyne" -> navController.navigate(R.id.navigation_home_mcheyne)
-                }
-                binding.translationSelector.isVisible = false
-                setupBottomNavigationBar()
-            }
+        }
     }
-
     override fun onResume() {
         super.onResume()
         traceLog(file="MainActivity.kt", function="onResume()")
+        if (Firebase.auth.currentUser != null && getBoolPref("hasCompletedOnboarding")) {
+            checkReadingDate()
+        }
     }
 
     override fun onPause() {
@@ -152,25 +181,24 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
         traceLog(file="MainActivity.kt", function="onStop()")
     }
 
-    fun setupNavigation(navId:Int, bottomNavVisible:Boolean, displayHome1:Boolean, displayHome2:Boolean, translationVisible:Boolean){
+    private fun setupNavigation(navId:Int, displayHome1:Boolean, translationVisible:Boolean){
         traceLog(file="MainActivity.kt", function="setupNavigation()")
         binding.myToolbar.setNavigationOnClickListener {
             navController.navigate(navId)
-            binding.bottomNav.isVisible = bottomNavVisible
+            binding.bottomNav.isVisible = true
             supportActionBar?.setDisplayHomeAsUpEnabled(displayHome1)
         }
         binding.translationSelector.isVisible = translationVisible
-        supportActionBar?.setDisplayHomeAsUpEnabled(displayHome2)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
     }
     private fun setupBottomNavigationBar() {
         traceLog(file="MainActivity.kt", function="setupBottomNavigationBar()")
         switchEnabled(current="home")
         navController.addOnDestinationChangedListener{ _, destination, _ ->
-            val planSystem = getStringPref(name="planSystem", defaultValue="pgh")
-            val homeId = if (planSystem == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
+            val homeId = R.id.navigation_home
             when (destination.id) {
                 R.id.navigation_scripture ->{
-                    setupNavigation(homeId, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = true)
+                    setupNavigation(homeId, displayHome1 = false, translationVisible = true)
                     if (getStringPref(name="bibleVersion", defaultValue="NIV") == "NASB"){
                         setStringPref(name="bibleVersion", value="NASB20", updateFS=true)
                     }
@@ -185,34 +213,7 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     }
                 }
                 R.id.navigation_plan_settings ->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
-                }
-                R.id.navigation_bible_stats_main ->{
-                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
-                    supportActionBar?.title = "Bible Statistics"
-                }
-                R.id.navigation_bible_testament_stats ->{
-                    setupNavigation(R.id.navigation_bible_stats_main, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
-                }
-                R.id.navigation_book_stats->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.popBackStack()
-                        binding.bottomNav.isVisible = true
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
-                }
-                R.id.navigation_bible_reset_menu->{
-                    setupNavigation(R.id.navigation_stats, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
-                    supportActionBar?.title = "Reset Bible Stats"
-                }
-                R.id.navigation_books_reset_menu->{
-                    binding.myToolbar.setNavigationOnClickListener{
-                        navController.popBackStack()
-                        binding.bottomNav.isVisible = true
-                    }
-                    binding.translationSelector.isVisible = false
-                    supportActionBar?.setDisplayHomeAsUpEnabled(true)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                 }
                 R.id.navigation_plan_type->{
                     binding.myToolbar.setNavigationOnClickListener{
@@ -235,54 +236,40 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
                     supportActionBar?.setDisplayHomeAsUpEnabled(true)
                 }
                 R.id.navigation_notifications->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                 }
                 R.id.navigation_overrides->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title="Overrides"
                 }
                 R.id.navigation_manual->{
-                    setupNavigation(R.id.navigation_overrides, bottomNavVisible = true, displayHome1 = true, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_overrides, displayHome1 = true, translationVisible = false)
                     supportActionBar?.title="Manual Override"
                 }
                 R.id.navigation_manual_numerical->{
-                    setupNavigation(R.id.navigation_overrides, bottomNavVisible = true, displayHome1 = true, displayHome2 =true, translationVisible = false)
+                    setupNavigation(R.id.navigation_overrides, displayHome1 = true, translationVisible = false)
                     supportActionBar?.title="Manual Override"
                 }
                 R.id.navigation_information->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                 }
                 R.id.navigation_account_settings->{
-                    setupNavigation(R.id.navigation_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Account Settings"
                 }
                 R.id.navigation_update_email->{
-                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_account_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Update Email"
                 }
                 R.id.navigation_update_password->{
-                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_account_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Update Password"
                 }
                 R.id.navigation_confirm_delete->{
-                    setupNavigation(R.id.navigation_account_settings, bottomNavVisible = true, displayHome1 = false, displayHome2 = true, translationVisible = false)
+                    setupNavigation(R.id.navigation_account_settings, displayHome1 = false, translationVisible = false)
                     supportActionBar?.title = "Delete Account"
                 }
                 R.id.navigation_home -> {
-                    if(planSystem == "mcheyne"){
-                        navController.navigate(R.id.navigation_home_mcheyne)
-                    }
-                    switchEnabled(current="home")
-                    when(darkMode){
-                        true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
-                        false->binding.navHostFragment.setBackgroundColor(Color.parseColor("#FFFFFF"))
-                    }
-                    supportActionBar?.title = getDate(option=0, fullMonth=true)
-                    supportActionBar?.show()
-                    supportActionBar?.setDisplayHomeAsUpEnabled(false)
-                    binding.translationSelector.isVisible = false
-                }
-                R.id.navigation_home_mcheyne -> {
                     switchEnabled(current="home")
                     when(darkMode){
                         true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
@@ -311,17 +298,12 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         traceLog(file="MainActivity.kt", function="onNavigationItemSelected()")
-        val homeId = when(getStringPref(name="planSystem", defaultValue="pgh")){
-            "pgh"->R.id.navigation_home
-            "mcheyne"->R.id.navigation_home_mcheyne
-            else->R.id.navigation_home
-        }
         val navControl = findNavController(this, R.id.nav_host_fragment)
         when(item.itemId){
             R.id.navigation_home ->{
                 supportActionBar?.title = getDate(option=0, fullMonth=true)
                 switchEnabled(current="home")
-                navControl.navigate(homeId)
+                navControl.navigate(R.id.navigation_home)
                 supportActionBar?.setDisplayHomeAsUpEnabled(false)
             }
             R.id.navigation_stats ->{
@@ -340,84 +322,135 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
     private fun checkReadingDate() {
         traceLog(file="MainActivity.kt", function="checkReadingDate()")
+        debugLog("checkreadingdate - FOR SCIENCE")
         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
-                .addOnSuccessListener {
-                    val currentData = it.data
-                    val dateChecked = extractStringPref(currentData, "dateChecked")
-                    val listsDone = extractIntPref(currentData, "listsDone")
-                    val mcheyneListsDone = extractIntPref(currentData, "mcheyneListsDone")
+            .addOnCompleteListener {
+                if (it.isSuccessful) {
+                    if (it.result == null) {
+                        newUser()
+                    } else {
+                        val currentData = it.result!!.data!!
+                        if (!checkDate(
+                                extractStringPref(currentData, "dateReset"),
+                                "current",
+                                false
+                            )
+                        ) {
+                            val dateChecked = extractStringPref(currentData, "dateChecked")
+                            val listsDone = extractIntPref(currentData, "pghDone")
+                            val mcheyneListsDone = extractIntPref(currentData, "mcheyneDone")
+                            debugLog("This is the date checked $dateChecked")
+                            if (!checkDate(dateChecked, "current", false)) {
+                                val allowPartial: Boolean =
+                                    extractBoolPref(currentData, "allowPartial")
+                                val planType: String =
+                                    extractStringPref(currentData, "planType", "horner")
+                                var pghDone = 0
+                                var mcheyneDone = 0
+                                val holdPlan: Boolean = extractBoolPref(currentData, "holdPlan")
 
-                    if (!checkDate(dateChecked, "current", false) && (listsDone != 0 || mcheyneListsDone != 0)) {
-                        val data: MutableMap<String, Any> = mutableMapOf()
-                        val allowPartial: Boolean         = extractBoolPref(currentData, "allowPartial")
-                        val planType: String              = extractStringPref(currentData, "planType", "horner")
-                        var pghDone: Int                  = 0
-                        var mcheyneDone: Int              = 0
-
-                        val mcheyneDoneAlready: Int       = extractIntPref(currentData, "mcheyneListsDone")
-                        val holdPlan: Boolean             = extractBoolPref(currentData, "holdPlan")
-
-                        debugLog(message="holdPlan = $holdPlan pghDoneAlready= $listsDone")
-
-                        if ((holdPlan && listsDone == 10) || !holdPlan) {
-                            for (i in 1..10) {
-                                if (extractIntPref(currentData, "list${i}Done") == 1) {
-                                    pghDone += 1
-                                    if (planType == "horner") data["list$i"] = extractIntPref(currentData, "list$i") + 1
-                                    data["list${i}Done"] = setIntPref(name="list${i}Done", value=0)
-                                    data["list${i}DoneDaily"] = setIntPref(name="list${i}DoneDaily", value=0)
+                                if ((holdPlan && listsDone == 10) || !holdPlan) {
+                                    for (i in 1..10) {
+                                        if (extractBoolPref(currentData, "pgh${i}Done")) {
+                                            pghDone += 1
+                                            if (planType == "horner") currentData["pgh${i}Index"] =
+                                                setIntPref(
+                                                    "pgh${i}Index",
+                                                    extractIntPref(currentData, "pgh${i}Index") + 1
+                                                )
+                                        }
+                                        currentData["pgh${i}Done"] =
+                                            setBoolPref(name = "pgh${i}Done", value = false)
+                                        currentData["pgh${i}DoneDaily"] =
+                                            setBoolPref(name = "pgh${i}DoneDaily", value = false)
+                                    }
+                                    currentData["pghDone"] = setIntPref(name = "pghDone", value = 0)
                                 }
-                            }
-                            data["listsDone"] = setIntPref(name="listsDone", value=0)
-                        }
-                        if((holdPlan && mcheyneDoneAlready == 4) || !holdPlan) {
-                            for (i in 1..4) {
-                                if (extractIntPref(currentData, "mcheyneList${i}Done") == 1) {
-                                    mcheyneDone += 1
-                                    if (planType == "horner") data["mcheyneList${i}"] = extractIntPref(currentData, "mcheyneList$i") + 1
-                                    data["mcheyneList${i}Done"] = 0
-                                    data["mcheyneList${i}DoneDaily"] = 0
+                                if ((holdPlan && mcheyneListsDone == 4) || !holdPlan) {
+                                    for (i in 1..4) {
+                                        if (extractBoolPref(currentData, "mcheyne${i}Done")) {
+                                            mcheyneDone += 1
+                                            if (planType == "horner") currentData["mcheyne${i}Index"] =
+                                                setIntPref(
+                                                    "mcheyne${i}Index",
+                                                    extractIntPref(
+                                                        currentData,
+                                                        "mcheyne${i}Index"
+                                                    ) + 1
+                                                )
+                                        }
+                                        currentData["mcheyne${i}Done"] =
+                                            setBoolPref(name = "mcheyne${i}Done", value = false)
+                                        currentData["mcheyne${i}DoneDaily"] =
+                                            setBoolPref(
+                                                name = "mcheyne${i}DoneDaily",
+                                                value = false
+                                            )
+                                    }
+                                    currentData["mcheyneDone"] = setIntPref("mcheyneDone", 0)
                                 }
-                            }
-                            data["mcheyneListsDone"] = 0
-                        }
-                        if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
-                            data["currentDayIndex"] = extractIntPref(currentData, "currentDayIndex") + 1
-                        }
-                        if (planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)) {
-                            data["mcheyneCurrentDayIndex"] = extractIntPref(currentData, "mcheyneCurrentDayIndex") + 1
-                        }
-                        if ((pghDone == 10 || (allowPartial && pghDone > 0)) || (mcheyneDone == 4 || (allowPartial && mcheyneDone > 0))) {
-                            data["currentStreak"] = extractIntPref(currentData, "currentStreak") + 1
-                            if (extractIntPref(currentData, "currentStreak") > extractIntPref(currentData, "maxStreak")) {
-                                data["maxStreak"] = extractIntPref(currentData, "currentStreak")
-                            }
-                        }
-                        if (pghDone == 0 && mcheyneDone == 0 && !extractBoolPref(currentData, "vacationMode")) {
-                            if (checkDate(dateChecked, "yesterday", false)) {
-                                data["isGrace"] = true
-                                data["graceTime"] = 0
-                                data["holdStreak"] = extractIntPref(currentData, "currentStreak")
+                                if (planType == "numerical" && ((allowPartial && pghDone > 0) || pghDone == 10)) {
+                                    currentData["pghIndex"] =
+                                        setIntPref(
+                                            "pghIndex",
+                                            extractIntPref(currentData, "pghIndex") + 1
+                                        )
+                                }
+                                if (planType == "numerical" && ((allowPartial && mcheyneDone > 0) || mcheyneDone == 4)) {
+                                    currentData["mcheyneIndex"] =
+                                        setIntPref(
+                                            "mcheyneIndex",
+                                            extractIntPref(currentData, "mcheyneIndex") + 1
+                                        )
+                                }
+                                if (pghDone == 0 && mcheyneDone == 0 && (!extractBoolPref(
+                                        currentData,
+                                        "vacationMode"
+                                    ) || !(extractBoolPref(
+                                        currentData,
+                                        "weekendMode"
+                                    ) && isWeekend()))
+                                ) {
+                                    if (!checkDate(dateChecked, "two", false)) {
+                                        if (!extractBoolPref(currentData, "isGrace")) {
+                                            currentData["isGrace"] = setBoolPref("isGrace", true)
+                                            currentData["holdStreak"] =
+                                                extractIntPref(currentData, "currentStreak")
+                                        } else {
+                                            currentData["graceTime"] = 1
+                                            currentData["isGrace"] = setBoolPref("isGrace", false)
+                                            currentData["holdStreak"] = setIntPref("holdStreak", 0)
+                                        }
+                                    }
+                                    currentData["currentStreak"] = 0
+                                    debugLog("The current streak has been reset")
+                                }
+                                currentData["dailyStreak"] = 0
+                                currentData["dateReset"] =
+                                    setStringPref("dateReset", getDate(0, false))
+                                updateFirestore(currentData)
+                                    .addOnSuccessListener {
+                                        navController.navigate(R.id.navigation_home)
+                                        debugLog("updated firestore data accurately")
+                                    }
+                                    .addOnFailureListener { error ->
+                                        Toast.makeText(
+                                            this@MainActivity,
+                                            "Error updating lists",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                        debugLog("Error updating lists $error")
+                                    }
                             } else {
-                                data["graceTime"] = 0
-                                data["isGrace"] = false
-                                data["holdStreak"] = 0
+                                navController.navigate(R.id.navigation_home)
                             }
-                            data["currentStreak"] = 0
+                        } else {
+                            navController.navigate(R.id.navigation_home)
                         }
-                        val homeID = if(extractStringPref(currentData, "planSystem")== "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
-                        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
-                                .addOnSuccessListener {
-                                    navController.navigate(homeID)
-                                }
-                                .addOnFailureListener {
-                                    Toast.makeText(this@MainActivity, "Error updating lists", Toast.LENGTH_LONG).show()
-                                }
                     }
                 }
-            .addOnFailureListener {
-                debugLog(message="Firebase failed for this reason ${it}")
             }
+
     }
 
     private fun switchEnabled(current: String){
@@ -452,66 +485,70 @@ class MainActivity : AppCompatActivity(),  BottomNavigationView.OnNavigationItem
     }
     private fun startFirebaseAuth(){
         traceLog(file="MainActivity.kt", function="onActivityResult()")
+
         val providers = arrayListOf(
             AuthUI.IdpConfig.EmailBuilder().setRequireName(false).build(),
             AuthUI.IdpConfig.GoogleBuilder().build()
         )
-        startActivityForResult(
-            AuthUI.getInstance()
-                .createSignInIntentBuilder()
-                .setLogo(R.drawable.logo2)
-                .setTheme(R.style.AppTheme)
-                .setIsSmartLockEnabled(false)
-                .setAvailableProviders(providers)
-                .build(), _rcSignIn)
+        val signInIntent = AuthUI.getInstance()
+            .createSignInIntentBuilder()
+            .setLogo(R.drawable.logo2)
+            .setTheme(R.style.AppTheme)
+            .setIsSmartLockEnabled(false)
+            .setAvailableProviders(providers)
+            .build()
+        signInLauncher.launch(signInIntent)
     }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        traceLog(file="MainActivity.kt", function="onActivityResult()")
-        super.onActivityResult(requestCode, resultCode, data)
-        Toast.makeText(this@MainActivity, "Loading...", Toast.LENGTH_LONG).show()
-        if(requestCode == _rcSignIn){
-            val response = IdpResponse.fromResultIntent(data)
-            if(resultCode == Activity.RESULT_OK){
-                val user = Firebase.auth.currentUser
-                Toast.makeText(this@MainActivity, "Signed In!", Toast.LENGTH_LONG).show()
-                val db = Firebase.firestore
-                db.collection("main").document(user!!.uid).get()
-                        .addOnSuccessListener { doc ->
-                            if (doc["list1"] != null) {
-                                firestoreToPreference(doc)
-                                finish()
-                                val i = Intent(this@MainActivity, MainActivity::class.java)
-                                startActivity(i)
-                            } else {
-                                preferenceToFirestore()
-                                finish()
-                                val i = Intent(this@MainActivity, MainActivity::class.java)
-                                startActivity(i)
-                            }
+    private fun onSignInResult(result:FirebaseAuthUIAuthenticationResult){
+        val response = result.idpResponse
+        if(result.resultCode == RESULT_OK){
+            val user = Firebase.auth.currentUser
+            Toast.makeText(this@MainActivity, "Signed In!", Toast.LENGTH_LONG).show()
+            val db = Firebase.firestore
+            db.collection("main").document(user!!.uid).get()
+                .addOnSuccessListener { doc ->
+                    if(doc.data == null){
+                        newUser().addOnSuccessListener {
+                            finish()
+                            val i = Intent(this@MainActivity, MainActivity::class.java)
+                            startActivity(i)
                         }
-            }else{
-                when{
-                    response == null -> {
-                        Timber.d("onActivityResult(): sign_in_cancelled")
-                        Toast.makeText(this@MainActivity, "Sign in was cancelled", Toast.LENGTH_LONG).show()
                     }
-                    response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
-                        Timber.d("onActivityResult(): no_internet_connection")
-                        Toast.makeText(this@MainActivity, "No internet connection", Toast.LENGTH_LONG).show()
+                    else if(Firebase.auth.currentUser!!.uid == getStringPref("uid") && (doc.data!!["lastUpdated"] == null || (doc.data!!["lastUpdated"] as Long) < getLongPref("lastUpdated"))){
+                        preferenceToFirestore().addOnSuccessListener {
+                            finish()
+                            val i = Intent(this@MainActivity, MainActivity::class.java)
+                            startActivity(i)
+                        }
+                    }else if(doc.data!!["lastUpdated"] != null && doc.data!!["lastUpdated"] as Long > getLongPref("lastUpdated")){
+                        firestoreToPreference(doc.data!!)
+                        setStringPref("uid", user.uid)
+                        finish()
+                        val i = Intent(this@MainActivity, MainActivity::class.java)
+                        startActivity(i)
                     }
-                    response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
-                        Timber.e("onActivityResult(): unknown_error")
-                        Toast.makeText(this@MainActivity, "An unknown error occured", Toast.LENGTH_LONG).show()
-                    }
-                    else ->{
-                        Timber.e("onActivityResult(): unknown_sign_in_response")
-                        Toast.makeText(this@MainActivity, "Unknown sign in response", Toast.LENGTH_LONG).show()
-                    }
-
                 }
-                startFirebaseAuth()
+        }else{
+            when{
+                response == null -> {
+                    Timber.d("onActivityResult(): sign_in_cancelled")
+                    Toast.makeText(this@MainActivity, "Sign in was cancelled", Toast.LENGTH_LONG).show()
+                }
+                response.error?.errorCode == ErrorCodes.NO_NETWORK -> {
+                    Timber.d("onActivityResult(): no_internet_connection")
+                    Toast.makeText(this@MainActivity, "No internet connection", Toast.LENGTH_LONG).show()
+                }
+                response.error?.errorCode == ErrorCodes.UNKNOWN_ERROR -> {
+                    Timber.e("onActivityResult(): unknown_error")
+                    Toast.makeText(this@MainActivity, "An unknown error occured", Toast.LENGTH_LONG).show()
+                }
+                else ->{
+                    Timber.e("onActivityResult(): unknown_sign_in_response")
+                    Toast.makeText(this@MainActivity, "Unknown sign in response", Toast.LENGTH_LONG).show()
+                }
+
             }
+            startFirebaseAuth()
         }
     }
 }

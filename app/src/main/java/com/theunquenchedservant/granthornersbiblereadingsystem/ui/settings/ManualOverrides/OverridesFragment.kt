@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualOverrides
 
 import android.app.AlertDialog
 import android.os.Bundle
@@ -68,7 +68,7 @@ class OverridesFragment:PreferenceFragmentCompat(){
                     }
                     Firebase.firestore.collection("main").document(Firebase.auth.currentUser?.uid!!).update(updateValues)
                             .addOnSuccessListener {
-                                val homeId = if(getStringPref("planSystem") == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
+                                val homeId = R.id.navigation_home
                                 mainActivity.navController.navigate(homeId)
                             }
                             .addOnFailureListener {
@@ -109,7 +109,7 @@ class OverridesFragment:PreferenceFragmentCompat(){
         dailyReset!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             resetDaily(requireContext()).addOnSuccessListener {
                 Toast.makeText(mainActivity.applicationContext, "Forced Daily Reset", Toast.LENGTH_LONG).show()
-                val homeId = if(getStringPref("planSystem") == "pgh") R.id.navigation_home else R.id.navigation_home_mcheyne
+                val homeId = R.id.navigation_home
                 mainActivity.navController.navigate(homeId)
             }
             false

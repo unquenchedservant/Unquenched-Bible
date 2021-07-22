@@ -11,7 +11,7 @@
         <item>NASB20</item>
 
     </string-array>
-    <string-array name="listNames">
+    <string-array name="pghListNames">
         <item>----</item>
         <item>The Gospels</item>
         <item>The Pentateuch</item>
@@ -27,20 +27,20 @@
     <string-array name="noneBook">
         <item>----</item>
     </string-array>
-    <string-array name="list1Book">
+    <string-array name="pgh_list1Book">
         <item>Matthew</item>
         <item>Mark</item>
         <item>Luke</item>
         <item>John</item>
     </string-array>
-    <string-array name="list2Book">
+    <string-array name="pgh_list2Book">
         <item>Genesis</item>
         <item>Exodus</item>
         <item>Leviticus</item>
         <item>Numbers</item>
         <item>Deuteronomy</item>
     </string-array>
-    <string-array name="list3Book">
+    <string-array name="pgh_list3Book">
         <item>Romans</item>
         <item>1 Corinthians</item>
         <item>2 Corinthians</item>
@@ -50,7 +50,7 @@
         <item>Colossians</item>
         <item>Hebrews</item>
     </string-array>
-    <string-array name="list4Book">
+    <string-array name="pgh_list4Book">
         <item>1 Thessalonians</item>
         <item>2 Thessalonians</item>
         <item>1 Timothy</item>
@@ -66,18 +66,18 @@
         <item>Jude</item>
         <item>Revelation</item>
     </string-array>
-    <string-array name="list5Book">
+    <string-array name="pgh_list5Book">
         <item>Job</item>
         <item>Ecclesiastes</item>
         <item>Song of Solomon</item>
     </string-array>
-    <string-array name="list6Book">
+    <string-array name="pgh_list6Book">
         <item>Psalms</item>
     </string-array>
-    <string-array name="list7Book">
+    <string-array name="pgh_list7Book">
         <item>Proverbs</item>
     </string-array>
-    <string-array name="list8Book">
+    <string-array name="pgh_list8Book">
         <item>Joshua</item>
         <item>Judges</item>
         <item>Ruth</item>
@@ -91,7 +91,7 @@
         <item>Nehemiah</item>
         <item>Esther</item>
     </string-array>
-    <string-array name="list9Book">
+    <string-array name="pgh_list9Book">
         <item>Isaiah</item>
         <item>Jeremiah</item>
         <item>Lamentations</item>
@@ -110,10 +110,10 @@
         <item>Zechariah</item>
         <item>Malachi</item>
     </string-array>
-    <string-array name="list10Book">
+    <string-array name="pgh_list10Book">
         <item>Acts</item>
     </string-array>
-    <string-array name="list_1">
+    <string-array name="pgh_list1">
         <item>Matthew 1</item>
         <item>Matthew 2</item>
         <item>Matthew 3</item>
@@ -204,98 +204,7 @@
         <item>John 20</item>
         <item>John 21</item>
     </string-array>
-    <string-array name="list_1_notif">
-        <item>Mat. 1</item>
-        <item>Mat. 2</item>
-        <item>Mat. 3</item>
-        <item>Mat. 4</item>
-        <item>Mat. 5</item>
-        <item>Mat. 6</item>
-        <item>Mat. 7</item>
-        <item>Mat. 8</item>
-        <item>Mat. 9</item>
-        <item>Mat. 10</item>
-        <item>Mat. 11</item>
-        <item>Mat. 12</item>
-        <item>Mat. 13</item>
-        <item>Mat. 14</item>
-        <item>Mat. 15</item>
-        <item>Mat. 16</item>
-        <item>Mat. 17</item>
-        <item>Mat. 18</item>
-        <item>Mat. 19</item>
-        <item>Mat. 20</item>
-        <item>Mat. 21</item>
-        <item>Mat. 22</item>
-        <item>Mat. 23</item>
-        <item>Mat. 24</item>
-        <item>Mat. 25</item>
-        <item>Mat. 26</item>
-        <item>Mat. 27</item>
-        <item>Mat. 28</item>
-        <item>Mark 1</item>
-        <item>Mark 2</item>
-        <item>Mark 3</item>
-        <item>Mark 4</item>
-        <item>Mark 5</item>
-        <item>Mark 6</item>
-        <item>Mark 7</item>
-        <item>Mark 8</item>
-        <item>Mark 9</item>
-        <item>Mark 10</item>
-        <item>Mark 11</item>
-        <item>Mark 12</item>
-        <item>Mark 13</item>
-        <item>Mark 14</item>
-        <item>Mark 15</item>
-        <item>Mark 16</item>
-        <item>Luke 1</item>
-        <item>Luke 2</item>
-        <item>Luke 3</item>
-        <item>Luke 4</item>
-        <item>Luke 5</item>
-        <item>Luke 6</item>
-        <item>Luke 7</item>
-        <item>Luke 8</item>
-        <item>Luke 9</item>
-        <item>Luke 10</item>
-        <item>Luke 11</item>
-        <item>Luke 12</item>
-        <item>Luke 13</item>
-        <item>Luke 14</item>
-        <item>Luke 15</item>
-        <item>Luke 16</item>
-        <item>Luke 17</item>
-        <item>Luke 18</item>
-        <item>Luke 19</item>
-        <item>Luke 20</item>
-        <item>Luke 21</item>
-        <item>Luke 22</item>
-        <item>Luke 23</item>
-        <item>Luke 24</item>
-        <item>John 1</item>
-        <item>John 2</item>
-        <item>John 3</item>
-        <item>John 4</item>
-        <item>John 5</item>
-        <item>John 6</item>
-        <item>John 7</item>
-        <item>John 8</item>
-        <item>John 9</item>
-        <item>John 10</item>
-        <item>John 11</item>
-        <item>John 12</item>
-        <item>John 13</item>
-        <item>John 14</item>
-        <item>John 15</item>
-        <item>John 16</item>
-        <item>John 17</item>
-        <item>John 18</item>
-        <item>John 19</item>
-        <item>John 20</item>
-        <item>John 21</item>
-    </string-array>
-    <string-array name="list_2">
+    <string-array name="pgh_list2">
         <item>Genesis 1</item>
         <item>Genesis 2</item>
         <item>Genesis 3</item>
@@ -484,196 +393,7 @@
         <item>Deuteronomy 33</item>
         <item>Deuteronomy 34</item>
     </string-array>
-    <string-array name="list_2_notif">
-        <item>Gen. 1</item>
-        <item>Gen. 2</item>
-        <item>Gen. 3</item>
-        <item>Gen. 4</item>
-        <item>Gen. 5</item>
-        <item>Gen. 6</item>
-        <item>Gen. 7</item>
-        <item>Gen. 8</item>
-        <item>Gen. 9</item>
-        <item>Gen. 10</item>
-        <item>Gen. 11</item>
-        <item>Gen. 12</item>
-        <item>Gen. 13</item>
-        <item>Gen. 14</item>
-        <item>Gen. 15</item>
-        <item>Gen. 16</item>
-        <item>Gen. 17</item>
-        <item>Gen. 18</item>
-        <item>Gen. 19</item>
-        <item>Gen. 20</item>
-        <item>Gen. 21</item>
-        <item>Gen. 22</item>
-        <item>Gen. 23</item>
-        <item>Gen. 24</item>
-        <item>Gen. 25</item>
-        <item>Gen. 26</item>
-        <item>Gen. 27</item>
-        <item>Gen. 28</item>
-        <item>Gen. 29</item>
-        <item>Gen. 30</item>
-        <item>Gen. 31</item>
-        <item>Gen. 32</item>
-        <item>Gen. 33</item>
-        <item>Gen. 34</item>
-        <item>Gen. 35</item>
-        <item>Gen. 36</item>
-        <item>Gen. 37</item>
-        <item>Gen. 38</item>
-        <item>Gen. 39</item>
-        <item>Gen. 40</item>
-        <item>Gen. 41</item>
-        <item>Gen. 42</item>
-        <item>Gen. 43</item>
-        <item>Gen. 44</item>
-        <item>Gen. 45</item>
-        <item>Gen. 46</item>
-        <item>Gen. 47</item>
-        <item>Gen. 48</item>
-        <item>Gen. 49</item>
-        <item>Gen. 50</item>
-        <item>Exo. 1</item>
-        <item>Exo. 2</item>
-        <item>Exo. 3</item>
-        <item>Exo. 4</item>
-        <item>Exo. 5</item>
-        <item>Exo. 6</item>
-        <item>Exo. 7</item>
-        <item>Exo. 8</item>
-        <item>Exo. 9</item>
-        <item>Exo. 10</item>
-        <item>Exo. 11</item>
-        <item>Exo. 12</item>
-        <item>Exo. 13</item>
-        <item>Exo. 14</item>
-        <item>Exo. 15</item>
-        <item>Exo. 16</item>
-        <item>Exo. 17</item>
-        <item>Exo. 18</item>
-        <item>Exo. 19</item>
-        <item>Exo. 20</item>
-        <item>Exo. 21</item>
-        <item>Exo. 22</item>
-        <item>Exo. 23</item>
-        <item>Exo. 24</item>
-        <item>Exo. 25</item>
-        <item>Exo. 26</item>
-        <item>Exo. 27</item>
-        <item>Exo. 28</item>
-        <item>Exo. 29</item>
-        <item>Exo. 30</item>
-        <item>Exo. 31</item>
-        <item>Exo. 32</item>
-        <item>Exo. 33</item>
-        <item>Exo. 34</item>
-        <item>Exo. 35</item>
-        <item>Exo. 36</item>
-        <item>Exo. 37</item>
-        <item>Exo. 38</item>
-        <item>Exo. 39</item>
-        <item>Exo. 40</item>
-        <item>Lev. 1</item>
-        <item>Lev. 2</item>
-        <item>Lev. 3</item>
-        <item>Lev. 4</item>
-        <item>Lev. 5</item>
-        <item>Lev. 6</item>
-        <item>Lev. 7</item>
-        <item>Lev. 8</item>
-        <item>Lev. 9</item>
-        <item>Lev. 10</item>
-        <item>Lev. 11</item>
-        <item>Lev. 12</item>
-        <item>Lev. 13</item>
-        <item>Lev. 14</item>
-        <item>Lev. 15</item>
-        <item>Lev. 16</item>
-        <item>Lev. 17</item>
-        <item>Lev. 18</item>
-        <item>Lev. 19</item>
-        <item>Lev. 20</item>
-        <item>Lev. 21</item>
-        <item>Lev. 22</item>
-        <item>Lev. 23</item>
-        <item>Lev. 24</item>
-        <item>Lev. 25</item>
-        <item>Lev. 26</item>
-        <item>Lev. 27</item>
-        <item>Num. 1</item>
-        <item>Num. 2</item>
-        <item>Num. 3</item>
-        <item>Num. 4</item>
-        <item>Num. 5</item>
-        <item>Num. 6</item>
-        <item>Num. 7</item>
-        <item>Num. 8</item>
-        <item>Num. 9</item>
-        <item>Num. 10</item>
-        <item>Num. 11</item>
-        <item>Num. 12</item>
-        <item>Num. 13</item>
-        <item>Num. 14</item>
-        <item>Num. 15</item>
-        <item>Num. 16</item>
-        <item>Num. 17</item>
-        <item>Num. 18</item>
-        <item>Num. 19</item>
-        <item>Num. 20</item>
-        <item>Num. 21</item>
-        <item>Num. 22</item>
-        <item>Num. 23</item>
-        <item>Num. 24</item>
-        <item>Num. 25</item>
-        <item>Num. 26</item>
-        <item>Num. 27</item>
-        <item>Num. 28</item>
-        <item>Num. 29</item>
-        <item>Num. 30</item>
-        <item>Num. 31</item>
-        <item>Num. 32</item>
-        <item>Num. 33</item>
-        <item>Num. 34</item>
-        <item>Num. 35</item>
-        <item>Num. 36</item>
-        <item>Deu. 1</item>
-        <item>Deu. 2</item>
-        <item>Deu. 3</item>
-        <item>Deu. 4</item>
-        <item>Deu. 5</item>
-        <item>Deu. 6</item>
-        <item>Deu. 7</item>
-        <item>Deu. 8</item>
-        <item>Deu. 9</item>
-        <item>Deu. 10</item>
-        <item>Deu. 11</item>
-        <item>Deu. 12</item>
-        <item>Deu. 13</item>
-        <item>Deu. 14</item>
-        <item>Deu. 15</item>
-        <item>Deu. 16</item>
-        <item>Deu. 17</item>
-        <item>Deu. 18</item>
-        <item>Deu. 19</item>
-        <item>Deu. 20</item>
-        <item>Deu. 21</item>
-        <item>Deu. 22</item>
-        <item>Deu. 23</item>
-        <item>Deu. 24</item>
-        <item>Deu. 25</item>
-        <item>Deu. 26</item>
-        <item>Deu. 27</item>
-        <item>Deu. 28</item>
-        <item>Deu. 29</item>
-        <item>Deu. 30</item>
-        <item>Deu. 31</item>
-        <item>Deu. 32</item>
-        <item>Deu. 33</item>
-        <item>Deu. 34</item>
-    </string-array>
-    <string-array name="list_3">
+    <string-array name="pgh_list3">
         <item>Romans 1</item>
         <item>Romans 2</item>
         <item>Romans 3</item>
@@ -753,87 +473,7 @@
         <item>Hebrews 12</item>
         <item>Hebrews 13</item>
     </string-array>
-    <string-array name="list_3_notif">
-        <item>Rom. 1</item>
-        <item>Rom. 2</item>
-        <item>Rom. 3</item>
-        <item>Rom. 4</item>
-        <item>Rom. 5</item>
-        <item>Rom. 6</item>
-        <item>Rom. 7</item>
-        <item>Rom. 8</item>
-        <item>Rom. 9</item>
-        <item>Rom. 10</item>
-        <item>Rom. 11</item>
-        <item>Rom. 12</item>
-        <item>Rom. 13</item>
-        <item>Rom. 14</item>
-        <item>Rom. 15</item>
-        <item>Rom. 16</item>
-        <item>1Co. 1</item>
-        <item>1Co. 2</item>
-        <item>1Co. 3</item>
-        <item>1Co. 4</item>
-        <item>1Co. 5</item>
-        <item>1Co. 6</item>
-        <item>1Co. 7</item>
-        <item>1Co. 8</item>
-        <item>1Co. 9</item>
-        <item>1Co. 10</item>
-        <item>1Co. 11</item>
-        <item>1Co. 12</item>
-        <item>1Co. 13</item>
-        <item>1Co. 14</item>
-        <item>1Co. 15</item>
-        <item>1Co. 16</item>
-        <item>2Co. 1</item>
-        <item>2Co. 2</item>
-        <item>2Co. 3</item>
-        <item>2Co. 4</item>
-        <item>2Co. 5</item>
-        <item>2Co. 6</item>
-        <item>2Co. 7</item>
-        <item>2Co. 8</item>
-        <item>2Co. 9</item>
-        <item>2Co. 10</item>
-        <item>2Co. 11</item>
-        <item>2Co. 12</item>
-        <item>2Co. 13</item>
-        <item>Gal. 1</item>
-        <item>Gal. 2</item>
-        <item>Gal. 3</item>
-        <item>Gal. 4</item>
-        <item>Gal. 5</item>
-        <item>Gal. 6</item>
-        <item>Eph. 1</item>
-        <item>Eph. 2</item>
-        <item>Eph. 3</item>
-        <item>Eph. 4</item>
-        <item>Eph. 5</item>
-        <item>Eph. 6</item>
-        <item>Php. 1</item>
-        <item>Php. 2</item>
-        <item>Php. 3</item>
-        <item>Php. 4</item>
-        <item>Col. 1</item>
-        <item>Col. 2</item>
-        <item>Col. 3</item>
-        <item>Col. 4</item>
-        <item>Heb. 1</item>
-        <item>Heb. 2</item>
-        <item>Heb. 3</item>
-        <item>Heb. 4</item>
-        <item>Heb. 5</item>
-        <item>Heb. 6</item>
-        <item>Heb. 7</item>
-        <item>Heb. 8</item>
-        <item>Heb. 9</item>
-        <item>Heb. 10</item>
-        <item>Heb. 11</item>
-        <item>Heb. 12</item>
-        <item>Heb. 13</item>
-    </string-array>
-    <string-array name="list_4">
+    <string-array name="pgh_list4">
         <item>1 Thessalonians 1</item>
         <item>1 Thessalonians 2</item>
         <item>1 Thessalonians 3</item>
@@ -900,74 +540,7 @@
         <item>Revelation 21</item>
         <item>Revelation 22</item>
     </string-array>
-    <string-array name="list_4_notif">
-        <item>1Th. 1</item>
-        <item>1Th. 2</item>
-        <item>1Th. 3</item>
-        <item>1Th. 4</item>
-        <item>1Th. 5</item>
-        <item>2Th. 1</item>
-        <item>2Th. 2</item>
-        <item>2Th. 3</item>
-        <item>1Ti. 1</item>
-        <item>1Ti. 2</item>
-        <item>1Ti. 3</item>
-        <item>1Ti. 4</item>
-        <item>1Ti. 5</item>
-        <item>1Ti. 6</item>
-        <item>2Ti. 1</item>
-        <item>2Ti. 2</item>
-        <item>2Ti. 3</item>
-        <item>2Ti. 4</item>
-        <item>Titus 1</item>
-        <item>Titus 2</item>
-        <item>Titus 3</item>
-        <item>Phm.</item>
-        <item>Jms 1</item>
-        <item>Jms 2</item>
-        <item>Jms 3</item>
-        <item>Jms 4</item>
-        <item>Jms 5</item>
-        <item>1Pt. 1</item>
-        <item>1Pt. 2</item>
-        <item>1Pt. 3</item>
-        <item>1Pt. 4</item>
-        <item>1Pt. 5</item>
-        <item>2Pt. 1</item>
-        <item>2Pt. 2</item>
-        <item>2Pt. 3</item>
-        <item>1Jn. 1</item>
-        <item>1Jn. 2</item>
-        <item>1Jn. 3</item>
-        <item>1Jn. 4</item>
-        <item>1Jn. 5</item>
-        <item>2Jn.</item>
-        <item>3Jn.</item>
-        <item>Jude</item>
-        <item>Rev. 1</item>
-        <item>Rev. 2</item>
-        <item>Rev. 3</item>
-        <item>Rev. 4</item>
-        <item>Rev. 5</item>
-        <item>Rev. 6</item>
-        <item>Rev. 7</item>
-        <item>Rev. 8</item>
-        <item>Rev. 9</item>
-        <item>Rev. 10</item>
-        <item>Rev. 11</item>
-        <item>Rev. 12</item>
-        <item>Rev. 13</item>
-        <item>Rev. 14</item>
-        <item>Rev. 15</item>
-        <item>Rev. 16</item>
-        <item>Rev. 17</item>
-        <item>Rev. 18</item>
-        <item>Rev. 19</item>
-        <item>Rev. 20</item>
-        <item>Rev. 21</item>
-        <item>Rev. 22</item>
-    </string-array>
-    <string-array name="list_5">
+    <string-array name="pgh_list5">
     <item>Job 1</item>
     <item>Job 2</item>
     <item>Job 3</item>
@@ -1031,71 +604,7 @@
     <item>Song of Solomon 7</item>
     <item>Song of Solomon 8</item>
 </string-array>
-    <string-array name="list_5_notif">
-        <item>Job 1</item>
-        <item>Job 2</item>
-        <item>Job 3</item>
-        <item>Job 4</item>
-        <item>Job 5</item>
-        <item>Job 6</item>
-        <item>Job 7</item>
-        <item>Job 8</item>
-        <item>Job 9</item>
-        <item>Job 10</item>
-        <item>Job 11</item>
-        <item>Job 12</item>
-        <item>Job 13</item>
-        <item>Job 14</item>
-        <item>Job 15</item>
-        <item>Job 16</item>
-        <item>Job 17</item>
-        <item>Job 18</item>
-        <item>Job 19</item>
-        <item>Job 20</item>
-        <item>Job 21</item>
-        <item>Job 22</item>
-        <item>Job 23</item>
-        <item>Job 24</item>
-        <item>Job 25</item>
-        <item>Job 26</item>
-        <item>Job 27</item>
-        <item>Job 28</item>
-        <item>Job 29</item>
-        <item>Job 30</item>
-        <item>Job 31</item>
-        <item>Job 32</item>
-        <item>Job 33</item>
-        <item>Job 34</item>
-        <item>Job 35</item>
-        <item>Job 36</item>
-        <item>Job 37</item>
-        <item>Job 38</item>
-        <item>Job 39</item>
-        <item>Job 40</item>
-        <item>Job 41</item>
-        <item>Job 42</item>
-        <item>Ecc. 1</item>
-        <item>Ecc. 2</item>
-        <item>Ecc. 3</item>
-        <item>Ecc. 4</item>
-        <item>Ecc. 5</item>
-        <item>Ecc. 6</item>
-        <item>Ecc. 7</item>
-        <item>Ecc. 8</item>
-        <item>Ecc. 9</item>
-        <item>Ecc. 10</item>
-        <item>Ecc. 11</item>
-        <item>Ecc. 12</item>
-        <item>SoS. 1</item>
-        <item>SoS. 2</item>
-        <item>SoS. 3</item>
-        <item>SoS. 4</item>
-        <item>SoS. 5</item>
-        <item>SoS. 6</item>
-        <item>SoS. 7</item>
-        <item>SoS. 8</item>
-    </string-array>
-    <string-array name="list_6">
+    <string-array name="pgh_list6">
         <item>Psalms 1</item>
         <item>Psalms 2</item>
         <item>Psalms 3</item>
@@ -1247,159 +756,7 @@
         <item>Psalms 149</item>
         <item>Psalms 150</item>
     </string-array>
-    <string-array name="list_6_notif">
-        <item>Ps. 1</item>
-        <item>Ps. 2</item>
-        <item>Ps. 3</item>
-        <item>Ps. 4</item>
-        <item>Ps. 5</item>
-        <item>Ps. 6</item>
-        <item>Ps. 7</item>
-        <item>Ps. 8</item>
-        <item>Ps. 9</item>
-        <item>Ps. 10</item>
-        <item>Ps. 11</item>
-        <item>Ps. 12</item>
-        <item>Ps. 13</item>
-        <item>Ps. 14</item>
-        <item>Ps. 15</item>
-        <item>Ps. 16</item>
-        <item>Ps. 17</item>
-        <item>Ps. 18</item>
-        <item>Ps. 19</item>
-        <item>Ps. 20</item>
-        <item>Ps. 21</item>
-        <item>Ps. 22</item>
-        <item>Ps. 23</item>
-        <item>Ps. 24</item>
-        <item>Ps. 25</item>
-        <item>Ps. 26</item>
-        <item>Ps. 27</item>
-        <item>Ps. 28</item>
-        <item>Ps. 29</item>
-        <item>Ps. 30</item>
-        <item>Ps. 31</item>
-        <item>Ps. 32</item>
-        <item>Ps. 33</item>
-        <item>Ps. 34</item>
-        <item>Ps. 35</item>
-        <item>Ps. 36</item>
-        <item>Ps. 37</item>
-        <item>Ps. 38</item>
-        <item>Ps. 39</item>
-        <item>Ps. 40</item>
-        <item>Ps. 41</item>
-        <item>Ps. 42</item>
-        <item>Ps. 43</item>
-        <item>Ps. 44</item>
-        <item>Ps. 45</item>
-        <item>Ps. 46</item>
-        <item>Ps. 47</item>
-        <item>Ps. 48</item>
-        <item>Ps. 49</item>
-        <item>Ps. 50</item>
-        <item>Ps. 51</item>
-        <item>Ps. 52</item>
-        <item>Ps. 53</item>
-        <item>Ps. 54</item>
-        <item>Ps. 55</item>
-        <item>Ps. 56</item>
-        <item>Ps. 57</item>
-        <item>Ps. 58</item>
-        <item>Ps. 59</item>
-        <item>Ps. 60</item>
-        <item>Ps. 61</item>
-        <item>Ps. 62</item>
-        <item>Ps. 63</item>
-        <item>Ps. 64</item>
-        <item>Ps. 65</item>
-        <item>Ps. 66</item>
-        <item>Ps. 67</item>
-        <item>Ps. 68</item>
-        <item>Ps. 69</item>
-        <item>Ps. 70</item>
-        <item>Ps. 71</item>
-        <item>Ps. 72</item>
-        <item>Ps. 73</item>
-        <item>Ps. 74</item>
-        <item>Ps. 75</item>
-        <item>Ps. 76</item>
-        <item>Ps. 77</item>
-        <item>Ps. 78</item>
-        <item>Ps. 79</item>
-        <item>Ps. 80</item>
-        <item>Ps. 81</item>
-        <item>Ps. 82</item>
-        <item>Ps. 83</item>
-        <item>Ps. 84</item>
-        <item>Ps. 85</item>
-        <item>Ps. 86</item>
-        <item>Ps. 87</item>
-        <item>Ps. 88</item>
-        <item>Ps. 89</item>
-        <item>Ps. 90</item>
-        <item>Ps. 91</item>
-        <item>Ps. 92</item>
-        <item>Ps. 93</item>
-        <item>Ps. 94</item>
-        <item>Ps. 95</item>
-        <item>Ps. 96</item>
-        <item>Ps. 97</item>
-        <item>Ps. 98</item>
-        <item>Ps. 99</item>
-        <item>Ps. 100</item>
-        <item>Ps. 101</item>
-        <item>Ps. 102</item>
-        <item>Ps. 103</item>
-        <item>Ps. 104</item>
-        <item>Ps. 105</item>
-        <item>Ps. 106</item>
-        <item>Ps. 107</item>
-        <item>Ps. 108</item>
-        <item>Ps. 109</item>
-        <item>Ps. 110</item>
-        <item>Ps. 111</item>
-        <item>Ps. 112</item>
-        <item>Ps. 113</item>
-        <item>Ps. 114</item>
-        <item>Ps. 115</item>
-        <item>Ps. 116</item>
-        <item>Ps. 117</item>
-        <item>Ps. 118</item>
-        <item>Ps. 119</item>
-        <item>Ps. 120</item>
-        <item>Ps. 121</item>
-        <item>Ps. 122</item>
-        <item>Ps. 123</item>
-        <item>Ps. 124</item>
-        <item>Ps. 125</item>
-        <item>Ps. 126</item>
-        <item>Ps. 127</item>
-        <item>Ps. 128</item>
-        <item>Ps. 129</item>
-        <item>Ps. 130</item>
-        <item>Ps. 131</item>
-        <item>Ps. 132</item>
-        <item>Ps. 133</item>
-        <item>Ps. 134</item>
-        <item>Ps. 135</item>
-        <item>Ps. 136</item>
-        <item>Ps. 137</item>
-        <item>Ps. 138</item>
-        <item>Ps. 139</item>
-        <item>Ps. 140</item>
-        <item>Ps. 141</item>
-        <item>Ps. 142</item>
-        <item>Ps. 143</item>
-        <item>Ps. 144</item>
-        <item>Ps. 145</item>
-        <item>Ps. 146</item>
-        <item>Ps. 147</item>
-        <item>Ps. 148</item>
-        <item>Ps. 149</item>
-        <item>Ps. 150</item>
-    </string-array>
-    <string-array name="list_7">
+    <string-array name="pgh_list7">
         <item>Proverbs 1</item>
         <item>Proverbs 2</item>
         <item>Proverbs 3</item>
@@ -1432,40 +789,7 @@
         <item>Proverbs 30</item>
         <item>Proverbs 31</item>
     </string-array>
-    <string-array name="list_7_notif">
-        <item>Prv. 1</item>
-        <item>Prv. 2</item>
-        <item>Prv. 3</item>
-        <item>Prv. 4</item>
-        <item>Prv. 5</item>
-        <item>Prv. 6</item>
-        <item>Prv. 7</item>
-        <item>Prv. 8</item>
-        <item>Prv. 9</item>
-        <item>Prv. 10</item>
-        <item>Prv. 11</item>
-        <item>Prv. 12</item>
-        <item>Prv. 13</item>
-        <item>Prv. 14</item>
-        <item>Prv. 15</item>
-        <item>Prv. 16</item>
-        <item>Prv. 17</item>
-        <item>Prv. 18</item>
-        <item>Prv. 19</item>
-        <item>Prv. 20</item>
-        <item>Prv. 21</item>
-        <item>Prv. 22</item>
-        <item>Prv. 23</item>
-        <item>Prv. 24</item>
-        <item>Prv. 25</item>
-        <item>Prv. 26</item>
-        <item>Prv. 27</item>
-        <item>Prv. 28</item>
-        <item>Prv. 29</item>
-        <item>Prv. 30</item>
-        <item>Prv. 31</item>
-    </string-array>
-    <string-array name="list_8">
+    <string-array name="pgh_list8">
         <item>Joshua 1</item>
         <item>Joshua 2</item>
         <item>Joshua 3</item>
@@ -1716,258 +1040,7 @@
         <item>Esther 9</item>
         <item>Esther 10</item>
     </string-array>
-    <string-array name="list_8_notif">
-        <item>Jsh. 1</item>
-        <item>Jsh. 2</item>
-        <item>Jsh. 3</item>
-        <item>Jsh. 4</item>
-        <item>Jsh. 5</item>
-        <item>Jsh. 6</item>
-        <item>Jsh. 7</item>
-        <item>Jsh. 8</item>
-        <item>Jsh. 9</item>
-        <item>Jsh. 10</item>
-        <item>Jsh. 11</item>
-        <item>Jsh. 12</item>
-        <item>Jsh. 13</item>
-        <item>Jsh. 14</item>
-        <item>Jsh. 15</item>
-        <item>Jsh. 16</item>
-        <item>Jsh. 17</item>
-        <item>Jsh. 18</item>
-        <item>Jsh. 19</item>
-        <item>Jsh. 20</item>
-        <item>Jsh. 21</item>
-        <item>Jsh. 22</item>
-        <item>Jsh. 23</item>
-        <item>Jsh. 24</item>
-        <item>Jdg. 1</item>
-        <item>Jdg. 2</item>
-        <item>Jdg. 3</item>
-        <item>Jdg. 4</item>
-        <item>Jdg. 5</item>
-        <item>Jdg. 6</item>
-        <item>Jdg. 7</item>
-        <item>Jdg. 8</item>
-        <item>Jdg. 9</item>
-        <item>Jdg. 10</item>
-        <item>Jdg. 11</item>
-        <item>Jdg. 12</item>
-        <item>Jdg. 13</item>
-        <item>Jdg. 14</item>
-        <item>Jdg. 15</item>
-        <item>Jdg. 16</item>
-        <item>Jdg. 17</item>
-        <item>Jdg. 18</item>
-        <item>Jdg. 19</item>
-        <item>Jdg. 20</item>
-        <item>Jdg. 21</item>
-        <item>Ruth 1</item>
-        <item>Ruth 2</item>
-        <item>Ruth 3</item>
-        <item>Ruth 4</item>
-        <item>1Sa. 1</item>
-        <item>1Sa. 2</item>
-        <item>1Sa. 3</item>
-        <item>1Sa. 4</item>
-        <item>1Sa. 5</item>
-        <item>1Sa. 6</item>
-        <item>1Sa. 7</item>
-        <item>1Sa. 8</item>
-        <item>1Sa. 9</item>
-        <item>1Sa. 10</item>
-        <item>1Sa. 11</item>
-        <item>1Sa. 12</item>
-        <item>1Sa. 13</item>
-        <item>1Sa. 14</item>
-        <item>1Sa. 15</item>
-        <item>1Sa. 16</item>
-        <item>1Sa. 17</item>
-        <item>1Sa. 18</item>
-        <item>1Sa. 19</item>
-        <item>1Sa. 20</item>
-        <item>1Sa. 21</item>
-        <item>1Sa. 22</item>
-        <item>1Sa. 23</item>
-        <item>1Sa. 24</item>
-        <item>1Sa. 25</item>
-        <item>1Sa. 26</item>
-        <item>1Sa. 27</item>
-        <item>1Sa. 28</item>
-        <item>1Sa. 29</item>
-        <item>1Sa. 30</item>
-        <item>1Sa. 31</item>
-        <item>2Sa. 1</item>
-        <item>2Sa. 2</item>
-        <item>2Sa. 3</item>
-        <item>2Sa. 4</item>
-        <item>2Sa. 5</item>
-        <item>2Sa. 6</item>
-        <item>2Sa. 7</item>
-        <item>2Sa. 8</item>
-        <item>2Sa. 9</item>
-        <item>2Sa. 10</item>
-        <item>2Sa. 11</item>
-        <item>2Sa. 12</item>
-        <item>2Sa. 13</item>
-        <item>2Sa. 14</item>
-        <item>2Sa. 15</item>
-        <item>2Sa. 16</item>
-        <item>2Sa. 17</item>
-        <item>2Sa. 18</item>
-        <item>2Sa. 19</item>
-        <item>2Sa. 20</item>
-        <item>2Sa. 21</item>
-        <item>2Sa. 22</item>
-        <item>2Sa. 23</item>
-        <item>2Sa. 24</item>
-        <item>1Ki. 1</item>
-        <item>1Ki. 2</item>
-        <item>1Ki. 3</item>
-        <item>1Ki. 4</item>
-        <item>1Ki. 5</item>
-        <item>1Ki. 6</item>
-        <item>1Ki. 7</item>
-        <item>1Ki. 8</item>
-        <item>1Ki. 9</item>
-        <item>1Ki. 10</item>
-        <item>1Ki. 11</item>
-        <item>1Ki. 12</item>
-        <item>1Ki. 13</item>
-        <item>1Ki. 14</item>
-        <item>1Ki. 15</item>
-        <item>1Ki. 16</item>
-        <item>1Ki. 17</item>
-        <item>1Ki. 18</item>
-        <item>1Ki. 19</item>
-        <item>1Ki. 20</item>
-        <item>1Ki. 21</item>
-        <item>1Ki. 22</item>
-        <item>2Ki. 1</item>
-        <item>2Ki. 2</item>
-        <item>2Ki. 3</item>
-        <item>2Ki. 4</item>
-        <item>2Ki. 5</item>
-        <item>2Ki. 6</item>
-        <item>2Ki. 7</item>
-        <item>2Ki. 8</item>
-        <item>2Ki. 9</item>
-        <item>2Ki. 10</item>
-        <item>2Ki. 11</item>
-        <item>2Ki. 12</item>
-        <item>2Ki. 13</item>
-        <item>2Ki. 14</item>
-        <item>2Ki. 15</item>
-        <item>2Ki. 16</item>
-        <item>2Ki. 17</item>
-        <item>2Ki. 18</item>
-        <item>2Ki. 19</item>
-        <item>2Ki. 20</item>
-        <item>2Ki. 21</item>
-        <item>2Ki. 22</item>
-        <item>2Ki. 23</item>
-        <item>2Ki. 24</item>
-        <item>2Ki. 25</item>
-        <item>1Ch. 1</item>
-        <item>1Ch. 2</item>
-        <item>1Ch. 3</item>
-        <item>1Ch. 4</item>
-        <item>1Ch. 5</item>
-        <item>1Ch. 6</item>
-        <item>1Ch. 7</item>
-        <item>1Ch. 8</item>
-        <item>1Ch. 9</item>
-        <item>1Ch. 10</item>
-        <item>1Ch. 11</item>
-        <item>1Ch. 12</item>
-        <item>1Ch. 13</item>
-        <item>1Ch. 14</item>
-        <item>1Ch. 15</item>
-        <item>1Ch. 16</item>
-        <item>1Ch. 17</item>
-        <item>1Ch. 18</item>
-        <item>1Ch. 19</item>
-        <item>1Ch. 20</item>
-        <item>1Ch. 21</item>
-        <item>1Ch. 22</item>
-        <item>1Ch. 23</item>
-        <item>1Ch. 24</item>
-        <item>1Ch. 25</item>
-        <item>1Ch. 26</item>
-        <item>1Ch. 27</item>
-        <item>1Ch. 28</item>
-        <item>1Ch. 29</item>
-        <item>2Ch. 1</item>
-        <item>2Ch. 2</item>
-        <item>2Ch. 3</item>
-        <item>2Ch. 4</item>
-        <item>2Ch. 5</item>
-        <item>2Ch. 6</item>
-        <item>2Ch. 7</item>
-        <item>2Ch. 8</item>
-        <item>2Ch. 9</item>
-        <item>2Ch. 10</item>
-        <item>2Ch. 11</item>
-        <item>2Ch. 12</item>
-        <item>2Ch. 13</item>
-        <item>2Ch. 14</item>
-        <item>2Ch. 15</item>
-        <item>2Ch. 16</item>
-        <item>2Ch. 17</item>
-        <item>2Ch. 18</item>
-        <item>2Ch. 19</item>
-        <item>2Ch. 20</item>
-        <item>2Ch. 21</item>
-        <item>2Ch. 22</item>
-        <item>2Ch. 23</item>
-        <item>2Ch. 24</item>
-        <item>2Ch. 25</item>
-        <item>2Ch. 26</item>
-        <item>2Ch. 27</item>
-        <item>2Ch. 28</item>
-        <item>2Ch. 29</item>
-        <item>2Ch. 30</item>
-        <item>2Ch. 31</item>
-        <item>2Ch. 32</item>
-        <item>2Ch. 33</item>
-        <item>2Ch. 34</item>
-        <item>2Ch. 35</item>
-        <item>2Ch. 36</item>
-        <item>Ezra 1</item>
-        <item>Ezra 2</item>
-        <item>Ezra 3</item>
-        <item>Ezra 4</item>
-        <item>Ezra 5</item>
-        <item>Ezra 6</item>
-        <item>Ezra 7</item>
-        <item>Ezra 8</item>
-        <item>Ezra 9</item>
-        <item>Ezra 10</item>
-        <item>Neh. 1</item>
-        <item>Neh. 2</item>
-        <item>Neh. 3</item>
-        <item>Neh. 4</item>
-        <item>Neh. 5</item>
-        <item>Neh. 6</item>
-        <item>Neh. 7</item>
-        <item>Neh. 8</item>
-        <item>Neh. 9</item>
-        <item>Neh. 10</item>
-        <item>Neh. 11</item>
-        <item>Neh. 12</item>
-        <item>Neh. 13</item>
-        <item>Est. 1</item>
-        <item>Est. 2</item>
-        <item>Est. 3</item>
-        <item>Est. 4</item>
-        <item>Est. 5</item>
-        <item>Est. 6</item>
-        <item>Est. 7</item>
-        <item>Est. 8</item>
-        <item>Est. 9</item>
-        <item>Est. 10</item>
-    </string-array>
-    <string-array name="list_9">
+    <string-array name="pgh_list9">
         <item>Isaiah 1</item>
         <item>Isaiah 2</item>
         <item>Isaiah 3</item>
@@ -2219,259 +1292,7 @@
         <item>Malachi 3</item>
         <item>Malachi 4</item>
     </string-array>
-    <string-array name="list_9_notif">
-        <item>Isa. 1</item>
-        <item>Isa. 2</item>
-        <item>Isa. 3</item>
-        <item>Isa. 4</item>
-        <item>Isa. 5</item>
-        <item>Isa. 6</item>
-        <item>Isa. 7</item>
-        <item>Isa. 8</item>
-        <item>Isa. 9</item>
-        <item>Isa. 10</item>
-        <item>Isa. 11</item>
-        <item>Isa. 12</item>
-        <item>Isa. 13</item>
-        <item>Isa. 14</item>
-        <item>Isa. 15</item>
-        <item>Isa. 16</item>
-        <item>Isa. 17</item>
-        <item>Isa. 18</item>
-        <item>Isa. 19</item>
-        <item>Isa. 20</item>
-        <item>Isa. 21</item>
-        <item>Isa. 22</item>
-        <item>Isa. 23</item>
-        <item>Isa. 24</item>
-        <item>Isa. 25</item>
-        <item>Isa. 26</item>
-        <item>Isa. 27</item>
-        <item>Isa. 28</item>
-        <item>Isa. 29</item>
-        <item>Isa. 30</item>
-        <item>Isa. 31</item>
-        <item>Isa. 32</item>
-        <item>Isa. 33</item>
-        <item>Isa. 34</item>
-        <item>Isa. 35</item>
-        <item>Isa. 36</item>
-        <item>Isa. 37</item>
-        <item>Isa. 38</item>
-        <item>Isa. 39</item>
-        <item>Isa. 40</item>
-        <item>Isa. 41</item>
-        <item>Isa. 42</item>
-        <item>Isa. 43</item>
-        <item>Isa. 44</item>
-        <item>Isa. 45</item>
-        <item>Isa. 46</item>
-        <item>Isa. 47</item>
-        <item>Isa. 48</item>
-        <item>Isa. 49</item>
-        <item>Isa. 50</item>
-        <item>Isa. 51</item>
-        <item>Isa. 52</item>
-        <item>Isa. 53</item>
-        <item>Isa. 54</item>
-        <item>Isa. 55</item>
-        <item>Isa. 56</item>
-        <item>Isa. 57</item>
-        <item>Isa. 58</item>
-        <item>Isa. 59</item>
-        <item>Isa. 60</item>
-        <item>Isa. 61</item>
-        <item>Isa. 62</item>
-        <item>Isa. 63</item>
-        <item>Isa. 64</item>
-        <item>Isa. 65</item>
-        <item>Isa. 66</item>
-        <item>Jer. 1</item>
-        <item>Jer. 2</item>
-        <item>Jer. 3</item>
-        <item>Jer. 4</item>
-        <item>Jer. 5</item>
-        <item>Jer. 6</item>
-        <item>Jer. 7</item>
-        <item>Jer. 8</item>
-        <item>Jer. 9</item>
-        <item>Jer. 10</item>
-        <item>Jer. 11</item>
-        <item>Jer. 12</item>
-        <item>Jer. 13</item>
-        <item>Jer. 14</item>
-        <item>Jer. 15</item>
-        <item>Jer. 16</item>
-        <item>Jer. 17</item>
-        <item>Jer. 18</item>
-        <item>Jer. 19</item>
-        <item>Jer. 20</item>
-        <item>Jer. 21</item>
-        <item>Jer. 22</item>
-        <item>Jer. 23</item>
-        <item>Jer. 24</item>
-        <item>Jer. 25</item>
-        <item>Jer. 26</item>
-        <item>Jer. 27</item>
-        <item>Jer. 28</item>
-        <item>Jer. 29</item>
-        <item>Jer. 30</item>
-        <item>Jer. 31</item>
-        <item>Jer. 32</item>
-        <item>Jer. 33</item>
-        <item>Jer. 34</item>
-        <item>Jer. 35</item>
-        <item>Jer. 36</item>
-        <item>Jer. 37</item>
-        <item>Jer. 38</item>
-        <item>Jer. 39</item>
-        <item>Jer. 40</item>
-        <item>Jer. 41</item>
-        <item>Jer. 42</item>
-        <item>Jer. 43</item>
-        <item>Jer. 44</item>
-        <item>Jer. 45</item>
-        <item>Jer. 46</item>
-        <item>Jer. 47</item>
-        <item>Jer. 48</item>
-        <item>Jer. 49</item>
-        <item>Jer. 50</item>
-        <item>Jer. 51</item>
-        <item>Jer. 52</item>
-        <item>Lam. 1</item>
-        <item>Lam. 2</item>
-        <item>Lam. 3</item>
-        <item>Lam. 4</item>
-        <item>Lam. 5</item>
-        <item>Ezk. 1</item>
-        <item>Ezk. 2</item>
-        <item>Ezk. 3</item>
-        <item>Ezk. 4</item>
-        <item>Ezk. 5</item>
-        <item>Ezk. 6</item>
-        <item>Ezk. 7</item>
-        <item>Ezk. 8</item>
-        <item>Ezk. 9</item>
-        <item>Ezk. 10</item>
-        <item>Ezk. 11</item>
-        <item>Ezk. 12</item>
-        <item>Ezk. 13</item>
-        <item>Ezk. 14</item>
-        <item>Ezk. 15</item>
-        <item>Ezk. 16</item>
-        <item>Ezk. 17</item>
-        <item>Ezk. 18</item>
-        <item>Ezk. 19</item>
-        <item>Ezk. 20</item>
-        <item>Ezk. 21</item>
-        <item>Ezk. 22</item>
-        <item>Ezk. 23</item>
-        <item>Ezk. 24</item>
-        <item>Ezk. 25</item>
-        <item>Ezk. 26</item>
-        <item>Ezk. 27</item>
-        <item>Ezk. 28</item>
-        <item>Ezk. 29</item>
-        <item>Ezk. 30</item>
-        <item>Ezk. 31</item>
-        <item>Ezk. 32</item>
-        <item>Ezk. 33</item>
-        <item>Ezk. 34</item>
-        <item>Ezk. 35</item>
-        <item>Ezk. 36</item>
-        <item>Ezk. 37</item>
-        <item>Ezk. 38</item>
-        <item>Ezk. 39</item>
-        <item>Ezk. 40</item>
-        <item>Ezk. 41</item>
-        <item>Ezk. 42</item>
-        <item>Ezk. 43</item>
-        <item>Ezk. 44</item>
-        <item>Ezk. 45</item>
-        <item>Ezk. 46</item>
-        <item>Ezk. 47</item>
-        <item>Ezk. 48</item>
-        <item>Dan. 1</item>
-        <item>Dan. 2</item>
-        <item>Dan. 3</item>
-        <item>Dan. 4</item>
-        <item>Dan. 5</item>
-        <item>Dan. 6</item>
-        <item>Dan. 7</item>
-        <item>Dan. 8</item>
-        <item>Dan. 9</item>
-        <item>Dan. 10</item>
-        <item>Dan. 11</item>
-        <item>Dan. 12</item>
-        <item>Hos. 1</item>
-        <item>Hos. 2</item>
-        <item>Hos. 3</item>
-        <item>Hos. 4</item>
-        <item>Hos. 5</item>
-        <item>Hos. 6</item>
-        <item>Hos. 7</item>
-        <item>Hos. 8</item>
-        <item>Hos. 9</item>
-        <item>Hos. 10</item>
-        <item>Hos. 11</item>
-        <item>Hos. 12</item>
-        <item>Hos. 13</item>
-        <item>Hos. 14</item>
-        <item>Joel 1</item>
-        <item>Joel 2</item>
-        <item>Joel 3</item>
-        <item>Amos 1</item>
-        <item>Amos 2</item>
-        <item>Amos 3</item>
-        <item>Amos 4</item>
-        <item>Amos 5</item>
-        <item>Amos 6</item>
-        <item>Amos 7</item>
-        <item>Amos 8</item>
-        <item>Amos 9</item>
-        <item>Obadiah</item>
-        <item>Jnh. 1</item>
-        <item>Jnh. 2</item>
-        <item>Jnh. 3</item>
-        <item>Jnh. 4</item>
-        <item>Mic. 1</item>
-        <item>Mic. 2</item>
-        <item>Mic. 3</item>
-        <item>Mic. 4</item>
-        <item>Mic. 5</item>
-        <item>Mic. 6</item>
-        <item>Mic. 7</item>
-        <item>Nah. 1</item>
-        <item>Nah. 2</item>
-        <item>Nah. 3</item>
-        <item>Hab. 1</item>
-        <item>Hab. 2</item>
-        <item>Hab. 3</item>
-        <item>Zep. 1</item>
-        <item>Zep. 2</item>
-        <item>Zep. 3</item>
-        <item>Hag. 1</item>
-        <item>Hag. 2</item>
-        <item>Zec. 1</item>
-        <item>Zec. 2</item>
-        <item>Zec. 3</item>
-        <item>Zec. 4</item>
-        <item>Zec. 5</item>
-        <item>Zec. 6</item>
-        <item>Zec. 7</item>
-        <item>Zec. 8</item>
-        <item>Zec. 9</item>
-        <item>Zec. 10</item>
-        <item>Zec. 11</item>
-        <item>Zec. 12</item>
-        <item>Zec. 13</item>
-        <item>Zec. 14</item>
-        <item>Mal. 1</item>
-        <item>Mal. 2</item>
-        <item>Mal. 3</item>
-        <item>Mal. 4</item>
-    </string-array>
-    <string-array name="list_10">
+    <string-array name="pgh_list10">
         <item>Acts 1</item>
         <item>Acts 2</item>
         <item>Acts 3</item>

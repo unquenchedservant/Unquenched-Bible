@@ -8,10 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.os.Build
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
-import com.theunquenchedservant.granthornersbiblereadingsystem.MainActivity
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.DailyCheck
-import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.RemindReceiver
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Receivers.RemindReceiver
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
 import java.util.*
@@ -19,16 +17,14 @@ import java.util.*
 object AlarmCreator {
     private val dailyIntent = Intent(App.applicationContext(), AlarmReceiver::class.java)
     private val remindIntent = Intent(App.applicationContext(), RemindReceiver::class.java)
-    private val checkIntent = Intent(App.applicationContext(), DailyCheck::class.java)
     private val dailyPending = PendingIntent.getBroadcast(App.applicationContext(), 4, dailyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
     private val remindPending = PendingIntent.getBroadcast(App.applicationContext(), 2, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-    private val checkPending = PendingIntent.getBroadcast(App.applicationContext(), 6, checkIntent, PendingIntent.FLAG_UPDATE_CURRENT)
 
     fun cancelAlarm(alarmType: String) {
         val notifyPendingIntent = when(alarmType){
             "daily" -> dailyPending
             "remind" -> remindPending
-            else -> checkPending
+            else -> dailyPending
         }
         val ctx = App.applicationContext()
         val alarmManager = ctx.getSystemService(Context.ALARM_SERVICE) as AlarmManager
@@ -53,7 +49,7 @@ object AlarmCreator {
     fun createAlarm(alarmType: String) {
         val ctx = App.applicationContext()
         val notifPendingIntent : PendingIntent
-        val timeInMinutes : Int
+        var timeInMinutes = 0
         when(alarmType) {
             "daily" -> {
                 notifPendingIntent = dailyPending
@@ -62,11 +58,7 @@ object AlarmCreator {
             "remind" -> {
                 notifPendingIntent = remindPending
                 timeInMinutes = getIntPref(name="remindNotif")
-            }
-            else -> {
-                notifPendingIntent = checkPending
-                timeInMinutes = 0
-            }
+            }else -> notifPendingIntent = dailyPending
         }
         val hour: Int
         val minute: Int
@@ -81,9 +73,9 @@ object AlarmCreator {
         val maxDone: Int
         val listsDone: String
         when(getStringPref(name="planSystem", defaultValue="pgh")){
-            "pgh"->{ maxDone = 10; listsDone = "listsDone"}
-            "mcheyne"-> {maxDone = 4; listsDone = "mcheyneListsDone"}
-            else-> {maxDone = 10; listsDone = "listsDone"}
+            "pgh"->{ maxDone = 10; listsDone = "pghDone"}
+            "mcheyne"-> {maxDone = 4; listsDone = "mcheyneDone"}
+            else-> {maxDone = 10; listsDone = "pghDone"}
         }
         when (calendar.before(Calendar.getInstance()) && ((alarmType=="daily" && getIntPref(name=listsDone) == maxDone) || alarmType != "daily")) {
                 true->calendar.add(Calendar.DATE, 1)

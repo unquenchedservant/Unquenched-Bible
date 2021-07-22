@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Notifications
 
 import android.annotation.SuppressLint
 import android.os.Bundle
@@ -22,7 +22,6 @@ class TimePreferenceDialogFragmentCompat : PreferenceDialogFragmentCompat() {
             return fragment
         }
     }
-
     override fun onBindDialogView(view: View) {
         super.onBindDialogView(view)
         mTimePicker = view.findViewById(R.id.timepicker)

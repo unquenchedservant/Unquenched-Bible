@@ -1,7 +1,8 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings
+package com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Notifications
 
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.setFragmentResult
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.theunquenchedservant.granthornersbiblereadingsystem.R

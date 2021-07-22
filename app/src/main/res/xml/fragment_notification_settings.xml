@@ -17,14 +17,14 @@
             android:summary="@string/summary_vacation_mode"
             app:allowDividerAbove="true"
             app:allowDividerBelow="true"/>
-        <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
+        <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Notifications.TimePreference
             app:key="dailyNotif"
             app:defaultValue="360"
             style="@style/AppPreference.DialogPreference"
             app:title="@string/title_daily_list"
             app:allowDividerAbove="true"
             app:allowDividerBelow="true"/>
-        <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.TimePreference
+        <com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Notifications.TimePreference
             app:key="remindNotif"
             app:defaultValue="1170"
             style="@style/AppPreference.DialogPreference"

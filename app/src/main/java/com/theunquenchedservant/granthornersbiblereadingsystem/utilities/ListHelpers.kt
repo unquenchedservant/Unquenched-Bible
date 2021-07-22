@@ -24,7 +24,6 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.BuildConfig
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.CardviewsBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeBinding
-import com.theunquenchedservant.granthornersbiblereadingsystem.databinding.FragmentHomeMcheyneBinding
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Dates.isLeapDay
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.traceLog
@@ -34,12 +33,14 @@ import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedP
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.getStringPref
+import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setBoolPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.setIntPref
 import java.util.*
 
 object ListHelpers {
 
     fun createUpdateAlert(context: Context){
+        val context = App.applicationContext()
         traceLog(file="ListHelpers.kt", function="createUpdateAlert()")
         val currentVersion = BuildConfig.VERSION_CODE
         debugLog("currentVersion $currentVersion")
@@ -98,24 +99,24 @@ object ListHelpers {
             builder.create().show()
         }
     }
-    fun setVisibilities(binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne: Boolean=false){
+    fun setVisibilities(binding: FragmentHomeBinding? = null, isMcheyne: Boolean=false){
         traceLog(file="ListHelpers.kt", function="setVisibilities()")
         if(!isMcheyne) {
-            changeVisibility(binding!!.cardList1, isCardView=false)
-            changeVisibility(binding.cardList2, isCardView=false)
-            changeVisibility(binding.cardList3, isCardView=false)
-            changeVisibility(binding.cardList4, isCardView=false)
-            changeVisibility(binding.cardList5, isCardView=false)
-            changeVisibility(binding.cardList6, isCardView=false)
-            changeVisibility(binding.cardList7, isCardView=false)
-            changeVisibility(binding.cardList8, isCardView=false)
-            changeVisibility(binding.cardList9, isCardView=false)
-            changeVisibility(binding.cardList10, isCardView=false)
+            changeVisibility(binding!!.pgh1, isCardView=false)
+            changeVisibility(binding.pgh2, isCardView=false)
+            changeVisibility(binding.pgh3, isCardView=false)
+            changeVisibility(binding.pgh4, isCardView=false)
+            changeVisibility(binding.pgh5, isCardView=false)
+            changeVisibility(binding.pgh6, isCardView=false)
+            changeVisibility(binding.pgh7, isCardView=false)
+            changeVisibility(binding.pgh8, isCardView=false)
+            changeVisibility(binding.pgh9, isCardView=false)
+            changeVisibility(binding.pgh10, isCardView=false)
         }else{
-            changeVisibility(bindingMCheyne!!.cardList1, isCardView=false)
-            changeVisibility(bindingMCheyne.cardList2, isCardView=false)
-            changeVisibility(bindingMCheyne.cardList3, isCardView=false)
-            changeVisibility(bindingMCheyne.cardList4, isCardView=false)
+            changeVisibility(binding!!.mcheyneList1, isCardView=false)
+            changeVisibility(binding.mcheyneList2, isCardView=false)
+            changeVisibility(binding.mcheyneList3, isCardView=false)
+            changeVisibility(binding.mcheyneList4, isCardView=false)
         }
     }
     fun initList(cardList: CardviewsBinding, listTitle:String){
@@ -131,7 +132,7 @@ object ListHelpers {
             emphColor = getColor(context, R.color.unquenchedOrange)
         }
         cardList.listTitle.text = listTitle
-        cardList.listReading.text = context.resources.getText(R.string.loading)
+        //cardList.listReading.text = context.resources.getText(R.string.loading)
         cardList.root.isClickable=false
         cardList.root.setCardBackgroundColor(backgroundColor)
         cardList.listReading.setTextColor(emphColor)
@@ -149,6 +150,7 @@ object ListHelpers {
             allDoneBackgroundColor = context.resources.getString(R.string.done_btn_background_color)
             backgroundColor = context.resources.getString(R.string.btn_background_color)
         }
+        debugLog("THIS IS THE LISTS DONE ${listsDone} this is limitNumber ${limitNumber}")
         when (listsDone) {
             maxDone -> {
                 materialButton.setText(R.string.done)
@@ -156,12 +158,8 @@ object ListHelpers {
                 materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$allDoneBackgroundColor"))
                 materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             }
-            0 -> {
-                materialButton.setText(R.string.not_done)
-                materialButton.isEnabled = true
-                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
-            }
             in 1..limitNumber -> {
+                debugLog("when is working properly")
                 materialButton.setText(R.string.btn_mark_remaining)
                 materialButton.isEnabled = true
                 val opacity = if (listsDone < 5) {
@@ -172,30 +170,36 @@ object ListHelpers {
                 materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#${opacity}$backgroundColor"))
                 materialButton.backgroundTintMode = PorterDuff.Mode.ADD
             }
+            0 -> {
+                materialButton.setText(R.string.not_done)
+                materialButton.isEnabled = true
+                materialButton.backgroundTintList = ColorStateList.valueOf(Color.parseColor("#$backgroundColor"))
+            }
+
         }
     }
-    fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding? = null, bindingMCheyne: FragmentHomeMcheyneBinding? = null, isMcheyne:Boolean=false){
+    fun hideOthers(cardList: CardView?, binding: FragmentHomeBinding? = null, isMcheyne:Boolean=false){
         traceLog(file="ListHelpers.kt", function="hideOthers()")
         if(!isMcheyne){
-            changeVisibility(binding!!.cardList1, isCardView=cardList == binding.cardList1.root)
-            changeVisibility(binding.cardList2, isCardView=cardList == binding.cardList2.root)
-            changeVisibility(binding.cardList3, isCardView=cardList == binding.cardList3.root)
-            changeVisibility(binding.cardList4, isCardView=cardList == binding.cardList4.root)
-            changeVisibility(binding.cardList5, isCardView=cardList == binding.cardList5.root)
-            changeVisibility(binding.cardList6, isCardView=cardList == binding.cardList6.root)
-            changeVisibility(binding.cardList7, isCardView=cardList == binding.cardList7.root)
-            changeVisibility(binding.cardList8, isCardView=cardList == binding.cardList8.root)
-            changeVisibility(binding.cardList9, isCardView=cardList == binding.cardList9.root)
-            changeVisibility(binding.cardList10, isCardView=cardList == binding.cardList10.root)
+            changeVisibility(binding!!.pgh1, isCardView=cardList == binding.pgh1.root)
+            changeVisibility(binding.pgh2, isCardView=cardList == binding.pgh2.root)
+            changeVisibility(binding.pgh3, isCardView=cardList == binding.pgh3.root)
+            changeVisibility(binding.pgh4, isCardView=cardList == binding.pgh4.root)
+            changeVisibility(binding.pgh5, isCardView=cardList == binding.pgh5.root)
+            changeVisibility(binding.pgh6, isCardView=cardList == binding.pgh6.root)
+            changeVisibility(binding.pgh7, isCardView=cardList == binding.pgh7.root)
+            changeVisibility(binding.pgh8, isCardView=cardList == binding.pgh8.root)
+            changeVisibility(binding.pgh9, isCardView=cardList == binding.pgh9.root)
+            changeVisibility(binding.pgh10, isCardView=cardList == binding.pgh10.root)
         }else{
-            changeVisibility(bindingMCheyne!!.cardList1, isCardView=cardList == bindingMCheyne.cardList1.root)
-            changeVisibility(bindingMCheyne.cardList2, isCardView=cardList == bindingMCheyne.cardList2.root)
-            changeVisibility(bindingMCheyne.cardList3, isCardView=cardList == bindingMCheyne.cardList3.root)
-            changeVisibility(bindingMCheyne.cardList4, isCardView=cardList == bindingMCheyne.cardList4.root)
+            changeVisibility(binding!!.mcheyneList1, isCardView=cardList == binding.mcheyneList1.root)
+            changeVisibility(binding.mcheyneList2, isCardView=cardList == binding.mcheyneList2.root)
+            changeVisibility(binding.mcheyneList3, isCardView=cardList == binding.mcheyneList3.root)
+            changeVisibility(binding.mcheyneList4, isCardView=cardList == binding.mcheyneList4.root)
         }
     }
 
-    fun listSwitcher(cardList: View, listDone: Int, material_button: Button){
+    fun listSwitcher(cardList: View, listDone: Boolean, material_button: Button){
         traceLog(file="ListHelpers.kt", function="listSwitcher()")
         val enabled = if(getBoolPref(name="darkMode", defaultValue=true)){
             getColor(App.applicationContext(), android.R.color.background_dark)
@@ -205,13 +209,13 @@ object ListHelpers {
         val disabled = Color.parseColor("#00383838")
         cardList as CardView
         when(listDone){
-            0 -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
-            1-> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
+            false -> { cardList.isEnabled = true; cardList.setCardBackgroundColor(enabled) }
+            true -> { material_button.setText(R.string.btn_mark_remaining); cardList.isEnabled = false; cardList.setCardBackgroundColor(disabled) }
         }
     }
     fun resetDaily(context:Context): Task<DocumentSnapshot> {
         traceLog(file="ListHelpers.kt", function="resetDaily()")
-       return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
+        return Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                 .addOnSuccessListener {
                     val currentData = it.data
                     val data = mutableMapOf<String, Any>()
@@ -222,7 +226,7 @@ object ListHelpers {
                         else->10
                     }
                     val planType = extractStringPref(currentData,"planType", defaultValue="horner")
-                    val listStart = if(planSystem=="pgh") "list" else "mcheyneList"
+                    val listStart = if(planSystem=="pgh") "pgh" else "mcheyne"
                     var resetStreak  = false
                     val vacation = extractBoolPref(currentData,"vacationMode")
                     when (extractIntPref(currentData,"dailyStreak")) {
@@ -241,28 +245,26 @@ object ListHelpers {
                     }
                     for(i in 1..doneMax){
                         if(planType == "horner") {
-                            when (extractIntPref(currentData, "${listStart}${i}DoneDaily")) {
-                                1 -> data["${listStart}${i}DoneDaily"] = setIntPref("$listStart${i}DoneDaily", 0)
-                            }
-                            when (getIntPref(name = "$listStart${i}Done")) {
-                                1 -> {
-                                    data["${listStart}$i"] = setIntPref("$listStart$i", extractIntPref(currentData, "$listStart$i") + 1)
-                                    data["$listStart${i}Done"] = setIntPref("$listStart${i}Done", 0)
+                            when (getBoolPref(name = "$listStart${i}Done")) {
+                                true -> {
+                                    data["${listStart}${i}Index"] = setIntPref("${listStart}${i}Index", extractIntPref(currentData, "$listStart${i}Index") + 1)
+                                    data["$listStart${i}Done"] = setBoolPref("$listStart${i}Done", false)
                                 }
 
                             }
                         }else if(planType == "numerical"){
-                            data["${listStart}${i}Done"] = setIntPref("$listStart${i}Done", 0)
+                            data["${listStart}${i}Done"] = setBoolPref("$listStart${i}Done", false)
                         }
                     }
                     if(planType== "numerical" && resetStreak) {
                         if(planSystem=="pgh") {
-                            data["currentDayIndex"] = setIntPref("currentDayIndex", extractIntPref(currentData,"currentDayIndex") + 1)
+                            data["pghIndex"] = setIntPref("pghIndex", extractIntPref(currentData,"pghIndex") + 1)
                         }else{
-                            data["mcheyneCurrentDayIndex"] = setIntPref("mcheyneCurrentDayIndex", extractIntPref(currentData,"mcheyneCurrentDayIndex") + 1)
+                            data["mcheyneIndex"] = setIntPref("mcheyneIndex", extractIntPref(currentData,"mcheyneIndex") + 1)
                         }
                     }
-                    data["${listStart}sDone"] = setIntPref("${listStart}sDone", 0)
+                    data["pghDone"] = setIntPref("pghDone", 0)
+                    data["mcheyneDone"] = setIntPref("mcheyneDone", 0)
                         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
                                 .addOnSuccessListener {
                                     debugLog("Lists reset successfully")
@@ -281,7 +283,7 @@ object ListHelpers {
     fun isAdvanceable(maxDone:Int):Boolean{
         traceLog(file="ListHelpers.kt", function="isAdvanceable()")
         val planType = getStringPref(name="planType", defaultValue="horner")
-        val listsDone = if(getStringPref("planSystem") == "pgh") "listsDone" else "mcheyneListsDone"
+        val listsDone = if(getStringPref("planSystem") == "pgh") "pghDone" else "mcheyneDone"
         return getIntPref(listsDone) == maxDone && (planType == "horner" || planType == "numerical")
     }
     fun isHorner():Boolean{
@@ -295,7 +297,7 @@ object ListHelpers {
     }
     fun isPsalm(cardView: CardviewsBinding, binding:FragmentHomeBinding, psalms:Boolean):Boolean{
         traceLog(file="ListHelpers.kt", function="isPsalm()")
-        return cardView.root == binding.cardList6.root && psalms
+        return cardView.root == binding.pgh6.root && psalms
     }
     fun isDayOff():Boolean{
         traceLog(file="ListHelpers.kt", function="isDayOff()")
@@ -304,9 +306,9 @@ object ListHelpers {
     fun getChapter(list:Array<String>, listName:String):String{
         traceLog(file="ListHelpers.kt", function="getChapter()")
         return when (getStringPref(name = "planType", defaultValue = "horner")) {
-            "horner" -> list[getIntPref(listName)]
+            "horner" -> list[getIntPref("${listName}Index")]
             "numerical" -> {
-                var index = getIntPref(name = "currentDayIndex", defaultValue = 0)
+                var index = getIntPref(name = "pghIndex", defaultValue = 0)
                 while (index >= list.size) {
                     index -= list.size
                 }
@@ -331,25 +333,6 @@ object ListHelpers {
         }else {
             cardList.listButtons.visibility = View.GONE
             cardList.listReading.visibility = View.VISIBLE
-        }
-    }
-    fun getListNumber(result: Map<String, Any>?, listName: String, listId: Int): String{
-        traceLog(file="ListHelpers.kt", function="getListNumber()")
-        val number = if(result != null){
-            (result[listName] as Long).toInt()
-        }else{
-            getIntPref(listName)
-        }
-        val list = App.applicationContext().resources.getStringArray(listId)
-        return when(number){
-            list.size -> {
-                setIntPref(listName, value=0, updateFS=true)
-                list[0]
-            }
-            else -> {
-                setIntPref(listName, value=number, updateFS=true)
-                list[number]
-            }
         }
     }
 }

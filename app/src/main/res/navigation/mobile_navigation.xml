@@ -1,15 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@id/navigation_home">
+    app:startDestination="@id/navigation_loading">
+    <fragment
+        android:id="@+id/navigation_loading"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.LoadingFragment"
+        android:label="Loading"/>
     <fragment
         android:id="@+id/navigation_home"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeFragment"
-        android:label="@string/title_home">
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_home_mcheyne"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.home.HomeMCheyneFragment"
         android:label="@string/title_home">
     </fragment>
     <fragment
@@ -38,86 +37,36 @@
 
     <fragment
         android:id="@+id/navigation_notifications"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.NotificationsFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Notifications.NotificationsFragment"
         android:label="Notifications"/>
     <fragment
         android:label="Manual"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListSet"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualOverrides.ManualListSet"
         android:id="@+id/navigation_manual" />
     <fragment
         android:label="Manual Numerical"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualListNumericalSet"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualOverrides.ManualListNumericalSet"
         android:id="@+id/navigation_manual_numerical" />
     <fragment
         android:id="@+id/navigation_stats"
         android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.StatisticsFragment"
         android:label="Statistics">
-        <action
-            android:id="@+id/action_navigation_stats_to_navigation_bible_stats_main"
-            app:destination="@id/navigation_bible_stats_main" />
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_bible_stats_main"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleStatsFragment"
-        android:label="Bible Statistics">
-        <action
-            android:id="@+id/action_navigation_bible_stats_main_to_navigation_stats"
-            app:destination="@id/navigation_stats"/>
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_bible_testament_stats"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleStatsTestamentFragment"
-        android:label="Testament Statistics">
-        <argument
-            android:name="testament"
-            app:argType="string"/>
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_book_stats"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleBookFragment"
-        android:label="Book Statistics">
-        <argument
-            android:name="book"
-            app:argType="string"/>
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_bible_reset_menu"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BibleResetMenuFragment"
-        android:label="Bible Reset Menu"/>
-    <fragment
-        android:id="@+id/navigation_books_reset_menu"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ResetBookMenuFragment"
-        android:label="Books Reset Menu">
-        <argument
-            android:name="testament"
-            app:argType="string"/>
-    </fragment>
-    <fragment
-        android:id="@+id/navigation_book_reset_menu"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.BookResetMenuFragment"
-        android:label="Book Reset Menu">
-        <argument
-            android:name="book"
-            app:argType="string"/>
-        <argument
-            android:name="testament"
-            app:argType="string"/>
     </fragment>
     <fragment
         android:id="@+id/navigation_plan_type"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanTypeFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSettings.PlanTypeFragment"
         android:label="Plan Type Menu"/>
     <fragment
         android:id="@+id/navigation_plan_system"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSystemFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSettings.PlanSystemFragment"
         android:label="Plan System Menu"/>
     <fragment
         android:id="@+id/navigation_account_settings"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.AccountSettingsFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Account.AccountSettingsFragment"
         android:label="Account Settings"/>
     <fragment
         android:id="@+id/navigation_update_email"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UpdateEmailFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Account.UpdateEmailFragment"
         android:label="Update Email">
         <argument
             android:name="error"
@@ -128,7 +77,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_update_password"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.UpdatePasswordFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Account.UpdatePasswordFragment"
         android:label="Update Password">
         <argument
             android:name="error"
@@ -136,7 +85,7 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_confirm_delete"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.DeleteAccountFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.Account.DeleteAccountFragment"
         android:label="Delete Account">
         <argument
             android:name="error"
@@ -144,11 +93,11 @@
     </fragment>
     <fragment
         android:id="@+id/navigation_overrides"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.OverridesFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.ManualOverrides.OverridesFragment"
         android:label="Overrides"/>
     <fragment
         android:id="@+id/navigation_plan_settings"
-        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSettingsFragment"
+        android:name="com.theunquenchedservant.granthornersbiblereadingsystem.ui.settings.PlanSettings.PlanSettingsFragment"
         android:label="PlanSettings" />
 
 

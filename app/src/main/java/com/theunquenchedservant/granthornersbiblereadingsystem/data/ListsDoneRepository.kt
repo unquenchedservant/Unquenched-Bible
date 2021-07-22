@@ -2,10 +2,12 @@ package com.theunquenchedservant.granthornersbiblereadingsystem.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.preference.PreferenceManager
 import com.google.firebase.auth.FirebaseUser
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.ktx.firestore
 import com.google.firebase.ktx.Firebase
+import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Log.debugLog
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractIntPref
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.SharedPref.extractStringPref
@@ -17,22 +19,11 @@ class ListsDoneRepository {
 
     fun getListsDone(): LiveData<ListsDone> {
         val data = MutableLiveData<ListsDone>()
-        when (user != null) {
-            true -> {
-                val db = Firebase.firestore
-                db.collection("main").document(user.uid).get()
-                        .addOnSuccessListener { docSnap ->
-                            val planSystem = extractStringPref(docSnap.data, "planSystem")
-                            val mcheyneDone = extractIntPref(docSnap.data, "mcheyneListsDone")
-                            val listDone = extractIntPref(docSnap.data, "listsDone")
-                            val listsDone = if(planSystem == "pgh") ListsDone(listDone) else ListsDone(mcheyneDone)
-                            data.value = listsDone
-                        }
-                        .addOnFailureListener { exception ->
-                            debugLog(message = "Failed to get data. Error: $exception")
-                        }
+        PreferenceManager.getDefaultSharedPreferences(App.applicationContext()).registerOnSharedPreferenceChangeListener { sharedPreferences, key ->
+            if(key == "pghDone" || key == "mcheyneDone"){
+                data.value = ListsDone(sharedPreferences.getInt(key, 0))
+                debugLog("Data changed ${data.value!!.listsDone}")
             }
-            else -> data.value = if(getStringPref(name="planSystem") == "pgh") ListsDone(getIntPref(name = "listsDone")) else ListsDone(getIntPref("mcheyneListsDone"))
         }
         return data
     }

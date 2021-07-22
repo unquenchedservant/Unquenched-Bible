@@ -1,4 +1,4 @@
-package com.theunquenchedservant.granthornersbiblereadingsystem.utilities
+package com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Receivers
 
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -24,47 +24,36 @@ class RemindReceiver : BroadcastReceiver() {
             false -> {
                 debugLog("Vacation mode off, preparing reminder notification")
                 if(getBoolPref(name="notifications")) {
-                    val check = getIntPref(name="listsDone")
-                    debugLog("lists done so far = $check")
-                    val allowPartial = getBoolPref(name="allowPartial")
-                    debugLog("Allow partial is $allowPartial")
-                    val doneMax = when(getStringPref(name="planSystem", defaultValue="pgh")){
-                        "pgh"->10
-                        "mcheyne"->4
-                        else->10
+                    val check: Int
+                    val doneMax: Int
+                    when(getStringPref(name="planSystem", defaultValue="pgh")){
+                        "pgh"-> { check = getIntPref("pghDone"); doneMax = 10 }
+                        "mcheyne"-> { check = getIntPref("mcheyneDone"); doneMax = 4 }
+                        else-> { check = getIntPref("pghDone"); doneMax = 4 }
                     }
+                    val allowPartial = getBoolPref(name="allowPartial")
                     mNotificationManager = context.getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
                     when (check) {
-                        0 -> {
-                            deliverNotification(context, false)
-                        }
+                        0 -> deliverNotification(context, false)
                          in 1 until doneMax -> {
                             mNotificationManager?.cancel(1)
                             mNotificationManager?.cancel(2)
                             deliverNotification(context, true)
                         }
-                        doneMax ->{
-                            debugLog("All lists done, not sending notification")
-                        }
+                        doneMax ->debugLog("All lists done, not sending notification")
                     }
-                }else{
-                    debugLog("Notification switch off, not sending notification")
-                }
+                }else debugLog("Notification switch off, not sending notification")
             }
-            true -> {
-                debugLog("Vacation mode on, not sending notification")
-            }
+            true -> debugLog("Vacation mode on, not sending notification")
         }
     }
 
     private fun deliverNotification(context: Context, partial:Boolean) {
         traceLog("RemindReceiver.kt", "deliverNotification()")
         val rem = context.resources.getString(R.string.title_reminder)
-        val content : String = if(partial){
-            "Don't forget to finish the reading!"
-        }else{
+        val content : String = if(partial) "Don't forget to finish the reading!"
+            else
             "Don't forget to do the reading"
-        }
         val tapIntent = Intent(context, MainActivity::class.java)
         tapIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
         val tapPending = PendingIntent.getActivity(context, 0, tapIntent, 0)
