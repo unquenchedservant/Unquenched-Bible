@@ -330,9 +330,9 @@ class HomeFragment : Fragment() {
                 )
             )
             builder.setMessage(
-                "* Added some various things along the backend to make the app run smoother \n" +
-                        "* Finally fixed an issue with the reading lists not syncing well between multiple devices. \n" +
-                        "Fixed an issue where the reading lists were not getting fully reset each night \n" +
+                "* Fixed a lot of the bugs with lists not updating correctly\n" +
+                        "* Made it so that switching accounts happens easier \n" +
+                        "* Added some other little functionality changes \n" +
                         "For more information go to https://changelog.unquenched.bible/ or click 'More Info' below!"
             )
             builder.create().show()
