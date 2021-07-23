@@ -264,6 +264,11 @@ class HomeFragment : Fragment() {
             binding.mcheyne.visibility = View.VISIBLE
         }
         binding.loading.visibility = View.GONE
+        if(planSystem == "pgh"){
+            updateButton(getIntPref("pghDone"), binding.materialButton, 10, 9)
+        }else{
+            updateButton(getIntPref("mcheyneDone"), binding.mcheyneButton, 4, 3)
+        }
         return binding.root
     }
 
@@ -289,11 +294,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         traceLog(file="HomeFragment.kt", function="onViewCreated()")
-        if(planSystem == "pgh"){
-            updateButton(getIntPref("pghDone"), binding.materialButton, 10, 9)
-        }else{
-            updateButton(getIntPref("mcheyneDone"), binding.mcheyneButton, 4, 3)
-        }
+
         updateAlert()
         createButtonListener()
         createNotificationChannel()
