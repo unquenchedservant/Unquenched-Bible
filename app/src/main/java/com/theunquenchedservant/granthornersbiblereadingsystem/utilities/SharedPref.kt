@@ -316,7 +316,7 @@ object SharedPref {
         updateIntPref(data, key = "graceTime")
         updateBoolPref(data, key = "isGrace")
         updateStringPref(data, key = "planSystem")
-
+        updateBoolPref(data, key = "hasCompletedOnboarding")
         when {
             getStringPref("planType") == "horner" -> {
                 setBoolPref("horner", true)
@@ -341,7 +341,7 @@ object SharedPref {
             setBoolPref("mcheyneSystem", true)
             setBoolPref("pghSystem", false)
         }
-        updateBoolPref(data, key = "hasCompletedOnboarding")
+
     }
 
     private fun updateDone(key:String, newKey:String):Boolean{

@@ -42,6 +42,7 @@ class AccountSettingsFragment: PreferenceFragmentCompat()  {
         logOut!!.onPreferenceClickListener = Preference.OnPreferenceClickListener {
             val builder = AlertDialog.Builder(context)
             builder.setPositiveButton(getString(R.string.yes)) { _, _ ->
+                PreferenceManager.getDefaultSharedPreferences(requireContext()).edit().clear().apply()
                 Firebase.auth.signOut()
                 Toast.makeText(context, "Signed Out!", Toast.LENGTH_LONG).show()
                 (activity as MainActivity).finish()
