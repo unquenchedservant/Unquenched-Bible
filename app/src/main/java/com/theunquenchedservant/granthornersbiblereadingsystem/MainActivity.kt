@@ -108,7 +108,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         binding.bottomNav.itemTextColor = colorStateList
         binding.translationSelector.isVisible = false
         setupBottomNavigationBar()
-
         if(Firebase.auth.currentUser == null) {
             startFirebaseAuth()
         }else if(!getBoolPref(name="hasCompletedOnboarding", defaultValue=false)){
@@ -123,7 +122,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
                         .addOnCompleteListener {
                             if (it.isSuccessful) {
-                                if(it.result?.data == null){
+                                if(it.result == null){
                                     newUser()
                                 }else {
                                     val data = it.result!!.data!!
@@ -131,10 +130,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                         data["lastUpdated"] = 0.toLong()
                                     }
                                     if ((data["lastUpdated"] as Long) > getLongPref("lastUpdated") && data["lastUpdated"] != 0) {
-                                        debugLog("firestore to preference - FOR SCIENCE")
                                         firestoreToPreference(data)
                                     } else {
-                                        debugLog("preference to firestore - FOR SCIENCE")
                                         preferenceToFirestore()
                                     }
                                     if (data["updatedPreferences"] == null || !(data["updatedPreferences"] as Boolean)) {
@@ -322,7 +319,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun checkReadingDate() {
         traceLog(file="MainActivity.kt", function="checkReadingDate()")
-        debugLog("checkreadingdate - FOR SCIENCE")
         Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).get()
             .addOnCompleteListener {
                 if (it.isSuccessful) {
@@ -339,7 +335,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             val dateChecked = extractStringPref(currentData, "dateChecked")
                             val listsDone = extractIntPref(currentData, "pghDone")
                             val mcheyneListsDone = extractIntPref(currentData, "mcheyneDone")
-                            debugLog("This is the date checked $dateChecked")
                             if (!checkDate(dateChecked, "current", false)) {
                                 val allowPartial: Boolean =
                                     extractBoolPref(currentData, "allowPartial")
@@ -417,21 +412,19 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                             currentData["holdStreak"] =
                                                 extractIntPref(currentData, "currentStreak")
                                         } else {
-                                            currentData["graceTime"] = 1
+                                            currentData["graceTime"] = setIntPref("graceTime", 1)
                                             currentData["isGrace"] = setBoolPref("isGrace", false)
                                             currentData["holdStreak"] = setIntPref("holdStreak", 0)
                                         }
                                     }
-                                    currentData["currentStreak"] = 0
-                                    debugLog("The current streak has been reset")
+                                    currentData["currentStreak"] = setIntPref("currentStreak", 0)
                                 }
-                                currentData["dailyStreak"] = 0
+                                currentData["dailyStreak"] = setIntPref("dailyStreak", 0)
                                 currentData["dateReset"] =
                                     setStringPref("dateReset", getDate(0, false))
                                 updateFirestore(currentData)
                                     .addOnSuccessListener {
                                         navController.navigate(R.id.navigation_home)
-                                        debugLog("updated firestore data accurately")
                                     }
                                     .addOnFailureListener { error ->
                                         Toast.makeText(
@@ -513,16 +506,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                             val i = Intent(this@MainActivity, MainActivity::class.java)
                             startActivity(i)
                         }
-                    }
-                    else if(Firebase.auth.currentUser!!.uid == getStringPref("uid") && (doc.data!!["lastUpdated"] == null || (doc.data!!["lastUpdated"] as Long) < getLongPref("lastUpdated"))){
-                        preferenceToFirestore().addOnSuccessListener {
-                            finish()
-                            val i = Intent(this@MainActivity, MainActivity::class.java)
-                            startActivity(i)
-                        }
-                    }else if(doc.data!!["lastUpdated"] != null && doc.data!!["lastUpdated"] as Long > getLongPref("lastUpdated")){
+                    }else{
                         firestoreToPreference(doc.data!!)
-                        setStringPref("uid", user.uid)
                         finish()
                         val i = Intent(this@MainActivity, MainActivity::class.java)
                         startActivity(i)
