@@ -188,7 +188,7 @@ class ManualListSet: Fragment() {
                             list.setSelection(it.getPosition(cInfo)) }
                     }
 
-                    "The Gospels"      -> {
+                    "Gospels"      -> {
                         val cInfo                    = getCurrentInfo(1) as Array<*>
                         val cBook                    = cInfo[0] as String
                         val cVerse                   = cInfo[1] as Int
