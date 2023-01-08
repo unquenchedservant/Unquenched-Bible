@@ -280,6 +280,7 @@ class HomeFragment : Fragment() {
             true -> {
                 allowResume = false
             }
+            false->{}
         }
     }
 
@@ -288,6 +289,7 @@ class HomeFragment : Fragment() {
         traceLog(file="HomeFragment.kt", function="onPause()")
         when (allowResume) {
             false -> allowResume = true
+            true ->{}
         }
     }
 

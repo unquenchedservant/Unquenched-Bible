@@ -240,6 +240,7 @@ object ListHelpers {
                                     if (!Dates.checkDate(extractStringPref(currentData, "dateChecked"), option="both", fullMonth=false))
                                         data["currentStreak"] = setIntPref("currentStreak", 0)
                                 }
+                                true->{}
                             }
                         }
                     }
@@ -250,6 +251,7 @@ object ListHelpers {
                                     data["${listStart}${i}Index"] = setIntPref("${listStart}${i}Index", extractIntPref(currentData, "$listStart${i}Index") + 1)
                                     data["$listStart${i}Done"] = setBoolPref("$listStart${i}Done", false)
                                 }
+                                false -> {}
 
                             }
                         }else if(planType == "numerical"){

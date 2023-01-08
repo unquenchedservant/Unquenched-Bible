@@ -1,12 +1,12 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.service
 
+import android.annotation.SuppressLint
 import android.app.AlarmManager
 import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.app.PendingIntent
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import com.theunquenchedservant.granthornersbiblereadingsystem.App
 import com.theunquenchedservant.granthornersbiblereadingsystem.R
 import com.theunquenchedservant.granthornersbiblereadingsystem.utilities.Receivers.RemindReceiver
@@ -17,8 +17,10 @@ import java.util.*
 object AlarmCreator {
     private val dailyIntent = Intent(App.applicationContext(), AlarmReceiver::class.java)
     private val remindIntent = Intent(App.applicationContext(), RemindReceiver::class.java)
-    private val dailyPending = PendingIntent.getBroadcast(App.applicationContext(), 4, dailyIntent, PendingIntent.FLAG_UPDATE_CURRENT)
-    private val remindPending = PendingIntent.getBroadcast(App.applicationContext(), 2, remindIntent, PendingIntent.FLAG_UPDATE_CURRENT)
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private val dailyPending = PendingIntent.getBroadcast(App.applicationContext(), 4, dailyIntent, PendingIntent.FLAG_MUTABLE)
+    @SuppressLint("UnspecifiedImmutableFlag")
+    private val remindPending = PendingIntent.getBroadcast(App.applicationContext(), 2, remindIntent, PendingIntent.FLAG_MUTABLE)
 
     fun cancelAlarm(alarmType: String) {
         val notifyPendingIntent = when(alarmType){
@@ -34,16 +36,14 @@ object AlarmCreator {
     fun createNotificationChannel() {
         val context = App.applicationContext()
         val primaryChannelId = "primary_notification_channel"
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-            val name = context.resources.getString(R.string.notification_channel_name)
-            val description = context.getString(R.string.notification_channel_description)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
-            val channel = NotificationChannel(primaryChannelId, name, importance)
-            channel.description = description
-            channel.enableVibration(true)
-            val notificationManager = context.getSystemService(NotificationManager::class.java)!!
-            notificationManager.createNotificationChannel(channel)
-        }
+        val name = context.resources.getString(R.string.notification_channel_name)
+        val description = context.getString(R.string.notification_channel_description)
+        val importance = NotificationManager.IMPORTANCE_DEFAULT
+        val channel = NotificationChannel(primaryChannelId, name, importance)
+        channel.description = description
+        channel.enableVibration(true)
+        val notificationManager = context.getSystemService(NotificationManager::class.java)!!
+        notificationManager.createNotificationChannel(channel)
     }
 
     fun createAlarm(alarmType: String) {
@@ -79,6 +79,7 @@ object AlarmCreator {
         }
         when (calendar.before(Calendar.getInstance()) && ((alarmType=="daily" && getIntPref(name=listsDone) == maxDone) || alarmType != "daily")) {
                 true->calendar.add(Calendar.DATE, 1)
+                false->{}
         }
         when(alarmType){
             "dailyCheck"-> alarmManager.setInexactRepeating(AlarmManager.RTC, calendar.timeInMillis, AlarmManager.INTERVAL_DAY, notifPendingIntent)
@@ -86,18 +87,21 @@ object AlarmCreator {
         }
     }
 
+    @SuppressLint("UnspecifiedImmutableFlag")
     fun createAlarms() {
         val ctx = App.applicationContext()
         val notifyIntent = Intent(ctx, AlarmReceiver::class.java)
 
-        when ((PendingIntent.getBroadcast(ctx, 4, notifyIntent, PendingIntent.FLAG_NO_CREATE) != null)) {
+        when ((PendingIntent.getBroadcast(ctx, 4, notifyIntent, PendingIntent.FLAG_MUTABLE) != null)) {
             false->createAlarm(alarmType="daily")
+            true->{}
         }
 
         val remindIntent = Intent(ctx, RemindReceiver::class.java)
 
-        when ((PendingIntent.getBroadcast(ctx, 2, remindIntent, PendingIntent.FLAG_NO_CREATE) != null)) {
+        when ((PendingIntent.getBroadcast(ctx, 2, remindIntent, PendingIntent.FLAG_MUTABLE) != null)) {
             false->createAlarm(alarmType="remind")
+            true->{}
         }
     }
 }

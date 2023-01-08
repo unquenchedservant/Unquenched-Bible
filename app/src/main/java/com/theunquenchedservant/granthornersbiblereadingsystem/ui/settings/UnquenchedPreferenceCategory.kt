@@ -17,7 +17,7 @@ class UnquenchedPreferenceCategory : PreferenceCategory {
 
     private lateinit var holderr: PreferenceViewHolder
 
-    override fun onBindViewHolder(holder: PreferenceViewHolder?) {
+    override fun onBindViewHolder(holder: PreferenceViewHolder) {
         super.onBindViewHolder(holder)
         holderr = holder!!
         val view: View = holder.itemView

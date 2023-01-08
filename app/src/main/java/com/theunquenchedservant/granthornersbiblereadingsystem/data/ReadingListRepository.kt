@@ -86,6 +86,7 @@ class ReadingListRepository {
                             else-> "Day Off"
                         }
                     }
+                    false->{}
                 }
             }
         }
