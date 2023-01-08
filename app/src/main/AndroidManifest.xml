@@ -15,6 +15,7 @@
         android:theme="@style/splash">
         <receiver
             android:name=".service.ServiceStarted"
+            android:exported="true"
             android:enabled="true">
             <intent-filter>
                 <action android:name="android.intent.action.MY_PACKAGE_REPLACED" />
@@ -39,6 +40,7 @@
             android:label="Unquenched Bible"
             android:configChanges="keyboardHidden|screenLayout|orientation"
             android:screenOrientation="portrait"
+            android:exported="true"
             android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
