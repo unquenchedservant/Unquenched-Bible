@@ -3,13 +3,13 @@
     font-family:Georgia,"Times New Roman",Times,serif;
 }
 body{
-	background-color: #121212;
+	background-color: #FFF;
 }
 h2, p{
-	color: #9cb9d3;
+	color: #FFF;
 }
 h3 {
-    color: white;
+    color: blue;
 }
 h4.speaker {
 	color: white;
