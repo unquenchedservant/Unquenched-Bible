@@ -33,7 +33,7 @@ android {
         applicationId "com.theunquenchedservant.granthornersbiblereadingsystem"
         minSdkVersion 31
         targetSdkVersion 33
-        versionCode 96
+        versionCode 97
         versionName "2.2.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
