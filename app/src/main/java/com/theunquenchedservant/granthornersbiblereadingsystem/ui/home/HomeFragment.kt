@@ -405,15 +405,19 @@ class HomeFragment : Fragment() {
         val maxDone: Int
         val button: Button
         val listsDone:Int
-        if(planSystem == "pgh"){
-            maxDone = 10
-            button = binding.materialButton
-        }else if(planSystem == "mcheyne"){
-            maxDone = 4
-            button = binding.mcheyneButton
-        }else{
-            maxDone = 10
-            button = binding.materialButton
+        when (planSystem) {
+            "pgh" -> {
+                maxDone = 10
+                button = binding.materialButton
+            }
+            "mcheyne" -> {
+                maxDone = 4
+                button = binding.mcheyneButton
+            }
+            else -> {
+                maxDone = 10
+                button = binding.materialButton
+            }
         }
         if(getIntPref("${planSystem}Done") < maxDone) {
             button.setOnClickListener {

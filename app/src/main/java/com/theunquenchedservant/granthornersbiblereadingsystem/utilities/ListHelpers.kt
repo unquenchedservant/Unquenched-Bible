@@ -267,13 +267,13 @@ object ListHelpers {
                     }
                     data["pghDone"] = setIntPref("pghDone", 0)
                     data["mcheyneDone"] = setIntPref("mcheyneDone", 0)
-                        Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
-                                .addOnSuccessListener {
-                                    debugLog("Lists reset successfully")
-                                }
-                                .addOnFailureListener { error->
-                                    debugLog("FAILURE WRITING TO FIRESTORE $error")
-                                }
+                    Firebase.firestore.collection("main").document(Firebase.auth.currentUser!!.uid).update(data)
+                            .addOnSuccessListener {
+                                debugLog("Lists reset successfully")
+                            }
+                            .addOnFailureListener { error->
+                                debugLog("FAILURE WRITING TO FIRESTORE $error")
+                            }
                 }
                 .addOnFailureListener {
                     val error = it
