@@ -1,5 +1,6 @@
 package com.theunquenchedservant.granthornersbiblereadingsystem.service
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationManager
 import android.app.PendingIntent
@@ -51,7 +52,11 @@ class AlarmReceiver : BroadcastReceiver() {
         mNotificationManager.cancel(1)
         mNotificationManager.cancel(2)
         tapIntent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-        val tapPending = PendingIntent.getActivity(context, 0, tapIntent, 0)
+        val tapPending = if (android.os.Build.VERSION.SDK_INT >= 31) {
+            PendingIntent.getActivity(context, 0, tapIntent, PendingIntent.FLAG_MUTABLE or PendingIntent.FLAG_IMMUTABLE)
+        } else {
+            PendingIntent.getActivity(context, 0, tapIntent, 0)
+        }
         val builder : Notification = NotificationCompat.Builder(context, _primaryChannelId)
                 .setSmallIcon(R.drawable.ic_notification_icon)
                 .setContentTitle(today)

@@ -15,7 +15,7 @@ import androidx.core.view.isVisible
 import androidx.navigation.NavController
 import androidx.navigation.Navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
-import androidx.navigation.ui.setupWithNavController
+import androidx.navigation.ui.NavigationUI.setupWithNavController
 import com.firebase.ui.auth.AuthUI
 import com.firebase.ui.auth.ErrorCodes
 import com.firebase.ui.auth.FirebaseAuthUIActivityResultContract
@@ -74,6 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             intArrayOf(-android.R.attr.state_checked)
         )
         binding = ActivityMainBinding.inflate(layoutInflater)
+        switchEnabled(current="home")
         val colorList: IntArray
         val toolbarColor: Int
         if(getBoolPref("darkMode", defaultValue=true)){
@@ -102,7 +103,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         toolbar.setBackgroundColor(toolbarColor)
         toolbar.title = getDate(option=0, fullMonth = true)
         setSupportActionBar(findViewById(R.id.my_toolbar))
-        binding.bottomNav.setupWithNavController(navController)
+        setupWithNavController(binding.bottomNav, navController)
         binding.bottomNav.setBackgroundColor(toolbarColor)
         binding.bottomNav.itemIconTintList = colorStateList
         binding.bottomNav.itemTextColor = colorStateList
@@ -143,9 +144,9 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                                     }
                                 }
                             } else {
-                                com.google.firebase.ktx.Firebase.crashlytics.log("Error getting user info")
-                                com.google.firebase.ktx.Firebase.crashlytics.recordException(it.exception?.cause!!)
-                                com.google.firebase.ktx.Firebase.crashlytics.setCustomKey("userId", com.google.firebase.ktx.Firebase.auth.currentUser?.uid!!)
+                                Firebase.crashlytics.log("Error getting user info")
+                                Firebase.crashlytics.recordException(it.exception?.cause!!)
+                                Firebase.crashlytics.setCustomKey("userId", Firebase.auth.currentUser?.uid!!)
                             }
 
                         }
@@ -155,7 +156,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     override fun onResume() {
         super.onResume()
-        traceLog(file="MainActivity.kt", function="onResume()")
+        traceLog(file="MainActivity.kt", function="onResume() RESUME CALLED")
         if (Firebase.auth.currentUser != null && getBoolPref("hasCompletedOnboarding")) {
             checkReadingDate()
         }
@@ -190,7 +191,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
     private fun setupBottomNavigationBar() {
         traceLog(file="MainActivity.kt", function="setupBottomNavigationBar()")
-        switchEnabled(current="home")
+        //switchEnabled(current="home")
+
         navController.addOnDestinationChangedListener{ _, destination, _ ->
             val homeId = R.id.navigation_home
             when (destination.id) {
@@ -267,6 +269,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     supportActionBar?.title = "Delete Account"
                 }
                 R.id.navigation_home -> {
+                    traceLog(file="MainActivity.kt", function="R.id.navigation_home")
+
                     switchEnabled(current="home")
                     when(darkMode){
                         true->binding.navHostFragment.setBackgroundColor(Color.parseColor("#121212"))
@@ -284,6 +288,8 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                     binding.translationSelector.isVisible = false
                 }
                 R.id.navigation_settings -> {
+                    traceLog(file="MainActivity.kt", function="R.id.navigation_settings")
+
                     switchEnabled(current="settings")
                     supportActionBar?.title = destination.label
                     binding.translationSelector.isVisible = false
@@ -447,7 +453,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun switchEnabled(current: String){
-        traceLog(file="MainActivity.kt", function="switchEnabled()")
+        traceLog(file="MainActivity.kt", function="switchEnabled() ${current}")
         val menu = binding.bottomNav.menu
         menu.findItem(R.id.navigation_home)?.isEnabled = current != "home"
         menu.findItem(R.id.navigation_stats)?.isEnabled = current != "stats"
