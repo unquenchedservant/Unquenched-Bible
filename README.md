@@ -1,3 +1,4 @@
+# PROJECT ABANDONED 
 # Unquenched Bible
 Android app for Grant Horner's Bible Reading System
 
