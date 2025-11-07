@@ -31,18 +31,13 @@
     // GitHub Pages redirect handling for single page apps
     // This script checks for a redirect from the 404.html and restores the URL
     // Must run before Flutter initializes
-    (function(l) {
-      if (l.search[1] === '/' ) {
-        var decoded = l.search.slice(1).split('&').map(function(s) {
-          return s.replace(/~and~/g, '&')
-        }).join('?');
-        // Use full pathname replacement, not just append
-        var newPath = decoded.startsWith('/') ? decoded : '/' + decoded;
-        window.history.replaceState(null, null,
-            l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') + newPath + l.hash
-        );
+    (function() {
+      var redirect = sessionStorage.getItem('redirect');
+      if (redirect) {
+        sessionStorage.removeItem('redirect');
+        window.history.replaceState(null, null, redirect);
       }
-    }(window.location))
+    }())
   </script>
 
   <meta charset="UTF-8">

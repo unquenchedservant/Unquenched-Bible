@@ -5,20 +5,9 @@
   <title>Unquenched Bible</title>
   <script type="text/javascript">
     // GitHub Pages 404 redirect for single page apps
-    // This script takes the current URL and converts the path and query
-    // string into just a query string, and then redirects the browser
-    // to the new url with the redirect information in the query string.
-    // This is needed for GitHub Pages to properly handle routing in single page apps.
-    var pathSegmentsToKeep = 0; // 0 for custom domain at root, 1 for subdirectory like /repo-name/
-
-    var l = window.location;
-    l.replace(
-      l.protocol + '//' + l.hostname + (l.port ? ':' + l.port : '') +
-      l.pathname.split('/').slice(0, 1 + pathSegmentsToKeep).join('/') + '/?/' +
-      l.pathname.slice(1).split('/').slice(pathSegmentsToKeep).join('/').replace(/&/g, '~and~') +
-      (l.search ? '&' + l.search.slice(1).replace(/&/g, '~and~') : '') +
-      l.hash
-    );
+    // Store the path in sessionStorage and redirect to index
+    sessionStorage.setItem('redirect', window.location.pathname + window.location.search + window.location.hash);
+    window.location.replace('/');
   </script>
 </head>
 <body>
