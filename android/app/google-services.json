@@ -1,0 +1,131 @@
+{
+  "project_info": {
+    "project_number": "145504042752",
+    "firebase_url": "https://pgh-bible-reading-plan.firebaseio.com",
+    "project_id": "pgh-bible-reading-plan",
+    "storage_bucket": "pgh-bible-reading-plan.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145504042752:android:dc622c11a88c748856bde5",
+        "android_client_info": {
+          "package_name": "com.example.unquenched_bible"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145504042752-tv8ijp641mkvgludh5j41mtrmu1ecpqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4PCZFDnOqKIygrp2L0EhaFCCpSEpIWYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145504042752-01mlnd4uqnc4bhc83pm3geemg4t3tl5e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145504042752-7e5ffvc8ciho5c0f0l0dd4ov6colhilt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.theunquenchedservant.Unquenched-Bible"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145504042752:android:efb4b4de8966901c56bde5",
+        "android_client_info": {
+          "package_name": "com.theunquenchedservant.granthornersbiblereadingsystem"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "145504042752-89rv9d2solbcom0sfk746rd9j4qv6v8j.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theunquenchedservant.granthornersbiblereadingsystem",
+            "certificate_hash": "91a76ff5840be9a2dab109ba79b5297cc00eb696"
+          }
+        },
+        {
+          "client_id": "145504042752-8b1g093ubihj35mhoirp9b42e0umemdv.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theunquenchedservant.granthornersbiblereadingsystem",
+            "certificate_hash": "b02148760313b2c653c411e58f66cbe569007b6a"
+          }
+        },
+        {
+          "client_id": "145504042752-b4i9fv6volvg0bgdcd8n5j7t12s67ja5.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theunquenchedservant.granthornersbiblereadingsystem",
+            "certificate_hash": "70478b41de2b2bd2fd6f38223f8ea08f26d95ece"
+          }
+        },
+        {
+          "client_id": "145504042752-dvv8jblvhmajbkfbfe81and35b4q1qim.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theunquenchedservant.granthornersbiblereadingsystem",
+            "certificate_hash": "6a1df24fe704400d7140c828c0f6736f19d36060"
+          }
+        },
+        {
+          "client_id": "145504042752-oqvvltkndkchav886s415t1o14kgt1vj.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theunquenchedservant.granthornersbiblereadingsystem",
+            "certificate_hash": "569ac51dc99931f314a2ba6e2cd3993172a3722e"
+          }
+        },
+        {
+          "client_id": "145504042752-vp84t9mlj3vpskekp2r037fgvcn4b290.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.theunquenchedservant.granthornersbiblereadingsystem",
+            "certificate_hash": "b00207c6dbc28f1532a30270073916d8950f395a"
+          }
+        },
+        {
+          "client_id": "145504042752-tv8ijp641mkvgludh5j41mtrmu1ecpqp.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD4PCZFDnOqKIygrp2L0EhaFCCpSEpIWYY"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "145504042752-01mlnd4uqnc4bhc83pm3geemg4t3tl5e.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "145504042752-7e5ffvc8ciho5c0f0l0dd4ov6colhilt.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.theunquenchedservant.Unquenched-Bible"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
