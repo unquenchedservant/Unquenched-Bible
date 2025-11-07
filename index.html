@@ -16,18 +16,7 @@
   -->
   <base href="/">
 
-  <!-- Google Sign-In Client ID -->
-  <meta name="google-signin-client_id" content="145504042752-bc5vm31q829i2687hudapsvo0srsoic7.apps.googleusercontent.com">
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-
   <script>
-    // Global callback for Google Sign-In
-    window.handleGoogleSignIn = function(response) {
-      console.log('Google Sign-In response:', response);
-      // The google_sign_in_web package will handle this automatically
-      // when we configure it properly in Flutter
-    };
-
     // GitHub Pages redirect handling for single page apps
     // This script checks for a redirect from the 404.html and restores the URL
     // Must run before Flutter initializes
