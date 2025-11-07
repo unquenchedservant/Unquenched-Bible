@@ -1,31 +1,45 @@
-*.iml
-.gradle
-/local.properties
-/.idea/caches
-/.idea/libraries
-/.idea/modules.xml
-/.idea/workspace.xml
-/.idea/navEditor.xml
-/.idea/assetWizardSettings.xml
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
 .DS_Store
-/build
-/app/libs
-/app/build
-/app/.cxx
-/app/release
-/captures
-gradle.properties
-.externalNativeBuild
-.cxx
+.atom/
+.build/
+.buildlog/
+.history
+.svn/
+.swiftpm/
+migrate_working_dir/
 
-app/google-services.json
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
 
-app/src/main/cpp/native-lib.cpp
+# The .vscode folder contains launch configuration and tasks you configure in
+# VS Code which you may wish to be included in version control, so this line
+# is commented out by default.
+#.vscode/
 
-.idea/render.experimental.xml
+# Flutter/Dart/Pub related
+**/doc/api/
+**/ios/Flutter/.last_build_id
+.dart_tool/
+.flutter-plugins-dependencies
+.pub-cache/
+.pub/
+/build/
+/coverage/
 
-app/test.txt
+# Symbolication related
+app.*.symbols
 
-app/src/main/java/com/theunquenchedservant/granthornersbiblereadingsystem/utilities/FirebaseHelper.kt
+# Obfuscation related
+app.*.map.json
 
-.idea/deploymentTargetDropDown.xml
+# Android Studio will place build artifacts here
+/android/app/debug
+/android/app/profile
+/android/app/release
