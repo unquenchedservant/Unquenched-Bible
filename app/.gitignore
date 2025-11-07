@@ -1,7 +1,0 @@
-/build
-/cpp
-/release/*
-/lib
-/src/androidTest
-/src/test
-gradle.properties
