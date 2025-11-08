@@ -1,11 +1,16 @@
-# PROJECT ABANDONED 
-# Unquenched Bible
-Android app for Grant Horner's Bible Reading System
+# unquenched_bible
 
-What started as a Google spreadsheet has now become an app! 
+A new Flutter project.
 
-This repo contains all code needed to run the app (with some exceptions), although if you're looking to just use the app
-and not contribute, please download from the Google Play Store instead. 
+## Getting Started
 
-## Coming soon
-Guide to the source code. Sorry it's a mess right now
+This project is a starting point for a Flutter application.
+
+A few resources to get you started if this is your first Flutter project:
+
+- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
+- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+
+For help getting started with Flutter development, view the
+[online documentation](https://docs.flutter.dev/), which offers tutorials,
+samples, guidance on mobile development, and a full API reference.

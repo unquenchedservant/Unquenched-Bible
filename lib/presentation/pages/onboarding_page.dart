@@ -123,7 +123,14 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
           const SizedBox(height: 16),
           TextButton.icon(
             onPressed: () async {
-              final Uri privacyPolicyUri = Uri.parse('${Uri.base.origin}/privacy_policy.html');
+              // Construct absolute URL for privacy policy
+              final uri = Uri.base;
+              final privacyPolicyUri = Uri(
+                scheme: uri.scheme,
+                host: uri.host,
+                port: uri.port,
+                path: '/privacy_policy.html',
+              );
               try {
                 await launchUrl(privacyPolicyUri, mode: LaunchMode.inAppBrowserView);
               } catch (e) {
@@ -149,14 +156,68 @@ class _OnboardingPageState extends ConsumerState<OnboardingPage> {
         const Text('Choose your Bible reading plan:'),
         const SizedBox(height: 16),
         RadioListTile<String>(
-          title: const Text('Grant Horner\'s Plan'),
+          title: Row(
+            children: [
+              const Text('Grant Horner\'s Plan'),
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: () async {
+                  final uri = Uri.parse('https://sohmer.net/media/professor_grant_horners_bible_reading_system.pdf');
+                  try {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Could not open link: $e')),
+                      );
+                    }
+                  }
+                },
+                child: const Text(
+                  'More Info',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
           subtitle: const Text('Read 10 chapters daily from different parts of the Bible'),
           value: 'horner',
           groupValue: _selectedPlanSystem,
           onChanged: (value) => setState(() => _selectedPlanSystem = value!),
         ),
         RadioListTile<String>(
-          title: const Text('M\'Cheyne Reading Plan'),
+          title: Row(
+            children: [
+              const Text('M\'Cheyne Reading Plan'),
+              const SizedBox(width: 8),
+              InkWell(
+                onTap: () async {
+                  final uri = Uri.parse('https://bibleplan.org/plans/mcheyne/');
+                  try {
+                    await launchUrl(uri, mode: LaunchMode.externalApplication);
+                  } catch (e) {
+                    if (context.mounted) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text('Could not open link: $e')),
+                      );
+                    }
+                  }
+                },
+                child: const Text(
+                  'More Info',
+                  style: TextStyle(
+                    color: Colors.blue,
+                    decoration: TextDecoration.underline,
+                    fontSize: 12,
+                  ),
+                ),
+              ),
+            ],
+          ),
           subtitle: const Text('Read through the Bible in one year with 4 readings daily'),
           value: 'mcheyne',
           groupValue: _selectedPlanSystem,

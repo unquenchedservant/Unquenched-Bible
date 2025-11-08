@@ -2,7 +2,7 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:google_sign_in/google_sign_in.dart';
+import 'package:flutter_web_plugins/url_strategy.dart';
 import 'firebase_options.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
@@ -13,6 +13,11 @@ import 'data/models/reading_plan_hive_model.dart';
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
 
+  // Use path-based URL strategy instead of hash-based for web
+  if (kIsWeb) {
+    usePathUrlStrategy();
+  }
+
   // Initialize Hive and register adapters
   await Hive.initFlutter();
   Hive.registerAdapter(ReadingPlanHiveModelAdapter());
@@ -20,13 +25,6 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-
-  // Initialize Google Sign-In for web
-  if (kIsWeb) {
-    await GoogleSignIn.instance.initialize(
-      clientId: '145504042752-bc5vm31q829i2687hudapsvo0srsoic7.apps.googleusercontent.com',
-    );
-  }
 
   runApp(
     const ProviderScope(

@@ -101,45 +101,54 @@ class HomePage extends ConsumerWidget {
               return const Center(child: Text('No reading plan set'));
             }
 
-            return SingleChildScrollView(
-              padding: const EdgeInsets.all(16),
-              child: Column(
-                children: [
-                  // Show validation warning if there's an error
-                  if (validationError != null)
-                    Container(
-                      width: double.infinity,
-                      margin: const EdgeInsets.only(bottom: 16),
-                      padding: const EdgeInsets.all(12),
-                      decoration: BoxDecoration(
-                        color: Colors.red.shade100,
-                        border: Border.all(color: Colors.red.shade300),
-                        borderRadius: BorderRadius.circular(8),
-                      ),
-                      child: Row(
+            return Center(
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(maxWidth: 900),
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    // Calculate card width based on available width within the ConstrainedBox
+                    final availableWidth = constraints.maxWidth;
+                    final cardWidth = (availableWidth - 44) / 2; // 44 = padding(32) + spacing(12)
+
+                    return SingleChildScrollView(
+                      padding: const EdgeInsets.all(16),
+                      child: Column(
                         children: [
-                          Icon(Icons.warning, color: Colors.red.shade700),
-                          const SizedBox(width: 8),
-                          Expanded(
-                            child: Text(
-                              validationError,
-                              style: TextStyle(
-                                color: Colors.red.shade900,
-                                fontWeight: FontWeight.bold,
-                              ),
-                            ),
+                      // Show validation warning if there's an error
+                      if (validationError != null)
+                        Container(
+                          width: double.infinity,
+                          margin: const EdgeInsets.only(bottom: 16),
+                          padding: const EdgeInsets.all(12),
+                          decoration: BoxDecoration(
+                            color: Colors.red.shade100,
+                            border: Border.all(color: Colors.red.shade300),
+                            borderRadius: BorderRadius.circular(8),
                           ),
-                        ],
-                      ),
-                    ),
-                  // Reading cards
-                  Wrap(
-                    spacing: 12,
-                    runSpacing: 12,
-                    children: readings.map((reading) {
-                  return SizedBox(
-                    width: (MediaQuery.of(context).size.width - 44) / 2, // 44 = padding(32) + spacing(12)
-                    child: ReadingListCard(
+                          child: Row(
+                            children: [
+                              Icon(Icons.warning, color: Colors.red.shade700),
+                              const SizedBox(width: 8),
+                              Expanded(
+                                child: Text(
+                                  validationError,
+                                  style: TextStyle(
+                                    color: Colors.red.shade900,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      // Reading cards
+                      Wrap(
+                        spacing: 12,
+                        runSpacing: 12,
+                        children: readings.map((reading) {
+                      return SizedBox(
+                        width: cardWidth,
+                        child: ReadingListCard(
                       reading: reading,
                       onPressRead: () async {
                         String searchQuery = '';
@@ -213,7 +222,11 @@ class HomePage extends ConsumerWidget {
                   );
                     }).toList(),
                   ),
-                ],
+                        ],
+                      ),
+                    );
+                  },
+                ),
               ),
             );
           },

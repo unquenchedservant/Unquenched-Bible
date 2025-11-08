@@ -46,14 +46,20 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       @override
       Future<User> signInWithGoogle() async {
           try {
-              // On web, authenticate() is not supported
-              // The renderButton() widget handles everything automatically
               if (kIsWeb) {
-                // On web, we just wait for auth state change from renderButton
-                throw AuthException('On web, sign-in is handled by renderButton widget');
+                // Web: Use Firebase Google Auth Provider popup
+                final GoogleAuthProvider googleProvider = GoogleAuthProvider();
+
+                // Sign in with popup
+                final userCredential = await firebaseAuth.signInWithPopup(googleProvider);
+
+                if(userCredential.user == null){
+                    throw AuthException('Google sign in failed');
+                }
+                return userCredential.user!;
               }
 
-              // Mobile platforms: use authenticate()
+              // Mobile platforms: use GoogleSignIn package
               final GoogleSignInAccount? googleUser = await googleSignIn.authenticate();
 
               if(googleUser == null){

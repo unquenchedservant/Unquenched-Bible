@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import '../providers/auth_providers.dart';
 import '../providers/reading_providers.dart';
 import '../providers/data_providers.dart';
@@ -442,7 +443,14 @@ class SettingsPage extends ConsumerWidget {
               title: const Text('Privacy Policy'),
               trailing: const Icon(Icons.chevron_right),
               onTap: () async {
-                final Uri privacyPolicyUri = Uri.parse('${Uri.base.origin}/privacy_policy.html');
+                // Construct absolute URL for privacy policy
+                final uri = Uri.base;
+                final privacyPolicyUri = Uri(
+                  scheme: uri.scheme,
+                  host: uri.host,
+                  port: uri.port,
+                  path: '/privacy_policy.html',
+                );
                 try {
                   await launchUrl(privacyPolicyUri, mode: LaunchMode.inAppBrowserView);
                 } catch (e) {
@@ -454,6 +462,77 @@ class SettingsPage extends ConsumerWidget {
                 }
               },
             ),
+
+            const Divider(),
+
+            ListTile(
+              title: const Text('Bible Gateway Dark Mode'),
+              subtitle: const Text('Browser extension by the same developer'),
+              leading: const Icon(Icons.dark_mode),
+              trailing: const Icon(Icons.chevron_right),
+              onTap: () {
+                showDialog(
+                  context: context,
+                  builder: (context) => AlertDialog(
+                    title: const Text('Bible Gateway Dark Mode'),
+                    content: Column(
+                      mainAxisSize: MainAxisSize.min,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text('Available for:'),
+                        const SizedBox(height: 16),
+                        ListTile(
+                          leading: const Icon(Icons.web),
+                          title: const Text('Firefox'),
+                          onTap: () async {
+                            final uri = Uri.parse('https://addons.mozilla.org/en-US/firefox/addon/bible-gateway-darkmode/?utm_source=addons.mozilla.org&utm_medium=referral&utm_content=search');
+                            try {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Could not open link: $e')),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                        ListTile(
+                          leading: const Icon(Icons.web),
+                          title: const Text('Chrome/Chromium'),
+                          onTap: () async {
+                            final uri = Uri.parse('https://chromewebstore.google.com/detail/bible-gateway-darkmode/fkmibejcfnaoglanjfceecmljgkjaici?pli=1');
+                            try {
+                              await launchUrl(uri, mode: LaunchMode.externalApplication);
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
+                            } catch (e) {
+                              if (context.mounted) {
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  SnackBar(content: Text('Could not open link: $e')),
+                                );
+                              }
+                            }
+                          },
+                        ),
+                      ],
+                    ),
+                    actions: [
+                      TextButton(
+                        onPressed: () => Navigator.of(context).pop(),
+                        child: const Text('Close'),
+                      ),
+                    ],
+                  ),
+                );
+              },
+            ),
+
+            const Divider(),
 
             ListTile(
               title: const Text('Sign Out'),
@@ -488,6 +567,69 @@ class SettingsPage extends ConsumerWidget {
                   }
                 }
               },
+            ),
+
+            // Community icons at the bottom
+            Padding(
+              padding: const EdgeInsets.only(right: 8.0, top: 8.0, bottom: 8.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.github),
+                    iconSize: 28,
+                    tooltip: 'GitHub',
+                    onPressed: () async {
+                      final Uri githubUri = Uri.parse('https://github.com/unquenchedservant/Unquenched-Bible');
+                      try {
+                        await launchUrl(githubUri, mode: LaunchMode.externalApplication);
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Could not open GitHub: $e')),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.discord),
+                    iconSize: 28,
+                    tooltip: 'Discord',
+                    onPressed: () async {
+                      final Uri discordUri = Uri.parse('https://discord.gg/J4JPjkB7S8');
+                      try {
+                        await launchUrl(discordUri, mode: LaunchMode.externalApplication);
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Could not open Discord: $e')),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                  const SizedBox(width: 8),
+                  IconButton(
+                    icon: const FaIcon(FontAwesomeIcons.mugHot),
+                    iconSize: 28,
+                    tooltip: 'Ko-fi',
+                    onPressed: () async {
+                      final Uri kofiUri = Uri.parse('https://ko-fi.com/chillhumanoid');
+                      try {
+                        await launchUrl(kofiUri, mode: LaunchMode.externalApplication);
+                      } catch (e) {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(content: Text('Could not open Ko-fi: $e')),
+                          );
+                        }
+                      }
+                    },
+                  ),
+                ],
+              ),
             ),
         ],
       ),

@@ -1,10 +1,9 @@
-import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
-import 'package:google_sign_in_web/web_only.dart' as web;
 import '../providers/auth_providers.dart';
 import '../providers/data_providers.dart';
+import '../widgets/google_sign_in_button.dart';
 
 class SignInPage extends ConsumerStatefulWidget {
   const SignInPage({super.key});
@@ -18,6 +17,7 @@ class _SignInPageState extends ConsumerState<SignInPage> {
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
   bool _isLoading = false;
+
 
   @override
   void dispose() {
@@ -37,7 +37,10 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       _passwordController.text,
     );
 
-    if (mounted) {
+    if (!mounted) return;
+
+    // Handle failure case
+    if (result.isLeft()) {
       setState(() => _isLoading = false);
       result.fold(
         (failure) {
@@ -45,26 +48,35 @@ class _SignInPageState extends ConsumerState<SignInPage> {
             SnackBar(content: Text(failure.message)),
           );
         },
-        (user) async {
-          // Check if user has a reading plan
-          final repository = ref.read(readingPlanRepositoryProvider);
-          final planResult = await repository.getReadingPlan(user.id);
-
-          if (!mounted) return;
-
-          planResult.fold(
-            (failure) {
-              // No plan exists - go to onboarding
-              context.go('/onboarding');
-            },
-            (plan) {
-              // Plan exists - go to home
-              context.go('/home');
-            },
-          );
-        },
+        (_) {}, // Never called
       );
+      return;
     }
+
+    // Handle success case
+    final user = result.fold(
+      (_) => throw Exception('Unreachable'), // Never called
+      (user) => user,
+    );
+
+    // Check if user has a reading plan
+    final repository = ref.read(readingPlanRepositoryProvider);
+    final planResult = await repository.getReadingPlan(user.id);
+
+    if (!mounted) return;
+
+    setState(() => _isLoading = false);
+
+    planResult.fold(
+      (failure) {
+        // No plan exists - go to onboarding
+        context.go('/onboarding');
+      },
+      (plan) {
+        // Plan exists - go to home
+        context.go('/home');
+      },
+    );
   }
 
   Future<void> _signInWithGoogle() async {
@@ -73,35 +85,46 @@ class _SignInPageState extends ConsumerState<SignInPage> {
       final signInUseCase = ref.read(signInWithGoogleProvider);
       final result = await signInUseCase();
 
-      if (mounted) {
-        setState(() => _isLoading = false);
+      if (!mounted) return;
 
+      // Handle failure case
+      if (result.isLeft()) {
+        setState(() => _isLoading = false);
         result.fold(
           (failure) {
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(content: Text(failure.message)),
             );
           },
-          (user) async {
-            // Check if user has a reading plan
-            final repository = ref.read(readingPlanRepositoryProvider);
-            final planResult = await repository.getReadingPlan(user.id);
-
-            if (!mounted) return;
-
-            planResult.fold(
-              (failure) {
-                // No plan exists - go to onboarding
-                context.go('/onboarding');
-              },
-              (plan) {
-                // Plan exists - go to home
-                context.go('/home');
-              },
-            );
-          },
+          (_) {}, // Never called
         );
+        return;
       }
+
+      // Handle success case
+      final user = result.fold(
+        (_) => throw Exception('Unreachable'), // Never called
+        (user) => user,
+      );
+
+      // Check if user has a reading plan
+      final repository = ref.read(readingPlanRepositoryProvider);
+      final planResult = await repository.getReadingPlan(user.id);
+
+      if (!mounted) return;
+
+      setState(() => _isLoading = false);
+
+      planResult.fold(
+        (failure) {
+          // No plan exists - go to onboarding
+          context.go('/onboarding');
+        },
+        (plan) {
+          // Plan exists - go to home
+          context.go('/home');
+        },
+      );
     }
 
   @override
@@ -109,13 +132,15 @@ class _SignInPageState extends ConsumerState<SignInPage> {
     return Scaffold(
       body: SafeArea(
         child: Center(
-          child: SingleChildScrollView(
-            padding: const EdgeInsets.all(24),
-            child: Form(
-              key: _formKey,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(maxWidth: 500),
+            child: SingleChildScrollView(
+              padding: const EdgeInsets.all(24),
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
                   const Icon(Icons.book, size: 80),
                   const SizedBox(height: 16),
                   const Text(
@@ -176,27 +201,19 @@ class _SignInPageState extends ConsumerState<SignInPage> {
                   ),
                   const SizedBox(height: 16),
 
-                  // Platform-specific Google Sign-In button
-                  if (kIsWeb)
-                    // Web: Use Google's official renderButton
-                    web.renderButton()
-                  else
-                    // Mobile: Use custom button
-                    SizedBox(
-                      width: double.infinity,
-                      child: OutlinedButton.icon(
-                        onPressed: _isLoading ? null : _signInWithGoogle,
-                        icon: const Icon(Icons.login),
-                        label: const Text('Sign in with Google'),
-                      ),
-                    ),
+                  GoogleSignInButton(
+                    onPressed: _signInWithGoogle,
+                    isLoading: _isLoading,
+                    text: 'Sign in with Google',
+                  ),
                   const SizedBox(height: 16),
 
                   TextButton(
                     onPressed: () => context.push('/signup'),
                     child: const Text('Don\'t have an account? Sign up'),
                   ),
-                ],
+                  ],
+                ),
               ),
             ),
           ),

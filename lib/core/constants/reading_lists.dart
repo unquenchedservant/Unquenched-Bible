@@ -217,7 +217,7 @@ class ReadingLists {
             "Jeremiah 7", "Jeremiah 8", "Jeremiah 9", "Jeremiah 10", "Jeremiah 11", "Jeremiah 12", "Jeremiah 13", "Jeremiah 14",
             "Jeremiah 15", "Jeremiah 16", "Jeremiah 17", "Jeremiah 18", "Jeremiah 19", "Jeremiah 20", "Jeremiah 21", "Jeremiah 22",
             "Jeremiah 23", "Jeremiah 24", "Jeremiah 25", "Jeremiah 26", "Jeremiah 27", "Jeremiah 28", "Jeremiah 29", "Jeremiah 30-31",
-            "Jeremiah 32", "Jeremiah 33", "Jeremiah 34", "Jeremiah 35", "Jeremiah 36&45", "Jeremiah 37", "Jeremiah 38", "Jeremiah 39", "Jeremiah 40",
+            "Jeremiah 32", "Jeremiah 33", "Jeremiah 34", "Jeremiah 35", "Jeremiah 36,45", "Jeremiah 37", "Jeremiah 38", "Jeremiah 39", "Jeremiah 40",
             "Jeremiah 41", "Jeremiah 42", "Jeremiah 43", "Jeremiah 44", "Jeremiah 46", "Jeremiah 47", "Jeremiah 48", "Jeremiah 49", "Jeremiah 50", "Jeremiah 51",
             "Jeremiah 52", "Lamentations 1", "Lamentations 2", "Lamentations 3", "Lamentations 4", "Lamentations 5", "Ezekiel 1", "Ezekiel 2", "Ezekiel 3",
             "Ezekiel 4", "Ezekiel 5", "Ezekiel 6", "Ezekiel 7", "Ezekiel 8", "Ezekiel 9", "Ezekiel 10", "Ezekiel 11", "Ezekiel 12", "Ezekiel 13",

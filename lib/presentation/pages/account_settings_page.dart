@@ -313,7 +313,7 @@ class AccountSettingsPage extends ConsumerWidget {
                         ScaffoldMessenger.of(context).showSnackBar(
                           const SnackBar(content: Text('Account deleted successfully')),
                         );
-                        // Navigate to login after successful deletion
+                        // Account is deleted, user is signed out, navigate to sign-in page
                         if (context.mounted) {
                           context.go('/signin');
                         }
