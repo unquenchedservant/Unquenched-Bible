@@ -46,5 +46,7 @@ app.*.map.json
 unquenchedbible/build/web
 
 Makefile
+lib/firebase_options.dart
 
 CLAUDE.md
+ROAST.md
